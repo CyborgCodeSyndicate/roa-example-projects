@@ -1,0 +1,193 @@
+package io.cyborgcode.api.test.framework;
+
+import io.cyborgcode.api.test.framework.data.test.TestData;
+import io.cyborgcode.api.test.framework.rest.authentication.AdminAuth;
+import io.cyborgcode.api.test.framework.rest.authentication.ReqResAuthentication;
+import io.cyborgcode.api.test.framework.rest.dto.request.LoginUser;
+import io.cyborgcode.api.test.framework.rest.dto.request.User;
+import io.cyborgcode.api.test.framework.rest.dto.response.CreatedUserResponse;
+import io.cyborgcode.roa.api.annotations.API;
+import io.cyborgcode.roa.api.annotations.AuthenticateViaApi;
+import io.cyborgcode.roa.api.storage.StorageKeysApi;
+import io.cyborgcode.roa.framework.annotation.Journey;
+import io.cyborgcode.roa.framework.annotation.JourneyData;
+import io.cyborgcode.roa.framework.annotation.PreQuest;
+import io.cyborgcode.roa.framework.annotation.Regression;
+import io.cyborgcode.roa.framework.annotation.Ripper;
+import io.cyborgcode.roa.framework.base.BaseQuest;
+import io.cyborgcode.roa.framework.quest.Quest;
+import io.cyborgcode.roa.validator.core.Assertion;
+import io.restassured.response.Response;
+import java.time.Instant;
+import org.aeonbits.owner.ConfigCache;
+import org.junit.jupiter.api.Test;
+
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_EVOLUTION;
+import static io.cyborgcode.api.test.framework.data.cleaner.TestDataCleaner.DELETE_ADMIN_USER;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_INTERMEDIATE;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_LEADER;
+import static io.cyborgcode.api.test.framework.preconditions.QuestPreconditions.Data.CREATE_NEW_USER;
+import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.DELETE_USER;
+import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_AT_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.JOB_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.NAME_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_KEY;
+import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_VALUE;
+import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
+import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_INTERMEDIATE_JOB;
+import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_INTERMEDIATE_NAME;
+import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_LEADER_JOB;
+import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_LEADER_NAME;
+import static io.cyborgcode.api.test.framework.utils.TestConstants.Users.ID_THREE;
+import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
+import static java.time.ZoneOffset.UTC;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static org.apache.http.HttpStatus.SC_CREATED;
+import static org.apache.http.HttpStatus.SC_NO_CONTENT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@API
+public class UserLifecycleEvolutionTest extends BaseQuest {
+
+   @Test
+   @Regression
+   public void testUserLifecycleBasic(Quest quest) {
+      final TestData testData = ConfigCache.getOrCreate(TestData.class);
+      final String username = testData.username();
+      final String password = testData.password();
+
+      quest.use(RING_OF_API)
+            .request(POST_LOGIN_USER, new LoginUser(username, password));
+
+      String token = retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
+            .getBody().jsonPath().getString(TOKEN.getJsonPath());
+
+      User userLeader = User.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
+      User userIntermediate = User.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
+
+      quest.use(RING_OF_API)
+            .requestAndValidate(
+                  POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
+                  userLeader,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+            )
+            .requestAndValidate(
+                  POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
+                  userIntermediate,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+            )
+            .validate(() -> {
+               CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                     .getBody().as(CreatedUserResponse.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertTrue(createdUserResponse.getCreatedAt()
+                     .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
+            })
+            .requestAndValidate(
+                  DELETE_USER.withPathParam(ID_PARAM, ID_THREE).withHeader(AUTHORIZATION_HEADER_KEY,
+                        AUTHORIZATION_HEADER_VALUE + token),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
+   @Regression
+   public void testUserLifecycleWithAuth(Quest quest) {
+      User userLeader = User.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
+      User userIntermediate = User.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
+
+      quest.use(RING_OF_API)
+            .requestAndValidate(
+                  POST_CREATE_USER,
+                  userLeader,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+            )
+            .requestAndValidate(
+                  POST_CREATE_USER,
+                  userIntermediate,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+            )
+            .validate(() -> {
+               CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                     .getBody().as(CreatedUserResponse.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertTrue(createdUserResponse.getCreatedAt()
+                     .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
+            })
+            .requestAndValidate(
+                  DELETE_USER.withPathParam(ID_PARAM, ID_THREE),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
+   @PreQuest({
+         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_INTERMEDIATE)}, order = 2),
+         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_LEADER)}, order = 1)
+   })
+   @Regression
+   public void testUserLifecycleWithPreQuest(Quest quest) {
+      quest.use(RING_OF_API)
+            .validate(() -> {
+               CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                     .getBody().as(CreatedUserResponse.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertTrue(createdUserResponse.getCreatedAt()
+                     .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
+            })
+            .requestAndValidate(
+                  DELETE_USER.withPathParam(ID_PARAM, ID_THREE),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
+   @PreQuest({
+         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_INTERMEDIATE)}, order = 2),
+         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_LEADER)}, order = 1)
+   })
+   @Ripper(targets = {DELETE_ADMIN_USER})
+   @Regression
+   public void testUserLifecycleWithRipper(Quest quest) {
+      quest.use(RING_OF_API)
+            .validate(() -> {
+               CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                     .getBody().as(CreatedUserResponse.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertTrue(createdUserResponse.getCreatedAt()
+                     .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
+            })
+            .complete();
+   }
+
+   @Test
+   @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
+   @PreQuest({
+         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_INTERMEDIATE)}, order = 2),
+         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_LEADER)}, order = 1)
+   })
+   @Ripper(targets = {DELETE_ADMIN_USER})
+   @Regression
+   public void testUserLifecycleWithCustomService(Quest quest) {
+      quest.use(RING_OF_EVOLUTION)
+            .validateCreatedUser()
+            .complete();
+   }
+
+}
