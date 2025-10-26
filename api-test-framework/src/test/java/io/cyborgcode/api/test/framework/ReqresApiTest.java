@@ -27,13 +27,13 @@ import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_CUSTOM;
-import static io.cyborgcode.api.test.framework.data.cleaner.TestDataCleaner.DELETE_ADMIN_USER;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.LOGIN_ADMIN_USER;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_INTERMEDIATE;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_JUNIOR;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_LEADER;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_SENIOR;
-import static io.cyborgcode.api.test.framework.preconditions.QuestPreconditions.Data;
+import static io.cyborgcode.api.test.framework.data.cleaner.TestDataCleaner.Data.DELETE_ADMIN_USER;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.LOGIN_ADMIN_USER;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_INTERMEDIATE;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_JUNIOR;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_LEADER;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_SENIOR;
+import static io.cyborgcode.api.test.framework.preconditions.QuestPreconditions.Data.CREATE_NEW_USER;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.DATA;
@@ -52,9 +52,9 @@ import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USER
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.FIRST_NAME_LENGTH_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_JOB_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_NAME_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.FIRST_NAME_LENGTH_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.USER_DATA_SIZE_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.userWithFirstNameNotFound;
 import static io.cyborgcode.api.test.framework.utils.Headers.EXAMPLE_HEADER;
@@ -281,8 +281,8 @@ public class ReqresApiTest extends BaseQuest {
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
    @PreQuest({
-         @Journey(value = Data.CREATE_NEW_USER, journeyData = {@JourneyData(USER_INTERMEDIATE)}, order = 2),
-         @Journey(value = Data.CREATE_NEW_USER, journeyData = {@JourneyData(USER_LEADER)}, order = 1)
+         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_INTERMEDIATE)}, order = 2),
+         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_LEADER)}, order = 1)
    })
    @Ripper(targets = {DELETE_ADMIN_USER})
    @Regression

@@ -5,17 +5,24 @@ import io.cyborgcode.roa.framework.parameters.Late;
 
 public enum TestDataCreator implements DataForge {
 
-   USER_LEADER_FLOW(DataCreationFunctions::createLeaderUser),
-   LOGIN_ADMIN_USER_FLOW(DataCreationFunctions::createAdminLoginUser),
-   USER_JUNIOR_FLOW(DataCreationFunctions::createJuniorUser),
-   USER_SENIOR_FLOW(DataCreationFunctions::createSeniorUser),
-   USER_INTERMEDIATE_FLOW(DataCreationFunctions::createIntermediateUser);
+   USER_LEADER(DataCreationFunctions::createLeaderUser),
+   LOGIN_ADMIN_USER(DataCreationFunctions::createAdminLoginUser),
+   USER_JUNIOR(DataCreationFunctions::createJuniorUser),
+   USER_SENIOR(DataCreationFunctions::createSeniorUser),
+   USER_INTERMEDIATE(DataCreationFunctions::createIntermediateUser);
 
-   public static final String USER_LEADER = "USER_LEADER_FLOW";
-   public static final String LOGIN_ADMIN_USER = "LOGIN_ADMIN_USER_FLOW";
-   public static final String USER_JUNIOR = "USER_JUNIOR_FLOW";
-   public static final String USER_SENIOR = "USER_SENIOR_FLOW";
-   public static final String USER_INTERMEDIATE = "USER_INTERMEDIATE_FLOW";
+   public static final class Data {
+
+      public static final String USER_LEADER = "USER_LEADER";
+      public static final String LOGIN_ADMIN_USER = "LOGIN_ADMIN_USER";
+      public static final String USER_JUNIOR = "USER_JUNIOR";
+      public static final String USER_SENIOR = "USER_SENIOR";
+      public static final String USER_INTERMEDIATE = "USER_INTERMEDIATE";
+
+      private Data() {
+      }
+
+   }
 
    private final Late<Object> createDataFunction;
 

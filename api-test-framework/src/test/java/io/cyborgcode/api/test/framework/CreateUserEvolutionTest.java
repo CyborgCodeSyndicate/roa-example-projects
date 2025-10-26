@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_EVOLUTION;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_JUNIOR;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_JUNIOR;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USERS;

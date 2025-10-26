@@ -6,9 +6,16 @@ import java.util.function.Consumer;
 
 public enum TestDataCleaner implements DataRipper<TestDataCleaner> {
 
-   DELETE_ADMIN_USER_FLOW(DataCleanUpFunctions::deleteAdminUser);
+   DELETE_ADMIN_USER(DataCleanUpFunctions::deleteAdminUser);
 
-   public static final String DELETE_ADMIN_USER = "DELETE_ADMIN_USER_FLOW";
+   public static final class Data {
+
+      public static final String DELETE_ADMIN_USER = "DELETE_ADMIN_USER";
+
+      private Data() {
+      }
+
+   }
 
    private final Consumer<SuperQuest> cleanUpFunction;
 

@@ -12,7 +12,7 @@ import io.cyborgcode.roa.framework.storage.StorageKeysTest;
 import io.restassured.response.Response;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_LEADER_FLOW;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_LEADER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.utils.QueryParams.PAGE_PARAM;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Pagination.PAGE_TWO;
@@ -58,7 +58,7 @@ public class DataCreationFunctions {
       try {
          userLeader = quest.getStorage()
                .sub(StorageKeysTest.ARGUMENTS)
-               .get(USER_LEADER_FLOW, User.class);
+               .get(USER_LEADER, User.class);
       } catch (Exception ex) {
          userLeader = createLeaderUser();
       }
@@ -76,7 +76,7 @@ public class DataCreationFunctions {
       try {
          userLeader = quest.getStorage()
                .sub(StorageKeysTest.PRE_ARGUMENTS)
-               .get(USER_LEADER_FLOW, User.class);
+               .get(USER_LEADER, User.class);
       } catch (Exception ex) {
          userLeader = createLeaderUser();
       }

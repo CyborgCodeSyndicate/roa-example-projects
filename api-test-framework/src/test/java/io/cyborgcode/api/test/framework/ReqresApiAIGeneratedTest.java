@@ -20,10 +20,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.data.cleaner.TestDataCleaner.DELETE_ADMIN_USER;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.LOGIN_ADMIN_USER;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_JUNIOR;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_LEADER;
+import static io.cyborgcode.api.test.framework.data.cleaner.TestDataCleaner.Data.DELETE_ADMIN_USER;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.LOGIN_ADMIN_USER;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_JUNIOR;
+import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_LEADER;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATED_USER_ID;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATED_USER_TIMESTAMP;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_JOB;
