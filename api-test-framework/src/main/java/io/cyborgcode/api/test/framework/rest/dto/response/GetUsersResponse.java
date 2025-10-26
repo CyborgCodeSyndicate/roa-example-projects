@@ -1,6 +1,5 @@
 package io.cyborgcode.api.test.framework.rest.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -22,6 +21,7 @@ public class GetUsersResponse {
    private int totalPages;
    private List<DataResponse> data;
    private SupportResponse support;
-
+   @JsonProperty("_meta")
+   private MetaResponse meta;
 
 }
