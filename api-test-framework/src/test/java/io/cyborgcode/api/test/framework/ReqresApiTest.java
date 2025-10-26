@@ -53,11 +53,11 @@ import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.FIRST_NAME_LENGTH_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.JOB_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.NAME_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_JOB_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_NAME_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.USER_DATA_SIZE_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.userWithFirstNameNotFound;
-import static io.cyborgcode.api.test.framework.utils.Headers.SPECIFIC_HEADER;
+import static io.cyborgcode.api.test.framework.utils.Headers.EXAMPLE_HEADER;
 import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
 import static io.cyborgcode.api.test.framework.utils.QueryParams.PAGE_PARAM;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.FileConstants.AVATAR_FILE_EXTENSION;
@@ -271,7 +271,7 @@ public class ReqresApiTest extends BaseQuest {
             .request(POST_LOGIN_USER, loginUser)
             .requestAndValidate(
                   GET_USER.withPathParam(ID_PARAM, ID_THREE)
-                        .withHeader(SPECIFIC_HEADER, retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
+                        .withHeader(EXAMPLE_HEADER, retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
                               .getBody().jsonPath().getString(TOKEN.getJsonPath())),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
             )
@@ -291,8 +291,8 @@ public class ReqresApiTest extends BaseQuest {
             .validate(() -> {
                CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
                      .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
                assertTrue(createdUserResponse.getCreatedAt().contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)));
             })
             .complete();

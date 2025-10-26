@@ -15,8 +15,8 @@ import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_AT_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.JOB_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.NAME_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_JOB_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_NAME_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.QueryParams.PAGE_PARAM;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Pagination.PAGE_TWO;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_INTERMEDIATE_JOB;
@@ -41,7 +41,7 @@ import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Ring("Gondor")
+@Ring("Ring of Evolution")
 public class EvolutionService extends FluentService {
 
    public EvolutionService getAllUsersAndValidateResponse() {
@@ -99,8 +99,8 @@ public class EvolutionService extends FluentService {
                      .get(POST_CREATE_USER, Response.class)
                      .getBody()
                      .as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
                assertTrue(createdUserResponse
                      .getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);

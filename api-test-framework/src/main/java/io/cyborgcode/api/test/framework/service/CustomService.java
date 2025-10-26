@@ -22,7 +22,7 @@ import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_I
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
-import static io.cyborgcode.api.test.framework.utils.Headers.SPECIFIC_HEADER;
+import static io.cyborgcode.api.test.framework.utils.Headers.EXAMPLE_HEADER;
 import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.FileConstants.AVATAR_FILE_EXTENSION;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.PageTwo.PAGE_TWO_CONTAINS_ANY_USER;
@@ -58,7 +58,7 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.STARTS_WITH;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpStatus.SC_OK;
 
-@Ring("Rivendell")
+@Ring("Ring of Custom")
 public class CustomService extends FluentService {
 
    public CustomService loginUserAndAddSpecificHeader(LoginUser loginUser) {
@@ -67,7 +67,7 @@ public class CustomService extends FluentService {
             .requestAndValidate(
                   GET_USER
                         .withPathParam(ID_PARAM, ID_THREE)
-                        .withHeader(SPECIFIC_HEADER, quest.getStorage().sub(StorageKeysApi.API).get(POST_LOGIN_USER, Response.class)
+                        .withHeader(EXAMPLE_HEADER, quest.getStorage().sub(StorageKeysApi.API).get(POST_LOGIN_USER, Response.class)
                               .getBody()
                               .jsonPath()
                               .getString(TOKEN.getJsonPath())),

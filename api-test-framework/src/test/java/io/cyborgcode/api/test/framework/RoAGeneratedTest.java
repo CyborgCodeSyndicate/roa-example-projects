@@ -35,8 +35,8 @@ import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.DELETE_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_AT_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.JOB_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.NAME_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_JOB_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_NAME_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.FileConstants.AVATAR_FILE_EXTENSION;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_INTERMEDIATE_JOB;
@@ -93,8 +93,8 @@ public class RoAGeneratedTest extends BaseQuest {
                            .getBody()
                            .as(CreatedUserResponse.class);
 
-               assertEquals(USER_INTERMEDIATE_NAME, createdIntermediateUser.getName(), NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdIntermediateUser.getJob(), JOB_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_NAME, createdIntermediateUser.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdIntermediateUser.getJob(), CREATED_USER_JOB_INCORRECT);
                assertTrue(createdIntermediateUser.getCreatedAt().matches(USER_TIMESTAMP_REGEX), CREATED_AT_INCORRECT);
             })
             .complete();
@@ -118,8 +118,8 @@ public class RoAGeneratedTest extends BaseQuest {
                      .getBody()
                      .as(CreatedUserResponse.class);
 
-               assertEquals(USER_LEADER_NAME, createdLeader.getName(), NAME_INCORRECT);
-               assertEquals(USER_LEADER_JOB, createdLeader.getJob(), JOB_INCORRECT);
+               assertEquals(USER_LEADER_NAME, createdLeader.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_LEADER_JOB, createdLeader.getJob(), CREATED_USER_JOB_INCORRECT);
             })
             .requestAndValidate(
                   DELETE_USER.withPathParam(ID_PARAM, retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)

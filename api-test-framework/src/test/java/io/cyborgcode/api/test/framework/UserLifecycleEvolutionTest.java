@@ -33,8 +33,8 @@ import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.DELETE_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_AT_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.JOB_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.NAME_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_JOB_INCORRECT;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_NAME_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_KEY;
 import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_VALUE;
 import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
@@ -85,8 +85,8 @@ public class UserLifecycleEvolutionTest extends BaseQuest {
             .validate(() -> {
                CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
                      .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
                assertTrue(createdUserResponse.getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
             })
@@ -119,8 +119,8 @@ public class UserLifecycleEvolutionTest extends BaseQuest {
             .validate(() -> {
                CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
                      .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
                assertTrue(createdUserResponse.getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
             })
@@ -143,8 +143,8 @@ public class UserLifecycleEvolutionTest extends BaseQuest {
             .validate(() -> {
                CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
                      .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
                assertTrue(createdUserResponse.getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
             })
@@ -168,8 +168,8 @@ public class UserLifecycleEvolutionTest extends BaseQuest {
             .validate(() -> {
                CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
                      .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), JOB_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
                assertTrue(createdUserResponse.getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
             })

@@ -45,7 +45,7 @@ import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USER
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.EMAIL_FOUND_IN_LIST_UNEXPECTED;
+import static io.cyborgcode.api.test.framework.utils.AssertionMessages.SENIOR_USER_EMAIL_FOUND_IN_PAGINATED_LIST;
 import static io.cyborgcode.api.test.framework.utils.Helpers.EMPTY_JSON;
 import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
 import static io.cyborgcode.api.test.framework.utils.QueryParams.PAGE_PARAM;
@@ -227,7 +227,7 @@ public class ReqresApiAIGeneratedTest extends BaseQuest {
 
                assertTrue(
                      emails.stream().noneMatch(email -> email.contains(USER_SENIOR_NAME.toLowerCase())),
-                     EMAIL_FOUND_IN_LIST_UNEXPECTED
+                     SENIOR_USER_EMAIL_FOUND_IN_PAGINATED_LIST
                );
             })
 
