@@ -4,11 +4,14 @@ import io.cyborgcode.roa.framework.parameters.PreQuestJourney;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
 import java.util.function.BiConsumer;
 
-public enum QuestPreconditions implements PreQuestJourney<QuestPreconditions> {
+public enum Preconditions implements PreQuestJourney<Preconditions> {
 
-   CREATE_NEW_USER(QuestPreconditionFunctions::createNewUser);
+   CREATE_NEW_USER(PreconditionFunctions::createNewUser);
 
    public static final class Data {
+
+      private Data() {
+      }
 
       public static final String CREATE_NEW_USER = "CREATE_NEW_USER";
 
@@ -16,7 +19,7 @@ public enum QuestPreconditions implements PreQuestJourney<QuestPreconditions> {
 
    private final BiConsumer<SuperQuest, Object[]> function;
 
-   QuestPreconditions(final BiConsumer<SuperQuest, Object[]> function) {
+   Preconditions(final BiConsumer<SuperQuest, Object[]> function) {
       this.function = function;
    }
 
@@ -26,7 +29,7 @@ public enum QuestPreconditions implements PreQuestJourney<QuestPreconditions> {
    }
 
    @Override
-   public QuestPreconditions enumImpl() {
+   public Preconditions enumImpl() {
       return this;
    }
 

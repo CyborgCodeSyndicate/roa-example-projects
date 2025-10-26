@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.cyborgcode.roa</groupId>
         <artifactId>roa-parent</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
     </parent>
 
     <groupId>io.cyborgcode.roa.usage</groupId>
@@ -17,7 +17,8 @@
         <api.config.file>config</api.config.file>
         <test.data.file>test_data</test.data.file>
         <framework.config.file>config</framework.config.file>
-        <test.env></test.env>
+        <logFileName>logs/api-example.log</logFileName>
+        <extended.logging>true</extended.logging>
     </properties>
 
 

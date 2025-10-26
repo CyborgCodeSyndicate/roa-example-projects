@@ -8,7 +8,7 @@ import io.restassured.specification.RequestSpecification;
 import static io.cyborgcode.api.test.framework.utils.Headers.API_KEY_HEADER;
 import static io.cyborgcode.api.test.framework.utils.Headers.API_KEY_VALUE;
 
-public enum ReqresEndpoints implements Endpoint<ReqresEndpoints> {
+public enum AppEndpoints implements Endpoint<AppEndpoints> {
 
    GET_ALL_USERS(Method.GET, "/users?{page}"),
    GET_USER(Method.GET, "/users/{id}"),
@@ -21,7 +21,7 @@ public enum ReqresEndpoints implements Endpoint<ReqresEndpoints> {
    private final Method method;
    private final String url;
 
-   ReqresEndpoints(final Method method, final String url) {
+   AppEndpoints(final Method method, final String url) {
       this.method = method;
       this.url = url;
    }
@@ -37,7 +37,7 @@ public enum ReqresEndpoints implements Endpoint<ReqresEndpoints> {
    }
 
    @Override
-   public ReqresEndpoints enumImpl() {
+   public AppEndpoints enumImpl() {
       return this;
    }
 
