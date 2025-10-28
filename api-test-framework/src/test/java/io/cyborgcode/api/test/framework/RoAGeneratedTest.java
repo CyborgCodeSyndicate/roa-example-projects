@@ -1,5 +1,8 @@
 package io.cyborgcode.api.test.framework;
 
+import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
+import io.cyborgcode.api.test.framework.data.creator.DataCreator;
+import io.cyborgcode.api.test.framework.preconditions.Preconditions;
 import io.cyborgcode.api.test.framework.rest.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.rest.authentication.ReqResAuthentication;
 import io.cyborgcode.api.test.framework.rest.dto.request.User;
@@ -23,17 +26,14 @@ import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_EVOLUTION;
-import static io.cyborgcode.api.test.framework.data.cleaner.TestDataCleaner.DELETE_ADMIN_USER;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_INTERMEDIATE;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_LEADER;
-import static io.cyborgcode.api.test.framework.preconditions.QuestPreconditions.Data.CREATE_NEW_USER;
+import static io.cyborgcode.api.test.framework.preconditions.Preconditions.Data.CREATE_NEW_USER;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SINGLE_USER_AVATAR;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SINGLE_USER_FIRST_NAME;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SUPPORT_TEXT;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SUPPORT_URL;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.DELETE_USER;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_USER;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.DELETE_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_AT_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.JOB_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.NAME_INCORRECT;
@@ -59,11 +59,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @API
-public class RoAGeneratedTest extends BaseQuest {
+class RoAGeneratedTest extends BaseQuest {
 
    @Test
    @Regression
-   public void shouldReturnUserThreeWithCorrectFieldsAndSupportInfo(final Quest quest) {
+   void shouldReturnUserThreeWithCorrectFieldsAndSupportInfo(final Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_USER.withPathParam(ID_PARAM, ID_THREE),
@@ -81,11 +81,11 @@ public class RoAGeneratedTest extends BaseQuest {
    @Regression
    @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
    @PreQuest({
-         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_LEADER)}, order = 1),
-         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_INTERMEDIATE)}, order = 2)
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1),
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2)
    })
-   @Ripper(targets = {DELETE_ADMIN_USER})
-   public void shouldCreateIntermediateUserWithCorrectDetails(final Quest quest) {
+   @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
+   void shouldCreateIntermediateUserWithCorrectDetails(final Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
                CreatedUserResponse createdIntermediateUser =
@@ -104,10 +104,10 @@ public class RoAGeneratedTest extends BaseQuest {
    @Smoke
    @Regression
    @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
-   @Ripper(targets = {DELETE_ADMIN_USER})
-   public void shouldCreateAndDeleteLeaderUserSuccessfully(
+   @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
+   void shouldCreateAndDeleteLeaderUserSuccessfully(
          final Quest quest,
-         final @Craft(model = USER_LEADER) Late<User> userLeader) {
+         final @Craft(model = DataCreator.Data.USER_LEADER) Late<User> userLeader) {
 
       quest.use(RING_OF_EVOLUTION)
             .createLeaderUserAndValidateResponse(userLeader.create())

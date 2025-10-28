@@ -4,15 +4,22 @@ import io.cyborgcode.roa.framework.parameters.DataRipper;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
 import java.util.function.Consumer;
 
-public enum TestDataCleaner implements DataRipper<TestDataCleaner> {
+public enum DataCleaner implements DataRipper<DataCleaner> {
 
-   DELETE_ADMIN_USER_FLOW(DataCleanUpFunctions::deleteAdminUser);
+   DELETE_ADMIN_USER(DataCleanUpFunctions::deleteAdminUser);
 
-   public static final String DELETE_ADMIN_USER = "DELETE_ADMIN_USER_FLOW";
+   public static final class Data {
+
+      private Data() {
+      }
+
+      public static final String DELETE_ADMIN_USER = "DELETE_ADMIN_USER";
+
+   }
 
    private final Consumer<SuperQuest> cleanUpFunction;
 
-   TestDataCleaner(final Consumer<SuperQuest> cleanUpFunction) {
+   DataCleaner(final Consumer<SuperQuest> cleanUpFunction) {
       this.cleanUpFunction = cleanUpFunction;
    }
 
@@ -22,7 +29,7 @@ public enum TestDataCleaner implements DataRipper<TestDataCleaner> {
    }
 
    @Override
-   public TestDataCleaner enumImpl() {
+   public DataCleaner enumImpl() {
       return this;
    }
 

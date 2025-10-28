@@ -6,7 +6,7 @@ import io.cyborgcode.roa.api.service.RestService;
 import io.restassured.http.Header;
 
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_KEY;
 import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_VALUE;
 

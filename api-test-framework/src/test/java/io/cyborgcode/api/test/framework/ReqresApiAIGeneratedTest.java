@@ -1,5 +1,7 @@
 package io.cyborgcode.api.test.framework;
 
+import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
+import io.cyborgcode.api.test.framework.data.creator.DataCreator;
 import io.cyborgcode.api.test.framework.rest.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.rest.authentication.ReqResAuthentication;
 import io.cyborgcode.api.test.framework.rest.dto.request.LoginUser;
@@ -20,10 +22,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.data.cleaner.TestDataCleaner.DELETE_ADMIN_USER;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.LOGIN_ADMIN_USER;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_JUNIOR;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_LEADER;
+import static io.cyborgcode.api.test.framework.data.creator.DataCreator.Data.LOGIN_ADMIN_USER;
+import static io.cyborgcode.api.test.framework.data.creator.DataCreator.Data.USER_JUNIOR;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATED_USER_ID;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATED_USER_TIMESTAMP;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_JOB;
@@ -40,11 +40,11 @@ import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOKEN;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_AVATAR_BY_INDEX;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_EMAIL_BY_INDEX;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_ID;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.DELETE_USER;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USERS;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_USER;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.DELETE_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_ALL_USERS;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.EMAIL_FOUND_IN_LIST_UNEXPECTED;
 import static io.cyborgcode.api.test.framework.utils.Helpers.EMPTY_JSON;
 import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
@@ -81,11 +81,11 @@ import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @API
-public class ReqresApiAIGeneratedTest extends BaseQuest {
+class ReqresApiAIGeneratedTest extends BaseQuest {
 
    @Test
    @Regression
-   public void testGetAllUsersPage1AndPage2(Quest quest) {
+   void testGetAllUsersPage1AndPage2(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_ONE),
@@ -107,7 +107,7 @@ public class ReqresApiAIGeneratedTest extends BaseQuest {
 
    @Test
    @Regression
-   public void testGetUserByIdValidAndInvalid(Quest quest) {
+   void testGetUserByIdValidAndInvalid(Quest quest) {
       quest.use(RING_OF_API)
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .requestAndValidate(
@@ -125,7 +125,7 @@ public class ReqresApiAIGeneratedTest extends BaseQuest {
 
    @Test
    @Regression
-   public void testCreateUserWithValidPayload(Quest quest, @Craft(model = USER_LEADER) User user) {
+   void testCreateUserWithValidPayload(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) User user) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
@@ -141,7 +141,7 @@ public class ReqresApiAIGeneratedTest extends BaseQuest {
 
    @Test
    @Regression
-   public void testLoginUserWithValidCredentials(Quest quest, @Craft(model = LOGIN_ADMIN_USER) LoginUser loginUser) {
+   void testLoginUserWithValidCredentials(Quest quest, @Craft(model = LOGIN_ADMIN_USER) LoginUser loginUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
@@ -155,7 +155,7 @@ public class ReqresApiAIGeneratedTest extends BaseQuest {
 
    @Test
    @Regression
-   public void testGetNonExistentUserReturns404AndEmptyBody(Quest quest) {
+   void testGetNonExistentUserReturns404AndEmptyBody(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_USER.withPathParam(ID_PARAM, INVALID_USER_ID),
@@ -169,8 +169,8 @@ public class ReqresApiAIGeneratedTest extends BaseQuest {
    @Smoke
    @Regression
    @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
-   @Ripper(targets = {DELETE_ADMIN_USER})
-   public void testCreateAndDeleteLeaderUser(Quest quest, @Craft(model = USER_LEADER) User userLeader) {
+   @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
+   void testCreateAndDeleteLeaderUser(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) User userLeader) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
@@ -195,11 +195,11 @@ public class ReqresApiAIGeneratedTest extends BaseQuest {
    @Smoke
    @Regression
    @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
-   @Ripper(targets = {DELETE_ADMIN_USER})
-   public void testFullUserLifecycleAndCrossValidation(
+   @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
+   void testFullUserLifecycleAndCrossValidation(
          Quest quest,
-         @Craft(model = USER_LEADER) User userLeader,
-         @Craft(model = USER_JUNIOR) Late<User> userJunior
+         @Craft(model = DataCreator.Data.USER_LEADER) User userLeader,
+         @Craft(model = DataCreator.Data.USER_JUNIOR) Late<User> userJunior
    ) {
       quest.use(RING_OF_API)
             .requestAndValidate(
