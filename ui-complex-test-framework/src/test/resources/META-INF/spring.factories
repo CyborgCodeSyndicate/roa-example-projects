@@ -1,0 +1,2 @@
+org.springframework.test.context.ContextCustomizerFactory=\
+io.cyborgcode.roa.framework.spring.FrameworkAdapterContextCustomizerFactory
