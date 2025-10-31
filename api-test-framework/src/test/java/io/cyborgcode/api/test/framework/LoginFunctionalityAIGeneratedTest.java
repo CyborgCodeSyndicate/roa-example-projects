@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.ERROR;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Login.INVALID_EMAIL;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Login.MISSING_EMAIL_ERROR;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Login.MISSING_PASSWORD_ERROR;
@@ -28,13 +28,13 @@ import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.apache.http.HttpStatus.SC_OK;
 
 @API
-public class LoginFunctionalityAIGeneratedTest extends BaseQuest {
+class LoginFunctionalityAIGeneratedTest extends BaseQuest {
 
    private static final TestData testData = ConfigCache.getOrCreate(TestData.class);
 
    @Test
    @Regression
-   public void testSuccessfulLogin(Quest quest) {
+   void testSuccessfulLogin(Quest quest) {
       LoginUser validUser = LoginUser.builder()
             .email(testData.username())
             .password(testData.password())
@@ -53,7 +53,7 @@ public class LoginFunctionalityAIGeneratedTest extends BaseQuest {
 
    @Test
    @Regression
-   public void testLoginMissingPassword(Quest quest) {
+   void testLoginMissingPassword(Quest quest) {
       LoginUser noPasswordUser = LoginUser.builder()
             .email(testData.username())
             .build();
@@ -70,7 +70,7 @@ public class LoginFunctionalityAIGeneratedTest extends BaseQuest {
 
    @Test
    @Regression
-   public void testLoginMissingEmail(Quest quest) {
+   void testLoginMissingEmail(Quest quest) {
       LoginUser noEmailUser = LoginUser.builder()
             .password(testData.password())
             .build();
@@ -87,7 +87,7 @@ public class LoginFunctionalityAIGeneratedTest extends BaseQuest {
 
    @Test
    @Regression
-   public void testLoginWithInvalidEmail(Quest quest) {
+   void testLoginWithInvalidEmail(Quest quest) {
       LoginUser invalidEmailUser = LoginUser.builder()
             .email(INVALID_EMAIL)
             .password(testData.password())

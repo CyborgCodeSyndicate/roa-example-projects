@@ -1,5 +1,6 @@
 package io.cyborgcode.api.test.framework;
 
+import io.cyborgcode.api.test.framework.data.creator.DataCreator;
 import io.cyborgcode.api.test.framework.rest.dto.request.User;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Craft;
@@ -16,7 +17,7 @@ import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data
 import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_SENIOR;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_LEADER_JOB;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_LEADER_NAME;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_SENIOR_JOB;
@@ -27,11 +28,11 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_CREATED;
 
 @API
-public class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
+class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   public void testCreateTwoUsersBasic(Quest quest) {
+   void testCreateTwoUsersBasic(Quest quest) {
       User userLeader = User.builder()
             .name(USER_LEADER_NAME)
             .job(USER_LEADER_JOB)
@@ -62,7 +63,7 @@ public class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   public void testCreateTwoUsersImproved(Quest quest, @Craft(model = USER_LEADER) User userLeader, @Craft(model = USER_SENIOR) Late<User> userSenior) {
+   void testCreateTwoUsersImproved(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) User userLeader, @Craft(model = DataCreator.Data.USER_SENIOR) Late<User> userSenior) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
@@ -83,7 +84,7 @@ public class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   public void testCreateTwoUsersImprovedWithCustomService(Quest quest, @Craft(model = USER_LEADER) User userLeader, @Craft(model = USER_SENIOR) Late<User> userSenior) {
+   void testCreateTwoUsersImprovedWithCustomService(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) User userLeader, @Craft(model = DataCreator.Data.USER_SENIOR) Late<User> userSenior) {
       quest.use(RING_OF_EVOLUTION)
             .createLeaderUserAndValidateResponse(userLeader)
             .createSeniorUserAndValidateResponse(userSenior.create())

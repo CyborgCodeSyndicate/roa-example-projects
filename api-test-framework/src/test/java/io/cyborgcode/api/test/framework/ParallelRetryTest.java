@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USERS;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.utils.QueryParams.PAGE_PARAM;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.Pagination.PAGE_TWO;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
@@ -19,12 +19,12 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_OK;
 
 @API
-public class ParallelRetryTest extends BaseQuest {
+class ParallelRetryTest extends BaseQuest {
 
    private static final AtomicBoolean conditionMet = new AtomicBoolean(false);
 
    @Test
-   public void testUpdateCondition(Quest quest) {
+   void testUpdateCondition(Quest quest) {
       try {
          Thread.sleep(3000);
       } catch (InterruptedException e) {
@@ -34,7 +34,7 @@ public class ParallelRetryTest extends BaseQuest {
    }
 
    @Test
-   public void testWaitForCondition(Quest quest) {
+   void testWaitForCondition(Quest quest) {
       quest.use(RING_OF_API)
             .retryUntil(
                   sharedFlagIsTrue(),

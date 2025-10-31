@@ -19,8 +19,8 @@ import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.RESOUR
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.RESOURCE_YEAR;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.ROOT;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SUPPORT_TEXT;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_RESOURCES;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_RESOURCE;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_ALL_RESOURCES;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_RESOURCE;
 import static io.cyborgcode.api.test.framework.utils.Helpers.EMPTY_JSON;
 import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
 import static io.cyborgcode.api.test.framework.utils.QueryParams.PAGE_PARAM;
@@ -52,10 +52,10 @@ import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_OK;
 
 @API
-public class ResourcesAIGeneratedTest extends BaseQuest {
+class ResourcesAIGeneratedTest extends BaseQuest {
 
    @Test
-   public void testGetAllResourcesPage1(Quest quest) {
+   void testGetAllResourcesPage1(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_RESOURCES.withQueryParam(PAGE_PARAM, PAGE_ONE),
@@ -70,7 +70,7 @@ public class ResourcesAIGeneratedTest extends BaseQuest {
    }
 
    @Test
-   public void testGetAllResourcesPage2(Quest quest) {
+   void testGetAllResourcesPage2(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_RESOURCES.withQueryParam(PAGE_PARAM, PAGE_TWO),
@@ -84,7 +84,7 @@ public class ResourcesAIGeneratedTest extends BaseQuest {
    }
 
    @Test
-   public void testGetAllResourcesPage3OrMoreReturnsEmptyData(Quest quest) {
+   void testGetAllResourcesPage3OrMoreReturnsEmptyData(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_RESOURCES.withQueryParam(PAGE_PARAM, PAGE_THREE),
@@ -97,7 +97,7 @@ public class ResourcesAIGeneratedTest extends BaseQuest {
    }
 
    @Test
-   public void testGetResourceById2_Positive(Quest quest) {
+   void testGetResourceById2_Positive(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_RESOURCE.withPathParam(ID_PARAM, RESOURCE_TWO_ID),
@@ -112,7 +112,7 @@ public class ResourcesAIGeneratedTest extends BaseQuest {
    }
 
    @Test
-   public void testGetResourceById23_NotFound(Quest quest) {
+   void testGetResourceById23_NotFound(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_RESOURCE.withPathParam(ID_PARAM, RESOURCE_INVALID_ID),

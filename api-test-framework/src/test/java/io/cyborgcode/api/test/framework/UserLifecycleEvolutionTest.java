@@ -1,6 +1,9 @@
 package io.cyborgcode.api.test.framework;
 
+import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
+import io.cyborgcode.api.test.framework.data.creator.DataCreator;
 import io.cyborgcode.api.test.framework.data.test.TestData;
+import io.cyborgcode.api.test.framework.preconditions.Preconditions;
 import io.cyborgcode.api.test.framework.rest.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.rest.authentication.ReqResAuthentication;
 import io.cyborgcode.api.test.framework.rest.dto.request.LoginUser;
@@ -29,9 +32,9 @@ import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data
 import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_LEADER;
 import static io.cyborgcode.api.test.framework.preconditions.QuestPreconditions.Data.CREATE_NEW_USER;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.DELETE_USER;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_CREATE_USER;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.DELETE_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_AT_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_JOB_INCORRECT;
 import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_NAME_INCORRECT;
@@ -53,11 +56,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @API
-public class UserLifecycleEvolutionTest extends BaseQuest {
+class UserLifecycleEvolutionTest extends BaseQuest {
 
    @Test
    @Regression
-   public void testUserLifecycleBasic(Quest quest) {
+   void testUserLifecycleBasic(Quest quest) {
       final TestData testData = ConfigCache.getOrCreate(TestData.class);
       final String username = testData.username();
       final String password = testData.password();
@@ -101,7 +104,7 @@ public class UserLifecycleEvolutionTest extends BaseQuest {
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
    @Regression
-   public void testUserLifecycleWithAuth(Quest quest) {
+   void testUserLifecycleWithAuth(Quest quest) {
       User userLeader = User.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
       User userIntermediate = User.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
 
@@ -134,11 +137,11 @@ public class UserLifecycleEvolutionTest extends BaseQuest {
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
    @PreQuest({
-         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_INTERMEDIATE)}, order = 2),
-         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_LEADER)}, order = 1)
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)
    })
    @Regression
-   public void testUserLifecycleWithPreQuest(Quest quest) {
+   void testUserLifecycleWithPreQuest(Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
                CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
@@ -158,12 +161,12 @@ public class UserLifecycleEvolutionTest extends BaseQuest {
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
    @PreQuest({
-         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_INTERMEDIATE)}, order = 2),
-         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_LEADER)}, order = 1)
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)
    })
-   @Ripper(targets = {DELETE_ADMIN_USER})
+   @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Regression
-   public void testUserLifecycleWithRipper(Quest quest) {
+   void testUserLifecycleWithRipper(Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
                CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
@@ -179,12 +182,12 @@ public class UserLifecycleEvolutionTest extends BaseQuest {
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
    @PreQuest({
-         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_INTERMEDIATE)}, order = 2),
-         @Journey(value = CREATE_NEW_USER, journeyData = {@JourneyData(USER_LEADER)}, order = 1)
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)
    })
-   @Ripper(targets = {DELETE_ADMIN_USER})
+   @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Regression
-   public void testUserLifecycleWithCustomService(Quest quest) {
+   void testUserLifecycleWithCustomService(Quest quest) {
       quest.use(RING_OF_EVOLUTION)
             .validateCreatedUser()
             .complete();
