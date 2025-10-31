@@ -19,14 +19,10 @@ import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOTAL_
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_AVATAR_BY_INDEX;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_FIRST_NAME;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_ID;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USERS;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_USER;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.POST_LOGIN_USER;
-import static io.cyborgcode.api.test.framework.utils.Headers.EXAMPLE_HEADER;
 import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_USER;
 import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_LOGIN_USER;
-import static io.cyborgcode.api.test.framework.utils.Headers.SPECIFIC_HEADER;
+import static io.cyborgcode.api.test.framework.utils.Headers.EXAMPLE_HEADER;
 import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.FileConstants.AVATAR_FILE_EXTENSION;
 import static io.cyborgcode.api.test.framework.utils.TestConstants.PageTwo.PAGE_TWO_CONTAINS_ANY_USER;

@@ -12,8 +12,6 @@ import io.cyborgcode.roa.framework.storage.StorageKeysTest;
 import io.restassured.response.Response;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.USER_LEADER;
-import static io.cyborgcode.api.test.framework.rest.ReqresEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEADER;
 import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.utils.QueryParams.PAGE_PARAM;

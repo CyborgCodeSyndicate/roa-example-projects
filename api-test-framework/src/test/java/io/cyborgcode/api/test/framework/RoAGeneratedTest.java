@@ -26,11 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_EVOLUTION;
-import static io.cyborgcode.api.test.framework.preconditions.Preconditions.Data.CREATE_NEW_USER;
-import static io.cyborgcode.api.test.framework.data.cleaner.TestDataCleaner.Data.DELETE_ADMIN_USER;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_INTERMEDIATE;
-import static io.cyborgcode.api.test.framework.data.creator.TestDataCreator.Data.USER_LEADER;
-import static io.cyborgcode.api.test.framework.preconditions.QuestPreconditions.Data.CREATE_NEW_USER;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SINGLE_USER_AVATAR;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SINGLE_USER_FIRST_NAME;
 import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SUPPORT_TEXT;
