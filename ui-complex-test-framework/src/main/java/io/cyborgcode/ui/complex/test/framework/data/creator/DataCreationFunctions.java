@@ -9,13 +9,15 @@ import org.openqa.selenium.NotFoundException;
 
 import java.util.List;
 
-public class DataCreationFunctions {
+public final class DataCreationFunctions {
 
+   private DataCreationFunctions() {
+   }
 
    public static Seller createValidSeller() {
       return Seller.builder()
-            .email("baker@vaadin.com")
-            .password("Fw@7pop9")
+            .email("admin@vaadin.com")
+            .password("admin")
             .build();
    }
 

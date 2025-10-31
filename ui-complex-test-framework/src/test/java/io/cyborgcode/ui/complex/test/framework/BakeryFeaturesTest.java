@@ -1,25 +1,25 @@
 package io.cyborgcode.ui.complex.test.framework;
 
-import io.cyborgcode.ui.complex.test.framework.data.creator.TestDataCreator;
+import io.cyborgcode.roa.framework.parameters.Late;
+import io.cyborgcode.roa.ui.annotations.AuthenticateViaUi;
+import io.cyborgcode.roa.ui.annotations.InterceptRequests;
+import io.cyborgcode.roa.validator.core.Assertion;
+import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator;
 import io.cyborgcode.ui.complex.test.framework.data.extractions.CustomDataExtractor;
 import io.cyborgcode.ui.complex.test.framework.db.hooks.DbHookFlows;
 import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
 import io.cyborgcode.ui.complex.test.framework.model.bakery.Seller;
-import io.cyborgcode.ui.complex.test.framework.preconditions.BakeryInterceptRequests;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminUi;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.BakeryUiLogging;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.db.annotations.DB;
 import io.cyborgcode.roa.db.annotations.DbHook;
 import io.cyborgcode.roa.db.annotations.DbHooks;
 import io.cyborgcode.roa.framework.annotation.*;
 import io.cyborgcode.roa.framework.base.BaseQuestSequential;
-import io.cyborgcode.roa.framework.parameters.Late;
 import io.cyborgcode.roa.framework.quest.Quest;
-import io.cyborgcode.roa.ui.annotations.AuthenticateViaUi;
-import io.cyborgcode.roa.ui.annotations.InterceptRequests;
 import io.cyborgcode.roa.ui.annotations.UI;
-import io.cyborgcode.roa.validator.core.Assertion;
+import io.cyborgcode.ui.complex.test.framework.preconditions.BakeryInterceptRequests;
+import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminUi;
+import io.cyborgcode.ui.complex.test.framework.ui.authentication.BakeryUiLogging;
 import io.qameta.allure.Description;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
@@ -28,21 +28,21 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static io.cyborgcode.ui.complex.test.framework.base.Ring.*;
-import static io.cyborgcode.ui.complex.test.framework.data.cleaner.TestDataCleaner.Data.DELETE_CREATED_ORDERS;
-import static io.cyborgcode.ui.complex.test.framework.data.creator.TestDataCreator.Data.*;
+import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
+import static io.cyborgcode.roa.framework.storage.StorageKeysTest.PRE_ARGUMENTS;
+import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
+import static io.cyborgcode.ui.complex.test.framework.base.Rings.*;
+import static io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner.Data.DELETE_CREATED_ORDERS;
+import static io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator.Data.*;
 import static io.cyborgcode.ui.complex.test.framework.preconditions.BakeryInterceptRequests.Data.INTERCEPT_REQUEST_AUTH;
+import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
 import static io.cyborgcode.ui.complex.test.framework.preconditions.BakeryQuestPreconditions.Data.LOGIN_PRECONDITION;
 import static io.cyborgcode.ui.complex.test.framework.preconditions.BakeryQuestPreconditions.Data.ORDER_PRECONDITION;
 import static io.cyborgcode.ui.complex.test.framework.rest.Endpoints.ENDPOINT_BAKERY;
 import static io.cyborgcode.ui.complex.test.framework.service.CustomService.getJsessionCookie;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.ButtonFields.*;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.SelectFields.LOCATION_DDL;
-import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
-import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
-import static io.cyborgcode.roa.framework.storage.StorageKeysTest.PRE_ARGUMENTS;
-import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
-import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 
 @UI
 @DB
@@ -50,12 +50,12 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 @DbHooks({
       @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 })
-public class BakeryFeaturesTest extends BaseQuestSequential {
+class BakeryFeaturesTest extends BaseQuestSequential {
 
 
    @Test
    @Description("Insertion data usage")
-   public void createOrderInsertion(Quest quest,
+   void createOrderInsertion(Quest quest,
          @Craft(model = VALID_SELLER) Seller seller,
          @Craft(model = VALID_ORDER) Order order) {
       quest
@@ -76,7 +76,7 @@ public class BakeryFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Description("Storage usage")
-   public void createOrderStorage(Quest quest,
+   void createOrderStorage(Quest quest,
          @Craft(model = VALID_SELLER) Seller seller) {
       quest
             .use(RING_OF_CUSTOM)
@@ -103,7 +103,7 @@ public class BakeryFeaturesTest extends BaseQuestSequential {
          @Journey(value = ORDER_PRECONDITION,
                journeyData = {@JourneyData(VALID_ORDER)}, order = 2)
    })
-   public void createOrderPreQuest(Quest quest,
+   void createOrderPreQuest(Quest quest,
          @Craft(model = VALID_ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
@@ -115,7 +115,7 @@ public class BakeryFeaturesTest extends BaseQuestSequential {
    @Test
    @Description("Authentication usage")
    @AuthenticateViaUi(credentials = AdminUi.class, type = BakeryUiLogging.class)
-   public void createOrderAuth(Quest quest,
+   void createOrderAuth(Quest quest,
          @Craft(model = VALID_ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
@@ -128,7 +128,7 @@ public class BakeryFeaturesTest extends BaseQuestSequential {
    @Test
    @Description("Authentication usage")
    @AuthenticateViaUi(credentials = AdminUi.class, type = BakeryUiLogging.class)
-   public void createOrderAuth2(Quest quest,
+   void createOrderAuth2(Quest quest,
          @Craft(model = VALID_ORDER) Order order) {
       quest
             .use(RING_OF_API)
@@ -150,15 +150,15 @@ public class BakeryFeaturesTest extends BaseQuestSequential {
          @Journey(value = ORDER_PRECONDITION,
                journeyData = {@JourneyData(VALID_ORDER)})
    })
-   public void createOrderAuthPreQuestPreArguments(Quest quest) {
+   void createOrderAuthPreQuestPreArguments(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)
-            .validateOrder(retrieve(PRE_ARGUMENTS, TestDataCreator.VALID_ORDER, Order.class))
+            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
             .complete();
    }
 
 
-   /*@Test
+   @Test
    @Disabled
    @Description("Interceptor raw usage")
    @InterceptRequests(requestUrlSubStrings = {INTERCEPT_REQUEST_AUTH})
@@ -176,10 +176,10 @@ public class BakeryFeaturesTest extends BaseQuestSequential {
                                     "$[0].changes[?(@.key=='totalPrice')].value", "for(;;);"),
                         List.class)))
             .complete();
-   }*/
+   }
 
 
-   /*@Test()
+   @Test()
    @Disabled
    @Description("Late data created with interceptor and ripper data cleanup usage")
    @InterceptRequests(requestUrlSubStrings = {INTERCEPT_REQUEST_AUTH})
@@ -196,10 +196,10 @@ public class BakeryFeaturesTest extends BaseQuestSequential {
             .createOrder(lateOrder.create())
             .validateOrder(lateOrder.create())
             .complete();
-   }*/
+   }
 
 
-   /*@Test
+   @Test
    @Disabled
    @Description("Interceptor with Storage and Late data re-usage")
    @InterceptRequests(requestUrlSubStrings = {INTERCEPT_REQUEST_AUTH})
@@ -212,7 +212,7 @@ public class BakeryFeaturesTest extends BaseQuestSequential {
          @Craft(model = VALID_LATE_ORDER) Late<Order> lateOrder) {
       quest
             .use(RING_OF_CUSTOM)
-            .validateOrder(retrieve(PRE_ARGUMENTS, TestDataCreator.VALID_ORDER, Order.class))
+            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
             .createOrder(lateOrder.create())
             .validateOrder(lateOrder.create())
             .drop()
@@ -220,6 +220,6 @@ public class BakeryFeaturesTest extends BaseQuestSequential {
             .interceptor().validateResponseHaveStatus(
                   BakeryInterceptRequests.INTERCEPT_REQUEST_AUTH.getEndpointSubString(), 2, true)
             .complete();
-   }*/
+   }
 
 }

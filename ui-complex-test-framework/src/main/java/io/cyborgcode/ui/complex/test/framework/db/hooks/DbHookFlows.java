@@ -7,10 +7,10 @@ import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.Map;
 
-import static io.cyborgcode.ui.complex.test.framework.db.Queries.QUERY_SELLER;
-import static io.cyborgcode.ui.complex.test.framework.db.hooks.QueriesH2.*;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.Queries.QUERY_SELLER;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.QueriesH2.*;
 
-public enum DbHookFlows implements DbHookFlow {
+public enum DbHookFlows implements DbHookFlow<DbHookFlows> {
 
    INITIALIZE_H2(DbHookFlows::initializeH2),
    QUERY_SAVE_IN_STORAGE_H2(DbHookFlows::getFromDbSaveInStorage);
@@ -41,7 +41,7 @@ public enum DbHookFlows implements DbHookFlow {
 
 
    @Override
-   public Enum<?> enumImpl() {
+   public DbHookFlows enumImpl() {
       return this;
    }
 

@@ -1,6 +1,6 @@
 package io.cyborgcode.ui.complex.test.framework.data.cleaner;
 
-import io.cyborgcode.ui.complex.test.framework.db.DbResponsesJsonPaths;
+import io.cyborgcode.ui.complex.test.framework.db.responses.DbResponsesJsonPaths;
 import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
 import io.cyborgcode.roa.db.query.QueryResponse;
 import io.cyborgcode.roa.db.storage.StorageKeysDb;
@@ -9,9 +9,9 @@ import io.cyborgcode.roa.validator.core.Assertion;
 
 import java.util.List;
 
-import static io.cyborgcode.ui.complex.test.framework.base.Ring.RING_OF_DB;
-import static io.cyborgcode.ui.complex.test.framework.data.creator.TestDataCreator.VALID_ORDER;
-import static io.cyborgcode.ui.complex.test.framework.db.Queries.*;
+import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_DB;
+import static io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator.VALID_ORDER;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.Queries.*;
 import static io.cyborgcode.roa.db.validator.DbAssertionTarget.NUMBER_ROWS;
 import static io.cyborgcode.roa.db.validator.DbAssertionTarget.QUERY_RESULT;
 import static io.cyborgcode.roa.framework.storage.StorageKeysTest.ARGUMENTS;

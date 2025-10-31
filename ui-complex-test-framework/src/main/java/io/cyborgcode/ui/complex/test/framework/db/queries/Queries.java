@@ -1,4 +1,4 @@
-package io.cyborgcode.ui.complex.test.framework.db;
+package io.cyborgcode.ui.complex.test.framework.db.queries;
 
 import io.cyborgcode.roa.db.config.DatabaseConfiguration;
 import io.cyborgcode.roa.db.query.DbQuery;
@@ -15,23 +15,19 @@ public enum Queries implements DbQuery<Queries> {
 
    private final String query;
 
-
    Queries(final String query) {
       this.query = query;
    }
-
 
    @Override
    public String query() {
       return query;
    }
 
-
    @Override
    public DatabaseConfiguration config() {
       return DbQuery.super.config();
    }
-
 
    @Override
    public Queries enumImpl() {

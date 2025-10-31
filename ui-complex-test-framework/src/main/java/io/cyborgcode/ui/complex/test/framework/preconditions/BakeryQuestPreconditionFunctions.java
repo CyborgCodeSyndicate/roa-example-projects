@@ -1,6 +1,6 @@
 package io.cyborgcode.ui.complex.test.framework.preconditions;
 
-import io.cyborgcode.ui.complex.test.framework.db.DbResponsesJsonPaths;
+import io.cyborgcode.ui.complex.test.framework.db.responses.DbResponsesJsonPaths;
 import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
 import io.cyborgcode.ui.complex.test.framework.model.bakery.Seller;
 import io.cyborgcode.ui.complex.test.framework.rest.Endpoints;
@@ -12,9 +12,9 @@ import io.cyborgcode.roa.framework.storage.DataExtractorsTest;
 import io.cyborgcode.roa.validator.core.Assertion;
 import org.apache.http.HttpStatus;
 
-import static io.cyborgcode.ui.complex.test.framework.base.Ring.*;
-import static io.cyborgcode.ui.complex.test.framework.db.Queries.QUERY_SELLER_EMAIL;
-import static io.cyborgcode.ui.complex.test.framework.db.Queries.QUERY_SELLER_PASSWORD;
+import static io.cyborgcode.ui.complex.test.framework.base.Rings.*;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.Queries.QUERY_SELLER_EMAIL;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.Queries.QUERY_SELLER_PASSWORD;
 import static io.cyborgcode.ui.complex.test.framework.rest.Endpoints.ENDPOINT_BAKERY;
 import static io.cyborgcode.ui.complex.test.framework.service.CustomService.getJsessionCookie;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;

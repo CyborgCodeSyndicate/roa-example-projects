@@ -1,7 +1,7 @@
 package io.cyborgcode.ui.complex.test.framework;
 
-import io.cyborgcode.ui.complex.test.framework.data.creator.TestDataCreator;
-import io.cyborgcode.ui.complex.test.framework.db.DbResponsesJsonPaths;
+import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator;
+import io.cyborgcode.ui.complex.test.framework.db.responses.DbResponsesJsonPaths;
 import io.cyborgcode.ui.complex.test.framework.db.hooks.DbHookFlows;
 import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
 import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminUi;
@@ -23,13 +23,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static io.cyborgcode.ui.complex.test.framework.base.Ring.RING_OF_CUSTOM;
-import static io.cyborgcode.ui.complex.test.framework.base.Ring.RING_OF_DB;
-import static io.cyborgcode.ui.complex.test.framework.data.cleaner.TestDataCleaner.Data.DELETE_CREATED_ORDERS;
-import static io.cyborgcode.ui.complex.test.framework.data.creator.TestDataCreator.Data.VALID_ORDER;
-import static io.cyborgcode.ui.complex.test.framework.data.creator.TestDataCreator.Data.VALID_SELLER;
-import static io.cyborgcode.ui.complex.test.framework.db.Queries.QUERY_ORDER;
-import static io.cyborgcode.ui.complex.test.framework.db.Queries.QUERY_ORDER_PRODUCT;
+import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_CUSTOM;
+import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_DB;
+import static io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner.Data.DELETE_CREATED_ORDERS;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.Queries.QUERY_ORDER;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.Queries.QUERY_ORDER_PRODUCT;
 import static io.cyborgcode.ui.complex.test.framework.preconditions.BakeryQuestPreconditions.Data.*;
 import static io.cyborgcode.roa.db.validator.DbAssertionTarget.QUERY_RESULT;
 import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
@@ -49,12 +47,12 @@ public class BakeryDataBaseTests extends BaseQuest {
    @Description("Database usage in Test")
    @PreQuest({
          @Journey(value = LOGIN_PRECONDITION,
-               journeyData = {@JourneyData(VALID_SELLER)}, order = 1),
+               journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1),
          @Journey(value = ORDER_PRECONDITION,
-               journeyData = {@JourneyData(VALID_ORDER)}, order = 2)
+               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
    })
    public void createOrderDatabaseValidation(Quest quest,
-         @Craft(model = VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
             .validateOrder(order)
@@ -79,14 +77,14 @@ public class BakeryDataBaseTests extends BaseQuest {
    @Description("Database usage in PreQuest and Test")
    @PreQuest({
          @Journey(value = SELLER_PRECONDITION,
-               journeyData = {@JourneyData(VALID_SELLER)}, order = 1),
+               journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1),
          @Journey(value = LOGIN_PRECONDITION,
-               journeyData = {@JourneyData(VALID_SELLER)}, order = 2),
+               journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 2),
          @Journey(value = ORDER_PRECONDITION,
-               journeyData = {@JourneyData(VALID_ORDER)}, order = 3)
+               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 3)
    })
    public void createOrderPreQuestDatabase(Quest quest,
-         @Craft(model = VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
             .validateOrder(order)
@@ -108,13 +106,13 @@ public class BakeryDataBaseTests extends BaseQuest {
    @AuthenticateViaUi(credentials = AdminUi.class, type = BakeryUiLogging.class)
    @PreQuest({
          @Journey(value = ORDER_PRECONDITION,
-               journeyData = {@JourneyData(VALID_ORDER)})
+               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
    })
    @Ripper(targets = {DELETE_CREATED_ORDERS})
    public void createOrderPreArgumentsAndRipper(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)
-            .validateOrder(retrieve(PRE_ARGUMENTS, TestDataCreator.VALID_ORDER, Order.class))
+            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
             .complete();
    }
 

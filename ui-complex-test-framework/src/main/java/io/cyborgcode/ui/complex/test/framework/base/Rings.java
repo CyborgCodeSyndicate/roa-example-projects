@@ -7,7 +7,7 @@ import io.cyborgcode.roa.db.service.fluent.DatabaseServiceFluent;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class Ring {
+public class Rings {
 
    public static final Class<RestServiceFluent> RING_OF_API = RestServiceFluent.class;
    public static final Class<DatabaseServiceFluent> RING_OF_DB = DatabaseServiceFluent.class;

@@ -1,8 +1,9 @@
-package io.cyborgcode.ui.complex.test.framework.db.hooks;
+package io.cyborgcode.ui.complex.test.framework.db.queries;
 
 import io.cyborgcode.roa.db.query.DbQuery;
 
 public enum QueriesH2 implements DbQuery<QueriesH2> {
+
    CREATE_TABLE_ORDERS(
          "CREATE TABLE orders ("
                + "id INT PRIMARY KEY, "
@@ -27,26 +28,24 @@ public enum QueriesH2 implements DbQuery<QueriesH2> {
    ),
    INSERT_SELLERS(
          "INSERT INTO sellers (id, email, password) VALUES " +
-               "(1, 'baker@vaadin.com', 'Fw@7pop9'), " +
+               "(1, 'admin@vaadin.com', 'admin'), " +
                "(2, 'admin@vaadin.com', 'admin')"
    );
 
    private final String query;
 
-
    QueriesH2(final String query) {
       this.query = query;
    }
-
 
    @Override
    public String query() {
       return query;
    }
 
-
    @Override
    public QueriesH2 enumImpl() {
       return this;
    }
+
 }

@@ -4,9 +4,9 @@ import io.cyborgcode.roa.ui.parameters.DataIntercept;
 
 
 public enum BakeryInterceptRequests implements DataIntercept<BakeryInterceptRequests> {
+
    INTERCEPT_REQUEST_AUTH("?v-r=uidl"),
    INTERCEPT_REQUEST_LOGIN("/login");
-
 
    public static final class Data {
 
@@ -15,8 +15,8 @@ public enum BakeryInterceptRequests implements DataIntercept<BakeryInterceptRequ
 
       private Data() {
       }
-   }
 
+   }
 
    private final String endpointSubString;
 

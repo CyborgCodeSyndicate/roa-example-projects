@@ -18,7 +18,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
 import java.util.Objects;
 
-import static io.cyborgcode.ui.complex.test.framework.base.Ring.RING_OF_UI;
+import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_UI;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.ButtonFields.SIGN_IN_BUTTON;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.InputFields.*;
 import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;

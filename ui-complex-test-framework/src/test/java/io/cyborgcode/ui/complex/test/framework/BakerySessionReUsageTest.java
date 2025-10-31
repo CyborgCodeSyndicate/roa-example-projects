@@ -1,6 +1,6 @@
 package io.cyborgcode.ui.complex.test.framework;
 
-import io.cyborgcode.ui.complex.test.framework.base.Ring;
+import io.cyborgcode.ui.complex.test.framework.base.Rings;
 import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminUi;
 import io.cyborgcode.ui.complex.test.framework.ui.authentication.BakeryUiLogging;
 import io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.InputFields;
@@ -20,7 +20,7 @@ public class BakerySessionReUsageTest extends BaseQuest {
    @AuthenticateViaUi(credentials = AdminUi.class, type = BakeryUiLogging.class, cacheCredentials = true)
    public void scenario_four(Quest quest) throws InterruptedException {
       quest
-            .use(Ring.RING_OF_UI)
+            .use(Rings.RING_OF_UI)
             .input().insert(InputFields.SEARCH_BAR_FIELD, "Amanda Nixon")
             .checkbox().validateIsEnabled(PAST_ORDERS_CHECKBOX)
             .checkbox().select(PAST_ORDERS_CHECKBOX)
@@ -33,7 +33,7 @@ public class BakerySessionReUsageTest extends BaseQuest {
    @AuthenticateViaUi(credentials = AdminUi.class, type = BakeryUiLogging.class, cacheCredentials = true)
    public void scenario_five(Quest quest) throws InterruptedException {
       quest
-            .use(Ring.RING_OF_UI)
+            .use(Rings.RING_OF_UI)
             .input().insert(InputFields.SEARCH_BAR_FIELD, "Amanda Nixon")
             .checkbox().validateIsEnabled(PAST_ORDERS_CHECKBOX)
             .checkbox().select(PAST_ORDERS_CHECKBOX)
