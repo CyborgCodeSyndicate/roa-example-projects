@@ -1,12 +1,12 @@
 package io.cyborgcode.api.test.framework;
 
+import io.cyborgcode.api.test.framework.data.constants.JsonSamples;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.validator.core.Assertion;
 import org.junit.jupiter.api.Test;
 
-import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.DATA;
 import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_COLOR;
 import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_COLOR_BY_INDEX;
@@ -21,7 +21,7 @@ import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.ROOT;
 import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.SUPPORT_TEXT;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_RESOURCES;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_RESOURCE;
-import static io.cyborgcode.api.test.framework.data.constants.Helpers.EMPTY_JSON;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.constants.PathVariables.ID_PARAM;
 import static io.cyborgcode.api.test.framework.data.constants.QueryParams.PAGE_PARAM;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.PAGE_ONE;
@@ -117,7 +117,7 @@ class ResourcesAIGeneratedTest extends BaseQuest {
             .requestAndValidate(
                   GET_RESOURCE.withPathParam(ID_PARAM, RESOURCE_INVALID_ID),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_NOT_FOUND).build(),
-                  Assertion.builder().target(BODY).key(ROOT.getJsonPath()).type(IS).expected(EMPTY_JSON).build()
+                  Assertion.builder().target(BODY).key(ROOT.getJsonPath()).type(IS).expected(JsonSamples.emptyJson()).build()
             )
             .complete();
    }
