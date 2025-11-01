@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserResponse {
 
-   DataResponse data;
-   SupportResponse support;
+   UserData data;
+   Support support;
    @JsonProperty("_meta")
-   private MetaResponse meta;
+   private Meta meta;
 
 }

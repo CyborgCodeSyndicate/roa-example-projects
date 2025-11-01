@@ -19,9 +19,9 @@ public class GetUsersResponse {
    private int total;
    @JsonProperty("total_pages")
    private int totalPages;
-   private List<DataResponse> data;
-   private SupportResponse support;
+   private List<UserData> data;
+   private Support support;
    @JsonProperty("_meta")
-   private MetaResponse meta;
+   private Meta meta;
 
 }

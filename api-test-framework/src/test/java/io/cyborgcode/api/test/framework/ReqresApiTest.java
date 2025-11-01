@@ -5,7 +5,7 @@ import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
 import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
 import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
-import io.cyborgcode.api.test.framework.api.dto.response.DataResponse;
+import io.cyborgcode.api.test.framework.api.dto.response.UserData;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
 import io.cyborgcode.api.test.framework.api.dto.response.UserResponse;
 import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
@@ -201,7 +201,7 @@ class ReqresApiTest extends BaseQuest {
                   .getData()
                   .stream()
                   .filter(user -> USER_NINE_FIRST_NAME.equals(user.getFirstName()))
-                  .map(DataResponse::getId)
+                  .map(UserData::getId)
                   .findFirst()
                   .orElseThrow(() -> new RuntimeException(userWithFirstNameNotFound(USER_NINE_FIRST_NAME))))
             )

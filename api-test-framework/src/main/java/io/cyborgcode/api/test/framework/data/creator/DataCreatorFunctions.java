@@ -3,7 +3,7 @@ package io.cyborgcode.api.test.framework.data.creator;
 
 import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
-import io.cyborgcode.api.test.framework.api.dto.response.DataResponse;
+import io.cyborgcode.api.test.framework.api.dto.response.UserData;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
 import io.cyborgcode.api.test.framework.data.constants.TestConstants;
 import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
@@ -43,19 +43,19 @@ public final class DataCreatorFunctions {
 
    public static CreateUserRequest createJuniorUserRequest() {
       SuperQuest quest = QuestHolder.get();
-      DataResponse dataResponse;
+      UserData userData;
 
       try {
-         dataResponse = extractFirstUserFromGetAllUsers(quest);
+         userData = extractFirstUserFromGetAllUsers(quest);
       } catch (Exception ex) {
          quest.use(RING_OF_API)
                .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO));
-         dataResponse = extractFirstUserFromGetAllUsers(quest);
+         userData = extractFirstUserFromGetAllUsers(quest);
       }
 
       return CreateUserRequest.builder()
-            .name(dataResponse.getFirstName() + " suffix")
-            .job("Junior " + dataResponse.getLastName() + " worker")
+            .name(userData.getFirstName() + " suffix")
+            .job("Junior " + userData.getLastName() + " worker")
             .build();
    }
 
@@ -95,7 +95,7 @@ public final class DataCreatorFunctions {
             .build();
    }
 
-   private static DataResponse extractFirstUserFromGetAllUsers(SuperQuest quest) {
+   private static UserData extractFirstUserFromGetAllUsers(SuperQuest quest) {
       return quest.getStorage()
             .sub(StorageKeysApi.API)
             .get(GET_ALL_USERS, Response.class)

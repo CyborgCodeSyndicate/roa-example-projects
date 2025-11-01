@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MetaResponse {
+public class Meta {
 
    @JsonProperty("powered_by")
    private String poweredBy;

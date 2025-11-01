@@ -1,7 +1,7 @@
 package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
-import io.cyborgcode.api.test.framework.api.dto.response.DataResponse;
+import io.cyborgcode.api.test.framework.api.dto.response.UserData;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
 import io.cyborgcode.roa.api.annotations.API;
@@ -47,14 +47,14 @@ class CreateUserEvolutionTest extends BaseQuest {
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
             );
 
-      DataResponse dataResponse = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
+      UserData userData = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
             .getBody()
             .as(GetUsersResponse.class)
             .getData().get(0);
 
       CreateUserRequest createJuniorUserRequest = CreateUserRequest.builder()
-            .name(dataResponse.getFirstName() + " suffix")
-            .job("Junior " + dataResponse.getLastName() + " worker")
+            .name(userData.getFirstName() + " suffix")
+            .job("Junior " + userData.getLastName() + " worker")
             .build();
 
       quest.use(RING_OF_API)
