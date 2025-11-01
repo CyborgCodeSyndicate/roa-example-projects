@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.utils;
+package io.cyborgcode.api.test.framework.data.constants;
 
 import lombok.experimental.UtilityClass;
 

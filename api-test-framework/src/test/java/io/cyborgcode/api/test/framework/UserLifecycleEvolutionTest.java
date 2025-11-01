@@ -2,13 +2,13 @@ package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
-import io.cyborgcode.api.test.framework.data.test.TestData;
+import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
 import io.cyborgcode.api.test.framework.preconditions.Preconditions;
-import io.cyborgcode.api.test.framework.rest.authentication.AdminAuth;
-import io.cyborgcode.api.test.framework.rest.authentication.ReqResAuthentication;
-import io.cyborgcode.api.test.framework.rest.dto.request.LoginUser;
-import io.cyborgcode.api.test.framework.rest.dto.request.User;
-import io.cyborgcode.api.test.framework.rest.dto.response.CreatedUserResponse;
+import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
+import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginUser;
+import io.cyborgcode.api.test.framework.api.dto.request.User;
+import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.api.annotations.AuthenticateViaApi;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
@@ -27,21 +27,21 @@ import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_EVOLUTION;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.DELETE_USER;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_CREATE_USER;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_LOGIN_USER;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_AT_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_JOB_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.AssertionMessages.CREATED_USER_NAME_INCORRECT;
-import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_KEY;
-import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_VALUE;
-import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_INTERMEDIATE_JOB;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_INTERMEDIATE_NAME;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_LEADER_JOB;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_LEADER_NAME;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Users.ID_THREE;
+import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.DELETE_USER;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_AT_INCORRECT;
+import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_USER_JOB_INCORRECT;
+import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_USER_NAME_INCORRECT;
+import static io.cyborgcode.api.test.framework.data.constants.Headers.AUTHORIZATION_HEADER_KEY;
+import static io.cyborgcode.api.test.framework.data.constants.Headers.AUTHORIZATION_HEADER_VALUE;
+import static io.cyborgcode.api.test.framework.data.constants.PathVariables.ID_PARAM;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_INTERMEDIATE_JOB;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_INTERMEDIATE_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_LEADER_JOB;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_LEADER_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.ID_THREE;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static java.time.ZoneOffset.UTC;
@@ -57,9 +57,9 @@ class UserLifecycleEvolutionTest extends BaseQuest {
    @Test
    @Regression
    void testUserLifecycleBasic(Quest quest) {
-      final TestData testData = ConfigCache.getOrCreate(TestData.class);
-      final String username = testData.username();
-      final String password = testData.password();
+      final DataProperties dataProperties = ConfigCache.getOrCreate(DataProperties.class);
+      final String username = dataProperties.username();
+      final String password = dataProperties.password();
 
       quest.use(RING_OF_API)
             .request(POST_LOGIN_USER, new LoginUser(username, password));
@@ -98,7 +98,7 @@ class UserLifecycleEvolutionTest extends BaseQuest {
    }
 
    @Test
-   @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
+   @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @Regression
    void testUserLifecycleWithAuth(Quest quest) {
       User userLeader = User.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
@@ -131,7 +131,7 @@ class UserLifecycleEvolutionTest extends BaseQuest {
    }
 
    @Test
-   @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
+   @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @PreQuest({
          @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
          @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)
@@ -155,7 +155,7 @@ class UserLifecycleEvolutionTest extends BaseQuest {
    }
 
    @Test
-   @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
+   @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @PreQuest({
          @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
          @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)
@@ -176,7 +176,7 @@ class UserLifecycleEvolutionTest extends BaseQuest {
    }
 
    @Test
-   @AuthenticateViaApi(credentials = AdminAuth.class, type = ReqResAuthentication.class)
+   @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @PreQuest({
          @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
          @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)

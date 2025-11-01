@@ -1,7 +1,7 @@
 package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
-import io.cyborgcode.api.test.framework.rest.dto.request.User;
+import io.cyborgcode.api.test.framework.api.dto.request.User;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Craft;
 import io.cyborgcode.roa.framework.annotation.Regression;
@@ -13,13 +13,13 @@ import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_EVOLUTION;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_CREATE_USER;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_LEADER_JOB;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_LEADER_NAME;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_SENIOR_JOB;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Roles.USER_SENIOR_NAME;
+import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
+import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_LEADER_JOB;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_LEADER_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_SENIOR_JOB;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_SENIOR_NAME;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.BODY;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;

@@ -1,7 +1,7 @@
 package io.cyborgcode.api.test.framework;
 
-import io.cyborgcode.api.test.framework.data.test.TestData;
-import io.cyborgcode.api.test.framework.rest.dto.request.LoginUser;
+import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginUser;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.base.BaseQuest;
@@ -11,14 +11,14 @@ import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.ERROR;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_LOGIN_USER;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Login.INVALID_EMAIL;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Login.MISSING_EMAIL_ERROR;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Login.MISSING_PASSWORD_ERROR;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Login.TOKEN_REGEX;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Login.USER_NOT_FOUND_ERROR;
+import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.ERROR;
+import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.INVALID_EMAIL;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.MISSING_EMAIL_ERROR;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.MISSING_PASSWORD_ERROR;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.TOKEN_REGEX;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.USER_NOT_FOUND_ERROR;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.BODY;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
@@ -30,14 +30,14 @@ import static org.apache.http.HttpStatus.SC_OK;
 @API
 class LoginFunctionalityAIGeneratedTest extends BaseQuest {
 
-   private static final TestData testData = ConfigCache.getOrCreate(TestData.class);
+   private static final DataProperties DATA_PROPERTIES = ConfigCache.getOrCreate(DataProperties.class);
 
    @Test
    @Regression
    void testSuccessfulLogin(Quest quest) {
       LoginUser validUser = LoginUser.builder()
-            .email(testData.username())
-            .password(testData.password())
+            .email(DATA_PROPERTIES.username())
+            .password(DATA_PROPERTIES.password())
             .build();
 
       quest.use(RING_OF_API)
@@ -55,7 +55,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    @Regression
    void testLoginMissingPassword(Quest quest) {
       LoginUser noPasswordUser = LoginUser.builder()
-            .email(testData.username())
+            .email(DATA_PROPERTIES.username())
             .build();
 
       quest.use(RING_OF_API)
@@ -72,7 +72,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    @Regression
    void testLoginMissingEmail(Quest quest) {
       LoginUser noEmailUser = LoginUser.builder()
-            .password(testData.password())
+            .password(DATA_PROPERTIES.password())
             .build();
 
       quest.use(RING_OF_API)
@@ -90,7 +90,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    void testLoginWithInvalidEmail(Quest quest) {
       LoginUser invalidEmailUser = LoginUser.builder()
             .email(INVALID_EMAIL)
-            .password(testData.password())
+            .password(DATA_PROPERTIES.password())
             .build();
 
       quest.use(RING_OF_API)

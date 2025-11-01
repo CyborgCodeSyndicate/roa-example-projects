@@ -1,10 +1,10 @@
 package io.cyborgcode.api.test.framework.data.creator;
 
 
-import io.cyborgcode.api.test.framework.rest.dto.request.LoginUser;
-import io.cyborgcode.api.test.framework.rest.dto.request.User;
-import io.cyborgcode.api.test.framework.rest.dto.response.DataResponse;
-import io.cyborgcode.api.test.framework.rest.dto.response.GetUsersResponse;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginUser;
+import io.cyborgcode.api.test.framework.api.dto.request.User;
+import io.cyborgcode.api.test.framework.api.dto.response.DataResponse;
+import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.quest.QuestHolder;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
@@ -13,13 +13,13 @@ import io.restassured.response.Response;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEADER;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_ALL_USERS;
-import static io.cyborgcode.api.test.framework.utils.QueryParams.PAGE_PARAM;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Pagination.PAGE_TWO;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
+import static io.cyborgcode.api.test.framework.data.constants.QueryParams.PAGE_PARAM;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.PAGE_TWO;
 
-public final class DataCreationFunctions {
+public final class DataCreatorFunctions {
 
-   private DataCreationFunctions() {
+   private DataCreatorFunctions() {
    }
 
    public static User createLeaderUser() {

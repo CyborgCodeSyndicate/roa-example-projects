@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.rest.dto.response;
+package io.cyborgcode.api.test.framework.api.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.rest;
+package io.cyborgcode.api.test.framework.api;
 
 public enum ApiResponsesJsonPaths {
 

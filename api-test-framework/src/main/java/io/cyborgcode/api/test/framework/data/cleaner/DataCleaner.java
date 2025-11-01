@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 public enum DataCleaner implements DataRipper<DataCleaner> {
 
-   DELETE_ADMIN_USER(DataCleanUpFunctions::deleteAdminUser);
+   DELETE_ADMIN_USER(DataCleanerFunctions::deleteAdminUser);
 
    public static final class Data {
 

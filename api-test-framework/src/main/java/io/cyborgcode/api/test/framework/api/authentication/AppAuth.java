@@ -1,16 +1,16 @@
-package io.cyborgcode.api.test.framework.rest.authentication;
+package io.cyborgcode.api.test.framework.api.authentication;
 
-import io.cyborgcode.api.test.framework.rest.dto.request.LoginUser;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginUser;
 import io.cyborgcode.roa.api.authentication.BaseAuthenticationClient;
 import io.cyborgcode.roa.api.service.RestService;
 import io.restassured.http.Header;
 
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_LOGIN_USER;
-import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_KEY;
-import static io.cyborgcode.api.test.framework.utils.Headers.AUTHORIZATION_HEADER_VALUE;
+import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.data.constants.Headers.AUTHORIZATION_HEADER_KEY;
+import static io.cyborgcode.api.test.framework.data.constants.Headers.AUTHORIZATION_HEADER_VALUE;
 
-public class ReqResAuthentication extends BaseAuthenticationClient {
+public class AppAuth extends BaseAuthenticationClient {
 
    @Override
    protected Header authenticateImpl(final RestService restService, final String username, final String password) {

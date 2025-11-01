@@ -1,12 +1,12 @@
-package io.cyborgcode.api.test.framework.rest;
+package io.cyborgcode.api.test.framework.api;
 
 import io.cyborgcode.roa.api.core.Endpoint;
 import io.restassured.http.ContentType;
 import io.restassured.http.Method;
 import io.restassured.specification.RequestSpecification;
 
-import static io.cyborgcode.api.test.framework.utils.Headers.API_KEY_HEADER;
-import static io.cyborgcode.api.test.framework.utils.Headers.API_KEY_VALUE;
+import static io.cyborgcode.api.test.framework.data.constants.Headers.API_KEY_HEADER;
+import static io.cyborgcode.api.test.framework.data.constants.Headers.API_KEY_VALUE;
 
 public enum AppEndpoints implements Endpoint<AppEndpoints> {
 
