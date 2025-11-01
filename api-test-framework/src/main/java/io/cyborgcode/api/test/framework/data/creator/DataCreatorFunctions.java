@@ -1,42 +1,47 @@
 package io.cyborgcode.api.test.framework.data.creator;
 
 
-import io.cyborgcode.api.test.framework.api.dto.request.LoginUser;
-import io.cyborgcode.api.test.framework.api.dto.request.User;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
 import io.cyborgcode.api.test.framework.api.dto.response.DataResponse;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
+import io.cyborgcode.api.test.framework.data.constants.TestConstants;
+import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.quest.QuestHolder;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
 import io.cyborgcode.roa.framework.storage.StorageKeysTest;
 import io.restassured.response.Response;
+import org.aeonbits.owner.ConfigCache;
 
-import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEADER;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.constants.QueryParams.PAGE_PARAM;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.PAGE_TWO;
+import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEADER;
 
 public final class DataCreatorFunctions {
+
+   private static final DataProperties DATA_PROPERTIES = ConfigCache.getOrCreate(DataProperties.class);
 
    private DataCreatorFunctions() {
    }
 
-   public static User createLeaderUser() {
-      return User.builder()
-            .name("Morpheus")
-            .job("Leader")
+   public static CreateUserRequest createLeaderUserRequest() {
+      return CreateUserRequest.builder()
+            .name(TestConstants.Roles.USER_LEADER_NAME)
+            .job(TestConstants.Roles.USER_LEADER_JOB)
             .build();
    }
 
-   public static LoginUser createAdminLoginUser() {
-      return LoginUser.builder()
-            .email("eve.holt@reqres.in")
-            .password("cityslicka")
+   public static LoginUserRequest createAdminLoginUserRequest() {
+      return LoginUserRequest.builder()
+            .email(DATA_PROPERTIES.username())
+            .password(DATA_PROPERTIES.password())
             .build();
    }
 
-   public static User createJuniorUser() {
+   public static CreateUserRequest createJuniorUserRequest() {
       SuperQuest quest = QuestHolder.get();
       DataResponse dataResponse;
 
@@ -48,43 +53,43 @@ public final class DataCreatorFunctions {
          dataResponse = extractFirstUserFromGetAllUsers(quest);
       }
 
-      return User.builder()
+      return CreateUserRequest.builder()
             .name(dataResponse.getFirstName() + " suffix")
             .job("Junior " + dataResponse.getLastName() + " worker")
             .build();
    }
 
-   public static User createSeniorUser() {
+   public static CreateUserRequest createSeniorUserRequest() {
       SuperQuest quest = QuestHolder.get();
 
-      User userLeader;
+      CreateUserRequest userLeader;
       try {
          userLeader = quest.getStorage()
                .sub(StorageKeysTest.ARGUMENTS)
-               .get(USER_LEADER, User.class);
+               .get(USER_LEADER, CreateUserRequest.class);
       } catch (Exception ex) {
-         userLeader = createLeaderUser();
+         userLeader = createLeaderUserRequest();
       }
 
-      return User.builder()
+      return CreateUserRequest.builder()
             .name("Mr. " + userLeader.getName())
             .job("Senior " + userLeader.getJob())
             .build();
    }
 
-   public static User createIntermediateUser() {
+   public static CreateUserRequest createIntermediateUserRequest() {
       SuperQuest quest = QuestHolder.get();
 
-      User userLeader;
+      CreateUserRequest userLeader;
       try {
          userLeader = quest.getStorage()
                .sub(StorageKeysTest.PRE_ARGUMENTS)
-               .get(USER_LEADER, User.class);
+               .get(USER_LEADER, CreateUserRequest.class);
       } catch (Exception ex) {
-         userLeader = createLeaderUser();
+         userLeader = createLeaderUserRequest();
       }
 
-      return User.builder()
+      return CreateUserRequest.builder()
             .name("Mr. " + userLeader.getName())
             .job("Intermediate " + userLeader.getJob())
             .build();

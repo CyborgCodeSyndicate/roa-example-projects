@@ -5,11 +5,11 @@ import io.cyborgcode.roa.framework.parameters.Late;
 
 public enum DataCreator implements DataForge<DataCreator> {
 
-   USER_LEADER(DataCreatorFunctions::createLeaderUser),
-   LOGIN_ADMIN_USER(DataCreatorFunctions::createAdminLoginUser),
-   USER_JUNIOR(DataCreatorFunctions::createJuniorUser),
-   USER_SENIOR(DataCreatorFunctions::createSeniorUser),
-   USER_INTERMEDIATE(DataCreatorFunctions::createIntermediateUser);
+   USER_LEADER(DataCreatorFunctions::createLeaderUserRequest),
+   LOGIN_ADMIN_USER(DataCreatorFunctions::createAdminLoginUserRequest),
+   USER_JUNIOR(DataCreatorFunctions::createJuniorUserRequest),
+   USER_SENIOR(DataCreatorFunctions::createSeniorUserRequest),
+   USER_INTERMEDIATE(DataCreatorFunctions::createIntermediateUserRequest);
 
    public static final class Data {
 

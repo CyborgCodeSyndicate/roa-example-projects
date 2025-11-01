@@ -1,14 +1,14 @@
 package io.cyborgcode.api.test.framework;
 
+import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
+import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
 import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
 import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
 import io.cyborgcode.api.test.framework.preconditions.Preconditions;
-import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
-import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
-import io.cyborgcode.api.test.framework.api.dto.request.LoginUser;
-import io.cyborgcode.api.test.framework.api.dto.request.User;
-import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.api.annotations.AuthenticateViaApi;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
@@ -25,12 +25,12 @@ import java.time.Instant;
 import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
-import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_EVOLUTION;
 import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOKEN;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.DELETE_USER;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_EVOLUTION;
 import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_AT_INCORRECT;
 import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_USER_JOB_INCORRECT;
 import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_USER_NAME_INCORRECT;
@@ -62,23 +62,25 @@ class UserLifecycleEvolutionTest extends BaseQuest {
       final String password = dataProperties.password();
 
       quest.use(RING_OF_API)
-            .request(POST_LOGIN_USER, new LoginUser(username, password));
+            .request(POST_LOGIN_USER, new LoginUserRequest(username, password));
 
       String token = retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
             .getBody().jsonPath().getString(TOKEN.getJsonPath());
 
-      User userLeader = User.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
-      User userIntermediate = User.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
+      CreateUserRequest createLeaderUserRequest =
+            CreateUserRequest.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
+      CreateUserRequest createIntermediateUserRequest =
+            CreateUserRequest.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
-                  userLeader,
+                  createLeaderUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .requestAndValidate(
                   POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
-                  userIntermediate,
+                  createIntermediateUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .validate(() -> {
@@ -101,18 +103,20 @@ class UserLifecycleEvolutionTest extends BaseQuest {
    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @Regression
    void testUserLifecycleWithAuth(Quest quest) {
-      User userLeader = User.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
-      User userIntermediate = User.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
+      CreateUserRequest createLeaderUserRequest =
+            CreateUserRequest.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
+      CreateUserRequest createIntermediateUserRequest =
+            CreateUserRequest.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  userLeader,
+                  createLeaderUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .requestAndValidate(
                   POST_CREATE_USER,
-                  userIntermediate,
+                  createIntermediateUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .validate(() -> {

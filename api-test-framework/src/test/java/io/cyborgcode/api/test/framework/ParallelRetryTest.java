@@ -10,8 +10,8 @@ import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 
-import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.constants.QueryParams.PAGE_PARAM;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.PAGE_TWO;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;

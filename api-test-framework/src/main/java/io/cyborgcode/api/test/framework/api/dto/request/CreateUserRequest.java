@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginUser {
+public class CreateUserRequest {
 
-   private String email;
-   private String password;
+   private String name;
+   private String job;
 
 }

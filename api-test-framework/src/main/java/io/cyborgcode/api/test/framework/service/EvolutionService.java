@@ -1,6 +1,6 @@
 package io.cyborgcode.api.test.framework.service;
 
-import io.cyborgcode.api.test.framework.api.dto.request.User;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
 import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.annotation.Ring;
@@ -53,11 +53,11 @@ public class EvolutionService extends FluentService {
       return this;
    }
 
-   public EvolutionService createJuniorUserAndValidateResponse(User juniorUser) {
+   public EvolutionService createJuniorUserAndValidateResponse(CreateUserRequest createJuniorUserRequest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  juniorUser,
+                  createJuniorUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME.getJsonPath()).type(IS).expected(USER_JUNIOR_NAME).build(),
@@ -66,11 +66,11 @@ public class EvolutionService extends FluentService {
       return this;
    }
 
-   public EvolutionService createLeaderUserAndValidateResponse(User leaderUser) {
+   public EvolutionService createLeaderUserAndValidateResponse(CreateUserRequest createLeaderUserRequest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  leaderUser,
+                  createLeaderUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME.getJsonPath()).type(IS).expected(USER_LEADER_NAME).soft(true).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_JOB.getJsonPath()).type(IS).expected(USER_LEADER_JOB).soft(true).build()
@@ -78,11 +78,11 @@ public class EvolutionService extends FluentService {
       return this;
    }
 
-   public EvolutionService createSeniorUserAndValidateResponse(User seniorUser) {
+   public EvolutionService createSeniorUserAndValidateResponse(CreateUserRequest createSeniorUserRequest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  seniorUser,
+                  createSeniorUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME.getJsonPath()).type(IS).expected(USER_SENIOR_NAME).soft(true).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_JOB.getJsonPath()).type(IS).expected(USER_SENIOR_JOB).soft(true).build()

@@ -1,7 +1,7 @@
 package io.cyborgcode.api.test.framework;
 
+import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
 import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
-import io.cyborgcode.api.test.framework.api.dto.request.LoginUser;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.base.BaseQuest;
@@ -10,10 +10,10 @@ import io.cyborgcode.roa.validator.core.Assertion;
 import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
-import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.ERROR;
 import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOKEN;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.INVALID_EMAIL;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.MISSING_EMAIL_ERROR;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.MISSING_PASSWORD_ERROR;
@@ -35,7 +35,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    @Test
    @Regression
    void testSuccessfulLogin(Quest quest) {
-      LoginUser validUser = LoginUser.builder()
+      LoginUserRequest validUserRequest = LoginUserRequest.builder()
             .email(DATA_PROPERTIES.username())
             .password(DATA_PROPERTIES.password())
             .build();
@@ -43,7 +43,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  validUser,
+                  validUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
                   Assertion.builder().target(BODY).key(TOKEN.getJsonPath()).type(NOT_NULL).expected(true).build(),
                   Assertion.builder().target(BODY).key(TOKEN.getJsonPath()).type(MATCHES_REGEX).expected(TOKEN_REGEX).build()
@@ -54,14 +54,14 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    @Test
    @Regression
    void testLoginMissingPassword(Quest quest) {
-      LoginUser noPasswordUser = LoginUser.builder()
+      LoginUserRequest noPasswordUserRequest = LoginUserRequest.builder()
             .email(DATA_PROPERTIES.username())
             .build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  noPasswordUser,
+                  noPasswordUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
                   Assertion.builder().target(BODY).key(ERROR.getJsonPath()).type(IS).expected(MISSING_PASSWORD_ERROR).build()
             )
@@ -71,14 +71,14 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    @Test
    @Regression
    void testLoginMissingEmail(Quest quest) {
-      LoginUser noEmailUser = LoginUser.builder()
+      LoginUserRequest noEmailUserRequest = LoginUserRequest.builder()
             .password(DATA_PROPERTIES.password())
             .build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  noEmailUser,
+                  noEmailUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
                   Assertion.builder().target(BODY).key(ERROR.getJsonPath()).type(IS).expected(MISSING_EMAIL_ERROR).build()
             )
@@ -88,7 +88,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    @Test
    @Regression
    void testLoginWithInvalidEmail(Quest quest) {
-      LoginUser invalidEmailUser = LoginUser.builder()
+      LoginUserRequest invalidEmailUserRequest = LoginUserRequest.builder()
             .email(INVALID_EMAIL)
             .password(DATA_PROPERTIES.password())
             .build();
@@ -96,7 +96,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  invalidEmailUser,
+                  invalidEmailUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
                   Assertion.builder().target(BODY).key(ERROR.getJsonPath()).type(IS).expected(USER_NOT_FOUND_ERROR).build()
             )

@@ -1,6 +1,6 @@
 package io.cyborgcode.api.test.framework.preconditions;
 
-import io.cyborgcode.api.test.framework.api.dto.request.User;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
 import io.cyborgcode.roa.validator.core.Assertion;
 
@@ -16,14 +16,14 @@ public final class PreconditionFunctions {
    }
 
    public static void createNewUser(SuperQuest quest, Object... objects) {
-      createNewUser(quest, (User) objects[0]);
+      createNewUser(quest, (CreateUserRequest) objects[0]);
    }
 
-   public static void createNewUser(SuperQuest quest, User userObject) {
+   public static void createNewUser(SuperQuest quest, CreateUserRequest userObjectRequest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  userObject,
+                  userObjectRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build());
    }
 
