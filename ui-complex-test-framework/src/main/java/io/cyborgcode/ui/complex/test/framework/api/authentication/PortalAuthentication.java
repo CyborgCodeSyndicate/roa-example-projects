@@ -1,4 +1,4 @@
-package io.cyborgcode.ui.complex.test.framework.rest.authentication;
+package io.cyborgcode.ui.complex.test.framework.api.authentication;
 
 import io.cyborgcode.roa.api.authentication.BaseAuthenticationClient;
 import io.cyborgcode.roa.api.service.RestService;

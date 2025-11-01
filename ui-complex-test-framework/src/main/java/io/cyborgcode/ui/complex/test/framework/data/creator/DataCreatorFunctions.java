@@ -1,17 +1,17 @@
 package io.cyborgcode.ui.complex.test.framework.data.creator;
 
-import io.cyborgcode.ui.complex.test.framework.data.extractions.CustomDataExtractor;
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Seller;
+import io.cyborgcode.ui.complex.test.framework.data.extractor.DataExtractorFunctions;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
 import io.cyborgcode.roa.framework.quest.QuestHolder;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
 import org.openqa.selenium.NotFoundException;
 
 import java.util.List;
 
-public final class DataCreationFunctions {
+public final class DataCreatorFunctions {
 
-   private DataCreationFunctions() {
+   private DataCreatorFunctions() {
    }
 
    public static Seller createValidSeller() {
@@ -36,7 +36,7 @@ public final class DataCreationFunctions {
 
    public static Order createValidLateOrder() {
       SuperQuest superQuest = QuestHolder.get();
-      List<String> productList = superQuest.getStorage().get(CustomDataExtractor
+      List<String> productList = superQuest.getStorage().get(DataExtractorFunctions
                   .responseBodyExtraction("?v-r=uidl",
                         "$..orderCard[?(@.fullName=='John Terry')].items[*].product.name", "for(;;);"),
             List.class);

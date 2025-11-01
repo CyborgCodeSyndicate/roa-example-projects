@@ -5,9 +5,9 @@ import io.cyborgcode.roa.framework.parameters.Late;
 
 public enum DataCreator implements DataForge<DataCreator> {
 
-   VALID_SELLER(DataCreationFunctions::createValidSeller),
-   VALID_ORDER(DataCreationFunctions::createValidOrder),
-   VALID_LATE_ORDER(DataCreationFunctions::createValidLateOrder);
+   VALID_SELLER(DataCreatorFunctions::createValidSeller),
+   VALID_ORDER(DataCreatorFunctions::createValidOrder),
+   VALID_LATE_ORDER(DataCreatorFunctions::createValidLateOrder);
 
    public static final class Data {
 

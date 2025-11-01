@@ -1,10 +1,10 @@
-package io.cyborgcode.ui.complex.test.framework.data.test;
+package io.cyborgcode.ui.complex.test.framework.data.retriever;
 
 import org.aeonbits.owner.Config;
 
 @Config.LoadPolicy(Config.LoadType.MERGE)
 @Config.Sources({"system:properties", "classpath:${test.data.file}.properties"})
-public interface TestData extends Config {
+public interface DataProperties extends Config {
 
    @Key("username")
    String username();

@@ -1,23 +1,22 @@
 package io.cyborgcode.ui.complex.test.framework.preconditions;
 
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Seller;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
 import io.cyborgcode.roa.framework.parameters.Late;
 import io.cyborgcode.roa.framework.parameters.PreQuestJourney;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
 
 import java.util.function.BiConsumer;
 
-import static io.cyborgcode.ui.complex.test.framework.preconditions.BakeryQuestPreconditionFunctions.*;
+import static io.cyborgcode.ui.complex.test.framework.preconditions.PreconditionFunctions.*;
 
-public enum BakeryQuestPreconditions implements PreQuestJourney<BakeryQuestPreconditions> {
+public enum Preconditions implements PreQuestJourney<Preconditions> {
 
    SELLER_PRECONDITION((quest, objects) -> validSellerSetup(quest, (Seller) objects[0])),
    SELLER_PRECONDITION_LATE((quest, objects) -> validSellerSetup(quest, (Late<Seller>) objects[0])),
    ORDER_PRECONDITION((quest, objects) -> validOrderSetup(quest, (Order) objects[0])),
    ORDER_PRECONDITION_LATE((quest, objects) -> validOrderSetup(quest, (Late<Order>) objects[0])),
    LOGIN_PRECONDITION((quest, objects) -> loginUser(quest, (Seller) objects[0]));
-
 
    public static final class Data {
 
@@ -33,23 +32,19 @@ public enum BakeryQuestPreconditions implements PreQuestJourney<BakeryQuestPreco
 
    }
 
-
    private final BiConsumer<SuperQuest, Object[]> function;
 
-
-   BakeryQuestPreconditions(final BiConsumer<SuperQuest, Object[]> function) {
+   Preconditions(final BiConsumer<SuperQuest, Object[]> function) {
       this.function = function;
    }
-
 
    @Override
    public BiConsumer<SuperQuest, Object[]> journey() {
       return function;
    }
 
-
    @Override
-   public BakeryQuestPreconditions enumImpl() {
+   public Preconditions enumImpl() {
       return this;
    }
 

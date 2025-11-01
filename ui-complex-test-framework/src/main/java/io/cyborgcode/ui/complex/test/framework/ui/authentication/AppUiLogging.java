@@ -1,12 +1,12 @@
 package io.cyborgcode.ui.complex.test.framework.ui.authentication;
 
-import io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.ButtonFields;
-import io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.InputFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields;
 import io.cyborgcode.roa.ui.authentication.BaseLoginClient;
 import io.cyborgcode.roa.ui.service.fluent.UiServiceFluent;
 import org.openqa.selenium.By;
 
-public class BakeryUiLogging extends BaseLoginClient {
+public class AppUiLogging extends BaseLoginClient {
 
 
    @Override

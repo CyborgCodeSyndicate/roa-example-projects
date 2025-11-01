@@ -1,12 +1,12 @@
 package io.cyborgcode.ui.complex.test.framework;
 
 import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator;
-import io.cyborgcode.ui.complex.test.framework.data.test.TestData;
+import io.cyborgcode.ui.complex.test.framework.data.retriever.DataProperties;
 import io.cyborgcode.ui.complex.test.framework.db.hooks.DbHookFlows;
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Seller;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
 import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminUi;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.BakeryUiLogging;
+import io.cyborgcode.ui.complex.test.framework.ui.authentication.AppUiLogging;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.db.annotations.DB;
 import io.cyborgcode.roa.db.annotations.DbHook;
@@ -31,12 +31,12 @@ import java.util.List;
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_UI;
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_CUSTOM;
 import static io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner.Data.DELETE_CREATED_ORDERS;
-import static io.cyborgcode.ui.complex.test.framework.preconditions.BakeryQuestPreconditions.Data.LOGIN_PRECONDITION;
-import static io.cyborgcode.ui.complex.test.framework.preconditions.BakeryQuestPreconditions.Data.ORDER_PRECONDITION;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.ButtonFields.*;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.InputFields.*;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.SelectFields.LOCATION_DDL;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.SelectFields.PRODUCTS_DDL;
+import static io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions.Data.LOGIN_PRECONDITION;
+import static io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions.Data.ORDER_PRECONDITION;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields.*;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.*;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.LOCATION_DDL;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.PRODUCTS_DDL;
 import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
 import static io.cyborgcode.roa.framework.storage.StorageKeysTest.PRE_ARGUMENTS;
 import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
@@ -82,19 +82,19 @@ public class BakeryEvolvingTest extends BaseQuest {
    @Test
    @Description("Raw with Data usage")
    public void createOrderRawData(Quest quest) {
-      final TestData testData = ConfigCache.getOrCreate(TestData.class);
+      final DataProperties dataProperties = ConfigCache.getOrCreate(DataProperties.class);
 
       Seller seller = Seller.builder()
-            .email(testData.sellerEmail())
-            .password(testData.sellerPassword())
+            .email(dataProperties.sellerEmail())
+            .password(dataProperties.sellerPassword())
             .build();
 
       Order order = Order.builder()
-            .customerName(testData.customerName())
-            .customerDetails(testData.customerDetails())
-            .phoneNumber(testData.phoneNumber())
-            .location(testData.location())
-            .product(testData.product())
+            .customerName(dataProperties.customerName())
+            .customerDetails(dataProperties.customerDetails())
+            .phoneNumber(dataProperties.phoneNumber())
+            .location(dataProperties.location())
+            .product(dataProperties.product())
             .build();
 
       quest
@@ -193,7 +193,7 @@ public class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("Authentication, Craft and Service usage")
-   @AuthenticateViaUi(credentials = AdminUi.class, type = BakeryUiLogging.class)
+   @AuthenticateViaUi(credentials = AdminUi.class, type = AppUiLogging.class)
    public void createOrderAuth(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
@@ -223,7 +223,7 @@ public class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("Authenticate, PreQuest, Service and Ripper usage")
-   @AuthenticateViaUi(credentials = AdminUi.class, type = BakeryUiLogging.class)
+   @AuthenticateViaUi(credentials = AdminUi.class, type = AppUiLogging.class)
    @PreQuest({
          @Journey(value = ORDER_PRECONDITION,
                journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})

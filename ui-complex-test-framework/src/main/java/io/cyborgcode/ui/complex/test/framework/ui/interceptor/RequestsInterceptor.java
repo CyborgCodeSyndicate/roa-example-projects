@@ -1,9 +1,9 @@
-package io.cyborgcode.ui.complex.test.framework.preconditions;
+package io.cyborgcode.ui.complex.test.framework.ui.interceptor;
 
 import io.cyborgcode.roa.ui.parameters.DataIntercept;
 
 
-public enum BakeryInterceptRequests implements DataIntercept<BakeryInterceptRequests> {
+public enum RequestsInterceptor implements DataIntercept<RequestsInterceptor> {
 
    INTERCEPT_REQUEST_AUTH("?v-r=uidl"),
    INTERCEPT_REQUEST_LOGIN("/login");
@@ -20,7 +20,7 @@ public enum BakeryInterceptRequests implements DataIntercept<BakeryInterceptRequ
 
    private final String endpointSubString;
 
-   BakeryInterceptRequests(final String endpointSubString) {
+   RequestsInterceptor(final String endpointSubString) {
       this.endpointSubString = endpointSubString;
    }
 
@@ -30,7 +30,7 @@ public enum BakeryInterceptRequests implements DataIntercept<BakeryInterceptRequ
    }
 
    @Override
-   public BakeryInterceptRequests enumImpl() {
+   public RequestsInterceptor enumImpl() {
       return this;
    }
 

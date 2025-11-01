@@ -3,9 +3,9 @@ package io.cyborgcode.ui.complex.test.framework;
 import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator;
 import io.cyborgcode.ui.complex.test.framework.db.responses.DbResponsesJsonPaths;
 import io.cyborgcode.ui.complex.test.framework.db.hooks.DbHookFlows;
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
 import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminUi;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.BakeryUiLogging;
+import io.cyborgcode.ui.complex.test.framework.ui.authentication.AppUiLogging;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.db.annotations.DB;
 import io.cyborgcode.roa.db.annotations.DbHook;
@@ -26,9 +26,9 @@ import java.util.List;
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_CUSTOM;
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_DB;
 import static io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner.Data.DELETE_CREATED_ORDERS;
-import static io.cyborgcode.ui.complex.test.framework.db.queries.Queries.QUERY_ORDER;
-import static io.cyborgcode.ui.complex.test.framework.db.queries.Queries.QUERY_ORDER_PRODUCT;
-import static io.cyborgcode.ui.complex.test.framework.preconditions.BakeryQuestPreconditions.Data.*;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.AppQueries.QUERY_ORDER;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.AppQueries.QUERY_ORDER_PRODUCT;
+import static io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions.Data.*;
 import static io.cyborgcode.roa.db.validator.DbAssertionTarget.QUERY_RESULT;
 import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
 import static io.cyborgcode.roa.framework.storage.StorageKeysTest.PRE_ARGUMENTS;
@@ -103,7 +103,7 @@ public class BakeryDataBaseTests extends BaseQuest {
 
    @Test
    @Description("Database cleanup with Ripper usage")
-   @AuthenticateViaUi(credentials = AdminUi.class, type = BakeryUiLogging.class)
+   @AuthenticateViaUi(credentials = AdminUi.class, type = AppUiLogging.class)
    @PreQuest({
          @Journey(value = ORDER_PRECONDITION,
                journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})

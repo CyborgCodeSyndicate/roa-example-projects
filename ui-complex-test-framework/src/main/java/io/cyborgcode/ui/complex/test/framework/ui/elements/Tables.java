@@ -1,6 +1,6 @@
 package io.cyborgcode.ui.complex.test.framework.ui.elements;
 
-import io.cyborgcode.ui.complex.test.framework.model.TableEntry;
+import io.cyborgcode.ui.complex.test.framework.ui.model.TableEntry;
 import io.cyborgcode.roa.ui.components.table.base.TableComponentType;
 import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
 import io.cyborgcode.roa.ui.service.tables.TableElement;

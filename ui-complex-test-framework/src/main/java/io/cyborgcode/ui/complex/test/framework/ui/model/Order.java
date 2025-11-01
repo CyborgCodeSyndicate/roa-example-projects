@@ -1,13 +1,13 @@
-package io.cyborgcode.ui.complex.test.framework.model.bakery;
+package io.cyborgcode.ui.complex.test.framework.ui.model;
 
-import io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.InputFields;
-import io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.SelectFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields;
 import io.cyborgcode.roa.ui.annotations.InsertionElement;
 import lombok.*;
 
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.InputFields.Data.*;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.SelectFields.Data.LOCATION_DDL;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.SelectFields.Data.PRODUCTS_DDL;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.Data.*;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.Data.LOCATION_DDL;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.Data.PRODUCTS_DDL;
 
 @NoArgsConstructor
 @AllArgsConstructor

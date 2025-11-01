@@ -1,4 +1,4 @@
-package io.cyborgcode.ui.complex.test.framework.model;
+package io.cyborgcode.ui.complex.test.framework.ui.model;
 
 import io.cyborgcode.ui.complex.test.framework.ui.types.InputFieldTypes;
 import io.cyborgcode.roa.ui.components.input.InputComponentType;

@@ -18,11 +18,6 @@ public enum Databases implements DbType<Databases> {
    }
 
    @Override
-   public Databases enumImpl() {
-      return this;
-   }
-
-   @Override
    public Driver driver() {
       return driver;
    }
@@ -31,5 +26,10 @@ public enum Databases implements DbType<Databases> {
    public String protocol() {
       return protocol;
    }
+
+    @Override
+    public Databases enumImpl() {
+        return this;
+    }
 
 }

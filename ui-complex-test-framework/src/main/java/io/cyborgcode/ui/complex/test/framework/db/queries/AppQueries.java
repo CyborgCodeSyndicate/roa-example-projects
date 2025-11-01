@@ -3,7 +3,7 @@ package io.cyborgcode.ui.complex.test.framework.db.queries;
 import io.cyborgcode.roa.db.config.DatabaseConfiguration;
 import io.cyborgcode.roa.db.query.DbQuery;
 
-public enum Queries implements DbQuery<Queries> {
+public enum AppQueries implements DbQuery<AppQueries> {
 
    QUERY_SELLER("SELECT * FROM sellers WHERE id = {id}"),
    QUERY_SELLER_EMAIL("SELECT email FROM sellers WHERE id = {id}"),
@@ -15,7 +15,7 @@ public enum Queries implements DbQuery<Queries> {
 
    private final String query;
 
-   Queries(final String query) {
+   AppQueries(final String query) {
       this.query = query;
    }
 
@@ -30,7 +30,7 @@ public enum Queries implements DbQuery<Queries> {
    }
 
    @Override
-   public Queries enumImpl() {
+   public AppQueries enumImpl() {
       return this;
    }
 

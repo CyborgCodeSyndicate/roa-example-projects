@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 public enum DataCleaner implements DataRipper<DataCleaner> {
 
-   DELETE_CREATED_ORDERS(DataCleanUpFunctions::cleanAllOrders);
+   DELETE_CREATED_ORDERS(DataCleanerFunctions::cleanAllOrders);
 
    public static final class Data {
 

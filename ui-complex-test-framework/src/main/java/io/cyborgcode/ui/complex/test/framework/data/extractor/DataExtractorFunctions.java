@@ -1,4 +1,4 @@
-package io.cyborgcode.ui.complex.test.framework.data.extractions;
+package io.cyborgcode.ui.complex.test.framework.data.extractor;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CustomDataExtractor {
+public class DataExtractorFunctions {
 
-   private CustomDataExtractor() {
+   private DataExtractorFunctions() {
    }
 
    public static <T> DataExtractor<T> responseBodyExtraction(String responsePrefix, String jsonPath, String jsonPrefix) {

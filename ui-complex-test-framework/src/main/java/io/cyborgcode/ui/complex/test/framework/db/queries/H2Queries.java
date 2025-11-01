@@ -2,7 +2,7 @@ package io.cyborgcode.ui.complex.test.framework.db.queries;
 
 import io.cyborgcode.roa.db.query.DbQuery;
 
-public enum QueriesH2 implements DbQuery<QueriesH2> {
+public enum H2Queries implements DbQuery<H2Queries> {
 
    CREATE_TABLE_ORDERS(
          "CREATE TABLE orders ("
@@ -34,7 +34,7 @@ public enum QueriesH2 implements DbQuery<QueriesH2> {
 
    private final String query;
 
-   QueriesH2(final String query) {
+   H2Queries(final String query) {
       this.query = query;
    }
 
@@ -44,7 +44,7 @@ public enum QueriesH2 implements DbQuery<QueriesH2> {
    }
 
    @Override
-   public QueriesH2 enumImpl() {
+   public H2Queries enumImpl() {
       return this;
    }
 

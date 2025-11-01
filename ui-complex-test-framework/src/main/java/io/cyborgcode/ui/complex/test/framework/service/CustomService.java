@@ -1,11 +1,11 @@
 package io.cyborgcode.ui.complex.test.framework.service;
 
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Seller;
-import io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.ButtonFields;
-import io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.InputFields;
-import io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.LinkFields;
-import io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.SelectFields;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.LinkFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields;
 import io.cyborgcode.roa.framework.annotation.Ring;
 import io.cyborgcode.roa.framework.chain.FluentService;
 import io.cyborgcode.roa.framework.quest.QuestHolder;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_UI;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.ButtonFields.SIGN_IN_BUTTON;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.bakery.InputFields.*;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields.SIGN_IN_BUTTON;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.*;
 import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

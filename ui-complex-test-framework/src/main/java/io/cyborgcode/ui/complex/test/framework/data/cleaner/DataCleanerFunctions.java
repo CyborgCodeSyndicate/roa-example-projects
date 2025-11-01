@@ -1,7 +1,7 @@
 package io.cyborgcode.ui.complex.test.framework.data.cleaner;
 
 import io.cyborgcode.ui.complex.test.framework.db.responses.DbResponsesJsonPaths;
-import io.cyborgcode.ui.complex.test.framework.model.bakery.Order;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
 import io.cyborgcode.roa.db.query.QueryResponse;
 import io.cyborgcode.roa.db.storage.StorageKeysDb;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
@@ -11,14 +11,18 @@ import java.util.List;
 
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_DB;
 import static io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator.VALID_ORDER;
-import static io.cyborgcode.ui.complex.test.framework.db.queries.Queries.*;
 import static io.cyborgcode.roa.db.validator.DbAssertionTarget.NUMBER_ROWS;
 import static io.cyborgcode.roa.db.validator.DbAssertionTarget.QUERY_RESULT;
 import static io.cyborgcode.roa.framework.storage.StorageKeysTest.ARGUMENTS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.AppQueries.QUERY_ORDER_ALL;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.AppQueries.QUERY_ORDER_DELETE;
+import static io.cyborgcode.ui.complex.test.framework.db.queries.AppQueries.QUERY_ORDER_PRODUCT;
 
-public class DataCleanUpFunctions {
+public class DataCleanerFunctions {
 
+    private DataCleanerFunctions() {
+    }
 
    public static void cleanAllOrders(SuperQuest quest) {
       var storage = quest.getStorage().sub(ARGUMENTS);

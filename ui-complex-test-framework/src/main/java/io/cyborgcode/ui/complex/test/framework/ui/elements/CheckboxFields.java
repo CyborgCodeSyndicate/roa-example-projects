@@ -1,4 +1,4 @@
-package io.cyborgcode.ui.complex.test.framework.ui.elements.bakery;
+package io.cyborgcode.ui.complex.test.framework.ui.elements;
 
 import io.cyborgcode.ui.complex.test.framework.ui.types.CheckboxFieldTypes;
 import io.cyborgcode.roa.ui.components.base.ComponentType;

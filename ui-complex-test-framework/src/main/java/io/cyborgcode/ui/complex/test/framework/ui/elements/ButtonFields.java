@@ -1,4 +1,4 @@
-package io.cyborgcode.ui.complex.test.framework.ui.elements.bakery;
+package io.cyborgcode.ui.complex.test.framework.ui.elements;
 
 import io.cyborgcode.ui.complex.test.framework.ui.functions.ContextConsumer;
 import io.cyborgcode.ui.complex.test.framework.ui.functions.SharedUi;
