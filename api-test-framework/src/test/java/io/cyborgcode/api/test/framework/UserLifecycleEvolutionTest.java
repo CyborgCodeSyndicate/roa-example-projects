@@ -137,8 +137,8 @@ class UserLifecycleEvolutionTest extends BaseQuest {
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @PreQuest({
-         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
-         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE_REQUEST)}, order = 2),
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER_REQUEST)}, order = 1)
    })
    @Regression
    void testUserLifecycleWithPreQuest(Quest quest) {
@@ -161,8 +161,8 @@ class UserLifecycleEvolutionTest extends BaseQuest {
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @PreQuest({
-         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
-         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE_REQUEST)}, order = 2),
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER_REQUEST)}, order = 1)
    })
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Regression
@@ -182,8 +182,8 @@ class UserLifecycleEvolutionTest extends BaseQuest {
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @PreQuest({
-         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
-         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE_REQUEST)}, order = 2),
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER_REQUEST)}, order = 1)
    })
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Regression

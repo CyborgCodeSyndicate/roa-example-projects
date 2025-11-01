@@ -18,7 +18,7 @@ import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.constants.QueryParams.PAGE_PARAM;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.PAGE_TWO;
-import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEADER;
+import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEADER_REQUEST;
 
 public final class DataCreatorFunctions {
 
@@ -34,7 +34,7 @@ public final class DataCreatorFunctions {
             .build();
    }
 
-   public static LoginUserRequest createAdminLoginUserRequest() {
+   public static LoginUserRequest createLoginAdminUserRequest() {
       return LoginUserRequest.builder()
             .email(DATA_PROPERTIES.username())
             .password(DATA_PROPERTIES.password())
@@ -66,7 +66,7 @@ public final class DataCreatorFunctions {
       try {
          userLeader = quest.getStorage()
                .sub(StorageKeysTest.ARGUMENTS)
-               .get(USER_LEADER, CreateUserRequest.class);
+               .get(USER_LEADER_REQUEST, CreateUserRequest.class);
       } catch (Exception ex) {
          userLeader = createLeaderUserRequest();
       }
@@ -84,7 +84,7 @@ public final class DataCreatorFunctions {
       try {
          userLeader = quest.getStorage()
                .sub(StorageKeysTest.PRE_ARGUMENTS)
-               .get(USER_LEADER, CreateUserRequest.class);
+               .get(USER_LEADER_REQUEST, CreateUserRequest.class);
       } catch (Exception ex) {
          userLeader = createLeaderUserRequest();
       }
