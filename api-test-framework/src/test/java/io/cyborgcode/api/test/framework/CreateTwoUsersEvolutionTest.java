@@ -61,7 +61,7 @@ class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   void testCreateTwoUsersImproved(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER_REQUEST) CreateUserRequest createLeaderUserRequest, @Craft(model = DataCreator.Data.USER_SENIOR_REQUEST) Late<CreateUserRequest> createSeniorUserRequest) {
+   void testCreateTwoUsersImproved(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserRequest createLeaderUserRequest, @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserRequest> createSeniorUserRequest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
@@ -82,7 +82,7 @@ class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   void testCreateTwoUsersImprovedWithCustomService(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER_REQUEST) CreateUserRequest createLeaderUserRequest, @Craft(model = DataCreator.Data.USER_SENIOR_REQUEST) Late<CreateUserRequest> createSeniorUserRequest) {
+   void testCreateTwoUsersImprovedWithCustomService(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserRequest createLeaderUserRequest, @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserRequest> createSeniorUserRequest) {
       quest.use(RING_OF_EVOLUTION)
             .createLeaderUserAndValidateResponse(createLeaderUserRequest)
             .createSeniorUserAndValidateResponse(createSeniorUserRequest.create())

@@ -71,7 +71,7 @@ class CreateUserEvolutionTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCreateJuniorUserImproved(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR_REQUEST) Late<CreateUserRequest> createUserRequest) {
+   void testCreateJuniorUserImproved(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserRequest> createUserRequest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
@@ -90,7 +90,7 @@ class CreateUserEvolutionTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCreateJuniorUserImprovedWithCustomService(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR_REQUEST) Late<CreateUserRequest> user) {
+   void testCreateJuniorUserImprovedWithCustomService(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserRequest> user) {
       quest.use(RING_OF_EVOLUTION)
             .getAllUsersAndValidateResponse()
             .createJuniorUserAndValidateResponse(user.create())

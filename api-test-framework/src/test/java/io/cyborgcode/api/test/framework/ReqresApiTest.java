@@ -5,8 +5,8 @@ import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
 import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
 import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
-import io.cyborgcode.api.test.framework.api.dto.response.UserData;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
+import io.cyborgcode.api.test.framework.api.dto.response.UserData;
 import io.cyborgcode.api.test.framework.api.dto.response.UserResponse;
 import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
@@ -218,7 +218,7 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCreateUser(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER_REQUEST) CreateUserRequest createUserRequest) {
+   void testCreateUser(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserRequest createUserRequest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
@@ -231,7 +231,7 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCreateJuniorUser(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR_REQUEST) Late<CreateUserRequest> createUserRequest) {
+   void testCreateJuniorUser(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserRequest> createUserRequest) {
       quest.use(RING_OF_API)
             .requestAndValidate(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
@@ -245,7 +245,7 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCreateTwoUsers(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER_REQUEST) CreateUserRequest createLeaderUserRequest, @Craft(model = DataCreator.Data.USER_SENIOR_REQUEST) Late<CreateUserRequest> createSeniorUserRequest) {
+   void testCreateTwoUsers(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserRequest createLeaderUserRequest, @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserRequest> createSeniorUserRequest) {
       quest.use(RING_OF_API)
             .requestAndValidate(POST_CREATE_USER, createLeaderUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
@@ -262,7 +262,7 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testLoginUserAndAddHeader(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER_REQUEST) LoginUserRequest loginUserRequest) {
+   void testLoginUserAndAddHeader(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginUserRequest loginUserRequest) {
       quest.use(RING_OF_API)
             .request(POST_LOGIN_USER, loginUserRequest)
             .requestAndValidate(
@@ -277,8 +277,8 @@ class ReqresApiTest extends BaseQuest {
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @PreQuest({
-         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE_REQUEST)}, order = 2),
-         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER_REQUEST)}, order = 1)
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 2),
+         @Journey(value = Preconditions.Data.CREATE_NEW_USER, journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)}, order = 1)
    })
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Regression
@@ -296,7 +296,7 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCustomService(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER_REQUEST) LoginUserRequest loginUserRequest) {
+   void testCustomService(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginUserRequest loginUserRequest) {
       quest.use(RING_OF_CUSTOM)
             .loginUserAndAddSpecificHeader(loginUserRequest)
             .drop()
@@ -309,7 +309,7 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testValidateAllUsers(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER_REQUEST) LoginUserRequest loginUserRequest) {
+   void testValidateAllUsers(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginUserRequest loginUserRequest) {
       quest.use(RING_OF_CUSTOM)
             .loginUserAndAddSpecificHeader(loginUserRequest)
             .requestAndValidateGetAllUsers()

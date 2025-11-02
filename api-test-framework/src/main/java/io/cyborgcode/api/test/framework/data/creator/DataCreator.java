@@ -5,25 +5,24 @@ import io.cyborgcode.roa.framework.parameters.Late;
 
 public enum DataCreator implements DataForge<DataCreator> {
 
-   USER_LEADER_REQUEST(DataCreatorFunctions::createLeaderUserRequest),
-   LOGIN_ADMIN_USER_REQUEST(DataCreatorFunctions::createLoginAdminUserRequest),
-   USER_JUNIOR_REQUEST(DataCreatorFunctions::createJuniorUserRequest),
-   USER_SENIOR_REQUEST(DataCreatorFunctions::createSeniorUserRequest),
-   USER_INTERMEDIATE_REQUEST(DataCreatorFunctions::createIntermediateUserRequest);
+   USER_LEADER(DataCreatorFunctions::createLeaderUserRequest),
+   LOGIN_ADMIN_USER(DataCreatorFunctions::createLoginAdminUserRequest),
+   USER_JUNIOR(DataCreatorFunctions::createJuniorUserRequest),
+   USER_SENIOR(DataCreatorFunctions::createSeniorUserRequest),
+   USER_INTERMEDIATE(DataCreatorFunctions::createIntermediateUserRequest);
 
    public static final class Data {
 
       private Data() {
       }
 
-      public static final String USER_LEADER_REQUEST = "USER_LEADER_REQUEST";
-      public static final String LOGIN_ADMIN_USER_REQUEST = "LOGIN_ADMIN_USER_REQUEST";
-      public static final String USER_JUNIOR_REQUEST = "USER_JUNIOR_REQUEST";
-      public static final String USER_SENIOR_REQUEST = "USER_SENIOR_REQUEST";
-      public static final String USER_INTERMEDIATE_REQUEST = "USER_INTERMEDIATE_REQUEST";
+      public static final String USER_LEADER = "USER_LEADER";
+      public static final String LOGIN_ADMIN_USER = "LOGIN_ADMIN_USER";
+      public static final String USER_JUNIOR = "USER_JUNIOR";
+      public static final String USER_SENIOR = "USER_SENIOR";
+      public static final String USER_INTERMEDIATE = "USER_INTERMEDIATE";
 
    }
-
 
    private final Late<Object> createDataFunction;
 
