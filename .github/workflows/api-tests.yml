@@ -1,0 +1,25 @@
+name: API Tests
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      tagsInclude:
+        description: "Tags to include (comma-separated)"
+        required: false
+        default: "Regression"
+      tagsExclude:
+        description: "Tags to exclude (comma-separated)"
+        required: false
+        default: "Flaky"
+jobs:
+  run:
+    uses: your-org/roa-github-workflows/.github/workflows/roa-tests.yml@main
+    with:
+      kind: api
+      project_module: api-test-framework
+      tags_include: ${{ github.event.inputs.tagsInclude }}
+      tags_exclude: ${{ github.event.inputs.tagsExclude }}
+    secrets: inherit
