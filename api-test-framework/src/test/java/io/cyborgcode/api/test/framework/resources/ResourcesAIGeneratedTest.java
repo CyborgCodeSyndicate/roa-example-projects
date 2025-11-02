@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.resources;
 
 import io.cyborgcode.api.test.framework.data.constants.JsonSamples;
 import io.cyborgcode.roa.api.annotations.API;

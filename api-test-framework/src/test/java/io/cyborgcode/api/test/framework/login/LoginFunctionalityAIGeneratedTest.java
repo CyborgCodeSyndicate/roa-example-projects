@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.login;
 
 import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
 import io.cyborgcode.api.test.framework.data.retriever.DataProperties;

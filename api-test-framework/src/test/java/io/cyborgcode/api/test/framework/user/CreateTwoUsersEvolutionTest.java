@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.user;
 
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
