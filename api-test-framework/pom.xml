@@ -51,5 +51,19 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>github-roa-plugins</id>
+            <name>GitHub Packages for Roa Libraries</name>
+            <url>https://maven.pkg.github.com/CyborgCodeSyndicate/roa-plugins</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
 
 </project>
