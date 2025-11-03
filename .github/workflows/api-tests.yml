@@ -22,6 +22,6 @@ jobs:
       project_module: api-test-framework
       tags_include: ${{ github.event.inputs.tagsInclude }}
       tags_exclude: ${{ github.event.inputs.tagsExclude }}
-      maven_user: ${{ github.actor }}
-      maven_token: ${{ secrets.GPR_READ_TOKEN }}  # PAT with read:packages
+      maven_user: ${{ secrets.GH_PACKAGES_USER }}
+      maven_token: ${{ secrets.GH_PACKAGES_PAT }}
     secrets: inherit
