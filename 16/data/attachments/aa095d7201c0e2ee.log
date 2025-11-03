@@ -1,0 +1,55 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:07,368 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:07,450 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:07,461 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:07,477 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The quest: 'testUserLifecycle(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:07,491 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Updated quest storage with credentials for username: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-11-03T21:46:07,505 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:08,223 [scenario=ReqresApiTest.testUserLifecycle] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-03T21:46:08,236 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:08,256 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:09,035 [scenario=ReqresApiTest.testUserLifecycle] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 768ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:09,047 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:09,053 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:09 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:09,548 [scenario=ReqresApiTest.testUserLifecycle] INFO  [API] - Successfully authenticated user: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-11-03T21:46:09,598 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [QUEST] - Creating data for: USER_LEADER
+🤖 CYBORG 🤖 2025-11-03T21:46:09,636 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:09,658 [scenario=ReqresApiTest.testUserLifecycle] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-03T21:46:09,665 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:09,671 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:10,036 [scenario=ReqresApiTest.testUserLifecycle] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 348ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,043 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,062 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:10 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:10,075 [scenario=ReqresApiTest.testUserLifecycle] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:10,086 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-03T21:46:10,095 [scenario=ReqresApiTest.testUserLifecycle] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-03T21:46:10,132 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [QUEST] - Creating data for: USER_INTERMEDIATE
+🤖 CYBORG 🤖 2025-11-03T21:46:10,140 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:10,150 [scenario=ReqresApiTest.testUserLifecycle] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,161 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,165 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:10,386 [scenario=ReqresApiTest.testUserLifecycle] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 212ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,391 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,397 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:10 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:10,404 [scenario=ReqresApiTest.testUserLifecycle] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:10,407 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-03T21:46:10,410 [scenario=ReqresApiTest.testUserLifecycle] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-03T21:46:10,412 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:10,416 [scenario=ReqresApiTest.testUserLifecycle] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-11-03T21:46:10,422 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_CREATE_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-11-03T21:46:10,430 [scenario=ReqresApiTest.testUserLifecycle] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,432 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,440 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:10,444 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The ripper has arrived
+🤖 CYBORG 🤖 2025-11-03T21:46:10,461 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:10,470 [scenario=ReqresApiTest.testUserLifecycle] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:10,476 [scenario=ReqresApiTest.testUserLifecycle] STEP  [API] - Sending request to endpoint DELETE-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,481 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:10,486 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:10,830 [scenario=ReqresApiTest.testUserLifecycle] STEP  [API] - Response with status: 204 received from endpoint: DELETE-https://reqres.in/api/users/3 in 341ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,837 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Response body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:10,840 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:10 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:10,847 [scenario=ReqresApiTest.testUserLifecycle] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:10,855 [scenario=ReqresApiTest.testUserLifecycle] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=204}]
+🤖 CYBORG 🤖 2025-11-03T21:46:10,857 [scenario=ReqresApiTest.testUserLifecycle] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 204, Actual: 204)
+🤖 CYBORG 🤖 2025-11-03T21:46:10,861 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - DataRipper processed target: 'DELETE_ADMIN_USER'.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,867 [scenario=ReqresApiTest.testUserLifecycle] INFO  [QUEST] - The quest of 'testUserLifecycle(Quest)' has concluded with glory. Status: SUCCESS. Duration: 3 seconds.

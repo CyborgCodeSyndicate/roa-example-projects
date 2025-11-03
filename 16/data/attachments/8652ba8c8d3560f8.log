@@ -1,0 +1,30 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:15,698 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:15,701 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:15,703 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:15,705 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] INFO  [QUEST] - The quest: 'testCreateTwoUsersImproved(Quest, User, Late)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:15,720 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:15,726 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-03T21:46:15,729 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:15,733 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:15,931 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 195ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:15,935 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:15,938 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:15 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:15,942 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:15,960 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Validation target: [{name=Morpheus, job=Leader, AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-03T21:46:15,963 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-03T21:46:15,966 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Morpheus, Actual: Morpheus)
+🤖 CYBORG 🤖 2025-11-03T21:46:15,968 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Leader, Actual: Leader)
+🤖 CYBORG 🤖 2025-11-03T21:46:15,974 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-03T21:46:15,977 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:15,980 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:16,179 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 195ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:16,183 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:16,185 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:16 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:16,190 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:16,207 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] EXTENDED [API] - Validation target: [{name=Mr. Morpheus, job=Senior Leader, AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-03T21:46:16,210 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-03T21:46:16,213 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Mr. Morpheus, Actual: Mr. Morpheus)
+🤖 CYBORG 🤖 2025-11-03T21:46:16,215 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Senior Leader, Actual: Senior Leader)
+🤖 CYBORG 🤖 2025-11-03T21:46:16,218 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:16,220 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:16,225 [scenario=CreateTwoUsersEvolutionTest.testCreateTwoUsersImproved] INFO  [QUEST] - The quest of 'testCreateTwoUsersImproved(Quest, User, Late)' has concluded with glory. Status: SUCCESS. Duration: 0 seconds.

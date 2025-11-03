@@ -1,0 +1,19 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:09,017 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,138 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,153 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,175 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] INFO  [QUEST] - The quest: 'testLoginUserWithValidCredentials(Quest, LoginUser)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:09,203 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:09,850 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-03T21:46:09,858 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:09,868 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:10,652 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 770ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,657 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,661 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:10 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:10,667 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:11,125 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200, token=QpwL5tke4Pnpja7X4}]
+🤖 CYBORG 🤖 2025-11-03T21:46:11,142 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,204 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] VALIDATION [QUEST] - ✔ Validation passed: NOT_NULL (Expected: true, Actual: QpwL5tke4Pnpja7X4)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,207 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] VALIDATION [QUEST] - ✔ Validation passed: MATCHES_REGEX (Expected: [a-zA-Z0-9]+, Actual: QpwL5tke4Pnpja7X4)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,214 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,217 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:11,238 [scenario=ReqresApiAIGeneratedTest.testLoginUserWithValidCredentials] INFO  [QUEST] - The quest of 'testLoginUserWithValidCredentials(Quest, LoginUser)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.

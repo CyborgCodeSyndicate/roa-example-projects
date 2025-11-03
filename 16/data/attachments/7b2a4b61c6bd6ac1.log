@@ -1,0 +1,55 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:11,350 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:11,355 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:11,359 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:11,367 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [QUEST] - The quest: 'testFullUserLifecycleAndCrossValidation(Quest, User, Late)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,373 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Updated quest storage with credentials for username: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-11-03T21:46:11,376 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:11,393 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,398 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,404 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:11,588 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 177ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,593 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,597 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:11 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:11,624 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [API] - Successfully authenticated user: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-11-03T21:46:11,643 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:11,648 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,651 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,653 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:11,854 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 194ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,862 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,864 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:11 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:11,871 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:11,901 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Validation target: [{name=Morpheus, job=Leader, AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-03T21:46:11,904 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,906 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Morpheus, Actual: Morpheus)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,909 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Leader, Actual: Leader)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,912 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:11,915 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:11,925 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,930 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:11,936 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:12,112 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 171ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:12,117 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:12,119 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:12 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:12,172 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [QUEST] - The ripper has arrived
+🤖 CYBORG 🤖 2025-11-03T21:46:12,178 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:12,182 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:12,184 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-03T21:46:12,186 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:12,188 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:12,276 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 84ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:12,280 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:12,288 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:12 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:12,304 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:12,308 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:12,310 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Sending request to endpoint DELETE-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-11-03T21:46:12,312 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:12,318 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:12,602 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] STEP  [API] - Response with status: 204 received from endpoint: DELETE-https://reqres.in/api/users/3 in 281ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:12,605 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:12,607 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:12 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:12,610 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:12,612 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=204}]
+🤖 CYBORG 🤖 2025-11-03T21:46:12,615 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 204, Actual: 204)
+🤖 CYBORG 🤖 2025-11-03T21:46:12,616 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [QUEST] - DataRipper processed target: 'DELETE_ADMIN_USER'.
+🤖 CYBORG 🤖 2025-11-03T21:46:12,622 [scenario=ReqresApiAIGeneratedTest.testFullUserLifecycleAndCrossValidation] INFO  [QUEST] - The quest of 'testFullUserLifecycleAndCrossValidation(Quest, User, Late)' has ended in defeat. Status: FAILED. Duration: 1 seconds.

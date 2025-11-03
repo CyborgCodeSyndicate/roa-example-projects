@@ -1,0 +1,19 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:09,475 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,520 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,540 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,565 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] INFO  [QUEST] - The quest: 'testSuccessfulLogin(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:09,607 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:10,355 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,374 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,387 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:11,231 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 825ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,259 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,265 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:11 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:11,283 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:11,723 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200, token=QpwL5tke4Pnpja7X4}]
+🤖 CYBORG 🤖 2025-11-03T21:46:11,730 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,776 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] VALIDATION [QUEST] - ✔ Validation passed: NOT_NULL (Expected: true, Actual: QpwL5tke4Pnpja7X4)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,782 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] VALIDATION [QUEST] - ✔ Validation passed: MATCHES_REGEX (Expected: [a-zA-Z0-9]+, Actual: QpwL5tke4Pnpja7X4)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,788 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,798 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:11,817 [scenario=LoginFunctionalityAIGeneratedTest.testSuccessfulLogin] INFO  [QUEST] - The quest of 'testSuccessfulLogin(Quest)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.

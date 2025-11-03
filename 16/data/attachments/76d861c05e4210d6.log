@@ -1,0 +1,18 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:10,794 [scenario=ReqresApiTest.testCreateUser] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:10,799 [scenario=ReqresApiTest.testCreateUser] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:10,807 [scenario=ReqresApiTest.testCreateUser] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:10,817 [scenario=ReqresApiTest.testCreateUser] INFO  [QUEST] - The quest: 'testCreateUser(Quest, User)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,834 [scenario=ReqresApiTest.testCreateUser] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:10,842 [scenario=ReqresApiTest.testCreateUser] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,844 [scenario=ReqresApiTest.testCreateUser] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,847 [scenario=ReqresApiTest.testCreateUser] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:11,071 [scenario=ReqresApiTest.testCreateUser] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 217ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,074 [scenario=ReqresApiTest.testCreateUser] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,076 [scenario=ReqresApiTest.testCreateUser] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:11 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:11,080 [scenario=ReqresApiTest.testCreateUser] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:11,089 [scenario=ReqresApiTest.testCreateUser] EXTENDED [API] - Validation target: [{name=Morpheus, AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-03T21:46:11,092 [scenario=ReqresApiTest.testCreateUser] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,093 [scenario=ReqresApiTest.testCreateUser] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Morpheus, Actual: Morpheus)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,095 [scenario=ReqresApiTest.testCreateUser] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,097 [scenario=ReqresApiTest.testCreateUser] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:11,100 [scenario=ReqresApiTest.testCreateUser] INFO  [QUEST] - The quest of 'testCreateUser(Quest, User)' has concluded with glory. Status: SUCCESS. Duration: 0 seconds.

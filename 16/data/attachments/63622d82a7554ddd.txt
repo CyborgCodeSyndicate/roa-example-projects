@@ -1,0 +1,4 @@
+{
+    "email": "wrong.email@reqres.in",
+    "password": "cityslicka"
+}

@@ -1,0 +1,1 @@
+{support.url=https://contentcaddy.io?utm_source=reqres&utm_medium=json&utm_campaign=referral, data.email=emma.wong@reqres.in, AssertionKeyForStatus=200}

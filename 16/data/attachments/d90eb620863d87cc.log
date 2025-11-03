@@ -1,0 +1,25 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:05,682 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:05,773 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:05,790 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:05,805 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] INFO  [QUEST] - The quest: 'testCreateJuniorUserImprovedWithCustomService(Quest, Late)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:05,840 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] INFO  [QUEST] - The quest has used the ring: 'Gondor'
+🤖 CYBORG 🤖 2025-11-03T21:46:05,850 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:06,099 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:06,343 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-03T21:46:06,358 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:06,372 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:07,056 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 675ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:07,115 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:07,123 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:07 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:07,141 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:07,147 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2025-11-03T21:46:07,155 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-03T21:46:07,366 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:07,379 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:07,386 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-03T21:46:07,391 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:07,400 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:07,491 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 84ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:07,503 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:07,512 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:07 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:07,532 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImprovedWithCustomService] INFO  [QUEST] - The quest of 'testCreateJuniorUserImprovedWithCustomService(Quest, Late)' has ended in defeat. Status: FAILED. Duration: 1 seconds.

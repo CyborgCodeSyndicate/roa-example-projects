@@ -1,0 +1,19 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:11,565 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:11,568 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:11,571 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:11,575 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] INFO  [QUEST] - The quest: 'testGetNonExistentUserReturns404AndEmptyBody(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,578 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:11,584 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] INFO  [API] - Prepared RequestSpecification with pathParams: {id=23}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:11,593 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/23.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,596 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:11,602 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:11,910 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] STEP  [API] - Response with status: 404 received from endpoint: GET-https://reqres.in/api/users/23 in 301ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,917 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,926 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:11 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:11,932 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:11,937 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] EXTENDED [API] - Validation target: [{$={}, AssertionKeyForStatus=404}]
+🤖 CYBORG 🤖 2025-11-03T21:46:11,942 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 404, Actual: 404)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,953 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: {}, Actual: {})
+🤖 CYBORG 🤖 2025-11-03T21:46:11,959 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,961 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:11,967 [scenario=ReqresApiAIGeneratedTest.testGetNonExistentUserReturns404AndEmptyBody] INFO  [QUEST] - The quest of 'testGetNonExistentUserReturns404AndEmptyBody(Quest)' has concluded with glory. Status: SUCCESS. Duration: 0 seconds.

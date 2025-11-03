@@ -1,0 +1,3 @@
+Content-Type=application/json
+x-api-key=reqres-free-v1
+Authorization=Bearer QpwL5tke4Pnpja7X4

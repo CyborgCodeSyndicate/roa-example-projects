@@ -1,0 +1,18 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:09,475 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,573 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,585 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,597 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] INFO  [QUEST] - The quest: 'testLoginWithInvalidEmail(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:09,611 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:10,355 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,378 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,405 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:11,228 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] STEP  [API] - Response with status: 400 received from endpoint: POST-https://reqres.in/api/login in 804ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,261 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,268 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:11 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:11,280 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:11,706 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] EXTENDED [API] - Validation target: [{error=user not found, AssertionKeyForStatus=400}]
+🤖 CYBORG 🤖 2025-11-03T21:46:11,725 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 400, Actual: 400)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,778 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: user not found, Actual: user not found)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,790 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,804 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:11,816 [scenario=LoginFunctionalityAIGeneratedTest.testLoginWithInvalidEmail] INFO  [QUEST] - The quest of 'testLoginWithInvalidEmail(Quest)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.

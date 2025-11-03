@@ -1,0 +1,37 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:09,017 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,134 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,148 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,167 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [QUEST] - The quest: 'testGetUserByIdValidAndInvalid(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:09,181 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:09,497 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:09,778 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-03T21:46:09,790 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:09,800 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:10,579 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 767ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,605 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,609 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:10 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:10,623 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [API] - Prepared RequestSpecification with pathParams: {id=9}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:10,628 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/9.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,632 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:10,635 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:10,950 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users/9 in 311ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,968 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,974 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:10 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:10,985 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:11,140 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Validation target: [{data.first_name=Tobias, data.email=tobias.funke@reqres.in, AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2025-11-03T21:46:11,151 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,204 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Tobias, Actual: Tobias)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,209 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] VALIDATION [QUEST] - ✔ Validation passed: CONTAINS (Expected: @reqres.in, Actual: tobias.funke@reqres.in)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,217 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [API] - Prepared RequestSpecification with pathParams: {id=23}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:11,225 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/23.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,231 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:11,234 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:11,477 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] STEP  [API] - Response with status: 404 received from endpoint: GET-https://reqres.in/api/users/23 in 236ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,483 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,485 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:11 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:11,495 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:11,498 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=404}]
+🤖 CYBORG 🤖 2025-11-03T21:46:11,501 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 404, Actual: 404)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,505 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,508 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:11,515 [scenario=ReqresApiAIGeneratedTest.testGetUserByIdValidAndInvalid] INFO  [QUEST] - The quest of 'testGetUserByIdValidAndInvalid(Quest)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.

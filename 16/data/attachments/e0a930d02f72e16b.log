@@ -1,0 +1,18 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:09,475 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,586 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,597 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:09,605 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] INFO  [QUEST] - The quest: 'testLoginMissingEmail(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:09,614 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:10,354 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-03T21:46:10,382 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:10,399 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:11,231 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] STEP  [API] - Response with status: 400 received from endpoint: POST-https://reqres.in/api/login in 818ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,259 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:11,270 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:11 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:11,283 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:11,704 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] EXTENDED [API] - Validation target: [{error=Missing email or username, AssertionKeyForStatus=400}]
+🤖 CYBORG 🤖 2025-11-03T21:46:11,726 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 400, Actual: 400)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,776 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Missing email or username, Actual: Missing email or username)
+🤖 CYBORG 🤖 2025-11-03T21:46:11,784 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:11,789 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:11,819 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingEmail] INFO  [QUEST] - The quest of 'testLoginMissingEmail(Quest)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.

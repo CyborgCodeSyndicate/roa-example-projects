@@ -1,0 +1,55 @@
+🤖 CYBORG 🤖 2025-11-03T21:46:03,656 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:03,689 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:03,706 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-03T21:46:03,731 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The quest: 'shouldCreateIntermediateUserWithCorrectDetails(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-03T21:46:03,751 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Updated quest storage with credentials for username: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-11-03T21:46:03,772 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:04,430 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-03T21:46:04,442 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:04,450 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:05,394 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 935ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:05,417 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:05,421 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:05 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:05,805 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [API] - Successfully authenticated user: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-11-03T21:46:05,860 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [QUEST] - Creating data for: USER_LEADER
+🤖 CYBORG 🤖 2025-11-03T21:46:05,919 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:05,926 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-03T21:46:05,930 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:05,933 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:06,293 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 351ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:06,298 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:06,302 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:06 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:06,309 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:06,313 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-03T21:46:06,317 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-03T21:46:06,338 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [QUEST] - Creating data for: USER_INTERMEDIATE
+🤖 CYBORG 🤖 2025-11-03T21:46:06,342 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:06,348 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-03T21:46:06,351 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:06,354 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:06,569 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 206ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:06,578 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-03T21:46:06,584 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:06 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:06,589 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:06,595 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-03T21:46:06,602 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-03T21:46:06,607 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:06,613 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-11-03T21:46:06,628 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_CREATE_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-11-03T21:46:06,666 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-11-03T21:46:06,670 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-03T21:46:06,673 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-03T21:46:06,676 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The ripper has arrived
+🤖 CYBORG 🤖 2025-11-03T21:46:06,688 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-03T21:46:06,691 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-11-03T21:46:06,694 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] STEP  [API] - Sending request to endpoint DELETE-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-11-03T21:46:06,697 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:06,699 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-03T21:46:06,897 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] STEP  [API] - Response with status: 204 received from endpoint: DELETE-https://reqres.in/api/users/3 in 195ms.
+🤖 CYBORG 🤖 2025-11-03T21:46:06,902 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Response body: .
+🤖 CYBORG 🤖 2025-11-03T21:46:06,904 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Response headers: Date=Mon, 03 Nov 2025 21:46:06 GMT
+🤖 CYBORG 🤖 2025-11-03T21:46:06,908 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-03T21:46:06,910 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=204}]
+🤖 CYBORG 🤖 2025-11-03T21:46:06,913 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 204, Actual: 204)
+🤖 CYBORG 🤖 2025-11-03T21:46:06,915 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - DataRipper processed target: 'DELETE_ADMIN_USER'.
+🤖 CYBORG 🤖 2025-11-03T21:46:06,921 [scenario=RoAGeneratedTest.shouldCreateIntermediateUserWithCorrectDetails] INFO  [QUEST] - The quest of 'shouldCreateIntermediateUserWithCorrectDetails(Quest)' has concluded with glory. Status: SUCCESS. Duration: 3 seconds.
