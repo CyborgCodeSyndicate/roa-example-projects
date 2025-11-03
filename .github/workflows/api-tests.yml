@@ -22,6 +22,5 @@ jobs:
       project_module: api-test-framework
       tags_include: ${{ github.event.inputs.tagsInclude }}
       tags_exclude: ${{ github.event.inputs.tagsExclude }}
-    secrets:
       maven_user:  ${{ secrets.GH_PACKAGES_USER }}
       maven_token: ${{ secrets.GH_PACKAGES_PAT }}
