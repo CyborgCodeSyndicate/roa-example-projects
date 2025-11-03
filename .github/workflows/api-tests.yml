@@ -24,4 +24,3 @@ jobs:
       tags_exclude: ${{ github.event.inputs.tagsExclude }}
       maven_user: ${{ secrets.GH_PACKAGES_USER }}
       maven_token: ${{ secrets.GH_PACKAGES_PAT }}
-    secrets: inherit
