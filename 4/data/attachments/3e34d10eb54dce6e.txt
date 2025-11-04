@@ -1,0 +1,7 @@
+Processed Journey Data:
+-------------------
+Journey: VALID_SELLER
+  {
+    "email" : "admin@vaadin.com",
+    "password" : "admin"
+  }
