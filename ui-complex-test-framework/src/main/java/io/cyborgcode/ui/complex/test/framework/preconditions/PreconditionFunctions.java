@@ -1,6 +1,6 @@
 package io.cyborgcode.ui.complex.test.framework.preconditions;
 
-import io.cyborgcode.ui.complex.test.framework.db.responses.DbResponsesJsonPaths;
+import io.cyborgcode.ui.complex.test.framework.db.extractors.DbResponsesJsonPaths;
 import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
 import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
 import io.cyborgcode.ui.complex.test.framework.api.AppEndpoints;
@@ -24,7 +24,7 @@ import static io.cyborgcode.roa.db.validator.DbAssertionTarget.QUERY_RESULT;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.EQUALS_IGNORE_CASE;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 
-public class PreconditionFunctions {
+public final class PreconditionFunctions {
 
     private PreconditionFunctions() {
     }

@@ -17,6 +17,7 @@ public class LinkVaImpl extends BaseComponent implements Link {
 
    private static final By LINK_TAG_NAME_SELECTOR = By.tagName("vaadin-tab");
    private static final String DISABLED_STATE = "disabled";
+   private static final String NOT_VISIBLE_STATE_INDICATOR = "hidden";
 
 
    public LinkVaImpl(SmartWebDriver driver) {
@@ -111,28 +112,28 @@ public class LinkVaImpl extends BaseComponent implements Link {
    @Override
    public boolean isVisible(final SmartWebElement container, final String linkText) {
       SmartWebElement link = findLinkInContainer(container, linkText);
-      return isLinkEnabled(link);
+      return isLinkVisible(link);
    }
 
 
    @Override
    public boolean isVisible(final SmartWebElement container) {
       SmartWebElement link = findLinkInContainer(container, null);
-      return isLinkEnabled(link);
+      return isLinkVisible(link);
    }
 
 
    @Override
    public boolean isVisible(final String linkText) {
       SmartWebElement link = findLinkByText(linkText);
-      return isLinkEnabled(link);
+      return isLinkVisible(link);
    }
 
 
    @Override
    public boolean isVisible(final By linkLocator) {
       SmartWebElement link = driver.findSmartElement(linkLocator);
-      return isLinkEnabled(link);
+      return isLinkVisible(link);
    }
 
 
@@ -153,6 +154,10 @@ public class LinkVaImpl extends BaseComponent implements Link {
 
 
    private boolean isLinkEnabled(SmartWebElement link) {
-      return !Objects.requireNonNull(link.getAttribute("class")).contains(DISABLED_STATE);
+      return !Objects.requireNonNull(link.getDomAttribute("class")).contains(DISABLED_STATE);
+   }
+
+   private boolean isLinkVisible(SmartWebElement link) {
+       return link.getDomAttribute(NOT_VISIBLE_STATE_INDICATOR) == null;
    }
 }

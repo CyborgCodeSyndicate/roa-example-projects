@@ -19,7 +19,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @ImplementationOfType(SelectFieldTypes.VA_SELECT)
@@ -70,8 +69,7 @@ public class SelectVaImpl extends BaseComponent implements Select {
       openDdl(container);
       List<SmartWebElement> options = getAllOptionsElements();
       List<String> availableOptions = options.stream()
-            .map(option -> option.findSmartElement(OPTION_TEXT_LOCATOR).getText().trim())
-            .collect(Collectors.toList());
+            .map(option -> option.findSmartElement(OPTION_TEXT_LOCATOR).getText().trim()).toList();
       closeDdl(container);
       return availableOptions;
    }
@@ -89,7 +87,7 @@ public class SelectVaImpl extends BaseComponent implements Select {
       List<String> checkedOptions = options.stream()
             .filter(this::checkIfOptionIsSelected)
             .map(SmartWebElement::getText)
-            .collect(Collectors.toList());
+            .toList();
       closeDdl(container);
       return checkedOptions;
    }
@@ -110,8 +108,9 @@ public class SelectVaImpl extends BaseComponent implements Select {
          return getSelectedOptions(containers.get(0));
       } else {
          SmartWebElement container = containers.stream()
-               .filter(c -> c.getAttribute("has-value") != null)
-               .findFirst().get();
+               .filter(c -> c.getDomAttribute("has-value") != null)
+               .findFirst()
+               .orElseThrow(() -> new IllegalStateException("No container with 'has-value' found"));
          return getSelectedOptions(container);
       }
    }
@@ -150,11 +149,11 @@ public class SelectVaImpl extends BaseComponent implements Select {
 
 
    protected boolean isOptionEnabled(SmartWebElement option) {
-      return option.getAttribute(DISABLED_CLASS_INDICATOR) == null;
+      return option.getDomAttribute(DISABLED_CLASS_INDICATOR) == null;
    }
 
    protected void openDdl(SmartWebElement ddlButton) {
-      if (!"true".equals(ddlButton.getAttribute("opened"))) {
+      if (!"true".equals(ddlButton.getDomAttribute("opened"))) {
          SmartWebElement toggleButton = findDdlButton(ddlButton);
          toggleButton.click();
          SharedUiFunctions.waitForElementLoading(driver, ddlButton);
@@ -162,9 +161,14 @@ public class SelectVaImpl extends BaseComponent implements Select {
    }
 
    protected void closeDdl(SmartWebElement ddlButton) {
-      if ("true".equals(ddlButton.getAttribute("opened"))) { //todo- getAttribute: StaleElementReferenceException
-         SmartWebElement toggleButton = findDdlButton(ddlButton);
-         toggleButton.click();
+      try {
+          if ("true".equals(ddlButton.getDomAttribute("opened"))) { //todo- getAttribute: StaleElementReferenceException
+              SmartWebElement toggleButton = findDdlButton(ddlButton);
+              toggleButton.click();
+          }
+      } catch (StaleElementReferenceException e) {
+          driver.findSmartElement(By.cssSelector("h2#title")).click();
+          System.out.println("\n h2#title");
       }
    }
 
@@ -175,8 +179,7 @@ public class SelectVaImpl extends BaseComponent implements Select {
    protected List<SmartWebElement> getAllOptionsElements() {
       List<SmartWebElement> options = driver.findSmartElements(OPTIONS_ROOT_LOCATOR);
       return options.stream()
-            .filter(element -> element.getAttribute("hidden") == null)
-            .collect(Collectors.toList());
+            .filter(element -> element.getDomAttribute("hidden") == null).toList();
    }
 
    protected SmartWebElement findOptionByText(List<SmartWebElement> options, String text) {
@@ -192,23 +195,21 @@ public class SelectVaImpl extends BaseComponent implements Select {
    }
 
    protected boolean checkIfOptionIsSelected(SmartWebElement option) {
-      return option.getAttribute("selected") != null;
+      return option.getDomAttribute("selected") != null;
    }
 
    protected List<String> selectItemsWithStrategy(final SmartWebElement container, final Strategy strategy) {
       openDdl(container);
       List<SmartWebElement> options = getAllOptionsElements();
-      List<String> selectedOptionsText = selectOptionByStrategy(options, strategy);
-      //closeDdl(container);
-      return selectedOptionsText;
+      return selectOptionByStrategy(options, strategy);
    }
 
    protected List<String> selectOptionByStrategy(List<SmartWebElement> options, Strategy strategy) {
       List<SmartWebElement> optionElements = getOptionsByStrategy(options, strategy);
+      optionElements.forEach(this::selectIfNotChecked);
       return optionElements.stream()
-            .peek(this::selectIfNotChecked)
-            .map(SmartWebElement::getText)
-            .collect(Collectors.toList());
+              .map(SmartWebElement::getText)
+              .toList();
    }
 
    protected List<SmartWebElement> getOptionsByStrategy(List<SmartWebElement> options, Strategy strategy) {

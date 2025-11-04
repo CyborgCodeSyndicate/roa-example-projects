@@ -21,7 +21,6 @@ public final class DataCreatorFunctions {
             .build();
    }
 
-
    public static Order createValidOrder() {
       return Order.builder()
             .id(1)
@@ -32,7 +31,6 @@ public final class DataCreatorFunctions {
             .product("Strawberry Bun")
             .build();
    }
-
 
    public static Order createValidLateOrder() {
       SuperQuest superQuest = QuestHolder.get();

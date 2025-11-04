@@ -18,11 +18,10 @@ public class InputVaImpl extends BaseComponent implements Input {
 
    private static final By INPUT_FIELD_CONTAINER = By.tagName("vaadin-text-field");
    private static final By INPUT_LOCATOR = By.tagName("input");
-
    private static final By INPUT_FIELD_ERROR_MESSAGE_LOCATOR = By.cssSelector("div[part='error-message']");
    private static final By INPUT_FIELD_LABEL_LOCATOR = By.cssSelector("div[part='label']");
-   public static final String ELEMENT_VALUE_ATTRIBUTE = "value";
-   public static final String FIELD_DISABLE_CLASS_INDICATOR = "disabled";
+   private static final String ELEMENT_VALUE_ATTRIBUTE = "value";
+   private static final String FIELD_DISABLE_CLASS_INDICATOR = "disabled";
 
 
    public InputVaImpl(SmartWebDriver driver) {
@@ -192,7 +191,6 @@ public class InputVaImpl extends BaseComponent implements Input {
       if (isInputFieldEnabled(inputFieldContainer)) {
          SmartWebElement inputElement = inputFieldContainer.findSmartElement(INPUT_LOCATOR);
          inputElement.clearAndSendKeys(value);
-         //inputElement.sendKeys(Keys.ENTER);
       }
    }
 
@@ -201,14 +199,13 @@ public class InputVaImpl extends BaseComponent implements Input {
       if (isInputFieldEnabled(inputFieldContainer)) {
          SmartWebElement inputElement = inputFieldContainer.findSmartElement(INPUT_LOCATOR);
          inputElement.clear();
-         //inputElement.sendKeys(Keys.ENTER);
       }
    }
 
 
    private String getInputFieldValue(SmartWebElement inputFieldContainer) {
       SmartWebElement inputElement = inputFieldContainer.findSmartElement(INPUT_LOCATOR);
-      return inputElement.getAttribute(ELEMENT_VALUE_ATTRIBUTE);
+      return inputElement.getDomAttribute(ELEMENT_VALUE_ATTRIBUTE);
    }
 
 
@@ -225,7 +222,7 @@ public class InputVaImpl extends BaseComponent implements Input {
 
 
    private boolean isInputFieldEnabled(SmartWebElement fieldElement) {
-      String classAttribute = fieldElement.getAttribute(FIELD_DISABLE_CLASS_INDICATOR);
+      String classAttribute = fieldElement.getDomAttribute(FIELD_DISABLE_CLASS_INDICATOR);
       return classAttribute == null;
    }
 

@@ -1,4 +1,4 @@
-package io.cyborgcode.ui.complex.test.framework.data.retriever;
+package io.cyborgcode.ui.complex.test.framework.data.test_data;
 
 import org.aeonbits.owner.Config;
 

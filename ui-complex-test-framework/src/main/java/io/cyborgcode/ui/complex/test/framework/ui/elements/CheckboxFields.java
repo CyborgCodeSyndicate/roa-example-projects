@@ -14,7 +14,6 @@ public enum CheckboxFields implements CheckboxUiElement {
    PAST_ORDERS_CHECKBOX(By.tagName("vaadin-checkbox"), CheckboxFieldTypes.VA_CHECKBOX_TYPE),
    ;
 
-
    private final By locator;
    private final CheckboxComponentType componentType;
    private final Consumer<SmartWebDriver> before;

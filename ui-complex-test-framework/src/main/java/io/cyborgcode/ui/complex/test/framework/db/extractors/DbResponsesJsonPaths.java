@@ -1,4 +1,4 @@
-package io.cyborgcode.ui.complex.test.framework.db.responses;
+package io.cyborgcode.ui.complex.test.framework.db.extractors;
 
 public enum DbResponsesJsonPaths {
 

@@ -35,7 +35,6 @@ public enum InputFields implements InputUiElement {
       public static final String DETAILS_FIELD = "DETAILS_FIELD";
       public static final String NUMBER_FIELD = "NUMBER_FIELD";
 
-
       private Data() {
       }
 

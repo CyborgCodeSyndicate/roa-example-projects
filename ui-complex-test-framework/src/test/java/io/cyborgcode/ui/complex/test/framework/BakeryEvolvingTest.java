@@ -1,12 +1,16 @@
 package io.cyborgcode.ui.complex.test.framework;
 
+import io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator;
-import io.cyborgcode.ui.complex.test.framework.data.retriever.DataProperties;
+import io.cyborgcode.ui.complex.test.framework.data.test_data.DataProperties;
 import io.cyborgcode.ui.complex.test.framework.db.hooks.DbHookFlows;
+import io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields;
 import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
 import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminUi;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.AppUiLogging;
+import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminCredentials;
+import io.cyborgcode.ui.complex.test.framework.ui.authentication.AppUiLogin;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.db.annotations.DB;
 import io.cyborgcode.roa.db.annotations.DbHook;
@@ -30,11 +34,7 @@ import java.util.List;
 
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_UI;
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_CUSTOM;
-import static io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner.Data.DELETE_CREATED_ORDERS;
 import static io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions.Data.LOGIN_PRECONDITION;
-import static io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions.Data.ORDER_PRECONDITION;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields.*;
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.*;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.LOCATION_DDL;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.PRODUCTS_DDL;
 import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
@@ -48,27 +48,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DbHooks({
       @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 })
-public class BakeryEvolvingTest extends BaseQuest {
+class BakeryEvolvingTest extends BaseQuest {
 
 
    @Test
    @Description("Raw usage")
-   public void createOrderRaw(Quest quest) {
+   void createOrderRaw(Quest quest) {
       quest
             .use(RING_OF_UI)
             .browser().navigate("https://bakery-flow.demo.vaadin.com/")
-            .input().insert(USERNAME_FIELD, "admin@vaadin.com")
-            .input().insert(PASSWORD_FIELD, "admin")
-            .button().click(SIGN_IN_BUTTON)
-            .button().click(NEW_ORDER_BUTTON)
-            .input().insert(CUSTOMER_FIELD, "John Terry")
-            .input().insert(DETAILS_FIELD, "Address")
-            .input().insert(NUMBER_FIELD, "+1-555-7777")
+            .input().insert(InputFields.USERNAME_FIELD, "admin@vaadin.com")
+            .input().insert(InputFields.PASSWORD_FIELD, "admin")
+            .button().click(ButtonFields.SIGN_IN_BUTTON)
+            .button().click(ButtonFields.NEW_ORDER_BUTTON)
+            .input().insert(InputFields.CUSTOMER_FIELD, "John Terry")
+            .input().insert(InputFields.DETAILS_FIELD, "Address")
+            .input().insert(InputFields.NUMBER_FIELD, "+1-555-7777")
             .select().selectOption(LOCATION_DDL, "Store")
             .select().selectOptions(PRODUCTS_DDL, Strategy.FIRST)
-            .button().click(REVIEW_ORDER_BUTTON)
-            .button().click(PLACE_ORDER_BUTTON)
-            .input().insert(SEARCH_BAR_FIELD, "John Terry")
+            .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
+            .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+            .input().insert(InputFields.SEARCH_BAR_FIELD, "John Terry")
             .validate(() -> {
                SuperQuest superQuest = QuestHolder.get();
                List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
@@ -81,7 +81,7 @@ public class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("Raw with Data usage")
-   public void createOrderRawData(Quest quest) {
+   void createOrderRawData(Quest quest) {
       final DataProperties dataProperties = ConfigCache.getOrCreate(DataProperties.class);
 
       Seller seller = Seller.builder()
@@ -100,18 +100,18 @@ public class BakeryEvolvingTest extends BaseQuest {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
-            .input().insert(USERNAME_FIELD, seller.getEmail())
-            .input().insert(PASSWORD_FIELD, seller.getPassword())
-            .button().click(SIGN_IN_BUTTON)
-            .button().click(NEW_ORDER_BUTTON)
-            .input().insert(CUSTOMER_FIELD, order.getCustomerName())
-            .input().insert(DETAILS_FIELD, order.getCustomerDetails())
-            .input().insert(NUMBER_FIELD, order.getPhoneNumber())
+            .input().insert(InputFields.USERNAME_FIELD, seller.getEmail())
+            .input().insert(InputFields.PASSWORD_FIELD, seller.getPassword())
+            .button().click(ButtonFields.SIGN_IN_BUTTON)
+            .button().click(ButtonFields.NEW_ORDER_BUTTON)
+            .input().insert(InputFields.CUSTOMER_FIELD, order.getCustomerName())
+            .input().insert(InputFields.DETAILS_FIELD, order.getCustomerDetails())
+            .input().insert(InputFields.NUMBER_FIELD, order.getPhoneNumber())
             .select().selectOption(LOCATION_DDL, order.getLocation())
             .select().selectOptions(PRODUCTS_DDL, order.getProduct())
-            .button().click(REVIEW_ORDER_BUTTON)
-            .button().click(PLACE_ORDER_BUTTON)
-            .input().insert(SEARCH_BAR_FIELD, order.getCustomerName())
+            .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
+            .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+            .input().insert(InputFields.SEARCH_BAR_FIELD, order.getCustomerName())
             .validate(() -> {
                SuperQuest superQuest = QuestHolder.get();
                List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
@@ -124,24 +124,24 @@ public class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("Craft usage")
-   public void createOrderCraft(Quest quest,
+   void createOrderCraft(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
-            .input().insert(USERNAME_FIELD, seller.getEmail())
-            .input().insert(PASSWORD_FIELD, seller.getPassword())
-            .button().click(SIGN_IN_BUTTON)
-            .button().click(NEW_ORDER_BUTTON)
-            .input().insert(CUSTOMER_FIELD, order.getCustomerName())
-            .input().insert(DETAILS_FIELD, order.getCustomerDetails())
-            .input().insert(NUMBER_FIELD, order.getPhoneNumber())
+            .input().insert(InputFields.USERNAME_FIELD, seller.getEmail())
+            .input().insert(InputFields.PASSWORD_FIELD, seller.getPassword())
+            .button().click(ButtonFields.SIGN_IN_BUTTON)
+            .button().click(ButtonFields.NEW_ORDER_BUTTON)
+            .input().insert(InputFields.CUSTOMER_FIELD, order.getCustomerName())
+            .input().insert(InputFields.DETAILS_FIELD, order.getCustomerDetails())
+            .input().insert(InputFields.NUMBER_FIELD, order.getPhoneNumber())
             .select().selectOption(LOCATION_DDL, order.getLocation())
             .select().selectOptions(PRODUCTS_DDL, order.getProduct())
-            .button().click(REVIEW_ORDER_BUTTON)
-            .button().click(PLACE_ORDER_BUTTON)
-            .input().insert(SEARCH_BAR_FIELD, order.getCustomerName())
+            .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
+            .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+            .input().insert(InputFields.SEARCH_BAR_FIELD, order.getCustomerName())
             .validate(() -> {
                SuperQuest superQuest = QuestHolder.get();
                List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
@@ -154,19 +154,19 @@ public class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("Insertion and Craft usage")
-   public void createOrderInsertion(Quest quest,
+   void createOrderInsertion(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
             .insertion().insertData(seller)
-            .button().click(SIGN_IN_BUTTON)
-            .button().click(NEW_ORDER_BUTTON)
+            .button().click(ButtonFields.SIGN_IN_BUTTON)
+            .button().click(ButtonFields.NEW_ORDER_BUTTON)
             .insertion().insertData(order)
-            .button().click(REVIEW_ORDER_BUTTON)
-            .button().click(PLACE_ORDER_BUTTON)
-            .input().insert(SEARCH_BAR_FIELD, order.getCustomerName())
+            .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
+            .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+            .input().insert(InputFields.SEARCH_BAR_FIELD, order.getCustomerName())
             .validate(() -> {
                SuperQuest superQuest = QuestHolder.get();
                List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
@@ -179,7 +179,7 @@ public class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("Service and Craft usage")
-   public void createOrderService(Quest quest,
+   void createOrderService(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
@@ -193,8 +193,8 @@ public class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("Authentication, Craft and Service usage")
-   @AuthenticateViaUi(credentials = AdminUi.class, type = AppUiLogging.class)
-   public void createOrderAuth(Quest quest,
+   @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
+   void createOrderAuth(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
@@ -209,10 +209,10 @@ public class BakeryEvolvingTest extends BaseQuest {
    @PreQuest({
          @Journey(value = LOGIN_PRECONDITION,
                journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1),
-         @Journey(value = ORDER_PRECONDITION,
+         @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
                journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
    })
-   public void createOrderPreQuest(Quest quest,
+   void createOrderPreQuest(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
@@ -223,13 +223,13 @@ public class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("Authenticate, PreQuest, Service and Ripper usage")
-   @AuthenticateViaUi(credentials = AdminUi.class, type = AppUiLogging.class)
+   @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    @PreQuest({
-         @Journey(value = ORDER_PRECONDITION,
+         @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
                journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
    })
-   @Ripper(targets = {DELETE_CREATED_ORDERS})
-   public void createOrderPreArgumentsAndRipper(Quest quest) {
+   @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
+   void createOrderPreArgumentsAndRipper(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)
             .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))

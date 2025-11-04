@@ -15,7 +15,7 @@ public class ButtonVaImpl extends BaseComponent implements Button {
 
    private static final By BUTTON_TAG_NAME_SELECTOR = By.tagName("vaadin-button");
    private static final String DISABLED_STATE_INDICATOR = "disabled";
-   public static final String NOT_VISIBLE_STATE_INDICATOR = "hidden";
+   private static final String NOT_VISIBLE_STATE_INDICATOR = "hidden";
 
 
    public ButtonVaImpl(SmartWebDriver driver) {
@@ -125,12 +125,12 @@ public class ButtonVaImpl extends BaseComponent implements Button {
 
 
    private boolean isButtonEnabled(SmartWebElement button) {
-      return button.getAttribute(DISABLED_STATE_INDICATOR) == null;
+      return button.getDomAttribute(DISABLED_STATE_INDICATOR) == null;
    }
 
 
    private boolean isButtonVisible(SmartWebElement button) {
-      return button.getAttribute(NOT_VISIBLE_STATE_INDICATOR) == null;
+      return button.getDomAttribute(NOT_VISIBLE_STATE_INDICATOR) == null;
    }
 
 }

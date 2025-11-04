@@ -1,5 +1,6 @@
 package io.cyborgcode.ui.complex.test.framework.ui.components.checkbox;
 
+import io.cyborgcode.roa.ui.log.LogUi;
 import io.cyborgcode.ui.complex.test.framework.ui.types.CheckboxFieldTypes;
 import io.cyborgcode.roa.ui.annotations.ImplementationOfType;
 import io.cyborgcode.roa.ui.components.base.BaseComponent;
@@ -13,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static io.cyborgcode.roa.ui.util.strategy.StrategyGenerator.*;
 
@@ -24,10 +24,12 @@ public class CheckboxVaImpl extends BaseComponent implements Checkbox {
    private static final By CHECKBOX_ELEMENT_SELECTOR = By.tagName("mat-checkbox");
    private static final String CHECKED_CLASS_INDICATOR = "checked";
    private static final String DISABLED_STATE = "disabled";
-   public static final By CHECKBOX_LABEL_LOCATOR = By.className("mat-checkbox-label");
+   private static final String CLASS_ATTRIBUTE = "class";
+   private static final By CHECKBOX_LABEL_LOCATOR = By.className("mat-checkbox-label");
+   private static final String LOG_CB_WITH_TEXT = "Select or Deselect checkbox with text: ";
 
 
-   public CheckboxVaImpl(SmartWebDriver driver) {
+    public CheckboxVaImpl(SmartWebDriver driver) {
       super(driver);
    }
 
@@ -104,7 +106,7 @@ public class CheckboxVaImpl extends BaseComponent implements Checkbox {
    @Override
    public List<String> getSelected(SmartWebElement container) {
       List<SmartWebElement> checkBoxes = findCheckboxes(container, true);
-      return checkBoxes.stream().map(this::getLabel).collect(Collectors.toList());
+      return checkBoxes.stream().map(this::getLabel).toList();
    }
 
    @Override
@@ -116,7 +118,7 @@ public class CheckboxVaImpl extends BaseComponent implements Checkbox {
    @Override
    public List<String> getAll(SmartWebElement container) {
       List<SmartWebElement> checkBoxes = findCheckboxes(container, null);
-      return checkBoxes.stream().map(this::getLabel).collect(Collectors.toList());
+      return checkBoxes.stream().map(this::getLabel).toList();
    }
 
    @Override
@@ -132,8 +134,15 @@ public class CheckboxVaImpl extends BaseComponent implements Checkbox {
       if (Objects.isNull(onlySelected)) {
          return checkBoxes;
       }
-      return onlySelected ? checkBoxes.stream().filter(this::isChecked).collect(Collectors.toList()) :
-            checkBoxes.stream().filter(checkBox -> !isChecked(checkBox)).collect(Collectors.toList());
+      if (Boolean.TRUE.equals(onlySelected)) {
+          return checkBoxes.stream()
+                  .filter(this::isChecked)
+                  .toList();
+      } else {
+          return checkBoxes.stream()
+                  .filter(cb -> !isChecked(cb))
+                  .toList();
+      }
    }
 
    private void performActionOnCheckboxes(SmartWebElement container, String[] checkBoxText, boolean select) {
@@ -150,7 +159,7 @@ public class CheckboxVaImpl extends BaseComponent implements Checkbox {
    private void performActionOnCheckboxesByLocator(By[] checkBoxLocator, boolean select) {
       List<SmartWebElement> checkBoxes = Arrays.stream(checkBoxLocator)
             .map(driver::findSmartElement)
-            .collect(Collectors.toList());
+            .toList();
       checkBoxes = checkBoxes.stream().filter(checkBox -> select != isChecked(checkBox)).toList();
       checkBoxes.forEach(this::clickIfEnabled);
    }
@@ -186,8 +195,7 @@ public class CheckboxVaImpl extends BaseComponent implements Checkbox {
 
    private List<SmartWebElement> filterCheckboxesByLabel(List<SmartWebElement> checkBoxes, String[] labels) {
       Set<String> labelSet = Set.of(labels);
-      return checkBoxes.stream().filter(checkBox -> labelSet.contains(getLabel(checkBox)))
-            .collect(Collectors.toList());
+      return checkBoxes.stream().filter(checkBox -> labelSet.contains(getLabel(checkBox))).toList();
    }
 
    private String applyStrategyAndClick(List<SmartWebElement> checkBoxes, Strategy strategy) {
@@ -201,25 +209,25 @@ public class CheckboxVaImpl extends BaseComponent implements Checkbox {
                SmartWebElement randomCheckBox = getRandomElementFromElements(checkBoxes);
                clickIfEnabled(randomCheckBox);
                selectedCheckBoxLabel = getLabel(randomCheckBox);
-               //info("Select or Deselect checkbox with text: " + selectedCheckBoxLabel);
+               LogUi.info(LOG_CB_WITH_TEXT + selectedCheckBoxLabel);
                return selectedCheckBoxLabel;
             case FIRST:
                SmartWebElement firstCheckBox = getFirstElementFromElements(checkBoxes);
                clickIfEnabled(firstCheckBox);
                selectedCheckBoxLabel = getLabel(firstCheckBox);
-               //info("Select or Deselect checkbox with text: " + selectedCheckBoxLabel);
+               LogUi.info(LOG_CB_WITH_TEXT + selectedCheckBoxLabel);
                return selectedCheckBoxLabel;
             case LAST:
                SmartWebElement lastCheckBox = getLastElementFromElements(checkBoxes);
                clickIfEnabled(lastCheckBox);
                selectedCheckBoxLabel = getLabel(lastCheckBox);
-               //info("Select or Deselect checkbox with text: " + selectedCheckBoxLabel);
+               LogUi.info(LOG_CB_WITH_TEXT + selectedCheckBoxLabel);
                return selectedCheckBoxLabel;
             case ALL:
                String allSelected = checkBoxes.stream().map(this::getLabel).toList()
                      .toString();
                checkBoxes.forEach(this::clickIfEnabled);
-               //info("Select or Deselect all checkboxes");
+               LogUi.info("Select or Deselect all checkboxes");
                return allSelected;
             default:
                throw new IllegalStateException("Unexpected strategy: " + strategy);
@@ -232,20 +240,20 @@ public class CheckboxVaImpl extends BaseComponent implements Checkbox {
 
    private void clickIfEnabled(SmartWebElement checkBox) {
       if (isEnabled(checkBox)) {
-         String checkBoxClass = checkBox.getAttribute("class");
+         String checkBoxClass = checkBox.getDomAttribute(CLASS_ATTRIBUTE);
          checkBox.click();
-         checkBox.waitUntilAttributeValueIsChanged("class", checkBoxClass);
-         checkBoxClass = checkBox.getAttribute("class");
-         checkBox.waitUntilAttributeValueIsChanged("class", checkBoxClass);
+         checkBox.waitUntilAttributeValueIsChanged(CLASS_ATTRIBUTE, checkBoxClass);
+         checkBoxClass = checkBox.getDomAttribute(CLASS_ATTRIBUTE);
+         checkBox.waitUntilAttributeValueIsChanged(CLASS_ATTRIBUTE, checkBoxClass);
       }
    }
 
    private boolean isChecked(SmartWebElement checkBox) {
-      return checkBox.getAttribute(CHECKED_CLASS_INDICATOR) != null;
+      return checkBox.getDomAttribute(CHECKED_CLASS_INDICATOR) != null;
    }
 
    private boolean isEnabled(SmartWebElement checkBox) {
-      return checkBox.getAttribute(DISABLED_STATE) == null;
+      return checkBox.getDomAttribute(DISABLED_STATE) == null;
    }
 
    private String getLabel(SmartWebElement checkBox) {

@@ -1,8 +1,8 @@
 package io.cyborgcode.ui.complex.test.framework;
 
 import io.cyborgcode.ui.complex.test.framework.base.Rings;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminUi;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.AppUiLogging;
+import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminCredentials;
+import io.cyborgcode.ui.complex.test.framework.ui.authentication.AppUiLogin;
 import io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
@@ -13,12 +13,12 @@ import org.junit.jupiter.api.Test;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.CheckboxFields.PAST_ORDERS_CHECKBOX;
 
 @UI
-public class BakerySessionReUsageTest extends BaseQuest {
+class BakerySessionReUsageTest extends BaseQuest {
 
 
    @Test
-   @AuthenticateViaUi(credentials = AdminUi.class, type = AppUiLogging.class, cacheCredentials = true)
-   public void scenario_four(Quest quest) throws InterruptedException {
+   @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
+   void scenario_four(Quest quest) {
       quest
             .use(Rings.RING_OF_UI)
             .input().insert(InputFields.SEARCH_BAR_FIELD, "Amanda Nixon")
@@ -30,8 +30,8 @@ public class BakerySessionReUsageTest extends BaseQuest {
    }
 
    @Test
-   @AuthenticateViaUi(credentials = AdminUi.class, type = AppUiLogging.class, cacheCredentials = true)
-   public void scenario_five(Quest quest) throws InterruptedException {
+   @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
+   void scenario_five(Quest quest) {
       quest
             .use(Rings.RING_OF_UI)
             .input().insert(InputFields.SEARCH_BAR_FIELD, "Amanda Nixon")

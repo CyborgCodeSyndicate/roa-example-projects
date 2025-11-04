@@ -20,16 +20,34 @@ public enum SharedUi implements ContextConsumer {
       this.function = function;
    }
 
+   /**
+    * Returns a Consumer that accepts a SmartWebDriver and applies the given
+    * By locator to the function represented by this SharedUi instance.
+    *
+    * @param locator the locator to be applied to the function
+    * @return a Consumer that applies the function to the given locator
+    */
    @Override
    public Consumer<SmartWebDriver> asConsumer(By locator) {
       return driver -> function.accept(driver, locator);
    }
 
+   /**
+    * Calls the underlying function with the given driver and null as the locator.
+    *
+    * @param driver the SmartWebDriver to be passed to the function
+    */
    @Override
    public void accept(SmartWebDriver driver) {
       accept(driver, null);
    }
 
+   /**
+    * Calls the underlying function with the given driver and locator.
+    *
+    * @param driver the SmartWebDriver to be passed to the function
+    * @param locator the locator to be passed to the function
+    */
    public void accept(SmartWebDriver driver, By locator) {
       function.accept(driver, locator);
    }

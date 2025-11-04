@@ -14,14 +14,12 @@ import java.util.function.Consumer;
 
 public enum ButtonFields implements ButtonUiElement {
 
-
    SIGN_IN_BUTTON(By.tagName("vaadin-button"), ButtonFieldTypes.VA_BUTTON_TYPE,
          SharedUi.WAIT_FOR_LOADING),
    NEW_ORDER_BUTTON(By.cssSelector("vaadin-button#action"), ButtonFieldTypes.VA_BUTTON_TYPE,
          SharedUi.WAIT_TO_BE_CLICKABLE,
-         //SharedUI.WAIT_FOR_LOADING), //todo: test the loading
          driver -> SharedUiFunctions.waitForPresence(driver,
-               By.cssSelector("vaadin-dialog-overlay#overlay"))), //todo: test if loading doesn't work
+               By.cssSelector("vaadin-dialog-overlay#overlay"))),
    REVIEW_ORDER_BUTTON(By.cssSelector("vaadin-button#review"), ButtonFieldTypes.VA_BUTTON_TYPE,
          SharedUi.WAIT_TO_BE_CLICKABLE,
          SharedUi.WAIT_TO_BE_REMOVED),
@@ -33,7 +31,6 @@ public enum ButtonFields implements ButtonUiElement {
          SharedUi.WAIT_TO_BE_REMOVED),
    CLEAR_SEARCH(By.cssSelector("vaadin-button#clear"), ButtonFieldTypes.VA_BUTTON_TYPE,
          SharedUi.WAIT_TO_BE_CLICKABLE,
-         //SharedUI.WAIT_FOR_LOADING) //todo: test the loading
          SharedUi.WAIT_TO_BE_REMOVED),
    ;
 
@@ -41,7 +38,6 @@ public enum ButtonFields implements ButtonUiElement {
 
       public static final String SIGN_IN_BUTTON = "SIGN_IN_BUTTON";
       public static final String NEW_ORDER_BUTTON = "NEW_ORDER_BUTTON";
-
 
       private Data() {
       }
@@ -53,21 +49,21 @@ public enum ButtonFields implements ButtonUiElement {
    private final Consumer<SmartWebDriver> before;
    private final Consumer<SmartWebDriver> after;
 
-
+   @SuppressWarnings("unused")
    ButtonFields(By locator) {
       this(locator, null, smartWebDriver -> {
       }, smartWebDriver -> {
       });
    }
 
-
+   @SuppressWarnings("unused")
    ButtonFields(By locator, ButtonComponentType componentType) {
       this(locator, componentType, smartWebDriver -> {
       }, smartWebDriver -> {
       });
    }
 
-
+   @SuppressWarnings("unused")
    ButtonFields(By locator,
                 ButtonComponentType componentType,
                 Consumer<SmartWebDriver> before) {
@@ -75,14 +71,12 @@ public enum ButtonFields implements ButtonUiElement {
       });
    }
 
-
    ButtonFields(By locator,
                 ButtonComponentType componentType,
                 ContextConsumer before) {
       this(locator, componentType, before.asConsumer(locator), smartWebDriver -> {
       });
    }
-
 
    ButtonFields(By locator,
                 ButtonComponentType componentType,
@@ -94,14 +88,12 @@ public enum ButtonFields implements ButtonUiElement {
       this.after = after;
    }
 
-
    ButtonFields(By locator,
                 ButtonComponentType componentType,
                 ContextConsumer before,
                 ContextConsumer after) {
       this(locator, componentType, before.asConsumer(locator), after.asConsumer(locator));
    }
-
 
    ButtonFields(By locator,
                 ButtonComponentType componentType,
@@ -110,7 +102,7 @@ public enum ButtonFields implements ButtonUiElement {
       this(locator, componentType, before.asConsumer(locator), after);
    }
 
-
+   @SuppressWarnings("unused")
    ButtonFields(By locator,
                 ButtonComponentType componentType,
                 Consumer<SmartWebDriver> before,
@@ -118,30 +110,25 @@ public enum ButtonFields implements ButtonUiElement {
       this(locator, componentType, before, after.asConsumer(locator));
    }
 
-
    @Override
    public By locator() {
       return locator;
    }
-
 
    @Override
    public <T extends ComponentType> T componentType() {
       return (T) componentType;
    }
 
-
    @Override
    public Enum<?> enumImpl() {
       return this;
    }
 
-
    @Override
    public Consumer<SmartWebDriver> before() {
       return before;
    }
-
 
    @Override
    public Consumer<SmartWebDriver> after() {

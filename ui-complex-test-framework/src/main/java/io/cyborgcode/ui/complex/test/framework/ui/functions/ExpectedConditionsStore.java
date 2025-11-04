@@ -14,8 +14,11 @@ public class ExpectedConditionsStore {
    }
 
    /**
-    * Returns an ExpectedCondition that checks for the visibility of
-    * an element found by the given locator.
+    * Returns an ExpectedCondition that checks if the element found by the given locator is visible.
+    * The element is considered visible if it is displayed and not stale.
+    * If the element can't be found or is stale, it's considered invisible.
+    * @param locator The locator of the element to check for visibility.
+    * @return An ExpectedCondition that checks if the element is visible.
     */
    public static ExpectedCondition<Boolean> visibilityOfElementLocatedCustom(final By locator) {
       return new ExpectedCondition<>() {
@@ -36,9 +39,14 @@ public class ExpectedConditionsStore {
       };
    }
 
+
    /**
-    * Returns an ExpectedCondition that checks for the invisibility
-    * of an element found by the given locator.
+    * Returns an ExpectedCondition that checks for the invisibility of an element found by the given locator.
+    * The element is considered invisible if it is not visible, or if it can't be found (e.g. NoSuchElementException)
+    * or if it is stale (e.g. StaleElementReferenceException).
+    *
+    * @param locator The locator of the element to check for invisibility.
+    * @return An ExpectedCondition that checks for the invisibility of the element.
     */
    public static ExpectedCondition<Boolean> invisibilityOfElementLocatedCustom(final By locator) {
       return new ExpectedCondition<>() {
@@ -60,9 +68,13 @@ public class ExpectedConditionsStore {
       };
    }
 
+
    /**
-    * Returns an ExpectedCondition that checks if the element found
-    * by the given locator is both displayed and enabled.
+    * Returns an ExpectedCondition that checks if the element found by the given locator is clickable.
+    * The element is considered clickable when it is visible and enabled.
+    *
+    * @param locator the By locator of the element to wait for
+    * @return an ExpectedCondition that checks if the element is clickable
     */
    public static ExpectedCondition<Boolean> elementToBeClickableCustom(final By locator) {
       return new ExpectedCondition<>() {
@@ -84,16 +96,20 @@ public class ExpectedConditionsStore {
       };
    }
 
+
    /**
-    * Returns an ExpectedCondition that checks for the 'loading'
-    * attribute on the specified SmartWebElement to be "false" or removed.
+    * Returns an ExpectedCondition that checks if the "loading" attribute has been removed from
+    * the given SmartWebElement.
+    * This can be used to wait for an element to finish loading before performing an action on it.
+    * @param element The SmartWebElement to wait for.
+    * @return An ExpectedCondition that checks if the "loading" attribute has been removed from the given SmartWebElement.
     */
    public static ExpectedCondition<Boolean> attributeLoadingToBeRemovedCustom(final SmartWebElement element) {
       return new ExpectedCondition<>() {
          @Override
          public Boolean apply(WebDriver driver) {
             try {
-               return "false".equals(element.getAttribute("loading"));
+               return "false".equals(element.getDomProperty("loading"));
             } catch (StaleElementReferenceException e) {
                return false;
             }

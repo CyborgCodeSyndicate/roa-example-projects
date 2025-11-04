@@ -6,7 +6,6 @@ import java.sql.Driver;
 
 public enum Databases implements DbType<Databases> {
 
-   POSTGRESQL(new org.postgresql.Driver(), "jdbc:postgresql"),
    H2(new org.h2.Driver(), "jdbc:h2");
 
    private final Driver driver;
