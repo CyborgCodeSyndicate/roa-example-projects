@@ -1,0 +1,17 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:15,664 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:15,749 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:15,767 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:15,779 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] INFO  [QUEST] - The quest: 'testCreateJuniorUserBasic(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,790 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:16,102 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:16,349 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-04T13:23:16,369 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:16,375 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:17,079 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 689ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:17,132 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:17,139 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:17 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:17,159 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:17,166 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2025-11-04T13:23:17,174 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-04T13:23:17,208 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] EXTENDED [QUEST] - Fetching data from storage by key: 'GET_ALL_USERS' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-11-04T13:23:17,418 [scenario=CreateUserEvolutionTest.testCreateJuniorUserBasic] INFO  [QUEST] - The quest of 'testCreateJuniorUserBasic(Quest)' has ended in defeat. Status: FAILED. Duration: 1 seconds.

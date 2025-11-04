@@ -1,0 +1,21 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:12,888 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:12,934 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:12,954 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:12,975 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] INFO  [QUEST] - The quest: 'testCreateUserWithValidPayload(Quest, User)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,036 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:13,816 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,821 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:13,829 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:14,542 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 707ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:14,548 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:14,553 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:14 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:14,568 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] INFO  [API] - Starting response validation with 5 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:15,102 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] EXTENDED [API] - Validation target: [{createdAt=2025-11-04T13:23:14.494Z, name=Morpheus, id=174, job=Leader, AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-04T13:23:15,113 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,119 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Morpheus, Actual: Morpheus)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,125 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Leader, Actual: Leader)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,130 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] VALIDATION [QUEST] - ✔ Validation passed: NOT_NULL (Expected: true, Actual: 174)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,133 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] VALIDATION [QUEST] - ✔ Validation passed: MATCHES_REGEX (Expected: ^\d{4}-\d{2}-\d{2}T.*Z$, Actual: 2025-11-04T13:23:14.494Z)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,146 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,150 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-04T13:23:15,163 [scenario=ReqresApiAIGeneratedTest.testCreateUserWithValidPayload] INFO  [QUEST] - The quest of 'testCreateUserWithValidPayload(Quest, User)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.

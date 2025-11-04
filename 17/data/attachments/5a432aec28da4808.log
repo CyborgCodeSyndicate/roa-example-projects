@@ -1,0 +1,18 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:12,952 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:13,062 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:13,086 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:13,100 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] INFO  [QUEST] - The quest: 'testLoginMissingPassword(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,112 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:13,884 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,896 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:13,902 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:14,768 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] STEP  [API] - Response with status: 400 received from endpoint: POST-https://reqres.in/api/login in 845ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:14,793 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:14,799 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:14 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:14,809 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:15,278 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] EXTENDED [API] - Validation target: [{error=Missing password, AssertionKeyForStatus=400}]
+🤖 CYBORG 🤖 2025-11-04T13:23:15,287 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 400, Actual: 400)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,328 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Missing password, Actual: Missing password)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,335 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,343 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-04T13:23:15,363 [scenario=LoginFunctionalityAIGeneratedTest.testLoginMissingPassword] INFO  [QUEST] - The quest of 'testLoginMissingPassword(Quest)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.

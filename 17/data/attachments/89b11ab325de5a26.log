@@ -1,0 +1,20 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:13,800 [scenario=ReqresApiTest.testGetUser] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:13,805 [scenario=ReqresApiTest.testGetUser] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:13,814 [scenario=ReqresApiTest.testGetUser] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:13,824 [scenario=ReqresApiTest.testGetUser] INFO  [QUEST] - The quest: 'testGetUser(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,830 [scenario=ReqresApiTest.testGetUser] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:13,836 [scenario=ReqresApiTest.testGetUser] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:13,846 [scenario=ReqresApiTest.testGetUser] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,851 [scenario=ReqresApiTest.testGetUser] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:13,857 [scenario=ReqresApiTest.testGetUser] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:14,092 [scenario=ReqresApiTest.testGetUser] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users/3 in 229ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:14,103 [scenario=ReqresApiTest.testGetUser] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:14,108 [scenario=ReqresApiTest.testGetUser] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:14 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:14,120 [scenario=ReqresApiTest.testGetUser] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:14,183 [scenario=ReqresApiTest.testGetUser] EXTENDED [API] - Validation target: [{support.url=https://contentcaddy.io?utm_source=reqres&utm_medium=json&utm_campaign=referral, data.email=emma.wong@reqres.in, AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2025-11-04T13:23:14,189 [scenario=ReqresApiTest.testGetUser] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-04T13:23:14,772 [scenario=ReqresApiTest.testGetUser] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: emma.wong@reqres.in, Actual: emma.wong@reqres.in)
+🤖 CYBORG 🤖 2025-11-04T13:23:14,774 [scenario=ReqresApiTest.testGetUser] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: https://contentcaddy.io?utm_source=reqres&utm_medium=json&utm_campaign=referral, Actual: https://contentcaddy.io?utm_source=reqres&utm_medium=json&utm_campaign=referral)
+🤖 CYBORG 🤖 2025-11-04T13:23:14,785 [scenario=ReqresApiTest.testGetUser] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-04T13:23:14,793 [scenario=ReqresApiTest.testGetUser] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-04T13:23:14,807 [scenario=ReqresApiTest.testGetUser] INFO  [QUEST] - The quest of 'testGetUser(Quest)' has concluded with glory. Status: SUCCESS. Duration: 1 seconds.

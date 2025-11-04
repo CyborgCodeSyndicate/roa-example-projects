@@ -1,0 +1,24 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:15,664 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:15,724 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:15,733 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:15,748 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] INFO  [QUEST] - The quest: 'testCreateJuniorUserImproved(Quest, Late)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,778 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:16,102 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:16,350 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-04T13:23:16,362 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:16,375 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:17,079 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 690ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:17,134 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:17,140 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:17 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:17,162 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:17,168 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2025-11-04T13:23:17,176 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-04T13:23:17,367 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:17,379 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:17,387 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-04T13:23:17,392 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:17,397 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:17,459 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 51ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:17,471 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:17,485 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:17 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:17,509 [scenario=CreateUserEvolutionTest.testCreateJuniorUserImproved] INFO  [QUEST] - The quest of 'testCreateJuniorUserImproved(Quest, Late)' has ended in defeat. Status: FAILED. Duration: 1 seconds.

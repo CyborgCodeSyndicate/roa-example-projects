@@ -1,0 +1,48 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:09,649 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:09,740 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:09,769 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:09,788 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [QUEST] - The quest: 'testUserLifecycleWithAuth(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:09,805 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Updated quest storage with credentials for username: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-11-04T13:23:09,815 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:10,533 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-04T13:23:10,548 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:10,571 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:11,530 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 942ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:11,554 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:11,561 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:11 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:11,989 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [API] - Successfully authenticated user: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-11-04T13:23:12,007 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:12,052 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-04T13:23:12,061 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:12,071 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:12,429 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 351ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:12,434 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:12,439 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:12 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:12,448 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:12,454 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-04T13:23:12,460 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-04T13:23:12,472 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-11-04T13:23:12,475 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:12,484 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:12,683 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 189ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:12,688 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:12,691 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:12 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:12,696 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:12,701 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-11-04T13:23:12,712 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-11-04T13:23:12,719 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-11-04T13:23:12,721 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_CREATE_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-11-04T13:23:12,773 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-11-04T13:23:12,793 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:12,802 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] STEP  [API] - Sending request to endpoint DELETE-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-11-04T13:23:12,810 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:12,819 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:13,025 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] STEP  [API] - Response with status: 204 received from endpoint: DELETE-https://reqres.in/api/users/3 in 196ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,039 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Response body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:13,046 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:13 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:13,056 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:13,058 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=204}]
+🤖 CYBORG 🤖 2025-11-04T13:23:13,063 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 204, Actual: 204)
+🤖 CYBORG 🤖 2025-11-04T13:23:13,069 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,073 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-04T13:23:13,085 [scenario=UserLifecycleEvolutionTest.testUserLifecycleWithAuth] INFO  [QUEST] - The quest of 'testUserLifecycleWithAuth(Quest)' has concluded with glory. Status: SUCCESS. Duration: 3 seconds.

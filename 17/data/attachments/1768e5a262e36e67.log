@@ -1,0 +1,25 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:14,945 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:14,952 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:14,955 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:14,957 [scenario=ReqresApiTest.testLoginUserAndAddHeader] INFO  [QUEST] - The quest: 'testLoginUserAndAddHeader(Quest, LoginUser)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:14,967 [scenario=ReqresApiTest.testLoginUserAndAddHeader] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:14,975 [scenario=ReqresApiTest.testLoginUserAndAddHeader] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-04T13:23:14,978 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:14,980 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:15,176 [scenario=ReqresApiTest.testLoginUserAndAddHeader] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 193ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,181 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:15,186 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:15 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:15,190 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_LOGIN_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-11-04T13:23:15,212 [scenario=ReqresApiTest.testLoginUserAndAddHeader] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {SpecificHeader=[QpwL5tke4Pnpja7X4]}
+🤖 CYBORG 🤖 2025-11-04T13:23:15,216 [scenario=ReqresApiTest.testLoginUserAndAddHeader] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,220 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:15,225 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:15,294 [scenario=ReqresApiTest.testLoginUserAndAddHeader] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users/3 in 63ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,299 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:15,308 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:15 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:15,312 [scenario=ReqresApiTest.testLoginUserAndAddHeader] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:15,314 [scenario=ReqresApiTest.testLoginUserAndAddHeader] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2025-11-04T13:23:15,325 [scenario=ReqresApiTest.testLoginUserAndAddHeader] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,326 [scenario=ReqresApiTest.testLoginUserAndAddHeader] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,328 [scenario=ReqresApiTest.testLoginUserAndAddHeader] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-04T13:23:15,331 [scenario=ReqresApiTest.testLoginUserAndAddHeader] INFO  [QUEST] - The quest of 'testLoginUserAndAddHeader(Quest, LoginUser)' has concluded with glory. Status: SUCCESS. Duration: 0 seconds.

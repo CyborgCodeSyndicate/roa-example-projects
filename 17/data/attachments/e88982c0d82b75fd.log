@@ -1,0 +1,14 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:12,036 [scenario=ReqresApiTest.testGetUserFromListOfUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:12,046 [scenario=ReqresApiTest.testGetUserFromListOfUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:12,056 [scenario=ReqresApiTest.testGetUserFromListOfUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:12,065 [scenario=ReqresApiTest.testGetUserFromListOfUsers] INFO  [QUEST] - The quest: 'testGetUserFromListOfUsers(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:12,074 [scenario=ReqresApiTest.testGetUserFromListOfUsers] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:12,304 [scenario=ReqresApiTest.testGetUserFromListOfUsers] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:12,566 [scenario=ReqresApiTest.testGetUserFromListOfUsers] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-04T13:23:12,579 [scenario=ReqresApiTest.testGetUserFromListOfUsers] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:12,590 [scenario=ReqresApiTest.testGetUserFromListOfUsers] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:13,374 [scenario=ReqresApiTest.testGetUserFromListOfUsers] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 776ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,430 [scenario=ReqresApiTest.testGetUserFromListOfUsers] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:13,436 [scenario=ReqresApiTest.testGetUserFromListOfUsers] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:13 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:13,458 [scenario=ReqresApiTest.testGetUserFromListOfUsers] EXTENDED [QUEST] - Fetching data from storage by key: 'GET_ALL_USERS' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-11-04T13:23:13,764 [scenario=ReqresApiTest.testGetUserFromListOfUsers] INFO  [QUEST] - The quest of 'testGetUserFromListOfUsers(Quest)' has ended in defeat. Status: FAILED. Duration: 1 seconds.

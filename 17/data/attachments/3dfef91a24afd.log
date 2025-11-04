@@ -1,0 +1,24 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:15,086 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:15,089 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:15,096 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:15,098 [scenario=ReqresApiTest.testCreateJuniorUser] INFO  [QUEST] - The quest: 'testCreateJuniorUser(Quest, Late)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,109 [scenario=ReqresApiTest.testCreateJuniorUser] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:15,115 [scenario=ReqresApiTest.testCreateJuniorUser] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:15,117 [scenario=ReqresApiTest.testCreateJuniorUser] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,118 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:15,120 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:15,195 [scenario=ReqresApiTest.testCreateJuniorUser] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 72ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,198 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:15,200 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:15 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:15,205 [scenario=ReqresApiTest.testCreateJuniorUser] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:15,207 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2025-11-04T13:23:15,211 [scenario=ReqresApiTest.testCreateJuniorUser] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,223 [scenario=ReqresApiTest.testCreateJuniorUser] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:15,228 [scenario=ReqresApiTest.testCreateJuniorUser] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:15,232 [scenario=ReqresApiTest.testCreateJuniorUser] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,233 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:15,239 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:15,305 [scenario=ReqresApiTest.testCreateJuniorUser] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 58ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,313 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:15,315 [scenario=ReqresApiTest.testCreateJuniorUser] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:15 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:15,332 [scenario=ReqresApiTest.testCreateJuniorUser] INFO  [QUEST] - The quest of 'testCreateJuniorUser(Quest, Late)' has ended in defeat. Status: FAILED. Duration: 0 seconds.

@@ -1,0 +1,18 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:11,771 [scenario=ReqresApiTest.testUserNotFound] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:11,871 [scenario=ReqresApiTest.testUserNotFound] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:11,896 [scenario=ReqresApiTest.testUserNotFound] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:11,919 [scenario=ReqresApiTest.testUserNotFound] INFO  [QUEST] - The quest: 'testUserNotFound(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:11,941 [scenario=ReqresApiTest.testUserNotFound] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:12,305 [scenario=ReqresApiTest.testUserNotFound] INFO  [API] - Prepared RequestSpecification with pathParams: {id=23}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:12,566 [scenario=ReqresApiTest.testUserNotFound] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/23.
+🤖 CYBORG 🤖 2025-11-04T13:23:12,576 [scenario=ReqresApiTest.testUserNotFound] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:12,587 [scenario=ReqresApiTest.testUserNotFound] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:13,500 [scenario=ReqresApiTest.testUserNotFound] STEP  [API] - Response with status: 404 received from endpoint: GET-https://reqres.in/api/users/23 in 901ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,505 [scenario=ReqresApiTest.testUserNotFound] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:13,512 [scenario=ReqresApiTest.testUserNotFound] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:13 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:13,527 [scenario=ReqresApiTest.testUserNotFound] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:13,538 [scenario=ReqresApiTest.testUserNotFound] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=404}]
+🤖 CYBORG 🤖 2025-11-04T13:23:13,549 [scenario=ReqresApiTest.testUserNotFound] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 404, Actual: 404)
+🤖 CYBORG 🤖 2025-11-04T13:23:13,619 [scenario=ReqresApiTest.testUserNotFound] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-04T13:23:13,627 [scenario=ReqresApiTest.testUserNotFound] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-04T13:23:13,636 [scenario=ReqresApiTest.testUserNotFound] INFO  [QUEST] - The quest of 'testUserNotFound(Quest)' has concluded with glory. Status: SUCCESS. Duration: 1 seconds.

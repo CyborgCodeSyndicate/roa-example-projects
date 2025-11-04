@@ -1,0 +1,37 @@
+🤖 CYBORG 🤖 2025-11-04T13:23:14,854 [scenario=ReqresApiTest.testCustomService] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:14,856 [scenario=ReqresApiTest.testCustomService] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:14,861 [scenario=ReqresApiTest.testCustomService] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-11-04T13:23:14,863 [scenario=ReqresApiTest.testCustomService] INFO  [QUEST] - The quest: 'testCustomService(Quest, LoginUser)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-04T13:23:14,877 [scenario=ReqresApiTest.testCustomService] INFO  [QUEST] - The quest has used the ring: 'Rivendell'
+🤖 CYBORG 🤖 2025-11-04T13:23:14,879 [scenario=ReqresApiTest.testCustomService] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:14,891 [scenario=ReqresApiTest.testCustomService] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-11-04T13:23:14,897 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:14,899 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:15,033 [scenario=ReqresApiTest.testCustomService] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 129ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,037 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:15,043 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:15 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:15,058 [scenario=ReqresApiTest.testCustomService] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {SpecificHeader=[QpwL5tke4Pnpja7X4]}
+🤖 CYBORG 🤖 2025-11-04T13:23:15,065 [scenario=ReqresApiTest.testCustomService] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,073 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:15,082 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:15,131 [scenario=ReqresApiTest.testCustomService] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users/3 in 44ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,138 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:15,140 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:15 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:15,144 [scenario=ReqresApiTest.testCustomService] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:15,147 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2025-11-04T13:23:15,149 [scenario=ReqresApiTest.testCustomService] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,152 [scenario=ReqresApiTest.testCustomService] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,155 [scenario=ReqresApiTest.testCustomService] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-11-04T13:23:15,161 [scenario=ReqresApiTest.testCustomService] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-11-04T13:23:15,167 [scenario=ReqresApiTest.testCustomService] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,169 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-11-04T13:23:15,174 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-11-04T13:23:15,235 [scenario=ReqresApiTest.testCustomService] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 56ms.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,242 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-11-04T13:23:15,249 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Response headers: Date=Tue, 04 Nov 2025 13:23:15 GMT
+🤖 CYBORG 🤖 2025-11-04T13:23:15,266 [scenario=ReqresApiTest.testCustomService] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-11-04T13:23:15,268 [scenario=ReqresApiTest.testCustomService] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2025-11-04T13:23:15,276 [scenario=ReqresApiTest.testCustomService] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-11-04T13:23:15,280 [scenario=ReqresApiTest.testCustomService] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-04T13:23:15,282 [scenario=ReqresApiTest.testCustomService] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-04T13:23:15,301 [scenario=ReqresApiTest.testCustomService] INFO  [QUEST] - The quest of 'testCustomService(Quest, LoginUser)' has concluded with glory. Status: SUCCESS. Duration: 0 seconds.
