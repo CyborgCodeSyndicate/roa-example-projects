@@ -1,0 +1,27 @@
+name: API Tests
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      tagsInclude:
+        description: "Tags to include (comma-separated)"
+        required: false
+        default: "Regression"
+      tagsExclude:
+        description: "Tags to exclude (comma-separated)"
+        required: false
+        default: "Flaky"
+jobs:
+  run:
+    uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests.yml@v1.0.1
+    with:
+      kind: api
+      project_module: api-test-framework
+      tags_include: ${{ github.event.inputs.tagsInclude }}
+      tags_exclude: ${{ github.event.inputs.tagsExclude }}
+    secrets:
+      maven_user:  ${{ secrets.GH_PACKAGES_USER }}
+      maven_token: ${{ secrets.GH_PACKAGES_PAT }}
