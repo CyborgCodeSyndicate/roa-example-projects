@@ -1,0 +1,1 @@
+QueryResponse(rows=[{LOCATION=Bakery, CUSTOMERDETAILS=Address, PHONENUMBER=+1-555-7777, PRODUCT=Strawberry Bun, ID=1, CUSTOMERNAME=John Terry}])

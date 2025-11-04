@@ -1,0 +1,11 @@
+Processed Journey Data:
+-------------------
+Journey: VALID_ORDER
+  {
+    "id" : 1,
+    "customerName" : "John Terry",
+    "customerDetails" : "Address",
+    "phoneNumber" : "+1-555-7777",
+    "location" : "Bakery",
+    "product" : "Strawberry Bun"
+  }

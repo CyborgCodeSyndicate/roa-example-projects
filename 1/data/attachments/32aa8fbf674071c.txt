@@ -1,0 +1,1 @@
+{$[?(@.ID == 1)].LOCATION=[Bakery], $[?(@.ID == 1)].PRODUCT=[Strawberry Bun]}
