@@ -44,6 +44,7 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.EQUALS_IGNORE_CASE
 class BakeryDataBaseTests extends BaseQuest {
 
    @Test
+   @Regression
    @Description("Database usage in Test")
    @PreQuest({
          @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,

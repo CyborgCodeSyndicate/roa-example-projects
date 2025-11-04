@@ -52,6 +52,7 @@ class BakeryEvolvingTest extends BaseQuest {
 
 
    @Test
+   @Regression
    @Description("Raw usage")
    void createOrderRaw(Quest quest) {
       quest
@@ -80,6 +81,7 @@ class BakeryEvolvingTest extends BaseQuest {
 
 
    @Test
+   @Regression
    @Description("Raw with Data usage")
    void createOrderRawData(Quest quest) {
       final DataProperties dataProperties = ConfigCache.getOrCreate(DataProperties.class);
