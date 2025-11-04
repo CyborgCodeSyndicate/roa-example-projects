@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.cyborgcode.roa</groupId>
         <artifactId>roa-parent</artifactId>
-        <version>1.1.1-SNAPSHOT-99d502a-19014153087</version>
+        <version>1.1.2</version>
     </parent>
 
     <groupId>io.cyborgcode.roa.usage</groupId>
