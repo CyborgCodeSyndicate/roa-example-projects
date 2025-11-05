@@ -1,10 +1,9 @@
 package io.cyborgcode.api.test.framework.data.creator;
 
-
-import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
-import io.cyborgcode.api.test.framework.api.dto.response.UserData;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersDto;
+import io.cyborgcode.api.test.framework.api.dto.response.UserData;
 import io.cyborgcode.api.test.framework.data.constants.TestConstants;
 import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
@@ -43,16 +42,7 @@ public final class DataCreatorFunctions {
 
    public static CreateUserDto juniorUser() {
       SuperQuest quest = QuestHolder.get();
-      UserData firstUser;
-
-      try {
-         firstUser = extractFirstUserFromGetAllUsers(quest);
-      } catch (Exception ex) {
-         quest.use(RING_OF_API)
-               .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO));
-         firstUser = extractFirstUserFromGetAllUsers(quest);
-      }
-
+      UserData firstUser = firstUserFromGetAllUsersOrFetch(quest);
       return CreateUserDto.builder()
             .name(firstUser.getFirstName() + " suffix")
             .job("Junior " + firstUser.getLastName() + " worker")
@@ -61,16 +51,8 @@ public final class DataCreatorFunctions {
 
    public static CreateUserDto seniorUser() {
       SuperQuest quest = QuestHolder.get();
-
-      CreateUserDto userLeader;
-      try {
-         userLeader = quest.getStorage()
-               .sub(StorageKeysTest.ARGUMENTS)
-               .get(USER_LEADER, CreateUserDto.class);
-      } catch (Exception ex) {
-         userLeader = leaderUser();
-      }
-
+      CreateUserDto userLeader =
+            leaderUserFromStorageOrDefault(quest, StorageKeysTest.ARGUMENTS); // encapsulated try/catch
       return CreateUserDto.builder()
             .name("Mr. " + userLeader.getName())
             .job("Senior " + userLeader.getJob())
@@ -79,20 +61,32 @@ public final class DataCreatorFunctions {
 
    public static CreateUserDto intermediateUser() {
       SuperQuest quest = QuestHolder.get();
-
-      CreateUserDto userLeader;
-      try {
-         userLeader = quest.getStorage()
-               .sub(StorageKeysTest.PRE_ARGUMENTS)
-               .get(USER_LEADER, CreateUserDto.class);
-      } catch (Exception ex) {
-         userLeader = leaderUser();
-      }
-
+      CreateUserDto userLeader =
+            leaderUserFromStorageOrDefault(quest, StorageKeysTest.PRE_ARGUMENTS); // encapsulated try/catch
       return CreateUserDto.builder()
             .name("Mr. " + userLeader.getName())
             .job("Intermediate " + userLeader.getJob())
             .build();
+   }
+
+   private static UserData firstUserFromGetAllUsersOrFetch(SuperQuest quest) {
+      try {
+         return extractFirstUserFromGetAllUsers(quest);
+      } catch (Exception ignored) {
+         quest.use(RING_OF_API)
+               .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO));
+         return extractFirstUserFromGetAllUsers(quest);
+      }
+   }
+
+   private static CreateUserDto leaderUserFromStorageOrDefault(SuperQuest quest, StorageKeysTest storageArea) {
+      try {
+         return quest.getStorage()
+               .sub(storageArea)
+               .get(USER_LEADER, CreateUserDto.class);
+      } catch (Exception ignored) {
+         return leaderUser();
+      }
    }
 
    private static UserData extractFirstUserFromGetAllUsers(SuperQuest quest) {
