@@ -2,12 +2,12 @@ package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
-import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
-import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
-import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
-import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
+import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserDto;
+import io.cyborgcode.api.test.framework.api.dto.response.GetUsersDto;
 import io.cyborgcode.api.test.framework.api.dto.response.UserData;
-import io.cyborgcode.api.test.framework.api.dto.response.UserResponse;
+import io.cyborgcode.api.test.framework.api.dto.response.UserDto;
 import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
 import io.cyborgcode.api.test.framework.preconditions.Preconditions;
@@ -171,10 +171,10 @@ class ReqresApiTest extends BaseQuest {
       quest.use(RING_OF_API)
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .validate(() -> {
-               GetUsersResponse usersResponse =
-                     retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class).getBody().as(GetUsersResponse.class);
-               assertEquals(PAGE_TWO_DATA_SIZE, usersResponse.getData().size(), USER_DATA_SIZE_INCORRECT);
-               assertEquals(USER_SEVENTH_FIRST_NAME_LENGTH, usersResponse.getData().get(0).getFirstName().length(), FIRST_NAME_LENGTH_INCORRECT);
+               GetUsersDto users =
+                     retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class).getBody().as(GetUsersDto.class);
+               assertEquals(PAGE_TWO_DATA_SIZE, users.getData().size(), USER_DATA_SIZE_INCORRECT);
+               assertEquals(USER_SEVENTH_FIRST_NAME_LENGTH, users.getData().get(0).getFirstName().length(), FIRST_NAME_LENGTH_INCORRECT);
             });
    }
 
@@ -184,7 +184,7 @@ class ReqresApiTest extends BaseQuest {
       quest.use(RING_OF_API)
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .requestAndValidate(
-                  GET_USER.withPathParam(ID_PARAM, retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class).getBody().as(GetUsersResponse.class).getData().get(0).getId()),
+                  GET_USER.withPathParam(ID_PARAM, retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class).getBody().as(GetUsersDto.class).getData().get(0).getId()),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
             )
             .complete();
@@ -197,7 +197,7 @@ class ReqresApiTest extends BaseQuest {
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .request(GET_USER.withPathParam(ID_PARAM, retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
                   .getBody()
-                  .as(GetUsersResponse.class)
+                  .as(GetUsersDto.class)
                   .getData()
                   .stream()
                   .filter(user -> USER_NINE_FIRST_NAME.equals(user.getFirstName()))
@@ -206,23 +206,23 @@ class ReqresApiTest extends BaseQuest {
                   .orElseThrow(() -> new RuntimeException(userWithFirstNameNotFound(USER_NINE_FIRST_NAME))))
             )
             .validate(softAssertions -> {
-               UserResponse userResponse =
-                     retrieve(StorageKeysApi.API, GET_USER, Response.class).getBody().as(UserResponse.class);
-               softAssertions.assertThat(userResponse.getData().getId()).isEqualTo(USER_NINE_ID);
-               softAssertions.assertThat(userResponse.getData().getEmail()).isEqualTo(USER_NINE_EMAIL);
-               softAssertions.assertThat(userResponse.getData().getFirstName()).isEqualTo(USER_NINE_FIRST_NAME);
-               softAssertions.assertThat(userResponse.getData().getLastName()).isEqualTo(USER_NINE_LAST_NAME);
+               UserDto user =
+                     retrieve(StorageKeysApi.API, GET_USER, Response.class).getBody().as(UserDto.class);
+               softAssertions.assertThat(user.getData().getId()).isEqualTo(USER_NINE_ID);
+               softAssertions.assertThat(user.getData().getEmail()).isEqualTo(USER_NINE_EMAIL);
+               softAssertions.assertThat(user.getData().getFirstName()).isEqualTo(USER_NINE_FIRST_NAME);
+               softAssertions.assertThat(user.getData().getLastName()).isEqualTo(USER_NINE_LAST_NAME);
             })
             .complete();
    }
 
    @Test
    @Regression
-   void testCreateUser(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserRequest createUserRequest) {
+   void testCreateUser(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  createUserRequest,
+                  leaderUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath()).type(IS).expected(USER_LEADER_NAME).soft(true).build()
             )
@@ -231,13 +231,13 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCreateJuniorUser(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserRequest> createUserRequest) {
+   void testCreateJuniorUser(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserDto> juniorUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
             )
             .requestAndValidate(POST_CREATE_USER,
-                  createUserRequest.create(),
+                  juniorUser.create(),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .complete();
@@ -245,14 +245,14 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCreateTwoUsers(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserRequest createLeaderUserRequest, @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserRequest> createSeniorUserRequest) {
+   void testCreateTwoUsers(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser, @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserDto> seniorUser) {
       quest.use(RING_OF_API)
-            .requestAndValidate(POST_CREATE_USER, createLeaderUserRequest,
+            .requestAndValidate(POST_CREATE_USER, leaderUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath()).type(IS).expected(USER_LEADER_NAME).soft(true).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_JOB_RESPONSE.getJsonPath()).type(IS).expected(USER_LEADER_JOB).soft(true).build()
             )
-            .requestAndValidate(POST_CREATE_USER, createSeniorUserRequest.create(),
+            .requestAndValidate(POST_CREATE_USER, seniorUser.create(),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath()).type(IS).expected(USER_SENIOR_NAME).soft(true).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_JOB_RESPONSE.getJsonPath()).type(IS).expected(USER_SENIOR_JOB).soft(true).build()
@@ -262,9 +262,9 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testLoginUserAndAddHeader(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginRequest loginRequest) {
+   void testLoginUserAndAddHeader(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginDto loginAdminUser) {
       quest.use(RING_OF_API)
-            .request(POST_LOGIN_USER, loginRequest)
+            .request(POST_LOGIN_USER, loginAdminUser)
             .requestAndValidate(
                   GET_USER.withPathParam(ID_PARAM, ID_THREE)
                         .withHeader(EXAMPLE_HEADER, retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
@@ -285,20 +285,20 @@ class ReqresApiTest extends BaseQuest {
    void testUserLifecycle(Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
-               CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
-                     .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
-               assertTrue(createdUserResponse.getCreatedAt().contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)));
+               CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                     .getBody().as(CreatedUserDto.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUser.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUser.getJob(), CREATED_USER_JOB_INCORRECT);
+               assertTrue(createdUser.getCreatedAt().contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)));
             })
             .complete();
    }
 
    @Test
    @Regression
-   void testCustomService(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginRequest loginRequest) {
+   void testCustomService(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginDto loginAdminUser) {
       quest.use(RING_OF_CUSTOM)
-            .loginUserAndAddSpecificHeader(loginRequest)
+            .loginUserAndAddSpecificHeader(loginAdminUser)
             .drop()
             .use(RING_OF_API)
             .requestAndValidate(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
@@ -309,9 +309,9 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testValidateAllUsers(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginRequest loginRequest) {
+   void testValidateAllUsers(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginDto loginAdminUser) {
       quest.use(RING_OF_CUSTOM)
-            .loginUserAndAddSpecificHeader(loginRequest)
+            .loginUserAndAddSpecificHeader(loginAdminUser)
             .requestAndValidateGetAllUsers()
             .complete();
    }

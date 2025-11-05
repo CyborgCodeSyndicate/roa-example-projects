@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetUsersResponse {
+public class GetUsersDto {
 
    private int page;
    @JsonProperty("per_page")

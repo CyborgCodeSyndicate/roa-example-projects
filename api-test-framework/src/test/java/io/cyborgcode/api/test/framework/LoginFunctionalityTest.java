@@ -1,6 +1,6 @@
 package io.cyborgcode.api.test.framework;
 
-import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Regression;
@@ -10,9 +10,9 @@ import io.cyborgcode.roa.validator.core.Assertion;
 import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.ERROR;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.INVALID_EMAIL;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.MISSING_EMAIL_ERROR;
@@ -35,7 +35,7 @@ class LoginFunctionalityTest extends BaseQuest {
    @Test
    @Regression
    void testSuccessfulLogin(Quest quest) {
-      LoginRequest validUserRequest = LoginRequest.builder()
+      LoginDto validUser = LoginDto.builder()
             .email(DATA_PROPERTIES.username())
             .password(DATA_PROPERTIES.password())
             .build();
@@ -43,7 +43,7 @@ class LoginFunctionalityTest extends BaseQuest {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  validUserRequest,
+                  validUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
                   Assertion.builder().target(BODY).key(TOKEN.getJsonPath()).type(NOT_NULL).expected(true).build(),
                   Assertion.builder().target(BODY).key(TOKEN.getJsonPath()).type(MATCHES_REGEX).expected(TOKEN_REGEX).build()
@@ -54,14 +54,14 @@ class LoginFunctionalityTest extends BaseQuest {
    @Test
    @Regression
    void testLoginMissingPassword(Quest quest) {
-      LoginRequest noPasswordUserRequest = LoginRequest.builder()
+      LoginDto noPasswordUser = LoginDto.builder()
             .email(DATA_PROPERTIES.username())
             .build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  noPasswordUserRequest,
+                  noPasswordUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
                   Assertion.builder().target(BODY).key(ERROR.getJsonPath()).type(IS).expected(MISSING_PASSWORD_ERROR).build()
             )
@@ -71,14 +71,14 @@ class LoginFunctionalityTest extends BaseQuest {
    @Test
    @Regression
    void testLoginMissingEmail(Quest quest) {
-      LoginRequest noEmailUserRequest = LoginRequest.builder()
+      LoginDto noEmailUser = LoginDto.builder()
             .password(DATA_PROPERTIES.password())
             .build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  noEmailUserRequest,
+                  noEmailUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
                   Assertion.builder().target(BODY).key(ERROR.getJsonPath()).type(IS).expected(MISSING_EMAIL_ERROR).build()
             )
@@ -88,7 +88,7 @@ class LoginFunctionalityTest extends BaseQuest {
    @Test
    @Regression
    void testLoginWithInvalidEmail(Quest quest) {
-      LoginRequest invalidEmailUserRequest = LoginRequest.builder()
+      LoginDto invalidEmailUser = LoginDto.builder()
             .email(INVALID_EMAIL)
             .password(DATA_PROPERTIES.password())
             .build();
@@ -96,7 +96,7 @@ class LoginFunctionalityTest extends BaseQuest {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  invalidEmailUserRequest,
+                  invalidEmailUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
                   Assertion.builder().target(BODY).key(ERROR.getJsonPath()).type(IS).expected(USER_NOT_FOUND_ERROR).build()
             )

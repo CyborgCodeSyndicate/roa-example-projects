@@ -1,6 +1,6 @@
 package io.cyborgcode.api.test.framework.service;
 
-import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.annotation.Ring;
 import io.cyborgcode.roa.framework.chain.FluentService;
@@ -61,9 +61,9 @@ import static org.apache.http.HttpStatus.SC_OK;
 @Ring("Ring of Custom")
 public class CustomService extends FluentService {
 
-   public CustomService loginUserAndAddSpecificHeader(LoginRequest loginRequest) {
+   public CustomService loginUserAndAddSpecificHeader(LoginDto loginDto) {
       quest.use(RING_OF_API)
-            .request(POST_LOGIN_USER, loginRequest)
+            .request(POST_LOGIN_USER, loginDto)
             .requestAndValidate(
                   GET_USER
                         .withPathParam(ID_PARAM, ID_THREE)

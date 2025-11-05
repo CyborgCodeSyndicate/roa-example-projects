@@ -2,9 +2,9 @@ package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
-import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
-import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
-import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
+import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserDto;
 import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
 import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
@@ -62,33 +62,33 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
       final String password = dataProperties.password();
 
       quest.use(RING_OF_API)
-            .request(POST_LOGIN_USER, new LoginRequest(username, password));
+            .request(POST_LOGIN_USER, new LoginDto(username, password));
 
       String token = retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
             .getBody().jsonPath().getString(TOKEN.getJsonPath());
 
-      CreateUserRequest createLeaderUserRequest =
-            CreateUserRequest.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
-      CreateUserRequest createIntermediateUserRequest =
-            CreateUserRequest.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
+      CreateUserDto leaderUser =
+            CreateUserDto.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
+      CreateUserDto intermediateUser =
+            CreateUserDto.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
-                  createLeaderUserRequest,
+                  leaderUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .requestAndValidate(
                   POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
-                  createIntermediateUserRequest,
+                  intermediateUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .validate(() -> {
-               CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
-                     .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
-               assertTrue(createdUserResponse.getCreatedAt()
+               CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                     .getBody().as(CreatedUserDto.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUser.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUser.getJob(), CREATED_USER_JOB_INCORRECT);
+               assertTrue(createdUser.getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
             })
             .requestAndValidate(
@@ -103,28 +103,28 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @Regression
    void testUserLifecycleWithAuth(Quest quest) {
-      CreateUserRequest createLeaderUserRequest =
-            CreateUserRequest.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
-      CreateUserRequest createIntermediateUserRequest =
-            CreateUserRequest.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
+      CreateUserDto leaderUser =
+            CreateUserDto.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
+      CreateUserDto intermediateUser =
+            CreateUserDto.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  createLeaderUserRequest,
+                  leaderUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .requestAndValidate(
                   POST_CREATE_USER,
-                  createIntermediateUserRequest,
+                  intermediateUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .validate(() -> {
-               CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
-                     .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
-               assertTrue(createdUserResponse.getCreatedAt()
+               CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                     .getBody().as(CreatedUserDto.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUser.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUser.getJob(), CREATED_USER_JOB_INCORRECT);
+               assertTrue(createdUser.getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
             })
             .requestAndValidate(
@@ -144,11 +144,11 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
    void testUserLifecycleWithPreQuest(Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
-               CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
-                     .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
-               assertTrue(createdUserResponse.getCreatedAt()
+               CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                     .getBody().as(CreatedUserDto.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUser.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUser.getJob(), CREATED_USER_JOB_INCORRECT);
+               assertTrue(createdUser.getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
             })
             .requestAndValidate(
@@ -169,11 +169,11 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
    void testUserLifecycleWithRipper(Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
-               CreatedUserResponse createdUserResponse = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
-                     .getBody().as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
-               assertTrue(createdUserResponse.getCreatedAt()
+               CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                     .getBody().as(CreatedUserDto.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUser.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUser.getJob(), CREATED_USER_JOB_INCORRECT);
+               assertTrue(createdUser.getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
             })
             .complete();

@@ -1,8 +1,8 @@
 package io.cyborgcode.api.test.framework;
 
-import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
 import io.cyborgcode.api.test.framework.api.dto.response.UserData;
-import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
+import io.cyborgcode.api.test.framework.api.dto.response.GetUsersDto;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
@@ -47,20 +47,20 @@ class CreateUserDataEvolutionTest extends BaseQuest {
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
             );
 
-      UserData userData = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
+      UserData firstUser = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
             .getBody()
-            .as(GetUsersResponse.class)
+            .as(GetUsersDto.class)
             .getData().get(0);
 
-      CreateUserRequest createJuniorUserRequest = CreateUserRequest.builder()
-            .name(userData.getFirstName() + " suffix")
-            .job("Junior " + userData.getLastName() + " worker")
+      CreateUserDto juniorUser = CreateUserDto.builder()
+            .name(firstUser.getFirstName() + " suffix")
+            .job("Junior " + firstUser.getLastName() + " worker")
             .build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  createJuniorUserRequest,
+                  juniorUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath()).type(IS).expected(USER_JUNIOR_NAME).build(),
@@ -71,7 +71,7 @@ class CreateUserDataEvolutionTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCreateJuniorUserImproved(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserRequest> createUserRequest) {
+   void testCreateJuniorUserImproved(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserDto> juniorUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
@@ -79,7 +79,7 @@ class CreateUserDataEvolutionTest extends BaseQuest {
             )
             .requestAndValidate(
                   POST_CREATE_USER,
-                  createUserRequest.create(),
+                  juniorUser.create(),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath()).type(IS).expected(USER_JUNIOR_NAME).build(),
@@ -90,10 +90,10 @@ class CreateUserDataEvolutionTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCreateJuniorUserImprovedWithCustomService(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserRequest> user) {
+   void testCreateJuniorUserImprovedWithCustomService(Quest quest, @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserDto> juniorUser) {
       quest.use(RING_OF_EVOLUTION)
             .getAllUsersAndValidateResponse()
-            .createJuniorUserAndValidateResponse(user.create())
+            .createJuniorUserAndValidateResponse(juniorUser.create())
             .complete();
    }
 

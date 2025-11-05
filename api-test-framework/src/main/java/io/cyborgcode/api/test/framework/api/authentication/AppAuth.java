@@ -1,6 +1,6 @@
 package io.cyborgcode.api.test.framework.api.authentication;
 
-import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.roa.api.authentication.BaseAuthenticationClient;
 import io.cyborgcode.roa.api.service.RestService;
 import io.restassured.http.Header;
@@ -15,7 +15,7 @@ public class AppAuth extends BaseAuthenticationClient {
    @Override
    protected Header authenticateImpl(final RestService restService, final String username, final String password) {
       String token = restService
-            .request(POST_LOGIN_USER, new LoginRequest(username, password))
+            .request(POST_LOGIN_USER, new LoginDto(username, password))
             .getBody()
             .jsonPath()
             .getString(TOKEN.getJsonPath());

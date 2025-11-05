@@ -1,10 +1,10 @@
 package io.cyborgcode.api.test.framework.data.creator;
 
 
-import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
-import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
 import io.cyborgcode.api.test.framework.api.dto.response.UserData;
-import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
+import io.cyborgcode.api.test.framework.api.dto.response.GetUsersDto;
 import io.cyborgcode.api.test.framework.data.constants.TestConstants;
 import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
@@ -27,69 +27,69 @@ public final class DataCreatorFunctions {
    private DataCreatorFunctions() {
    }
 
-   public static CreateUserRequest createLeaderUserRequest() {
-      return CreateUserRequest.builder()
+   public static CreateUserDto leaderUser() {
+      return CreateUserDto.builder()
             .name(TestConstants.Roles.USER_LEADER_NAME)
             .job(TestConstants.Roles.USER_LEADER_JOB)
             .build();
    }
 
-   public static LoginRequest createLoginAdminUserRequest() {
-      return LoginRequest.builder()
+   public static LoginDto loginAdminUser() {
+      return LoginDto.builder()
             .email(DATA_PROPERTIES.username())
             .password(DATA_PROPERTIES.password())
             .build();
    }
 
-   public static CreateUserRequest createJuniorUserRequest() {
+   public static CreateUserDto juniorUser() {
       SuperQuest quest = QuestHolder.get();
-      UserData userData;
+      UserData firstUser;
 
       try {
-         userData = extractFirstUserFromGetAllUsers(quest);
+         firstUser = extractFirstUserFromGetAllUsers(quest);
       } catch (Exception ex) {
          quest.use(RING_OF_API)
                .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO));
-         userData = extractFirstUserFromGetAllUsers(quest);
+         firstUser = extractFirstUserFromGetAllUsers(quest);
       }
 
-      return CreateUserRequest.builder()
-            .name(userData.getFirstName() + " suffix")
-            .job("Junior " + userData.getLastName() + " worker")
+      return CreateUserDto.builder()
+            .name(firstUser.getFirstName() + " suffix")
+            .job("Junior " + firstUser.getLastName() + " worker")
             .build();
    }
 
-   public static CreateUserRequest createSeniorUserRequest() {
+   public static CreateUserDto seniorUser() {
       SuperQuest quest = QuestHolder.get();
 
-      CreateUserRequest userLeader;
+      CreateUserDto userLeader;
       try {
          userLeader = quest.getStorage()
                .sub(StorageKeysTest.ARGUMENTS)
-               .get(USER_LEADER, CreateUserRequest.class);
+               .get(USER_LEADER, CreateUserDto.class);
       } catch (Exception ex) {
-         userLeader = createLeaderUserRequest();
+         userLeader = leaderUser();
       }
 
-      return CreateUserRequest.builder()
+      return CreateUserDto.builder()
             .name("Mr. " + userLeader.getName())
             .job("Senior " + userLeader.getJob())
             .build();
    }
 
-   public static CreateUserRequest createIntermediateUserRequest() {
+   public static CreateUserDto intermediateUser() {
       SuperQuest quest = QuestHolder.get();
 
-      CreateUserRequest userLeader;
+      CreateUserDto userLeader;
       try {
          userLeader = quest.getStorage()
                .sub(StorageKeysTest.PRE_ARGUMENTS)
-               .get(USER_LEADER, CreateUserRequest.class);
+               .get(USER_LEADER, CreateUserDto.class);
       } catch (Exception ex) {
-         userLeader = createLeaderUserRequest();
+         userLeader = leaderUser();
       }
 
-      return CreateUserRequest.builder()
+      return CreateUserDto.builder()
             .name("Mr. " + userLeader.getName())
             .job("Intermediate " + userLeader.getJob())
             .build();
@@ -100,7 +100,7 @@ public final class DataCreatorFunctions {
             .sub(StorageKeysApi.API)
             .get(GET_ALL_USERS, Response.class)
             .getBody()
-            .as(GetUsersResponse.class)
+            .as(GetUsersDto.class)
             .getData()
             .get(0);
    }

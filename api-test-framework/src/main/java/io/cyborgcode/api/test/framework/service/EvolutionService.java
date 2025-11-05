@@ -1,7 +1,7 @@
 package io.cyborgcode.api.test.framework.service;
 
-import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
-import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
+import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserDto;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.annotation.Ring;
 import io.cyborgcode.roa.framework.chain.FluentService;
@@ -53,11 +53,11 @@ public class EvolutionService extends FluentService {
       return this;
    }
 
-   public EvolutionService createJuniorUserAndValidateResponse(CreateUserRequest createJuniorUserRequest) {
+   public EvolutionService createJuniorUserAndValidateResponse(CreateUserDto juniorUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  createJuniorUserRequest,
+                  juniorUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME.getJsonPath()).type(IS).expected(USER_JUNIOR_NAME).build(),
@@ -66,11 +66,11 @@ public class EvolutionService extends FluentService {
       return this;
    }
 
-   public EvolutionService createLeaderUserAndValidateResponse(CreateUserRequest createLeaderUserRequest) {
+   public EvolutionService createLeaderUserAndValidateResponse(CreateUserDto leaderUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  createLeaderUserRequest,
+                  leaderUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME.getJsonPath()).type(IS).expected(USER_LEADER_NAME).soft(true).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_JOB.getJsonPath()).type(IS).expected(USER_LEADER_JOB).soft(true).build()
@@ -78,11 +78,11 @@ public class EvolutionService extends FluentService {
       return this;
    }
 
-   public EvolutionService createSeniorUserAndValidateResponse(CreateUserRequest createSeniorUserRequest) {
+   public EvolutionService createSeniorUserAndValidateResponse(CreateUserDto seniorUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
-                  createSeniorUserRequest,
+                  seniorUser,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_NAME.getJsonPath()).type(IS).expected(USER_SENIOR_NAME).soft(true).build(),
                   Assertion.builder().target(BODY).key(CREATE_USER_JOB.getJsonPath()).type(IS).expected(USER_SENIOR_JOB).soft(true).build()
@@ -93,15 +93,15 @@ public class EvolutionService extends FluentService {
    public EvolutionService validateCreatedUser() {
       quest.use(RING_OF_API)
             .validate(() -> {
-               CreatedUserResponse createdUserResponse = quest
+               CreatedUserDto createdUser = quest
                      .getStorage()
                      .sub(StorageKeysApi.API)
                      .get(POST_CREATE_USER, Response.class)
                      .getBody()
-                     .as(CreatedUserResponse.class);
-               assertEquals(USER_INTERMEDIATE_NAME, createdUserResponse.getName(), CREATED_USER_NAME_INCORRECT);
-               assertEquals(USER_INTERMEDIATE_JOB, createdUserResponse.getJob(), CREATED_USER_JOB_INCORRECT);
-               assertTrue(createdUserResponse
+                     .as(CreatedUserDto.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUser.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUser.getJob(), CREATED_USER_JOB_INCORRECT);
+               assertTrue(createdUser
                      .getCreatedAt()
                      .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)), CREATED_AT_INCORRECT);
             });
