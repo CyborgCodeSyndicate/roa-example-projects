@@ -5,7 +5,7 @@ import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersDto;
 import io.cyborgcode.api.test.framework.api.dto.response.UserData;
 import io.cyborgcode.api.test.framework.data.constants.TestConstants;
-import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
+import io.cyborgcode.api.test.framework.data.retriever.TestData;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.quest.QuestHolder;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
@@ -21,7 +21,7 @@ import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEA
 
 public final class DataCreatorFunctions {
 
-   private static final DataProperties DATA_PROPERTIES = ConfigCache.getOrCreate(DataProperties.class);
+   private static final TestData DATA_PROPERTIES = ConfigCache.getOrCreate(TestData.class);
 
    private DataCreatorFunctions() {
    }

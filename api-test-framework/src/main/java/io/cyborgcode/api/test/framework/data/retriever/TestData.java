@@ -7,7 +7,7 @@ import org.aeonbits.owner.Config;
 @ConfigSource("test-config")
 @Config.LoadPolicy(Config.LoadType.MERGE)
 @Config.Sources({"system:properties", "classpath:${test.data.file}.properties"})
-public interface DataProperties extends PropertyConfig {
+public interface TestData extends PropertyConfig {
 
    @Key("username")
    String username();

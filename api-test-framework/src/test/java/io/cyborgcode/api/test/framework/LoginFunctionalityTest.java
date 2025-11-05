@@ -1,7 +1,7 @@
 package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
-import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
+import io.cyborgcode.api.test.framework.data.retriever.TestData;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.base.BaseQuest;
@@ -30,7 +30,7 @@ import static org.apache.http.HttpStatus.SC_OK;
 @API
 class LoginFunctionalityTest extends BaseQuest {
 
-   private static final DataProperties DATA_PROPERTIES = ConfigCache.getOrCreate(DataProperties.class);
+   private static final TestData DATA_PROPERTIES = ConfigCache.getOrCreate(TestData.class);
 
    @Test
    @Regression

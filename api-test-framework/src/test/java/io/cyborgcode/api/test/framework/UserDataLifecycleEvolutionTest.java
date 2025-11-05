@@ -7,7 +7,7 @@ import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserDto;
 import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
-import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
+import io.cyborgcode.api.test.framework.data.retriever.TestData;
 import io.cyborgcode.api.test.framework.preconditions.Preconditions;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.api.annotations.AuthenticateViaApi;
@@ -57,9 +57,9 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
    @Test
    @Regression
    void testUserLifecycleBasic(Quest quest) {
-      final DataProperties dataProperties = ConfigCache.getOrCreate(DataProperties.class);
-      final String username = dataProperties.username();
-      final String password = dataProperties.password();
+      final TestData testData = ConfigCache.getOrCreate(TestData.class);
+      final String username = testData.username();
+      final String password = testData.password();
 
       quest.use(RING_OF_API)
             .request(POST_LOGIN_USER, new LoginDto(username, password));
