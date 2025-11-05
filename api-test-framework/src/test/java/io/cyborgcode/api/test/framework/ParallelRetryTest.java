@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.retry;
+package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.base.BaseQuest;

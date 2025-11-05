@@ -10,8 +10,8 @@ import io.restassured.response.Response;
 import java.time.Instant;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.CREATE_USER_JOB;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.CREATE_USER_NAME;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_JOB;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_NAME;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_AT_INCORRECT;

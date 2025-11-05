@@ -1,6 +1,6 @@
 package io.cyborgcode.api.test.framework.service;
 
-import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.annotation.Ring;
 import io.cyborgcode.roa.framework.chain.FluentService;
@@ -9,16 +9,16 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.DATA;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.PER_PAGE;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.SUPPORT_TEXT;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.SUPPORT_URL;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOTAL;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOTAL_PAGES;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.USER_AVATAR_BY_INDEX;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.USER_FIRST_NAME;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.USER_ID;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.DATA;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.PER_PAGE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_TEXT;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_URL;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL_PAGES;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_AVATAR_BY_INDEX;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_FIRST_NAME;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_ID;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_USER;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
@@ -61,9 +61,9 @@ import static org.apache.http.HttpStatus.SC_OK;
 @Ring("Ring of Custom")
 public class CustomService extends FluentService {
 
-   public CustomService loginUserAndAddSpecificHeader(LoginUserRequest loginUserRequest) {
+   public CustomService loginUserAndAddSpecificHeader(LoginRequest loginRequest) {
       quest.use(RING_OF_API)
-            .request(POST_LOGIN_USER, loginUserRequest)
+            .request(POST_LOGIN_USER, loginRequest)
             .requestAndValidate(
                   GET_USER
                         .withPathParam(ID_PARAM, ID_THREE)

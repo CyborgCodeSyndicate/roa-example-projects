@@ -1,9 +1,9 @@
-package io.cyborgcode.api.test.framework.user;
+package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
-import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
 import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
 import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
@@ -25,7 +25,7 @@ import java.time.Instant;
 import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOKEN;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.DELETE_USER;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
@@ -52,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @API
-class UserLifecycleEvolutionTest extends BaseQuest {
+class UserDataLifecycleEvolutionTest extends BaseQuest {
 
    @Test
    @Regression
@@ -62,7 +62,7 @@ class UserLifecycleEvolutionTest extends BaseQuest {
       final String password = dataProperties.password();
 
       quest.use(RING_OF_API)
-            .request(POST_LOGIN_USER, new LoginUserRequest(username, password));
+            .request(POST_LOGIN_USER, new LoginRequest(username, password));
 
       String token = retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
             .getBody().jsonPath().getString(TOKEN.getJsonPath());

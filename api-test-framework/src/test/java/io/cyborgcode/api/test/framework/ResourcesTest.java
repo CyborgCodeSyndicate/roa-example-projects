@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.resources;
+package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.data.constants.JsonSamples;
 import io.cyborgcode.roa.api.annotations.API;
@@ -7,18 +7,18 @@ import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.validator.core.Assertion;
 import org.junit.jupiter.api.Test;
 
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.DATA;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_COLOR;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_COLOR_BY_INDEX;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_ID;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_ID_BY_INDEX;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_NAME;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_NAME_BY_INDEX;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_PAGE;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_PANTONE;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.RESOURCE_YEAR;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.ROOT;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.SUPPORT_TEXT;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.DATA;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.RESOURCE_COLOR;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.RESOURCE_COLOR_BY_INDEX;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.RESOURCE_ID;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.RESOURCE_ID_BY_INDEX;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.RESOURCE_NAME;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.RESOURCE_NAME_BY_INDEX;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.RESOURCE_PAGE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.RESOURCE_PANTONE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.RESOURCE_YEAR;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.ROOT;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_TEXT;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_RESOURCES;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_RESOURCE;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
@@ -52,7 +52,7 @@ import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_OK;
 
 @API
-class ResourcesAIGeneratedTest extends BaseQuest {
+class ResourcesTest extends BaseQuest {
 
    @Test
    void testGetAllResourcesPage1(Quest quest) {

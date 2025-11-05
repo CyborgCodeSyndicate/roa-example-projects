@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.user;
+package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
 import io.cyborgcode.api.test.framework.api.dto.response.UserData;
@@ -15,8 +15,8 @@ import io.cyborgcode.roa.validator.core.Assertion;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
@@ -36,7 +36,7 @@ import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_OK;
 
 @API
-class CreateUserEvolutionTest extends BaseQuest {
+class CreateUserDataEvolutionTest extends BaseQuest {
 
    @Test
    @Regression

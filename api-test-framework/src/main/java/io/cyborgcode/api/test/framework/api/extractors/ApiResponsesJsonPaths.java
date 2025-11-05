@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.api;
+package io.cyborgcode.api.test.framework.api.extractors;
 
 public enum ApiResponsesJsonPaths {
 

@@ -1,9 +1,9 @@
-package io.cyborgcode.api.test.framework.flows;
+package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
-import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
 import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserResponse;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
 import io.cyborgcode.api.test.framework.api.dto.response.UserData;
@@ -28,20 +28,20 @@ import io.restassured.response.Response;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
 
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.DATA;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.PER_PAGE;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.SINGLE_USER_EMAIL_EXPLICIT;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.SUPPORT_TEXT;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.SUPPORT_URL;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.SUPPORT_URL_EXPLICIT;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOTAL;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOTAL_PAGES;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.USER_AVATAR_BY_INDEX;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.USER_FIRST_NAME;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.USER_ID;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.DATA;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.PER_PAGE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SINGLE_USER_EMAIL_EXPLICIT;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_TEXT;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_URL;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_URL_EXPLICIT;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL_PAGES;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_AVATAR_BY_INDEX;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_FIRST_NAME;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_ID;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_USER;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
@@ -262,9 +262,9 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testLoginUserAndAddHeader(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginUserRequest loginUserRequest) {
+   void testLoginUserAndAddHeader(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginRequest loginRequest) {
       quest.use(RING_OF_API)
-            .request(POST_LOGIN_USER, loginUserRequest)
+            .request(POST_LOGIN_USER, loginRequest)
             .requestAndValidate(
                   GET_USER.withPathParam(ID_PARAM, ID_THREE)
                         .withHeader(EXAMPLE_HEADER, retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
@@ -296,9 +296,9 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testCustomService(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginUserRequest loginUserRequest) {
+   void testCustomService(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginRequest loginRequest) {
       quest.use(RING_OF_CUSTOM)
-            .loginUserAndAddSpecificHeader(loginUserRequest)
+            .loginUserAndAddSpecificHeader(loginRequest)
             .drop()
             .use(RING_OF_API)
             .requestAndValidate(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
@@ -309,9 +309,9 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   void testValidateAllUsers(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginUserRequest loginUserRequest) {
+   void testValidateAllUsers(Quest quest, @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER) LoginRequest loginRequest) {
       quest.use(RING_OF_CUSTOM)
-            .loginUserAndAddSpecificHeader(loginUserRequest)
+            .loginUserAndAddSpecificHeader(loginRequest)
             .requestAndValidateGetAllUsers()
             .complete();
    }

@@ -1,7 +1,7 @@
 package io.cyborgcode.api.test.framework.data.creator;
 
 
-import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserRequest;
 import io.cyborgcode.api.test.framework.api.dto.response.UserData;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersResponse;
@@ -34,8 +34,8 @@ public final class DataCreatorFunctions {
             .build();
    }
 
-   public static LoginUserRequest createLoginAdminUserRequest() {
-      return LoginUserRequest.builder()
+   public static LoginRequest createLoginAdminUserRequest() {
+      return LoginRequest.builder()
             .email(DATA_PROPERTIES.username())
             .password(DATA_PROPERTIES.password())
             .build();

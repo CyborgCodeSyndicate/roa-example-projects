@@ -1,6 +1,6 @@
-package io.cyborgcode.api.test.framework.login;
+package io.cyborgcode.api.test.framework;
 
-import io.cyborgcode.api.test.framework.api.dto.request.LoginUserRequest;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginRequest;
 import io.cyborgcode.api.test.framework.data.retriever.DataProperties;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Regression;
@@ -10,8 +10,8 @@ import io.cyborgcode.roa.validator.core.Assertion;
 import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.ERROR;
-import static io.cyborgcode.api.test.framework.api.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.ERROR;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOKEN;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.INVALID_EMAIL;
@@ -28,14 +28,14 @@ import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.apache.http.HttpStatus.SC_OK;
 
 @API
-class LoginFunctionalityAIGeneratedTest extends BaseQuest {
+class LoginFunctionalityTest extends BaseQuest {
 
    private static final DataProperties DATA_PROPERTIES = ConfigCache.getOrCreate(DataProperties.class);
 
    @Test
    @Regression
    void testSuccessfulLogin(Quest quest) {
-      LoginUserRequest validUserRequest = LoginUserRequest.builder()
+      LoginRequest validUserRequest = LoginRequest.builder()
             .email(DATA_PROPERTIES.username())
             .password(DATA_PROPERTIES.password())
             .build();
@@ -54,7 +54,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    @Test
    @Regression
    void testLoginMissingPassword(Quest quest) {
-      LoginUserRequest noPasswordUserRequest = LoginUserRequest.builder()
+      LoginRequest noPasswordUserRequest = LoginRequest.builder()
             .email(DATA_PROPERTIES.username())
             .build();
 
@@ -71,7 +71,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    @Test
    @Regression
    void testLoginMissingEmail(Quest quest) {
-      LoginUserRequest noEmailUserRequest = LoginUserRequest.builder()
+      LoginRequest noEmailUserRequest = LoginRequest.builder()
             .password(DATA_PROPERTIES.password())
             .build();
 
@@ -88,7 +88,7 @@ class LoginFunctionalityAIGeneratedTest extends BaseQuest {
    @Test
    @Regression
    void testLoginWithInvalidEmail(Quest quest) {
-      LoginUserRequest invalidEmailUserRequest = LoginUserRequest.builder()
+      LoginRequest invalidEmailUserRequest = LoginRequest.builder()
             .email(INVALID_EMAIL)
             .password(DATA_PROPERTIES.password())
             .build();
