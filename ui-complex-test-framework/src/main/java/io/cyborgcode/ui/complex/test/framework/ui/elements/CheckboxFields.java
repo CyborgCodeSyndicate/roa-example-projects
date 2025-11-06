@@ -11,36 +11,27 @@ import java.util.function.Consumer;
 
 public enum CheckboxFields implements CheckboxUiElement {
 
-   PAST_ORDERS_CHECKBOX(By.tagName("vaadin-checkbox"), CheckboxFieldTypes.VA_CHECKBOX_TYPE),
-   ;
+   PAST_ORDERS_CHECKBOX(By.tagName("vaadin-checkbox"), CheckboxFieldTypes.VA_CHECKBOX_TYPE);
+
+   public static final class Data {
+
+       public static final String PAST_ORDERS_CHECKBOX = "PAST_ORDERS_CHECKBOX";
+
+       private Data() {
+       }
+
+   }
 
    private final By locator;
    private final CheckboxComponentType componentType;
    private final Consumer<SmartWebDriver> before;
    private final Consumer<SmartWebDriver> after;
 
-
-   CheckboxFields(By locator) {
-      this(locator, null, smartWebDriver -> {
-      }, smartWebDriver -> {
-      });
-   }
-
-
    CheckboxFields(By locator, CheckboxComponentType componentType) {
       this(locator, componentType, smartWebDriver -> {
       }, smartWebDriver -> {
       });
    }
-
-
-   CheckboxFields(By locator,
-                  CheckboxComponentType componentType,
-                  Consumer<SmartWebDriver> before) {
-      this(locator, componentType, before, smartWebDriver -> {
-      });
-   }
-
 
    CheckboxFields(By locator,
                   CheckboxComponentType componentType,
@@ -52,30 +43,25 @@ public enum CheckboxFields implements CheckboxUiElement {
       this.after = after;
    }
 
-
    @Override
    public By locator() {
       return locator;
    }
-
 
    @Override
    public <T extends ComponentType> T componentType() {
       return (T) componentType;
    }
 
-
    @Override
    public Enum<?> enumImpl() {
       return this;
    }
 
-
    @Override
    public Consumer<SmartWebDriver> before() {
       return before;
    }
-
 
    @Override
    public Consumer<SmartWebDriver> after() {

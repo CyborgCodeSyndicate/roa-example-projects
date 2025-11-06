@@ -11,10 +11,8 @@ public final class Data {
       return getTestDataConfig();
    }
 
-
    private static DataProperties getTestDataConfig() {
       return ConfigCache.getOrCreate(DataProperties.class);
    }
-
 
 }

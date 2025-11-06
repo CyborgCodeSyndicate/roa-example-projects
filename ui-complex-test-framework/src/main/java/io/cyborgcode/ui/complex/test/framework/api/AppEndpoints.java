@@ -8,13 +8,12 @@ import java.util.Map;
 
 public enum AppEndpoints implements Endpoint<AppEndpoints> {
 
-   ENDPOINT_EXAMPLE(Method.POST, "/create/{campaignId}/get"),
    ENDPOINT_BAKERY(Method.POST, "/storefront"),
+   ENDPOINT_BAKERY_GET(Method.GET, "/"),
    ENDPOINT_BAKERY_LOGIN(Method.POST, "/login");
 
    private final Method method;
    private final String url;
-
 
    AppEndpoints(final Method method, final String url) {
       this.method = method;

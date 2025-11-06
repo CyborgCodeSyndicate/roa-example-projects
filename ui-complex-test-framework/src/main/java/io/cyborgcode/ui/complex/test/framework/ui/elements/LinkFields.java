@@ -1,6 +1,5 @@
 package io.cyborgcode.ui.complex.test.framework.ui.elements;
 
-import io.cyborgcode.ui.complex.test.framework.ui.functions.ContextConsumer;
 import io.cyborgcode.ui.complex.test.framework.ui.types.LinkFieldTypes;
 import io.cyborgcode.roa.ui.components.base.ComponentType;
 import io.cyborgcode.roa.ui.components.link.LinkComponentType;
@@ -14,8 +13,18 @@ public enum LinkFields implements LinkUiElement {
 
    STOREFRONT_LINK(By.cssSelector("a[href='dashboard']"), LinkFieldTypes.VA_LINK),
    DASHBOARD_LINK(By.cssSelector("a[href='dashboard']"), LinkFieldTypes.VA_LINK),
-   LOGOUT_LINK(By.cssSelector("a[href='/logout']"), LinkFieldTypes.VA_LINK),
-   ;
+   LOGOUT_LINK(By.cssSelector("a[href='/logout']"), LinkFieldTypes.VA_LINK);
+
+   public static final class Data {
+
+      public static final String STOREFRONT_LINK = "STOREFRONT_LINK";
+      public static final String DASHBOARD_LINK = "DASHBOARD_LINK";
+      public static final String LOGOUT_LINK = "LOGOUT_LINK";
+
+      private Data() {
+      }
+
+   }
 
    private final By locator;
    private final LinkComponentType componentType;
@@ -23,35 +32,11 @@ public enum LinkFields implements LinkUiElement {
    private final Consumer<SmartWebDriver> after;
 
 
-   LinkFields(By locator) {
-      this(locator, null, smartWebDriver -> {
-      }, smartWebDriver -> {
-      });
-   }
-
-
    LinkFields(By locator, LinkComponentType componentType) {
       this(locator, componentType, smartWebDriver -> {
       }, smartWebDriver -> {
       });
    }
-
-
-   LinkFields(By locator,
-              LinkComponentType componentType,
-              Consumer<SmartWebDriver> before) {
-      this(locator, componentType, before, smartWebDriver -> {
-      });
-   }
-
-
-   LinkFields(By locator,
-              LinkComponentType componentType,
-              ContextConsumer before) {
-      this(locator, componentType, before.asConsumer(locator), smartWebDriver -> {
-      });
-   }
-
 
    LinkFields(By locator,
               LinkComponentType componentType,
@@ -63,38 +48,25 @@ public enum LinkFields implements LinkUiElement {
       this.after = after;
    }
 
-
-   LinkFields(By locator,
-              LinkComponentType componentType,
-              ContextConsumer before,
-              ContextConsumer after) {
-      this(locator, componentType, before.asConsumer(locator), after.asConsumer(locator));
-   }
-
-
    @Override
    public By locator() {
       return locator;
    }
-
 
    @Override
    public <T extends ComponentType> T componentType() {
       return (T) componentType;
    }
 
-
    @Override
    public Enum<?> enumImpl() {
       return this;
    }
 
-
    @Override
    public Consumer<SmartWebDriver> before() {
       return before;
    }
-
 
    @Override
    public Consumer<SmartWebDriver> after() {

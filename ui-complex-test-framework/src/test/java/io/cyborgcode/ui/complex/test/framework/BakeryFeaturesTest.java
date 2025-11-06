@@ -18,7 +18,6 @@ import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.db.annotations.DB;
 import io.cyborgcode.roa.db.annotations.DbHook;
-import io.cyborgcode.roa.db.annotations.DbHooks;
 import io.cyborgcode.roa.framework.annotation.*;
 import io.cyborgcode.roa.framework.base.BaseQuestSequential;
 import io.cyborgcode.roa.framework.quest.Quest;
@@ -44,9 +43,7 @@ import static io.cyborgcode.ui.complex.test.framework.service.CustomService.getJ
 @UI
 @DB
 @API
-@DbHooks({
-      @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
-})
+@DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 class BakeryFeaturesTest extends BaseQuestSequential {
 
 
@@ -77,7 +74,7 @@ class BakeryFeaturesTest extends BaseQuestSequential {
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller) {
       quest
             .use(RING_OF_CUSTOM)
-            .loginUser(seller)
+            .login(seller)
             .drop()
             .use(RING_OF_UI)
             .button().click(ButtonFields.NEW_ORDER_BUTTON)
@@ -94,12 +91,10 @@ class BakeryFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Description("PreQuest usage")
-   //@PreQuest({
-           @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
-                   journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
-           @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-                   journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
-   //})
+   @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
+           journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
+   @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+           journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
    void createOrderPreQuest(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)
@@ -142,10 +137,8 @@ class BakeryFeaturesTest extends BaseQuestSequential {
    @Test
    @Description("Authenticate, PreQuest and PreArguments usage")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
-   @PreQuest({
-         @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
-   })
+   @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+         journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
    void createOrderAuthPreQuestPreArguments(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)
@@ -162,7 +155,7 @@ class BakeryFeaturesTest extends BaseQuestSequential {
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller) {
       quest
             .use(RING_OF_CUSTOM)
-            .loginUser2(seller)
+            .loginUsingInsertion(seller)
             .editOrder("Lionel Huber")
             .drop()
             .use(RING_OF_UI)
@@ -186,7 +179,7 @@ class BakeryFeaturesTest extends BaseQuestSequential {
          @Craft(model = DataCreator.Data.VALID_LATE_ORDER) Late<Order> lateOrder) {
       quest
             .use(RING_OF_CUSTOM)
-            .loginUser2(seller)
+            .loginUsingInsertion(seller)
             .createOrder(order)
             .validateOrder(order)
             .createOrder(lateOrder.create())
@@ -200,10 +193,8 @@ class BakeryFeaturesTest extends BaseQuestSequential {
    @Description("Interceptor with Storage and Late data re-usage")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
-   @PreQuest({
-         @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
-   })
+   @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+         journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
    void createOrderInterceptorStorage(Quest quest,
          @Craft(model = DataCreator.Data.VALID_LATE_ORDER) Late<Order> lateOrder) {
       quest

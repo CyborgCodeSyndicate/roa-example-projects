@@ -1,9 +1,7 @@
 package io.cyborgcode.ui.complex.test.framework.ui.authentication;
 
-import io.cyborgcode.ui.complex.test.framework.data.test_data.Data;
-import io.cyborgcode.ui.complex.test.framework.data.test_data.DataProperties;
 import io.cyborgcode.roa.ui.authentication.LoginCredentials;
-import org.aeonbits.owner.ConfigCache;
+import io.cyborgcode.ui.complex.test.framework.data.test_data.Data;
 
 public class AdminCredentials implements LoginCredentials {
 
@@ -14,8 +12,7 @@ public class AdminCredentials implements LoginCredentials {
 
    @Override
    public String password() {
-      return  Data.testData().password();
-
+      return Data.testData().password();
    }
 
 }

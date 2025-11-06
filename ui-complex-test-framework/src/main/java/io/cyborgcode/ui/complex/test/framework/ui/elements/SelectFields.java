@@ -18,13 +18,6 @@ public enum SelectFields implements SelectUiElement {
    PRODUCTS_DDL(By.cssSelector("vaadin-combo-box#products"), SelectFieldTypes.VA_SELECT_TYPE,
          SharedUi.WAIT_FOR_PRESENCE);
 
-
-   private final By locator;
-   private final SelectComponentType componentType;
-   private final Consumer<SmartWebDriver> before;
-   private final Consumer<SmartWebDriver> after;
-
-
    public static final class Data {
 
       public static final String LOCATION_DDL = "LOCATION_DDL";
@@ -35,28 +28,10 @@ public enum SelectFields implements SelectUiElement {
 
    }
 
-
-   SelectFields(By locator) {
-      this(locator, null, smartWebDriver -> {
-      }, smartWebDriver -> {
-      });
-   }
-
-
-   SelectFields(By locator, SelectComponentType componentType) {
-      this(locator, componentType, smartWebDriver -> {
-      }, smartWebDriver -> {
-      });
-   }
-
-
-   SelectFields(By locator,
-                SelectComponentType componentType,
-                Consumer<SmartWebDriver> before) {
-      this(locator, componentType, before, smartWebDriver -> {
-      });
-   }
-
+   private final By locator;
+   private final SelectComponentType componentType;
+   private final Consumer<SmartWebDriver> before;
+   private final Consumer<SmartWebDriver> after;
 
    SelectFields(By locator,
                 SelectComponentType componentType,
@@ -64,7 +39,6 @@ public enum SelectFields implements SelectUiElement {
       this(locator, componentType, before.asConsumer(locator), smartWebDriver -> {
       });
    }
-
 
    SelectFields(By locator,
                 SelectComponentType componentType,
@@ -76,46 +50,25 @@ public enum SelectFields implements SelectUiElement {
       this.after = after;
    }
 
-
-   SelectFields(By locator,
-                SelectComponentType componentType,
-                ContextConsumer before,
-                ContextConsumer after) {
-      this(locator, componentType, before.asConsumer(locator), after.asConsumer(locator));
-   }
-
-
-   SelectFields(By locator,
-                SelectComponentType componentType,
-                ContextConsumer before,
-                Consumer<SmartWebDriver> after) {
-      this(locator, componentType, before.asConsumer(locator), after);
-   }
-
-
    @Override
    public By locator() {
       return locator;
    }
-
 
    @Override
    public <T extends ComponentType> T componentType() {
       return (T) componentType;
    }
 
-
    @Override
    public Enum<?> enumImpl() {
       return this;
    }
 
-
    @Override
    public Consumer<SmartWebDriver> before() {
       return before;
    }
-
 
    @Override
    public Consumer<SmartWebDriver> after() {

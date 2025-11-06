@@ -9,8 +9,7 @@ import io.cyborgcode.roa.ui.selenium.smart.SmartWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
-
-@ImplementationOfType(ButtonFieldTypes.VA_BUTTON)
+@ImplementationOfType(ButtonFieldTypes.Data.VA_BUTTON)
 public class ButtonVaImpl extends BaseComponent implements Button {
 
    private static final By BUTTON_TAG_NAME_SELECTOR = By.tagName("vaadin-button");

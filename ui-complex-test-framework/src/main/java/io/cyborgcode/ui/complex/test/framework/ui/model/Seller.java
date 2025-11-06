@@ -18,7 +18,7 @@ public class Seller {
    private String surname;
 
    @InsertionElement(locatorClass = InputFields.class, elementEnum = USERNAME_FIELD, order = 1)
-   private String email;
+   private String username;
 
    @InsertionElement(locatorClass = InputFields.class, elementEnum = PASSWORD_FIELD, order = 2)
    private String password;

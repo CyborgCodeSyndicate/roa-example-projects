@@ -185,7 +185,8 @@ class ReqresApiTest extends BaseQuest {
       quest.use(RING_OF_API)
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .requestAndValidate(
-                  GET_USER.withPathParam(ID_PARAM, retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class).getBody().as(GetUsersResponse.class).getData().get(0).getId()),
+                  GET_USER.withPathParam(ID_PARAM, retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
+                          .getBody().as(GetUsersResponse.class).getData().get(0).getId()),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
             )
             .complete();

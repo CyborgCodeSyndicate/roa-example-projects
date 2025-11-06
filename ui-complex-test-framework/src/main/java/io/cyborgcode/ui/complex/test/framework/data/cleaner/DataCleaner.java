@@ -24,6 +24,7 @@ public enum DataCleaner implements DataRipper<DataCleaner> {
       this.cleanUpFunction = cleanUpFunction;
    }
 
+
    @Override
    public Consumer<SuperQuest> eliminate() {
       return cleanUpFunction;

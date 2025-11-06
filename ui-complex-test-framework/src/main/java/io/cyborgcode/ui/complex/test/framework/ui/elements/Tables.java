@@ -14,12 +14,20 @@ public enum Tables implements TableElement<Tables> {
    CAMPAIGNS(TableEntry.class),
    ORDERS(TableEntry.class, SIMPLE);
 
+   public static final class Data {
+
+       public static final String CAMPAIGNS = "CAMPAIGNS";
+       public static final String ORDERS = "ORDERS";
+
+       private Data() {
+       }
+
+   }
 
    private final Class<?> rowRepresentationClass;
    private final TableComponentType tableType;
    private final Consumer<SmartWebDriver> before;
    private final Consumer<SmartWebDriver> after;
-
 
    <T> Tables(final Class<T> rowRepresentationClass) {
       this(rowRepresentationClass, null, smartWebDriver -> {
@@ -27,20 +35,17 @@ public enum Tables implements TableElement<Tables> {
       });
    }
 
-
    <T> Tables(final Class<T> rowRepresentationClass, TableComponentType tableType) {
       this(rowRepresentationClass, tableType, smartWebDriver -> {
       }, smartWebDriver -> {
       });
    }
 
-
    <T> Tables(final Class<T> rowRepresentationClass, TableComponentType tableType,
          Consumer<SmartWebDriver> before) {
       this(rowRepresentationClass, tableType, before, smartWebDriver -> {
       });
    }
-
 
    <T> Tables(final Class<T> rowRepresentationClass, TableComponentType tableType,
          Consumer<SmartWebDriver> before, Consumer<SmartWebDriver> after) {
@@ -49,7 +54,6 @@ public enum Tables implements TableElement<Tables> {
       this.before = before;
       this.after = after;
    }
-
 
    @Override
    public <T extends TableComponentType> T tableType() {
@@ -60,24 +64,20 @@ public enum Tables implements TableElement<Tables> {
       }
    }
 
-
    @Override
    public <T> Class<T> rowsRepresentationClass() {
       return (Class<T>) rowRepresentationClass;
    }
-
 
    @Override
    public Tables enumImpl() {
       return this;
    }
 
-
    @Override
    public Consumer<SmartWebDriver> before() {
       return before;
    }
-
 
    @Override
    public Consumer<SmartWebDriver> after() {

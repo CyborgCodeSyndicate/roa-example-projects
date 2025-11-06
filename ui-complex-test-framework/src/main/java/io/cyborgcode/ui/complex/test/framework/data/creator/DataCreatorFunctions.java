@@ -16,7 +16,7 @@ public final class DataCreatorFunctions {
 
    public static Seller createValidSeller() {
       return Seller.builder()
-            .email("admin@vaadin.com")
+            .username("admin@vaadin.com")
             .password("admin")
             .build();
    }

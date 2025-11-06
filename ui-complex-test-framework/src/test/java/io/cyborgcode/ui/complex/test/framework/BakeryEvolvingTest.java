@@ -1,5 +1,6 @@
 package io.cyborgcode.ui.complex.test.framework;
 
+import io.cyborgcode.ui.complex.test.framework.data.test_data.StaticData;
 import io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator;
 import io.cyborgcode.ui.complex.test.framework.data.test_data.DataProperties;
@@ -38,6 +39,7 @@ import static io.cyborgcode.ui.complex.test.framework.preconditions.Precondition
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.LOCATION_DDL;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.PRODUCTS_DDL;
 import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
+import static io.cyborgcode.roa.framework.storage.DataExtractorsTest.staticTestData;
 import static io.cyborgcode.roa.framework.storage.StorageKeysTest.PRE_ARGUMENTS;
 import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -54,12 +56,16 @@ class BakeryEvolvingTest extends BaseQuest {
    @Test
    @Regression
    @Description("Raw usage")
+   @StaticTestData(StaticData.class)
    void createOrderRaw(Quest quest) {
+      String username = QuestHolder.get().getStorage().get(staticTestData(StaticData.USERNAME), String.class);
+      String password = QuestHolder.get().getStorage().get(staticTestData(StaticData.PASSWORD), String.class);
+
       quest
             .use(RING_OF_UI)
             .browser().navigate("https://bakery-flow.demo.vaadin.com/")
-            .input().insert(InputFields.USERNAME_FIELD, "admin@vaadin.com")
-            .input().insert(InputFields.PASSWORD_FIELD, "admin")
+            .input().insert(InputFields.USERNAME_FIELD, username)
+            .input().insert(InputFields.PASSWORD_FIELD, password)
             .button().click(ButtonFields.SIGN_IN_BUTTON)
             .button().click(ButtonFields.NEW_ORDER_BUTTON)
             .input().insert(InputFields.CUSTOMER_FIELD, "John Terry")
@@ -87,7 +93,7 @@ class BakeryEvolvingTest extends BaseQuest {
       final DataProperties dataProperties = ConfigCache.getOrCreate(DataProperties.class);
 
       Seller seller = Seller.builder()
-            .email(dataProperties.sellerEmail())
+            .username(dataProperties.sellerEmail())
             .password(dataProperties.sellerPassword())
             .build();
 
@@ -102,7 +108,7 @@ class BakeryEvolvingTest extends BaseQuest {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
-            .input().insert(InputFields.USERNAME_FIELD, seller.getEmail())
+            .input().insert(InputFields.USERNAME_FIELD, seller.getUsername())
             .input().insert(InputFields.PASSWORD_FIELD, seller.getPassword())
             .button().click(ButtonFields.SIGN_IN_BUTTON)
             .button().click(ButtonFields.NEW_ORDER_BUTTON)
@@ -132,7 +138,7 @@ class BakeryEvolvingTest extends BaseQuest {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
-            .input().insert(InputFields.USERNAME_FIELD, seller.getEmail())
+            .input().insert(InputFields.USERNAME_FIELD, seller.getUsername())
             .input().insert(InputFields.PASSWORD_FIELD, seller.getPassword())
             .button().click(ButtonFields.SIGN_IN_BUTTON)
             .button().click(ButtonFields.NEW_ORDER_BUTTON)
@@ -186,7 +192,7 @@ class BakeryEvolvingTest extends BaseQuest {
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
-            .loginUser(seller)
+            .login(seller)
             .createOrder(order)
             .validateOrder(order)
             .complete();
@@ -208,12 +214,10 @@ class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("PreQuest, Craft and Service usage")
-   @PreQuest({
-         @Journey(value = LOGIN_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1),
-         @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
-   })
+   @Journey(value = LOGIN_PRECONDITION,
+          journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
+   @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+          journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
    void createOrderPreQuest(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
@@ -226,10 +230,8 @@ class BakeryEvolvingTest extends BaseQuest {
    @Test
    @Description("Authenticate, PreQuest, Service and Ripper usage")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
-   @PreQuest({
-         @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
-   })
+   @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+          journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
    @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
    void createOrderPreArgumentsAndRipper(Quest quest) {
       quest

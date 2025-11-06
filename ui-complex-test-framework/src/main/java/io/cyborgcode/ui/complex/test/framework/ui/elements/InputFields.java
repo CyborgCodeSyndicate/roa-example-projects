@@ -23,9 +23,7 @@ public enum InputFields implements InputUiElement {
    DETAILS_FIELD(By.id("customerDetails"), InputFieldTypes.VA_INPUT_TYPE,
          SharedUi.WAIT_FOR_PRESENCE),
    NUMBER_FIELD(By.id("customerNumber"), InputFieldTypes.VA_INPUT_TYPE,
-         SharedUi.WAIT_FOR_PRESENCE),
-   ;
-
+         SharedUi.WAIT_FOR_PRESENCE);
 
    public static final class Data {
 
@@ -40,18 +38,10 @@ public enum InputFields implements InputUiElement {
 
    }
 
-
    private final By locator;
    private final InputComponentType componentType;
    private final Consumer<SmartWebDriver> before;
    private final Consumer<SmartWebDriver> after;
-
-
-   InputFields(By locator) {
-      this(locator, null, smartWebDriver -> {
-      }, smartWebDriver -> {
-      });
-   }
 
    InputFields(By locator, InputComponentType componentType) {
       this(locator, componentType, smartWebDriver -> {
@@ -59,22 +49,12 @@ public enum InputFields implements InputUiElement {
       });
    }
 
-
-   InputFields(By locator,
-               InputComponentType componentType,
-               Consumer<SmartWebDriver> before) {
-      this(locator, componentType, before, smartWebDriver -> {
-      });
-   }
-
-
    InputFields(By locator,
                InputComponentType componentType,
                ContextConsumer before) {
       this(locator, componentType, before.asConsumer(locator), smartWebDriver -> {
       });
    }
-
 
    InputFields(By locator,
                InputComponentType componentType,
@@ -86,7 +66,6 @@ public enum InputFields implements InputUiElement {
       this.after = after;
    }
 
-
    InputFields(By locator,
                InputComponentType componentType,
                ContextConsumer before,
@@ -94,12 +73,10 @@ public enum InputFields implements InputUiElement {
       this(locator, componentType, before.asConsumer(locator), after.asConsumer(locator));
    }
 
-
    @Override
    public By locator() {
       return locator;
    }
-
 
    @Override
    public <T extends ComponentType> T componentType() {
@@ -109,18 +86,15 @@ public enum InputFields implements InputUiElement {
       return (T) componentType;
    }
 
-
    @Override
    public Enum<?> enumImpl() {
       return this;
    }
 
-
    @Override
    public Consumer<SmartWebDriver> before() {
       return before;
    }
-
 
    @Override
    public Consumer<SmartWebDriver> after() {

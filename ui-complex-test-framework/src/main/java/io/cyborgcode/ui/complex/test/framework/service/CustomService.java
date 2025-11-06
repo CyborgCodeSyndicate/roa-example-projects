@@ -13,12 +13,14 @@ import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
 import io.cyborgcode.roa.ui.selenium.smart.SmartWebElement;
 import io.cyborgcode.roa.ui.util.strategy.Strategy;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 import java.util.Objects;
 
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_UI;
+import static io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields.NEW_ORDER_BUTTON;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields.SIGN_IN_BUTTON;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.*;
 import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
@@ -28,45 +30,45 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CustomService extends FluentService {
 
 
-   public CustomService loginUser(String username, String password) {
+   public CustomService login(String username, String password) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
             .input().insert(USERNAME_FIELD, username)
             .input().insert(PASSWORD_FIELD, password)
             .button().click(SIGN_IN_BUTTON)
-            //.button().validateIsVisible(NEW_ORDER_BUTTON);
+            .button().validateIsVisible(NEW_ORDER_BUTTON)
             .input().validateIsEnabled(SEARCH_BAR_FIELD);
       return this;
    }
 
 
-   public CustomService loginUser(Seller seller) {
+   public CustomService login(Seller seller) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
-            .input().insert(USERNAME_FIELD, seller.getEmail())
+            .input().insert(USERNAME_FIELD, seller.getUsername())
             .input().insert(PASSWORD_FIELD, seller.getPassword())
             .button().click(SIGN_IN_BUTTON)
-            //.button().validateIsVisible(NEW_ORDER_BUTTON);
+            .button().validateIsVisible(NEW_ORDER_BUTTON)
             .input().validateIsEnabled(SEARCH_BAR_FIELD);
       return this;
    }
 
 
-   public CustomService loginUser2(Seller seller) {
+   public CustomService loginUsingInsertion(Seller seller) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
             .insertion().insertData(seller)
             .button().click(SIGN_IN_BUTTON)
-            //.button().validateIsVisible(NEW_ORDER_BUTTON);
+            .button().validateIsVisible(NEW_ORDER_BUTTON)
             .input().validateIsEnabled(SEARCH_BAR_FIELD);
       return this;
    }
 
 
-   public CustomService logoutUser() {
+   public CustomService logout() {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
@@ -79,7 +81,7 @@ public class CustomService extends FluentService {
    public CustomService createOrder() {
       quest
             .use(RING_OF_UI)
-            .button().click(ButtonFields.NEW_ORDER_BUTTON)
+            .button().click(NEW_ORDER_BUTTON)
             .input().insert(InputFields.CUSTOMER_FIELD, "John Terry")
             .input().validateValue(InputFields.CUSTOMER_FIELD, "John Terry")
             .select().selectOptions(SelectFields.PRODUCTS_DDL, Strategy.FIRST)
@@ -116,7 +118,7 @@ public class CustomService extends FluentService {
    public CustomService createOrder(Order order) {
       quest
             .use(RING_OF_UI)
-            .button().click(ButtonFields.NEW_ORDER_BUTTON)
+            .button().click(NEW_ORDER_BUTTON)
             .insertion().insertData(order)
             .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
             /*.validate(() -> {
@@ -181,4 +183,13 @@ public class CustomService extends FluentService {
             "JSESSIONID cookie not found!"
       ).toString();
    }
+
+    public CustomService setJsessionCookie(String cookie) {
+                QuestHolder.get().artifact(RING_OF_UI, SmartWebDriver.class)
+                        .getOriginal()
+                        .manage()
+                        .addCookie(new Cookie("JSESSIONID", cookie));
+                return this;
+    }
+
 }
