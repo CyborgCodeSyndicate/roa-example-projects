@@ -1,0 +1,80 @@
+package io.cyborgcode.api.test.framework;
+
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
+import io.cyborgcode.api.test.framework.data.retriever.TestData;
+import io.cyborgcode.roa.api.annotations.API;
+import io.cyborgcode.roa.framework.base.BaseQuest;
+import io.cyborgcode.roa.framework.quest.Quest;
+import io.cyborgcode.roa.validator.core.Assertion;
+import org.aeonbits.owner.ConfigCache;
+import org.junit.jupiter.api.Test;
+
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.ERROR;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.INVALID_EMAIL;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.MISSING_EMAIL_ERROR;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.MISSING_PASSWORD_ERROR;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.USER_NOT_FOUND_ERROR;
+import static io.cyborgcode.roa.api.validator.RestAssertionTarget.BODY;
+import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
+
+@API
+class LoginNegativeScenariosTest extends BaseQuest {
+
+   private static final TestData DATA = ConfigCache.getOrCreate(TestData.class);
+
+   @Test
+   void returns400AndErrorWhenPasswordIsMissing(Quest quest) {
+      LoginDto request = LoginDto.builder()
+            .email(DATA.username())
+            .build();
+
+      quest.use(RING_OF_API)
+            .requestAndValidate(
+                  POST_LOGIN_USER,
+                  request,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
+                  Assertion.builder().target(BODY).key(ERROR.getJsonPath())
+                        .type(IS).expected(MISSING_PASSWORD_ERROR).build()
+            )
+            .complete();
+   }
+
+   @Test
+   void returns400AndErrorWhenEmailIsMissing(Quest quest) {
+      LoginDto request = LoginDto.builder()
+            .password(DATA.password())
+            .build();
+
+      quest.use(RING_OF_API)
+            .requestAndValidate(
+                  POST_LOGIN_USER,
+                  request,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
+                  Assertion.builder().target(BODY).key(ERROR.getJsonPath())
+                        .type(IS).expected(MISSING_EMAIL_ERROR).build()
+            )
+            .complete();
+   }
+
+   @Test
+   void returns400AndErrorWhenEmailIsInvalid(Quest quest) {
+      LoginDto request = LoginDto.builder()
+            .email(INVALID_EMAIL)
+            .password(DATA.password())
+            .build();
+
+      quest.use(RING_OF_API)
+            .requestAndValidate(
+                  POST_LOGIN_USER,
+                  request,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
+                  Assertion.builder().target(BODY).key(ERROR.getJsonPath())
+                        .type(IS).expected(USER_NOT_FOUND_ERROR).build()
+            )
+            .complete();
+   }
+}
