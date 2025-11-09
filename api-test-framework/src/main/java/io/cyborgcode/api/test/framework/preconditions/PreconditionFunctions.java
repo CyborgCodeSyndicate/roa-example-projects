@@ -10,6 +10,13 @@ import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_CREATED;
 
+/**
+ * Implementation of reusable precondition routines referenced by {@link Preconditions}.
+ * <p>
+ * Each method encapsulates a concrete setup step (for example, creating a user) that can be
+ * triggered via {@code @PreQuest} journeys before a test executes, keeping test methods
+ * focused on verification rather than state preparation.
+ */
 public final class PreconditionFunctions {
 
    private PreconditionFunctions() {

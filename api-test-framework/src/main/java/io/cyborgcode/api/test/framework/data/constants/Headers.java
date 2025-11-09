@@ -2,6 +2,12 @@ package io.cyborgcode.api.test.framework.data.constants;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Common HTTP header keys and example values used throughout the tests.
+ * <p>
+ * Centralizes header-related configuration so that authentication,
+ * custom headers, and API keys remain consistent and easy to change.
+ */
 @UtilityClass
 public class Headers {
 

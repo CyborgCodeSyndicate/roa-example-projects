@@ -2,6 +2,12 @@ package io.cyborgcode.api.test.framework.data.constants;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Centralized assertion messages used across tests.
+ * <p>
+ * Keeps failure messages consistent and readable while avoiding duplication
+ * in individual test classes.
+ */
 @UtilityClass
 public final class AssertionMessages {
 

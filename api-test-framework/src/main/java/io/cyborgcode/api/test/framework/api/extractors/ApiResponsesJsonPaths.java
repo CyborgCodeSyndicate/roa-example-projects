@@ -1,5 +1,17 @@
 package io.cyborgcode.api.test.framework.api.extractors;
 
+/**
+ * Central registry of JSON path expressions used across the tutorial tests.
+ * <p>
+ * Encapsulates commonly accessed response fields (users, resources, support block,
+ * tokens, errors, etc.) so that JSON paths are:
+ * <ul>
+ *   <li>type-safe and discoverable via enum constants,</li>
+ *   <li>reused consistently across tests,</li>
+ *   <li>easy to update in one place if the API contract changes.</li>
+ * </ul>
+ * Supports indexed paths via {@link #getJsonPath(Object...)} for list-based responses.
+ */
 public enum ApiResponsesJsonPaths {
 
    // --- General / Root Keys ---

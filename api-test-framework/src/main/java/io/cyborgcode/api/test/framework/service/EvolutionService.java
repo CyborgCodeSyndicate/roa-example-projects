@@ -9,11 +9,11 @@ import io.cyborgcode.roa.validator.core.Assertion;
 import io.restassured.response.Response;
 import java.time.Instant;
 
-import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_JOB;
-import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_NAME;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_JOB;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_NAME;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_AT_INCORRECT;
 import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_USER_JOB_INCORRECT;
 import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_USER_NAME_INCORRECT;
@@ -41,6 +41,18 @@ import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * ROA service ("Ring of Evolution") used in the evolution examples.
+ * <p>
+ * This class shows how you can move repeated test logic into reusable,
+ * fluent methods instead of duplicating it in every test.
+ * <ul>
+ *   <li>Wraps common flows such as "get all users", "create user", "validate created user".</li>
+ *   <li>Keeps tests focused on <i>what</i> they verify, not <i>how</i> they call the API.</li>
+ *   <li>Used in the evolution tests via {@code quest.use(RING_OF_EVOLUTION)} to demonstrate
+ *       how to gradually refactor scenarios into shared building blocks.</li>
+ * </ul>
+ */
 @Ring("Ring of Evolution")
 public class EvolutionService extends FluentService {
 

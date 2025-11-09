@@ -8,6 +8,16 @@ import io.restassured.specification.RequestSpecification;
 import static io.cyborgcode.api.test.framework.data.constants.Headers.API_KEY_HEADER;
 import static io.cyborgcode.api.test.framework.data.constants.Headers.API_KEY_VALUE;
 
+/**
+ * Enum-based definition of all API endpoints used in the example tests.
+ * <p>
+ * Each constant specifies the HTTP method and relative URL for a given operation and
+ * implements {@link Endpoint} to integrate with the ROA
+ * fluent API. A shared default configuration (JSON content type, common headers, base URL)
+ * is applied to all endpoints via {@link #defaultConfiguration()}.
+ * </p>
+ * This centralizes endpoint metadata to keep tests consistent, discoverable, and easy to maintain.
+ */
 public enum AppEndpoints implements Endpoint<AppEndpoints> {
 
    GET_ALL_USERS(Method.GET, "/users?{page}"),

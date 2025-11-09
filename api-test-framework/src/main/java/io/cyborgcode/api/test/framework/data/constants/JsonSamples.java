@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.Map;
 import lombok.experimental.UtilityClass;
 
+/**
+ * Reusable JSON payload samples and helpers for response/body assertions.
+ */
 @UtilityClass
 public class JsonSamples {
 

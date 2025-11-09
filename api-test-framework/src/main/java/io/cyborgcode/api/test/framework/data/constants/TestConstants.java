@@ -4,6 +4,20 @@ import java.util.List;
 import java.util.Map;
 import lombok.experimental.UtilityClass;
 
+/**
+ * Canonical expected values used across the Reqres-based examples.
+ * <p>
+ * Encapsulates:
+ * <ul>
+ *    <li>pagination settings and ranges,</li>
+ *    <li>support metadata and URLs,</li>
+ *    <li>user identities and roles used in assertions,</li>
+ *    <li>resource metadata (colors, years, ids),</li>
+ *    <li>login error messages and token patterns.</li>
+ * </ul>
+ * These constants document the assumptions about the public Reqres API
+ * that the tutorial tests assert against.
+ */
 @UtilityClass
 public class TestConstants {
 
@@ -48,8 +62,6 @@ public class TestConstants {
       public static final String SUPPORT_TEXT_PREFIX = "Tired of writing";
       public static final String SUPPORT_URL_REGEX =
             "https:\\/\\/contentcaddy\\.io\\?utm_source=reqres&utm_medium=json&utm_campaign=referral";
-      public static final String SUPPORT_URL_VALUE =
-            "https://contentcaddy.io?utm_source=reqres&utm_medium=json&utm_campaign=referral";
       public static final String SUPPORT_TEXT_FULL = "Tired of writing endless social media content?";
       public static final String SUPPORT_TEXT_BRAND = "Content Caddy";
    }
@@ -90,7 +102,6 @@ public class TestConstants {
             Keys.LAST_NAME, "User",
             Keys.AVATAR, "invalidUrls"
       );
-      public static final int INVALID_USER_ID = 23;
    }
 
    public static class PageTwo {
@@ -132,7 +143,6 @@ public class TestConstants {
       private Login() {
       }
 
-      public static final String TOKEN_REGEX = "[a-zA-Z0-9]+";
       public static final String MISSING_PASSWORD_ERROR = "Missing password";
       public static final String MISSING_EMAIL_ERROR = "Missing email or username";
       public static final String USER_NOT_FOUND_ERROR = "user not found";
@@ -151,7 +161,5 @@ public class TestConstants {
       public static final String RESOURCE_TWO_COLOR = "#C74375";
       public static final String RESOURCE_TWO_PANTONE = "17-2031";
       public static final int RESOURCE_INVALID_ID = 23;
-      public static final String RESOURCE_SIX_NAME = "honeysuckle";
-      public static final String RESOURCE_SIX_COLOR = "#D94F70";
    }
 }

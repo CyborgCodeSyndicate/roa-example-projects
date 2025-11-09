@@ -19,6 +19,16 @@ import static io.cyborgcode.api.test.framework.data.constants.QueryParams.PAGE_P
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.PAGE_TWO;
 import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEADER;
 
+/**
+ * Factory methods backing {@link DataCreator} entries.
+ * <p>
+ * Provides centralized, reusable builders for test data objects used across examples.
+ * Some factories are context-aware: they can read from the active {@link SuperQuest}
+ * storage or trigger prerequisite calls (e.g. fetching users) to derive dynamic input.
+ * <p>
+ * This keeps test classes focused on behavior while delegating all data construction
+ * and lookup logic to a single, maintainable location.
+ */
 public final class DataCreatorFunctions {
 
    private static final TestData DATA_PROPERTIES = ConfigCache.getOrCreate(TestData.class);

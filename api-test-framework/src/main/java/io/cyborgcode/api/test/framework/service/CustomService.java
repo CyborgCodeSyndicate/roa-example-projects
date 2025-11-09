@@ -58,6 +58,18 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.STARTS_WITH;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpStatus.SC_OK;
 
+/**
+ * Custom ROA service ("ring") containing reusable steps for Reqres tests.
+ * <p>
+ * Instead of repeating the same request + validation logic in multiple tests,
+ * this class groups common flows into methods that can be called fluently.
+ * <ul>
+ *   <li>Keeps test methods short and focused on intent.</li>
+ *   <li>Ensures shared scenarios (like "logged-in user" or
+ *       "validate users list") are implemented in one place.</li>
+ *   <li>Used via {@code quest.use(RING_OF_CUSTOM)}.</li>
+ * </ul>
+ */
 @Ring("Ring of Custom")
 public class CustomService extends FluentService {
 
