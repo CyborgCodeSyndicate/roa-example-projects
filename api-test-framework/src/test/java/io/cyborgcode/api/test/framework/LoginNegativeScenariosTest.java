@@ -6,6 +6,7 @@ import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.validator.core.Assertion;
+import io.qameta.allure.Description;
 import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
@@ -21,12 +22,20 @@ import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 
+/**
+ * LoginNegativeScenariosTest
+ * <p>
+ * Demonstrates how to validate negative login scenarios with RoA against Reqres:
+ * missing password, missing email, and invalid email, all returning 400 with proper error messages.
+ * The successful login flow is covered in GettingStartedTest.
+ */
 @API
 class LoginNegativeScenariosTest extends BaseQuest {
 
    private static final TestData DATA = ConfigCache.getOrCreate(TestData.class);
 
    @Test
+   @Description("Verifies that a login request without password returns 400 and MISSING_PASSWORD_ERROR.")
    void returns400AndErrorWhenPasswordIsMissing(Quest quest) {
       LoginDto request = LoginDto.builder()
             .email(DATA.username())
@@ -44,6 +53,7 @@ class LoginNegativeScenariosTest extends BaseQuest {
    }
 
    @Test
+   @Description("Verifies that a login request without email returns 400 and MISSING_EMAIL_ERROR.")
    void returns400AndErrorWhenEmailIsMissing(Quest quest) {
       LoginDto request = LoginDto.builder()
             .password(DATA.password())
@@ -61,6 +71,7 @@ class LoginNegativeScenariosTest extends BaseQuest {
    }
 
    @Test
+   @Description("Verifies that a login request with INVALID_EMAIL returns 400 and USER_NOT_FOUND_ERROR.")
    void returns400AndErrorWhenEmailIsInvalid(Quest quest) {
       LoginDto request = LoginDto.builder()
             .email(INVALID_EMAIL)
@@ -77,4 +88,5 @@ class LoginNegativeScenariosTest extends BaseQuest {
             )
             .complete();
    }
+
 }

@@ -9,6 +9,7 @@ import io.cyborgcode.roa.framework.base.BaseQuestSequential;
 import io.cyborgcode.roa.framework.parameters.Late;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.validator.core.Assertion;
+import io.qameta.allure.Description;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
@@ -25,12 +26,19 @@ import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_CREATED;
 
+/**
+ * Demonstrates the evolution of creating multiple users:
+ * from inline DTO construction, through {@code @Craft} and {@code Late},
+ * to using a custom ROA ring that encapsulates reusable steps.
+ * Requires {@link API} because it uses {@code RING_OF_API} and {@code RING_OF_EVOLUTION}.
+ */
 @API
 class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   void testCreateTwoUsersBasic(Quest quest) {
+   @Description("Creates two users with inline request bodies and validates both responses.")
+   void shouldCreateTwoUsersWithInlineData(Quest quest) {
       CreateUserDto leaderUser = CreateUserDto.builder()
             .name(USER_LEADER_NAME)
             .job(USER_LEADER_JOB)
@@ -61,7 +69,10 @@ class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   void testCreateTwoUsersImproved(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser, @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserDto> seniorUser) {
+   @Description("Creates two users using @Craft and Late to externalize and reuse request body creation.")
+   void shouldCreateTwoUsersUsingCraftAndLate(Quest quest,
+                                              @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser,
+                                              @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserDto> seniorUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
@@ -82,7 +93,10 @@ class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   void testCreateTwoUsersImprovedWithCustomService(Quest quest, @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser, @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserDto> seniorUser) {
+   @Description("Creates two users using a custom ROA ring that encapsulates the user creation and validation flow.")
+   void shouldCreateTwoUsersUsingCustomService(Quest quest,
+                                               @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser,
+                                               @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserDto> seniorUser) {
       quest.use(RING_OF_EVOLUTION)
             .createLeaderUserAndValidateResponse(leaderUser)
             .createSeniorUserAndValidateResponse(seniorUser.create())

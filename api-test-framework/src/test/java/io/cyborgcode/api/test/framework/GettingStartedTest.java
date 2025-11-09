@@ -8,6 +8,7 @@ import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.validator.core.Assertion;
+import io.qameta.allure.Description;
 import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +38,22 @@ import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_OK;
 
+/**
+ * GettingStartedTest
+ * <p>
+ * Minimal entry point for RoA-style API testing with Reqres.
+ * <p>
+ * IMPORTANT:
+ * - This class is annotated with {@link API}, which is required when using RING_OF_API
+ *   and the RoA API DSL.
+ * - Demonstrates:
+ *   - Using {@code quest.use(RING_OF_API)}
+ *   - Basic GET with query/path parameters
+ *   - Basic POST with a request DTO
+ *   - Simple assertions on status, headers, and body
+ * For advanced features (preconditions, authentication, ripper, custom rings, evolutions),
+ * see the dedicated example classes.
+ */
 @API
 class GettingStartedTest extends BaseQuest {
 
@@ -44,6 +61,7 @@ class GettingStartedTest extends BaseQuest {
 
    @Test
    @Regression
+   @Description("Verifies that GET_ALL_USERS with page=2 returns 200 and a JSON Content-Type.")
    void returns200AndUsersWhenPageIs2(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
@@ -56,6 +74,7 @@ class GettingStartedTest extends BaseQuest {
 
    @Test
    @Regression
+   @Description("Verifies that GET_USER for ID_THREE returns 200 and the expected user email.")
    void returns200AndUserDetailsWhenIdExists(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
@@ -69,6 +88,7 @@ class GettingStartedTest extends BaseQuest {
 
    @Test
    @Regression
+   @Description("Verifies that POST_CREATE_USER with a valid CreateUserDto returns 201 and echoes the user name.")
    void createsUserAndReturns201(Quest quest) {
       CreateUserDto createUserRequest = CreateUserDto.builder()
             .name(USER_LEADER_NAME)
@@ -80,13 +100,15 @@ class GettingStartedTest extends BaseQuest {
                   POST_CREATE_USER,
                   createUserRequest,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
-                  Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath()).type(IS).expected(USER_LEADER_NAME).build()
+                  Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath())
+                        .type(IS).expected(USER_LEADER_NAME).build()
             )
             .complete();
    }
 
    @Test
    @Regression
+   @Description("Verifies that POST_LOGIN_USER with valid credentials returns 200 and a non-null token.")
    void returns200AndTokenWhenCredentialsAreValid(Quest quest) {
       LoginDto loginRequest = LoginDto.builder()
             .email(DATA.username())
@@ -103,5 +125,4 @@ class GettingStartedTest extends BaseQuest {
             )
             .complete();
    }
-
 }
