@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.evolution;
 
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
 import io.cyborgcode.api.test.framework.data.creator.DataCreator;
@@ -38,7 +38,7 @@ class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
    @Test
    @Regression
    @Description("Creates two users with inline request bodies and validates both responses.")
-   void shouldCreateTwoUsersWithInlineData(Quest quest) {
+   void createsTwoUsersWithInlineData(Quest quest) {
       CreateUserDto leaderUser = CreateUserDto.builder()
             .name(USER_LEADER_NAME)
             .job(USER_LEADER_JOB)
@@ -70,7 +70,7 @@ class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
    @Test
    @Regression
    @Description("Creates two users using @Craft and Late to externalize and reuse request body creation.")
-   void shouldCreateTwoUsersUsingCraftAndLate(Quest quest,
+   void createsTwoUsersUsingCraftAndLate(Quest quest,
                                               @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser,
                                               @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserDto> seniorUser) {
       quest.use(RING_OF_API)
@@ -94,7 +94,7 @@ class CreateTwoUsersEvolutionTest extends BaseQuestSequential {
    @Test
    @Regression
    @Description("Creates two users using a custom ROA ring that encapsulates the user creation and validation flow.")
-   void shouldCreateTwoUsersUsingCustomService(Quest quest,
+   void createsTwoUsersUsingCustomService(Quest quest,
                                                @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser,
                                                @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserDto> seniorUser) {
       quest.use(RING_OF_EVOLUTION)

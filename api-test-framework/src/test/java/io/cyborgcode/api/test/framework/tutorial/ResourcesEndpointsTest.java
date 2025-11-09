@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.tutorial;
 
 import io.cyborgcode.api.test.framework.data.constants.JsonSamples;
 import io.cyborgcode.roa.api.annotations.API;
@@ -55,12 +55,12 @@ import static org.apache.http.HttpStatus.SC_OK;
  * positive/negative flows, and list vs single-resource validations.
  */
 @API
-class ReqresResourcesTest extends BaseQuest {
+class ResourcesEndpointsTest extends BaseQuest {
 
    @Test
    @Regression
    @Description("Validates that the first page of resources returns JSON, expected first item, and a non-empty data array.")
-   void shouldGetResourcesForFirstPage(Quest quest) {
+   void getsResourcesForFirstPage(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_RESOURCES.withQueryParam(PAGE_PARAM, PAGE_ONE),
@@ -77,7 +77,7 @@ class ReqresResourcesTest extends BaseQuest {
    @Test
    @Regression
    @Description("Validates that the third page of resources returns an empty data array and the expected support text branding.")
-   void shouldReturnEmptyDataForThirdPage(Quest quest) {
+   void returnsEmptyDataForThirdPage(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_RESOURCES.withQueryParam(PAGE_PARAM, PAGE_THREE),
@@ -92,7 +92,7 @@ class ReqresResourcesTest extends BaseQuest {
    @Test
    @Regression
    @Description("Validates that an existing resource ID returns all expected fields with correct values.")
-   void shouldGetResourceById(Quest quest) {
+   void getsResourceById(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_RESOURCE.withPathParam(ID_PARAM, RESOURCE_TWO_ID),
@@ -109,7 +109,7 @@ class ReqresResourcesTest extends BaseQuest {
    @Test
    @Regression
    @Description("Validates that a non-existing resource ID returns HTTP 404 and an empty JSON body.")
-   void shouldReturnNotFoundForNonExistingResource(Quest quest) {
+   void returnsNotFoundForNonExistingResource(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_RESOURCE.withPathParam(ID_PARAM, RESOURCE_INVALID_ID),

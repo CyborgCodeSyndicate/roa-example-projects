@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.tutorial;
 
 import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.api.test.framework.data.retriever.TestData;
@@ -23,11 +23,8 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 
 /**
- * LoginNegativeScenariosTest
- * <p>
  * Demonstrates how to validate negative login scenarios with RoA against Reqres:
  * missing password, missing email, and invalid email, all returning 400 with proper error messages.
- * The successful login flow is covered in GettingStartedTest.
  */
 @API
 class LoginNegativeScenariosTest extends BaseQuest {
@@ -37,14 +34,14 @@ class LoginNegativeScenariosTest extends BaseQuest {
    @Test
    @Description("Verifies that a login request without password returns 400 and MISSING_PASSWORD_ERROR.")
    void returns400AndErrorWhenPasswordIsMissing(Quest quest) {
-      LoginDto request = LoginDto.builder()
+      LoginDto login = LoginDto.builder()
             .email(DATA.username())
             .build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  request,
+                  login,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
                   Assertion.builder().target(BODY).key(ERROR.getJsonPath())
                         .type(IS).expected(MISSING_PASSWORD_ERROR).build()
@@ -55,14 +52,14 @@ class LoginNegativeScenariosTest extends BaseQuest {
    @Test
    @Description("Verifies that a login request without email returns 400 and MISSING_EMAIL_ERROR.")
    void returns400AndErrorWhenEmailIsMissing(Quest quest) {
-      LoginDto request = LoginDto.builder()
+      LoginDto login = LoginDto.builder()
             .password(DATA.password())
             .build();
 
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  request,
+                  login,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
                   Assertion.builder().target(BODY).key(ERROR.getJsonPath())
                         .type(IS).expected(MISSING_EMAIL_ERROR).build()
@@ -73,7 +70,7 @@ class LoginNegativeScenariosTest extends BaseQuest {
    @Test
    @Description("Verifies that a login request with INVALID_EMAIL returns 400 and USER_NOT_FOUND_ERROR.")
    void returns400AndErrorWhenEmailIsInvalid(Quest quest) {
-      LoginDto request = LoginDto.builder()
+      LoginDto login = LoginDto.builder()
             .email(INVALID_EMAIL)
             .password(DATA.password())
             .build();
@@ -81,7 +78,7 @@ class LoginNegativeScenariosTest extends BaseQuest {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
-                  request,
+                  login,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
                   Assertion.builder().target(BODY).key(ERROR.getJsonPath())
                         .type(IS).expected(USER_NOT_FOUND_ERROR).build()

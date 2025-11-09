@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.evolution;
 
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersDto;
@@ -41,12 +41,12 @@ import static org.apache.http.HttpStatus.SC_OK;
  * using storage, {@code @Craft}, {@code Late}, and a custom ROA ring for Reqres user creation.
  */
 @API
-class CreateUserDataEvolutionTest extends BaseQuest {
+class CreateUserEvolutionTest extends BaseQuest {
 
    @Test
    @Regression
    @Description("Creates a junior user using data derived from a previously fetched users list.")
-   void shouldCreateJuniorUserUsingStoredUsersResponse(Quest quest) {
+   void createsJuniorUserUsingStoredUsersResponse(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
@@ -79,7 +79,7 @@ class CreateUserDataEvolutionTest extends BaseQuest {
    @Test
    @Regression
    @Description("Creates a junior user using @Craft with Late to defer request body generation until after prerequisites run.")
-   void shouldCreateJuniorUserUsingCraftAndLate(Quest quest,
+   void createsJuniorUserUsingCraftAndLate(Quest quest,
                                                 @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserDto> juniorUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
@@ -100,7 +100,7 @@ class CreateUserDataEvolutionTest extends BaseQuest {
    @Test
    @Regression
    @Description("Creates a junior user using a custom ROA ring to encapsulate reusable API steps.")
-   void shouldCreateJuniorUserUsingCustomService(Quest quest,
+   void createsJuniorUserUsingCustomService(Quest quest,
                                                  @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserDto> juniorUser) {
       quest.use(RING_OF_EVOLUTION)
             .getAllUsersAndValidateResponse()

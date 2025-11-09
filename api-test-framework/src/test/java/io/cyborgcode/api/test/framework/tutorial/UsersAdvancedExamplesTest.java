@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.tutorial;
 
 import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
@@ -37,10 +37,8 @@ import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPa
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.DATA;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.PER_PAGE;
-import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SINGLE_USER_EMAIL_EXPLICIT;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_TEXT;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_URL;
-import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_URL_EXPLICIT;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOKEN;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL_PAGES;
@@ -72,16 +70,13 @@ import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Role
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_TEXT_PREFIX;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_URL_REGEX;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_URL_REQRES_FRAGMENT;
-import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_URL_VALUE;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.ID_THREE;
-import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.INVALID_USER_ID;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_NINE_EMAIL;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_NINE_FIRST_NAME;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_NINE_ID;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_NINE_LAST_NAME;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_ONE_FIRST_NAME;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_SEVENTH_FIRST_NAME_LENGTH;
-import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_THREE_EMAIL;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.BODY;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.HEADER;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
@@ -106,7 +101,6 @@ import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpStatus.SC_CREATED;
-import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -124,38 +118,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * - usage of a custom ring ({@code RING_OF_CUSTOM}) for reusable services.
  */
 @API
-class ReqresApiTest extends BaseQuest {
-
-   @Test
-   @Regression
-   @Description("Retrieves a single user by id and validates key fields with soft assertions on the response.")
-   void shouldGetUserByIdWithSoftAssertions(Quest quest) {
-      quest.use(RING_OF_API)
-            .requestAndValidate(
-                  GET_USER.withPathParam(ID_PARAM, ID_THREE),
-                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).soft(true).build(),
-                  Assertion.builder().target(BODY).key(SINGLE_USER_EMAIL_EXPLICIT.getJsonPath()).type(IS).expected(USER_THREE_EMAIL).soft(true).build(),
-                  Assertion.builder().target(BODY).key(SUPPORT_URL_EXPLICIT.getJsonPath()).type(IS).expected(SUPPORT_URL_VALUE).soft(true).build()
-            )
-            .complete();
-   }
-
-   @Test
-   @Regression
-   @Description("Verifies that requesting a non-existing user returns HTTP 404 Not Found.")
-   void shouldReturnNotFoundForInvalidUser(Quest quest) {
-      quest.use(RING_OF_API)
-            .requestAndValidate(
-                  GET_USER.withPathParam(ID_PARAM, INVALID_USER_ID),
-                  Assertion.builder().target(STATUS).type(IS).expected(SC_NOT_FOUND).build()
-            )
-            .complete();
-   }
+class UsersAdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
    @Description("Validates the list users endpoint using a comprehensive set of built-in assertions.")
-   void shouldValidateUsersListWithComprehensiveAssertions(Quest quest) {
+   void validatesUsersListWithComprehensiveAssertions(Quest quest) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
@@ -183,8 +151,8 @@ class ReqresApiTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Demonstrates retrieving a stored response and validating it using plain JUnit assertions.")
-   void shouldValidateUsersWithJUnitAssertions(Quest quest) {
+   @Description("Retrieves a stored response and validates it using plain JUnit assertions.")
+   void validatesUsersWithJUnitAssertions(Quest quest) {
       quest.use(RING_OF_API)
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .validate(() -> {
@@ -200,7 +168,7 @@ class ReqresApiTest extends BaseQuest {
    @Test
    @Regression
    @Description("Uses stored list response to fetch a specific user by id in a chained request.")
-   void shouldGetUserFromPreviouslyFetchedUserList(Quest quest) {
+   void getsUserFromPreviouslyFetchedUserList(Quest quest) {
       quest.use(RING_OF_API)
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .requestAndValidate(
@@ -218,7 +186,7 @@ class ReqresApiTest extends BaseQuest {
    @Test
    @Regression
    @Description("Finds a user by first name from a stored list and validates the full user using soft assertions.")
-   void shouldGetUserByFirstNameFromListWithSoftAssertions(Quest quest) {
+   void getsUserByFirstNameFromListWithSoftAssertions(Quest quest) {
       quest.use(RING_OF_API)
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .request(
@@ -249,7 +217,7 @@ class ReqresApiTest extends BaseQuest {
    @Test
    @Regression
    @Description("Creates a user using a @Craft model as the request payload.")
-   void shouldCreateUserFromCraftModel(Quest quest,
+   void createsUserFromCraftModel(Quest quest,
                                        @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
@@ -265,7 +233,7 @@ class ReqresApiTest extends BaseQuest {
    @Test
    @Regression
    @Description("Combines a GET and POST where the POST body is built lazily using a Late<@Craft> model.")
-   void shouldCreateJuniorUserUsingLateCraftModel(Quest quest,
+   void createsJuniorUserUsingLateCraftModel(Quest quest,
                                                   @Craft(model = DataCreator.Data.USER_JUNIOR)
                                                   Late<CreateUserDto> juniorUser) {
       quest.use(RING_OF_API)
@@ -284,7 +252,7 @@ class ReqresApiTest extends BaseQuest {
    @Test
    @Regression
    @Description("Creates two users using a mix of @Craft and Late<@Craft> models in a chained flow.")
-   void shouldCreateTwoUsersUsingCraftAndLateModels(Quest quest,
+   void createsTwoUsersUsingCraftAndLateModels(Quest quest,
                                                     @Craft(model = DataCreator.Data.USER_LEADER)
                                                     CreateUserDto leaderUser,
                                                     @Craft(model = DataCreator.Data.USER_SENIOR)
@@ -314,7 +282,7 @@ class ReqresApiTest extends BaseQuest {
    @Test
    @Regression
    @Description("Logs in using @Craft credentials, stores the token, and reuses it as a header in the next request.")
-   void shouldLoginAndCallGetUserWithTokenFromStorage(Quest quest,
+   void loginsAndCallsGetUserWithTokenFromStorage(Quest quest,
                                                       @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
                                                       LoginDto loginAdminUser) {
       quest.use(RING_OF_API)
@@ -346,7 +314,7 @@ class ReqresApiTest extends BaseQuest {
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Regression
    @Description("Executes a full user lifecycle using AuthenticateViaApi, PreQuest journeys, and a Ripper cleanup.")
-   void shouldExecuteUserLifecycleWithPreQuestAndRipper(Quest quest) {
+   void executesUserLifecycleWithPreQuestAndRipper(Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
                CreatedUserDto createdUser =
@@ -363,7 +331,7 @@ class ReqresApiTest extends BaseQuest {
    @Test
    @Regression
    @Description("Uses a custom service ring to log in and call the users endpoint with a preconfigured header.")
-   void shouldUseCustomServiceRingToLoginAndFetchUsers(Quest quest,
+   void usesCustomServiceRingToLoginAndFetchUsers(Quest quest,
                                                        @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
                                                        LoginDto loginAdminUser) {
       quest.use(RING_OF_CUSTOM)
@@ -380,7 +348,7 @@ class ReqresApiTest extends BaseQuest {
    @Test
    @Regression
    @Description("Delegates the entire flow to a custom service ring that validates all users.")
-   void shouldUseCustomServiceRingToValidateAllUsers(Quest quest,
+   void usesCustomServiceRingToValidateAllUsers(Quest quest,
                                                      @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
                                                      LoginDto loginAdminUser) {
       quest.use(RING_OF_CUSTOM)

@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.evolution;
 
 import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
@@ -19,6 +19,7 @@ import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.annotation.Ripper;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
+import io.cyborgcode.roa.validator.core.Assertion;
 import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import java.time.Instant;
@@ -60,12 +61,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * - Encapsulated flows via {@code RING_OF_EVOLUTION}.
  */
 @API
-class UserDataLifecycleEvolutionTest extends BaseQuest {
+class UserLifecycleEvolutionTest extends BaseQuest {
 
    @Test
    @Regression
    @Description("Executes the user lifecycle manually using explicit login, token handling, create, validate, and delete.")
-   void shouldExecuteUserLifecycleManually(Quest quest) {
+   void executesUserLifecycleManually(Quest quest) {
       final TestData testData = ConfigCache.getOrCreate(TestData.class);
       final String username = testData.username();
       final String password = testData.password();
@@ -85,12 +86,12 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
             .requestAndValidate(
                   POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
                   leaderUser,
-                  io.cyborgcode.roa.validator.core.Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .requestAndValidate(
                   POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
                   intermediateUser,
-                  io.cyborgcode.roa.validator.core.Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .validate(() -> {
                CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
@@ -104,7 +105,7 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
             .requestAndValidate(
                   DELETE_USER.withPathParam(ID_PARAM, ID_THREE)
                         .withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
-                  io.cyborgcode.roa.validator.core.Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
             )
             .complete();
    }
@@ -113,7 +114,7 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
    @Regression
    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @Description("Executes the user lifecycle using @AuthenticateViaApi instead of manual token handling.")
-   void shouldExecuteUserLifecycleWithApiAuthentication(Quest quest) {
+   void executesUserLifecycleWithApiAuthentication(Quest quest) {
       CreateUserDto leaderUser =
             CreateUserDto.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
       CreateUserDto intermediateUser =
@@ -123,12 +124,12 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
             .requestAndValidate(
                   POST_CREATE_USER,
                   leaderUser,
-                  io.cyborgcode.roa.validator.core.Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .requestAndValidate(
                   POST_CREATE_USER,
                   intermediateUser,
-                  io.cyborgcode.roa.validator.core.Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .validate(() -> {
                CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
@@ -141,7 +142,7 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
             })
             .requestAndValidate(
                   DELETE_USER.withPathParam(ID_PARAM, ID_THREE),
-                  io.cyborgcode.roa.validator.core.Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
             )
             .complete();
    }
@@ -162,7 +163,7 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
          )
    })
    @Description("Executes the user lifecycle using @PreQuest journeys to prepare users before the test body runs.")
-   void shouldExecuteUserLifecycleWithPreQuest(Quest quest) {
+   void executesUserLifecycleWithPreQuest(Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
                CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
@@ -175,7 +176,7 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
             })
             .requestAndValidate(
                   DELETE_USER.withPathParam(ID_PARAM, ID_THREE),
-                  io.cyborgcode.roa.validator.core.Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
             )
             .complete();
    }
@@ -197,7 +198,7 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
    })
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Description("Executes the user lifecycle with @PreQuest data setup and @Ripper cleanup after the test.")
-   void shouldExecuteUserLifecycleWithPreQuestAndRipper(Quest quest) {
+   void executesUserLifecycleWithPreQuestAndRipper(Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
                CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
@@ -228,7 +229,7 @@ class UserDataLifecycleEvolutionTest extends BaseQuest {
    })
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Description("Executes the user lifecycle using a custom evolution ring that encapsulates validation logic.")
-   void shouldExecuteUserLifecycleUsingEvolutionRing(Quest quest) {
+   void executesUserLifecycleUsingEvolutionRing(Quest quest) {
       quest.use(RING_OF_EVOLUTION)
             .validateCreatedUser()
             .complete();

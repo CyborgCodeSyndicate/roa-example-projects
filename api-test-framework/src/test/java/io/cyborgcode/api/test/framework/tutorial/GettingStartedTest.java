@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework;
+package io.cyborgcode.api.test.framework.tutorial;
 
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
 import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
@@ -38,9 +38,7 @@ import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_OK;
 
-/**
- * GettingStartedTest
- * <p>
+/**s
  * Minimal entry point for RoA-style API testing with Reqres.
  * <p>
  * IMPORTANT:
