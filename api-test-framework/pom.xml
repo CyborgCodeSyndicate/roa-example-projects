@@ -14,9 +14,9 @@
     <version>1.0.0</version>
 
     <properties>
-        <api.config.file>config</api.config.file>
-        <test.data.file>test_data</test.data.file>
-        <framework.config.file>config</framework.config.file>
+        <api.config.file>config-prod</api.config.file>
+        <test.data.file>test_data-prod</test.data.file>
+        <framework.config.file>config-prod</framework.config.file>
         <logFileName>logs/api-example.log</logFileName>
         <extended.logging>true</extended.logging>
     </properties>
