@@ -9,11 +9,10 @@ import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
 import io.cyborgcode.roa.ui.selenium.smart.SmartWebElement;
 import io.cyborgcode.roa.ui.util.strategy.Strategy;
 import io.cyborgcode.roa.ui.util.strategy.StrategyGenerator;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NotFoundException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -94,14 +93,9 @@ public class SelectVaImpl extends BaseComponent implements Select {
 
    @Override
    public List<String> getSelectedOptions(By containerLocator) {
-      //todo: fix StaleElement for shadowRoot
-      try {
-         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-         wait.ignoring(StaleElementReferenceException.class)
-               .until(ExpectedConditions.stalenessOf(driver.findSmartElement(containerLocator)));
-      } catch (TimeoutException e) {
-         e.printStackTrace();
-      }
+      WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+      wait.ignoring(StaleElementReferenceException.class)
+            .until(ExpectedConditions.stalenessOf(driver.findSmartElement(containerLocator)));
 
       List<SmartWebElement> containers = driver.findSmartElements(containerLocator);
       if (containers.size() == 1) {
@@ -162,7 +156,7 @@ public class SelectVaImpl extends BaseComponent implements Select {
 
    protected void closeDdl(SmartWebElement ddlButton) {
       try {
-          if ("true".equals(ddlButton.getDomAttribute("opened"))) { //todo- getAttribute: StaleElementReferenceException
+          if ("true".equals(ddlButton.getDomAttribute("opened"))) {
               SmartWebElement toggleButton = findDdlButton(ddlButton);
               toggleButton.click();
           }
@@ -183,7 +177,12 @@ public class SelectVaImpl extends BaseComponent implements Select {
    }
 
    protected SmartWebElement findOptionByText(List<SmartWebElement> options, String text) {
-      return findOptionByText(options, text, OPTION_TEXT_LOCATOR);
+      Wait<SmartWebDriver> wait = new FluentWait<>(driver)
+            .withTimeout(Duration.ofSeconds(2))
+            .pollingEvery(Duration.ofMillis(500))
+            .ignoring(NotFoundException.class);
+
+      return wait.until(driver -> findOptionByText(options, text, OPTION_TEXT_LOCATOR));
    }
 
    protected SmartWebElement findOptionByText(List<SmartWebElement> options, String text, By locator) {
@@ -223,7 +222,11 @@ public class SelectVaImpl extends BaseComponent implements Select {
 
    protected void selectIfNotChecked(SmartWebElement option) {
       if (!checkIfOptionIsSelected(option)) {
-         option.click(); //todo- ElementNotInteractableException
+          try {
+              option.click();
+          } catch (ElementNotInteractableException e) {
+              ((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
+          }
       }
    }
 }

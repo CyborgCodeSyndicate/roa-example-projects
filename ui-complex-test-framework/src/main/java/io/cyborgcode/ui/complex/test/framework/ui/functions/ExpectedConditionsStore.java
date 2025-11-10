@@ -109,16 +109,18 @@ public class ExpectedConditionsStore {
          @Override
          public Boolean apply(WebDriver driver) {
             try {
-               return "false".equals(element.getDomProperty("loading"));
+                String v = element.getDomAttribute("loading");
+                return v == null || v.isEmpty() || "false".equalsIgnoreCase(v);
             } catch (StaleElementReferenceException e) {
-               return false;
+                return false;
             }
          }
 
          @Override
          public String toString() {
-            return "Waiting for loading attribute to be removed from element: " + element;
+            return "loading attribute to be removed from element: " + element;
          }
       };
    }
+
 }

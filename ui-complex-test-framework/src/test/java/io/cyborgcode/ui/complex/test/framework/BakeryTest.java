@@ -13,9 +13,11 @@ import io.cyborgcode.roa.framework.quest.QuestHolder;
 import io.cyborgcode.roa.ui.annotations.AuthenticateViaUi;
 import io.cyborgcode.roa.ui.annotations.InterceptRequests;
 import io.cyborgcode.roa.ui.annotations.UI;
+import io.cyborgcode.roa.ui.storage.StorageKeysUi;
 import io.cyborgcode.roa.validator.core.Assertion;
 import io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator;
+import io.cyborgcode.ui.complex.test.framework.data.extractor.DataExtractorFunctions;
 import io.cyborgcode.ui.complex.test.framework.data.test_data.StaticData;
 import io.cyborgcode.ui.complex.test.framework.db.hooks.DbHookFlows;
 import io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions;
@@ -27,8 +29,11 @@ import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
 import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
 import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
@@ -47,10 +52,49 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DB
 @API
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
-class BakeryTest extends BaseQuestSequential {
+class BakeryTest extends BaseQuest {
 
 
-    @Test()
+    @Test
+    @Description("Interceptor with Storage and Late data re-usage")
+    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
+    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
+    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+            journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
+    void createOrderInterceptorStorage(Quest quest,
+                                       @Craft(model = DataCreator.Data.VALID_LATE_ORDER) Late<Order> lateOrder) {
+        quest
+                .use(RING_OF_CUSTOM)
+                .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
+                .createOrder(lateOrder.create())
+                .validateOrder(lateOrder.create())
+                .drop()
+                .use(RING_OF_UI)
+                .interceptor().validateResponseHaveStatus(
+                        RequestsInterceptor.INTERCEPT_REQUEST_AUTH.getEndpointSubString(), 2, true)
+                .complete();
+    }
+
+    /*@Test
+    @Description("Interceptor raw usage")
+    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
+    void createOrderInterceptor(Quest quest,
+                                @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller) {
+        quest
+                .use(RING_OF_CUSTOM)
+                .loginUsingInsertion(seller)
+                .editOrder("Lionel Huber")
+                .drop()
+                .use(RING_OF_UI)
+                .validate(() -> Assertions.assertEquals(List.of("$197.54"),
+                        retrieve(DataExtractorFunctions
+                                        .responseBodyExtraction(RequestsInterceptor.INTERCEPT_REQUEST_AUTH.getEndpointSubString(),
+                                                "$[0].changes[?(@.key=='totalPrice')].value", "for(;;);"),
+                                List.class)))
+                .complete();
+    }*/
+
+    /*@Test()
     @Description("Late data created with interceptor and ripper data cleanup usage")
     @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
     @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
@@ -66,7 +110,7 @@ class BakeryTest extends BaseQuestSequential {
                 .createOrder(lateOrder.create())
                 .validateOrder(lateOrder.create())
                 .complete();
-    }
+    }*/
 
    /* @Test
     @Description("Authentication usage")
