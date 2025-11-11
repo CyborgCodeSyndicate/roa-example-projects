@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>api-test-framework</module>
+        <module>ui-simple-test-framework</module>
         <module>ui-complex-test-framework</module>
     </modules>
 
