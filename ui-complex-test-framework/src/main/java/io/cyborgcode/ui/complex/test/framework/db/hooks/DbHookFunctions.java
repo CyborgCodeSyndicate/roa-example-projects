@@ -11,6 +11,29 @@ import static io.cyborgcode.ui.complex.test.framework.db.queries.DbSetupQueries.
 import static io.cyborgcode.ui.complex.test.framework.db.queries.DbSetupQueries.INSERT_ORDERS;
 import static io.cyborgcode.ui.complex.test.framework.db.queries.DbSetupQueries.INSERT_SELLERS;
 
+/**
+ * Implementation functions for database hook operations.
+ * <p>
+ * This utility class provides the actual database setup/teardown logic referenced by
+ * {@link DbHookFlows} enum constants. Each method performs database operations that
+ * execute before or after tests as part of the database hook lifecycle.
+ * </p>
+ * <p>
+ * Key hook functions:
+ * <ul>
+ *   <li>{@link #initializeH2(DatabaseService)} — creates H2 in-memory database schema
+ *       and populates seed data for testing. This runs before tests to establish a
+ *       known database state.</li>
+ *   <li>{@link #getFromDbSaveInStorage(DatabaseService, Map, String[])} — executes a
+ *       query and stores results in shared storage for access during test execution.</li>
+ * </ul>
+ * </p>
+ * <p>
+ * These functions integrate with ROA's {@code @DbHook} annotation to execute database
+ * operations at specific test lifecycle points (BEFORE, AFTER), enabling consistent
+ * database state management across the test suite.
+ * </p>
+ */
 public class DbHookFunctions {
 
     private DbHookFunctions() {

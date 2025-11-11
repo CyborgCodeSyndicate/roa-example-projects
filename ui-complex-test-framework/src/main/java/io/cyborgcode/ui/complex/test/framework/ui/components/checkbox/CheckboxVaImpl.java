@@ -17,8 +17,30 @@ import java.util.Set;
 
 import static io.cyborgcode.roa.ui.util.strategy.StrategyGenerator.*;
 
-
-@ImplementationOfType(CheckboxFieldTypes.VA_CHECKBOX)
+/**
+ * Vaadin-specific implementation of the {@link Checkbox} component interface.
+ * <p>
+ * This class provides the concrete logic for interacting with Vaadin checkboxes
+ * ({@code <mat-checkbox>} elements) in the Bakery Flow application. It is automatically
+ * selected by ROA's component resolution mechanism when a checkbox element is tagged with
+ * {@link CheckboxFieldTypes#VA_CHECKBOX_TYPE} via the {@code @ImplementationOfType} annotation.
+ * </p>
+ * <p>
+ * Key capabilities:
+ * <ul>
+ *   <li>Select/deselect checkboxes by label text, locator, or strategy (FIRST, LAST, RANDOM, ALL)</li>
+ *   <li>Check selection state via {@code checked} DOM attribute</li>
+ *   <li>Check enabled/disabled state via {@code disabled} DOM attribute</li>
+ *   <li>Retrieve all selected or available checkbox labels</li>
+ *   <li>Wait for attribute changes after click to ensure state synchronization</li>
+ * </ul>
+ * </p>
+ * <p>
+ * This implementation handles Vaadin's DOM structure and attribute-based state
+ * management, ensuring reliable interaction with checkboxes in dynamic UIs.
+ * </p>
+ */
+@ImplementationOfType(CheckboxFieldTypes.Data.VA_CHECKBOX)
 public class CheckboxVaImpl extends BaseComponent implements Checkbox {
 
    private static final By CHECKBOX_ELEMENT_SELECTOR = By.tagName("mat-checkbox");
@@ -29,7 +51,7 @@ public class CheckboxVaImpl extends BaseComponent implements Checkbox {
    private static final String LOG_CB_WITH_TEXT = "Select or Deselect checkbox with text: ";
 
 
-    public CheckboxVaImpl(SmartWebDriver driver) {
+   public CheckboxVaImpl(SmartWebDriver driver) {
       super(driver);
    }
 

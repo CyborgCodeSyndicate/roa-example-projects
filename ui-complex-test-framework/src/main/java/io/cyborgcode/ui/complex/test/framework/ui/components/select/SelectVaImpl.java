@@ -19,8 +19,31 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-
-@ImplementationOfType(SelectFieldTypes.VA_SELECT)
+/**
+ * Vaadin-specific implementation of the {@link Select} component interface.
+ * <p>
+ * This class provides the concrete logic for interacting with Vaadin combo boxes
+ * ({@code <vaadin-combo-box>} elements) in the Bakery Flow application. It is automatically
+ * selected by ROA's component resolution mechanism when a select element is tagged with
+ * {@link SelectFieldTypes#VA_SELECT_TYPE} via the {@code @ImplementationOfType} annotation.
+ * </p>
+ * <p>
+ * Key capabilities:
+ * <ul>
+ *   <li>Select options by text, locator, or strategy (FIRST, LAST, RANDOM, ALL)</li>
+ *   <li>Retrieve available and selected options</li>
+ *   <li>Check option visibility and enabled state via {@code disabled} DOM attribute</li>
+ *   <li>Handle Vaadin's overlay-based dropdown rendering ({@code <vaadin-combo-box-overlay>})</li>
+ *   <li>Manage dropdown open/close state via {@code opened} attribute</li>
+ *   <li>Handle stale element references during dynamic option loading</li>
+ * </ul>
+ * </p>
+ * <p>
+ * This implementation handles Vaadin's DOM structure, attribute-based state management
+ * and asynchronous option loading, ensuring reliable interaction with navigation tabs in dynamic UIs.
+ * </p>
+ */
+@ImplementationOfType(SelectFieldTypes.Data.VA_SELECT)
 public class SelectVaImpl extends BaseComponent implements Select {
 
    public static final By OPTIONS_CONTAINER_LOCATOR = By.cssSelector("vaadin-combo-box-overlay#overlay");
@@ -28,8 +51,6 @@ public class SelectVaImpl extends BaseComponent implements Select {
    public static final By OPEN_DDL_BUTTON_LOCATOR = By.id("toggleButton");
    public static final By OPTION_LOCATOR = By.cssSelector("vaadin-combo-box-item");
    public static final By OPTION_TEXT_LOCATOR = By.cssSelector("div#content");
-
-
    public static final String DISABLED_CLASS_INDICATOR = "disabled";
 
    public SelectVaImpl(SmartWebDriver driver) {

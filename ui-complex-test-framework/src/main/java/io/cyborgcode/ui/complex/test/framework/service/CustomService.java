@@ -26,6 +26,20 @@ import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.*;
 import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * High-level, domain-specific service for Bakery Flow application test operations.
+ * <p>
+ * This custom fluent service extends {@link FluentService} and is registered as the
+ * "Custom" ring via {@code @Ring}. It provides business-logic-focused test operations
+ * that abstract complex UI interaction sequences into reusable, readable methods.
+ * Tests access this service via {@code quest.use(RING_OF_CUSTOM)}.
+ * </p>
+ * <p>
+ * This service internally delegates to the UI ring ({@code RING_OF_UI}) for low-level
+ * Selenium operations, maintaining the separation between test orchestration and
+ * element interaction logic.
+ * </p>
+ */
 @Ring("Custom")
 public class CustomService extends FluentService {
 

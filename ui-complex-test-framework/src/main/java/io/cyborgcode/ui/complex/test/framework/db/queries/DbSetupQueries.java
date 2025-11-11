@@ -2,6 +2,28 @@ package io.cyborgcode.ui.complex.test.framework.db.queries;
 
 import io.cyborgcode.roa.db.query.DbQuery;
 
+/**
+ * Database schema setup and seed data queries for test initialization.
+ * <p>
+ * This enum contains DDL (Data Definition Language) and DML (Data Manipulation Language)
+ * statements used to bootstrap the in-memory H2 database before test execution. These
+ * queries are typically invoked from {@link io.cyborgcode.ui.complex.test.framework.db.hooks.DbHookFunctions}
+ * as part of the {@code @DbHook} lifecycle.
+ * </p>
+ * <p>
+ * Available setup operations:
+ * <ul>
+ *   <li>{@link #CREATE_TABLE_ORDERS} — creates the orders table schema</li>
+ *   <li>{@link #CREATE_TABLE_SELLERS} — creates the sellers table schema</li>
+ *   <li>{@link #INSERT_ORDERS} — populates orders with seed data</li>
+ *   <li>{@link #INSERT_SELLERS} — populates sellers with seed data</li>
+ * </ul>
+ * </p>
+ * <p>
+ * This centralized approach ensures consistent database state across all tests and
+ * makes schema changes easy to track and version-control.
+ * </p>
+ */
 public enum DbSetupQueries implements DbQuery<DbSetupQueries> {
 
    CREATE_TABLE_ORDERS(

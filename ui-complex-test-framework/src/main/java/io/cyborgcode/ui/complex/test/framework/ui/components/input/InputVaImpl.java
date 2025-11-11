@@ -12,7 +12,30 @@ import org.openqa.selenium.NotFoundException;
 import java.util.List;
 import java.util.Objects;
 
-
+/**
+ * Vaadin-specific implementation of the {@link Input} component interface.
+ * <p>
+ * This class provides the concrete logic for interacting with Vaadin input fields
+ * ({@code <vaadin-text-field>} elements) in the Bakery Flow application. It is automatically
+ * selected by ROA's component resolution mechanism when an input element is tagged with
+ * {@link InputFieldTypes#VA_INPUT_TYPE} via the {@code @ImplementationOfType} annotation.
+ * </p>
+ * <p>
+ * Key capabilities:
+ * <ul>
+ *   <li>Insert text into fields by label, locator, or within a container</li>
+ *   <li>Clear field values</li>
+ *   <li>Retrieve current field values via {@code value} DOM attribute</li>
+ *   <li>Check enabled/disabled state via {@code disabled} DOM attribute</li>
+ *   <li>Retrieve validation error messages from {@code error-message} part</li>
+ *   <li>Find fields dynamically by label text</li>
+ * </ul>
+ * </p>
+ * <p>
+ * This implementation handles Vaadin's DOM structure and attribute-based state
+ * management, ensuring reliable interaction with input fields in dynamic UIs.
+ * </p>
+ */
 @ImplementationOfType(InputFieldTypes.Data.VA_INPUT)
 public class InputVaImpl extends BaseComponent implements Input {
 

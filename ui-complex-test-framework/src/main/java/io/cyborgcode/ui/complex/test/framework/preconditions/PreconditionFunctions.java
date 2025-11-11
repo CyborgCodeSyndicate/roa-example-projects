@@ -22,6 +22,19 @@ import static io.cyborgcode.roa.db.validator.DbAssertionTarget.QUERY_RESULT;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.EQUALS_IGNORE_CASE;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 
+/**
+ * Implementation functions for precondition setup operations.
+ * <p>
+ * This utility class provides the actual precondition logic referenced by {@link Preconditions}
+ * enum constants. Each method performs setup operations required to establish test state
+ * before the main test execution begins.
+ * </p>
+ * <p>
+ * These functions demonstrate multi-ring orchestration, combining UI, API, and database
+ * operations to establish complex test preconditions. They integrate with ROA's
+ * {@code @Journey} and {@code @PreQuest} annotations to execute setup logic before tests.
+ * </p>
+ */
 public final class PreconditionFunctions {
 
     private PreconditionFunctions() {

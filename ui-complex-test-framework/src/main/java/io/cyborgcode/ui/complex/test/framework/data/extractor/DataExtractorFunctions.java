@@ -11,6 +11,33 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Utility functions for creating data extractors from intercepted network responses.
+ * <p>
+ * This class provides factory methods for building {@link DataExtractor} instances that
+ * extract data from UI network traffic captured via ROA's request interception mechanism.
+ * This enables tests to retrieve runtime data from API responses that occur during UI
+ * interactions, bridging the gap between UI and API testing.
+ * </p>
+ * <p>
+ * The primary method {@link #responseBodyExtraction(String, String, String)} creates
+ * extractors that:
+ * <ol>
+ *   <li>Filter intercepted responses by URL pattern</li>
+ *   <li>Remove Vaadin's security prefix (e.g., {@code for(;;);})</li>
+ *   <li>Parse JSON response bodies using JsonPath expressions</li>
+ *   <li>Return extracted values for test assertions or late-bound data creation</li>
+ * </ol>
+ * </p>
+ * <p>
+ * This pattern is particularly useful for:
+ * <ul>
+ *   <li>Validating backend responses during UI operations</li>
+ *   <li>Extracting dynamic data (IDs, tokens) from AJAX responses</li>
+ *   <li>Creating context-aware test data based on application state</li>
+ * </ul>
+ * </p>
+ */
 public class DataExtractorFunctions {
 
    private DataExtractorFunctions() {

@@ -11,6 +11,22 @@ import org.openqa.selenium.By;
 
 import java.util.function.Consumer;
 
+/**
+ * Registry of select/dropdown UI elements for the Bakery Flow application.
+ * <p>
+ * Each enum constant defines a specific dropdown/combo-box with its Selenium locator,
+ * component type, and optional before/after synchronization hooks. Implements {@link SelectUiElement} to integrate
+ * with ROA's fluent UI testing API, enabling operations like
+ * {@code quest.use(RING_OF_UI).select().selectOption(LOCATION_DDL, "Store")}.
+ * </p>
+ * <p>
+ * Before/after hooks leverage {@link SharedUi} functions to handle asynchronous page behavior
+ * and to ensure the dropdown is fully rendered before interaction, preventing race conditions in dynamic UIs.
+ * </p>
+ * <p>
+ * The nested {@link Data} class provides string constants for annotation-based references.
+ * </p>
+ */
 public enum SelectFields implements SelectUiElement {
 
    LOCATION_DDL(By.cssSelector("vaadin-combo-box#pickupLocation"), SelectFieldTypes.VA_SELECT_TYPE,

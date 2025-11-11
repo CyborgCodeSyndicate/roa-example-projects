@@ -12,6 +12,23 @@ import org.openqa.selenium.By;
 
 import java.util.function.Consumer;
 
+/**
+ * Registry of button UI elements for the Bakery Flow application.
+ * <p>
+ * Each enum constant defines a specific button with its Selenium locator,
+ * component type, and optional before/after synchronization hooks to handle dynamic page behavior.
+ * Implements {@link ButtonUiElement} to integrate with ROA's fluent UI testing API,
+ * enabling operations like {@code quest.use(RING_OF_UI).button().click(SIGN_IN_BUTTON)}.
+ * </p>
+ * <p>
+ * Buttons may use custom wait strategies via {@link SharedUi} to ensure clickability,
+ * wait for overlays, or verify element removal after interaction. These patterns handle
+ * asynchronous UI updates and modal dialogs.
+ * </p>
+ * <p>
+ * The nested {@link Data} class provides string constants for annotation-based references.
+ * </p>
+ */
 public enum ButtonFields implements ButtonUiElement {
 
    SIGN_IN_BUTTON(By.tagName("vaadin-button"), ButtonFieldTypes.VA_BUTTON_TYPE,
