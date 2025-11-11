@@ -1,9 +1,9 @@
 package io.cyborgcode.ui.complex.test.framework;
 
+import io.cyborgcode.ui.complex.test.framework.data.test_data.Data;
 import io.cyborgcode.ui.complex.test.framework.data.test_data.StaticData;
 import io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator;
-import io.cyborgcode.ui.complex.test.framework.data.test_data.DataProperties;
 import io.cyborgcode.ui.complex.test.framework.db.hooks.DbHookFlows;
 import io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions;
 import io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields;
@@ -15,7 +15,6 @@ import io.cyborgcode.ui.complex.test.framework.ui.authentication.AppUiLogin;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.db.annotations.DB;
 import io.cyborgcode.roa.db.annotations.DbHook;
-import io.cyborgcode.roa.db.annotations.DbHooks;
 import io.cyborgcode.roa.framework.annotation.*;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
@@ -27,7 +26,6 @@ import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
 import io.cyborgcode.roa.ui.selenium.smart.SmartWebElement;
 import io.cyborgcode.roa.ui.util.strategy.Strategy;
 import io.qameta.allure.Description;
-import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
@@ -49,13 +47,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 class BakeryEvolvingTest extends BaseQuest {
 
-
    @Test
    @Regression
-   @Description("Raw usage")
-   @StaticTestData(StaticData.class)
-   void createOrderRaw(Quest quest) {
-
+   @Description("Baseline order creation flow without advanced framework features and static raw data usage")
+   void createOrderUsingRawData(Quest quest) {
       quest
             .use(RING_OF_UI)
             .browser().navigate("https://bakery-flow.demo.vaadin.com/")
@@ -82,28 +77,69 @@ class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Raw usage")
-   @StaticTestData(StaticData.class)
-   void createOrderRaw2(Quest quest) {
-      String username = QuestHolder.get().getStorage().get(staticTestData(StaticData.USERNAME), String.class);
-      String password = QuestHolder.get().getStorage().get(staticTestData(StaticData.PASSWORD), String.class);
+   @Description("Order creation flow using externalized test data properties")
+   void createOrderUsingTestDataProperties(Quest quest) {
+      Seller seller = Seller.builder()
+            .username(Data.testData().sellerEmail())
+            .password(Data.testData().sellerPassword())
+            .build();
 
+      Order order = Order.builder()
+            .customerName(Data.testData().customerName())
+            .customerDetails(Data.testData().customerDetails())
+            .phoneNumber(Data.testData().phoneNumber())
+            .location(Data.testData().location())
+            .product(Data.testData().product())
+            .build();
 
       quest
             .use(RING_OF_UI)
-            .browser().navigate("https://bakery-flow.demo.vaadin.com/")
+            .browser().navigate(getUiConfig().baseUrl())
+            .input().insert(InputFields.USERNAME_FIELD, seller.getUsername())
+            .input().insert(InputFields.PASSWORD_FIELD, seller.getPassword())
+            .button().click(ButtonFields.SIGN_IN_BUTTON)
+            .button().click(ButtonFields.NEW_ORDER_BUTTON)
+            .input().insert(InputFields.CUSTOMER_FIELD, order.getCustomerName())
+            .input().insert(InputFields.DETAILS_FIELD, order.getCustomerDetails())
+            .input().insert(InputFields.NUMBER_FIELD, order.getPhoneNumber())
+            .select().selectOption(LOCATION_DDL, order.getLocation())
+            .select().selectOptions(PRODUCTS_DDL, order.getProduct())
+            .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
+            .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+            .input().insert(InputFields.SEARCH_BAR_FIELD, order.getCustomerName())
+            .validate(() -> {
+                SuperQuest superQuest = QuestHolder.get();
+                List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
+                        .findSmartElements(By.cssSelector("h3[class='name']"));
+                assertTrue(elements.stream().anyMatch(e -> e.getText().equalsIgnoreCase(order.getCustomerName())));
+            })
+            .complete();
+   }
+
+   @Test
+   @Regression
+   @Description("Order creation flow using static test data feature")
+   @StaticTestData(StaticData.class)
+   void createOrderUsingStaticTestDataFeature(Quest quest) {
+      String username = QuestHolder.get().getStorage().get(staticTestData(StaticData.USERNAME), String.class);
+      String password = QuestHolder.get().getStorage().get(staticTestData(StaticData.PASSWORD), String.class);
+      Order order = QuestHolder.get().getStorage().get(staticTestData(StaticData.ORDER), Order.class);
+
+      quest
+            .use(RING_OF_UI)
+            .browser().navigate(getUiConfig().baseUrl())
             .input().insert(InputFields.USERNAME_FIELD, username)
             .input().insert(InputFields.PASSWORD_FIELD, password)
             .button().click(ButtonFields.SIGN_IN_BUTTON)
             .button().click(ButtonFields.NEW_ORDER_BUTTON)
-            .input().insert(InputFields.CUSTOMER_FIELD, "John Terry")
-            .input().insert(InputFields.DETAILS_FIELD, "Address")
-            .input().insert(InputFields.NUMBER_FIELD, "+1-555-7777")
-            .select().selectOption(LOCATION_DDL, "Store")
+            .input().insert(InputFields.CUSTOMER_FIELD, order.getCustomerName())
+            .input().insert(InputFields.DETAILS_FIELD, order.getCustomerDetails())
+            .input().insert(InputFields.NUMBER_FIELD, order.getPhoneNumber())
+            .select().selectOption(LOCATION_DDL, order.getLocation())
             .select().selectOptions(PRODUCTS_DDL, Strategy.FIRST)
             .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
             .button().click(ButtonFields.PLACE_ORDER_BUTTON)
-            .input().insert(InputFields.SEARCH_BAR_FIELD, "John Terry")
+            .input().insert(InputFields.SEARCH_BAR_FIELD, order.getCustomerName())
             .validate(() -> {
                 SuperQuest superQuest = QuestHolder.get();
                 List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
@@ -113,29 +149,16 @@ class BakeryEvolvingTest extends BaseQuest {
             .complete();
    }
 
-
    @Test
-   @Regression
-   @Description("Raw with Data usage")
-   void createOrderRawData(Quest quest) {
-      final DataProperties dataProperties = ConfigCache.getOrCreate(DataProperties.class);
-
-      Seller seller = Seller.builder()
-            .username(dataProperties.sellerEmail())
-            .password(dataProperties.sellerPassword())
-            .build();
-
-      Order order = Order.builder()
-            .customerName(dataProperties.customerName())
-            .customerDetails(dataProperties.customerDetails())
-            .phoneNumber(dataProperties.phoneNumber())
-            .location(dataProperties.location())
-            .product(dataProperties.product())
-            .build();
-
+   @Description("Order creation flow using craft feature to create domain objects")
+   void createOrderUsingCraftFeature(Quest quest,
+         // Craft: provides a typed model instance resolved by the data creator
+         @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
+         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
+            // Using crafted model values directly in UI steps
             .input().insert(InputFields.USERNAME_FIELD, seller.getUsername())
             .input().insert(InputFields.PASSWORD_FIELD, seller.getPassword())
             .button().click(ButtonFields.SIGN_IN_BUTTON)
@@ -157,45 +180,15 @@ class BakeryEvolvingTest extends BaseQuest {
             .complete();
    }
 
-
    @Test
-   @Description("Craft usage")
-   void createOrderCraft(Quest quest,
+   @Description("Order creation flow using craft and insertion features")
+   void createOrderUsingCraftAndInsertionFeatures(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
-            .input().insert(InputFields.USERNAME_FIELD, seller.getUsername())
-            .input().insert(InputFields.PASSWORD_FIELD, seller.getPassword())
-            .button().click(ButtonFields.SIGN_IN_BUTTON)
-            .button().click(ButtonFields.NEW_ORDER_BUTTON)
-            .input().insert(InputFields.CUSTOMER_FIELD, order.getCustomerName())
-            .input().insert(InputFields.DETAILS_FIELD, order.getCustomerDetails())
-            .input().insert(InputFields.NUMBER_FIELD, order.getPhoneNumber())
-            .select().selectOption(LOCATION_DDL, order.getLocation())
-            .select().selectOptions(PRODUCTS_DDL, order.getProduct())
-            .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
-            .button().click(ButtonFields.PLACE_ORDER_BUTTON)
-            .input().insert(InputFields.SEARCH_BAR_FIELD, order.getCustomerName())
-            .validate(() -> {
-               SuperQuest superQuest = QuestHolder.get();
-               List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
-                     .findSmartElements(By.cssSelector("h3[class='name']"));
-               assertTrue(elements.stream().anyMatch(e -> e.getText().equalsIgnoreCase(order.getCustomerName())));
-            })
-            .complete();
-   }
-
-
-   @Test
-   @Description("Insertion and Craft usage")
-   void createOrderInsertion(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
-      quest
-            .use(RING_OF_UI)
-            .browser().navigate(getUiConfig().baseUrl())
+            // insertion(): maps model fields to UI inputs in a single call
             .insertion().insertData(seller)
             .button().click(ButtonFields.SIGN_IN_BUTTON)
             .button().click(ButtonFields.NEW_ORDER_BUTTON)
@@ -214,11 +207,12 @@ class BakeryEvolvingTest extends BaseQuest {
 
 
    @Test
-   @Description("Service and Craft usage")
-   void createOrderService(Quest quest,
+   @Description("Order creation flow using craft and custom service features")
+   void createOrderUsingCraftAndCustomServiceFeatures(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
+            // Use a custom ring (service) exposing domain-specific fluent methods
             .use(RING_OF_CUSTOM)
             .login(seller)
             .createOrder(order)
