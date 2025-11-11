@@ -28,5 +28,5 @@ public class PurchaseForeignCurrency {
    private String amount;
 
    @InsertionElement(locatorClass = RadioFields.class, elementEnum = DOLLARS_RADIO_FIELD, order = 3)
-   private String usDollar;
+   private boolean usDollar;
 }

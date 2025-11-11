@@ -11,7 +11,7 @@ public final class DataCreatorFunctions {
       return PurchaseForeignCurrency.builder()
             .currency("Mexico (peso)")
             .amount("100")
-            .usDollar("U.S. dollar (USD)")
+            .usDollar(true)
             .build();
    }
 

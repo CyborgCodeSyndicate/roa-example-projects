@@ -13,19 +13,37 @@ import io.cyborgcode.ui.simple.test.framework.ui.elements.InputFields;
 import io.cyborgcode.ui.simple.test.framework.ui.elements.LinkFields;
 import io.cyborgcode.ui.simple.test.framework.ui.elements.SelectFields;
 import io.qameta.allure.Description;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.ui.simple.test.framework.base.Rings.RING_OF_UI;
 
+/**
+ * Represents an authenticated UI test suite that integrates with the {@link AuthenticateViaUi}.
+ *
+ * <p>This class demonstrates a single cached login via {@code cacheCredentials = true}.
+ * The authenticated session is reused as a precondition across tests in this class to reduce
+ * boilerplate and speed up execution. The first annotated test performs the login and
+ * subsequent annotated tests reuse the cached session.
+ *
+ * <p>The {@link AuthenticateViaUi} annotation must be applied at the test method level.
+ * If an isolated session is needed per test, set {@code cacheCredentials = false}.
+ *
+ * <p>Examples target the Zero Bank demo app (via {@code getUiConfig().baseUrl()}),
+ * but the patterns are app-agnostic and reusable across projects.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @UI
-class ZeroBankAuthTest extends BaseQuest {
-
+@DisplayName("UI Authentication with Cached Session")
+class AuthenticationViaUITests extends BaseQuest {
 
    @Test()
-   @Description("COMPONENTS: Button, Input, Link, Select, Alert")
+   @Description("Login is handled once via @AuthenticateViaUi and reused")
    @Regression
+   // Uses @AuthenticateViaUi with cacheCredentials=true so login runs once and is reused across tests
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
-   void testScenario1(Quest quest) {
+   void testScenario_1(Quest quest) {
       quest
             .use(RING_OF_UI)
             .link().click(LinkFields.TRANSFER_FUNDS_LINK)
@@ -40,10 +58,10 @@ class ZeroBankAuthTest extends BaseQuest {
    }
 
    @Test()
-   @Description("COMPONENTS: Button, Input, Link, Select, Alert")
+   @Description("Login session is reused from cached login")
    @Regression
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
-   void testScenario2(Quest quest) {
+   void testScenario_2(Quest quest) {
       quest
             .use(RING_OF_UI)
             .link().click(LinkFields.TRANSFER_FUNDS_LINK)
@@ -58,10 +76,10 @@ class ZeroBankAuthTest extends BaseQuest {
    }
 
    @Test()
-   @Description("COMPONENTS: Button, Input, Link, Select, Alert")
+   @Description("Login session is reused from cached login")
    @Regression
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
-   void testScenario3(Quest quest) {
+   void testScenario_3(Quest quest) {
       quest
             .use(RING_OF_UI)
             .link().click(LinkFields.TRANSFER_FUNDS_LINK)

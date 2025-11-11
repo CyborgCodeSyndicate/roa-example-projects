@@ -42,8 +42,7 @@ import static io.cyborgcode.roa.ui.validator.UiTablesAssertionTarget.TABLE_VALUE
 import static io.cyborgcode.ui.simple.test.framework.base.Rings.RING_OF_UI;
 
 @UI
-class ZeroBankTableTest extends BaseQuest {
-
+class TableComponentTests extends BaseQuest {
 
    @Test
    @Description("COMPONENTS: Button, Input, Link, List, Validate, Select, Table")

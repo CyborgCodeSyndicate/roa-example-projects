@@ -9,7 +9,7 @@ import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
 import static io.cyborgcode.ui.simple.test.framework.base.Rings.RING_OF_PURCHASE_CURRENCY;
 import static io.cyborgcode.ui.simple.test.framework.base.Rings.RING_OF_UI;
 
-public class PreconditionFunctions {
+public final class PreconditionFunctions {
 
    private PreconditionFunctions() {
    }
