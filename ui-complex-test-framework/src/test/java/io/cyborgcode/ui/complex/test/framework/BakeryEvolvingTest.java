@@ -35,7 +35,6 @@ import java.util.List;
 
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_UI;
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_CUSTOM;
-import static io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions.Data.LOGIN_PRECONDITION;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.LOCATION_DDL;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.PRODUCTS_DDL;
 import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
@@ -45,11 +44,9 @@ import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @UI
-@DB
 @API
-@DbHooks({
-      @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
-})
+@DB
+@DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 class BakeryEvolvingTest extends BaseQuest {
 
 
@@ -58,8 +55,39 @@ class BakeryEvolvingTest extends BaseQuest {
    @Description("Raw usage")
    @StaticTestData(StaticData.class)
    void createOrderRaw(Quest quest) {
+
+      quest
+            .use(RING_OF_UI)
+            .browser().navigate("https://bakery-flow.demo.vaadin.com/")
+            .input().insert(InputFields.USERNAME_FIELD, "admin@vaadin.com")
+            .input().insert(InputFields.PASSWORD_FIELD, "admin")
+            .button().click(ButtonFields.SIGN_IN_BUTTON)
+            .button().click(ButtonFields.NEW_ORDER_BUTTON)
+            .input().insert(InputFields.CUSTOMER_FIELD, "John Terry")
+            .input().insert(InputFields.DETAILS_FIELD, "Address")
+            .input().insert(InputFields.NUMBER_FIELD, "+1-555-7777")
+            .select().selectOption(LOCATION_DDL, "Store")
+            .select().selectOptions(PRODUCTS_DDL, Strategy.FIRST)
+            .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
+            .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+            .input().insert(InputFields.SEARCH_BAR_FIELD, "John Terry")
+            .validate(() -> {
+               SuperQuest superQuest = QuestHolder.get();
+               List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
+                     .findSmartElements(By.cssSelector("h3[class='name']"));
+               assertTrue(elements.stream().anyMatch(e -> e.getText().equalsIgnoreCase("John Terry")));
+            })
+            .complete();
+   }
+
+   @Test
+   @Regression
+   @Description("Raw usage")
+   @StaticTestData(StaticData.class)
+   void createOrderRaw2(Quest quest) {
       String username = QuestHolder.get().getStorage().get(staticTestData(StaticData.USERNAME), String.class);
       String password = QuestHolder.get().getStorage().get(staticTestData(StaticData.PASSWORD), String.class);
+
 
       quest
             .use(RING_OF_UI)
@@ -77,10 +105,10 @@ class BakeryEvolvingTest extends BaseQuest {
             .button().click(ButtonFields.PLACE_ORDER_BUTTON)
             .input().insert(InputFields.SEARCH_BAR_FIELD, "John Terry")
             .validate(() -> {
-               SuperQuest superQuest = QuestHolder.get();
-               List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
-                     .findSmartElements(By.cssSelector("h3[class='name']"));
-               assertTrue(elements.stream().anyMatch(e -> e.getText().equalsIgnoreCase("John Terry")));
+                SuperQuest superQuest = QuestHolder.get();
+                List<SmartWebElement> elements = superQuest.artifact(RING_OF_UI, SmartWebDriver.class)
+                        .findSmartElements(By.cssSelector("h3[class='name']"));
+                assertTrue(elements.stream().anyMatch(e -> e.getText().equalsIgnoreCase("John Terry")));
             })
             .complete();
    }
@@ -214,7 +242,7 @@ class BakeryEvolvingTest extends BaseQuest {
 
    @Test
    @Description("PreQuest, Craft and Service usage")
-   @Journey(value = LOGIN_PRECONDITION,
+   @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
           journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
           journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
