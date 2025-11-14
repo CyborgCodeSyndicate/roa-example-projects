@@ -55,7 +55,7 @@ public class Constants {
       public static final String TRANSACTION_DESCRIPTION_TELECOM = "TELECOM";
       public static final String TRANSACTION_FROM_DATE = "2012-01-01";
       public static final String TRANSACTION_TO_DATE = "2012-12-31";
-      public static final String TRANSACTION_AMOUNT_1 = "100";
+      public static final String TRANSACTION_AMOUNT_1 = "1";
       public static final String TRANSACTION_AMOUNT_100 = "100";
       public static final String TRANSACTION_AMOUNT_1000 = "1000";
       public static final String TRANSACTION_TYPE_DEPOSIT = "Deposit";

@@ -44,7 +44,6 @@ public class RadioBootstrapImpl extends BaseComponent implements Radio {
    public static final String CHECKED_CLASS_INDICATOR = "checked";
    public static final String DISABLED_CLASS_INDICATOR = "disabled";
    public static final String VISIBLE_CLASS_INDICATOR = "hidden";
-   public static final String CLASS_PROPERTY = "class";
 
 
    public RadioBootstrapImpl(SmartWebDriver driver) {
@@ -203,13 +202,8 @@ public class RadioBootstrapImpl extends BaseComponent implements Radio {
 
 
    private boolean hasClass(SmartWebElement element, String classToken) {
-      String classes = element.getDomAttribute(CLASS_PROPERTY);
-      if (classes == null) {
-         throw new IllegalStateException(
-               "Missing 'class' attribute on element; cannot verify presence of class token '" + classToken + "'."
-         );
-      }
-      return classes.contains(classToken);
+      String classes = element.getDomAttribute("class");
+      return classes != null && classes.contains(classToken);
    }
 
 

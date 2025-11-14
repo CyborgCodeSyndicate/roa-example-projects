@@ -44,7 +44,7 @@ public class ListBootstrapImpl extends BaseComponent implements ItemList {
 
    private static final By LIST_ITEM_ELEMENT_SELECTOR = By.tagName("li");
    private static final By ITEM_LABEL_LOCATOR = By.tagName("a");
-   private static final String SELECTED_STATE = "selected";
+   private static final String SELECTED_STATE = "active";
    private static final String DISABLED_STATE = "disabled";
 
 
@@ -379,12 +379,18 @@ public class ListBootstrapImpl extends BaseComponent implements ItemList {
    }
 
 
+   private boolean hasClass(SmartWebElement element, String classToken) {
+      String classes = element.getDomAttribute("class");
+      return classes != null && classes.contains(classToken);
+   }
+
+
    private boolean isSelected(SmartWebElement listItem) {
-      return Objects.requireNonNull(listItem.getDomAttribute("class")).contains(SELECTED_STATE);
+      return hasClass(listItem, SELECTED_STATE);
    }
 
 
    private boolean isEnabled(SmartWebElement listItem) {
-      return !Objects.requireNonNull(listItem.getDomAttribute("class")).contains(DISABLED_STATE);
+      return !hasClass(listItem, DISABLED_STATE);
    }
 }
