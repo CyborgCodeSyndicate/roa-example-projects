@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.tutorial;
+package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
@@ -17,7 +17,6 @@ import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.annotation.Craft;
 import io.cyborgcode.roa.framework.annotation.Journey;
 import io.cyborgcode.roa.framework.annotation.JourneyData;
-import io.cyborgcode.roa.framework.annotation.PreQuest;
 import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.annotation.Ripper;
 import io.cyborgcode.roa.framework.base.BaseQuest;
@@ -114,11 +113,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * - response storage and {@code retrieve} usage across steps
  * - {@link Craft} and {@link Late} for request model creation
  * - dynamic path/header values from previous responses
- * - {@link AuthenticateViaApi}, {@link PreQuest}, and {@link Ripper} flows
+ * - {@link AuthenticateViaApi}, {@link Journey}, and {@link Ripper} flows
  * - usage of a custom ring ({@code RING_OF_CUSTOM}) for reusable services.
  */
 @API
-class UsersAdvancedExamplesTest extends BaseQuest {
+class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
@@ -218,7 +217,7 @@ class UsersAdvancedExamplesTest extends BaseQuest {
    @Regression
    @Description("Creates a user using a @Craft model as the request payload.")
    void createsUserFromCraftModel(Quest quest,
-                                       @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser) {
+                                  @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
@@ -234,8 +233,8 @@ class UsersAdvancedExamplesTest extends BaseQuest {
    @Regression
    @Description("Combines a GET and POST where the POST body is built lazily using a Late<@Craft> model.")
    void createsJuniorUserUsingLateCraftModel(Quest quest,
-                                                  @Craft(model = DataCreator.Data.USER_JUNIOR)
-                                                  Late<CreateUserDto> juniorUser) {
+                                             @Craft(model = DataCreator.Data.USER_JUNIOR)
+                                             Late<CreateUserDto> juniorUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
@@ -253,10 +252,10 @@ class UsersAdvancedExamplesTest extends BaseQuest {
    @Regression
    @Description("Creates two users using a mix of @Craft and Late<@Craft> models in a chained flow.")
    void createsTwoUsersUsingCraftAndLateModels(Quest quest,
-                                                    @Craft(model = DataCreator.Data.USER_LEADER)
-                                                    CreateUserDto leaderUser,
-                                                    @Craft(model = DataCreator.Data.USER_SENIOR)
-                                                    Late<CreateUserDto> seniorUser) {
+                                               @Craft(model = DataCreator.Data.USER_LEADER)
+                                               CreateUserDto leaderUser,
+                                               @Craft(model = DataCreator.Data.USER_SENIOR)
+                                               Late<CreateUserDto> seniorUser) {
       quest.use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
@@ -283,8 +282,8 @@ class UsersAdvancedExamplesTest extends BaseQuest {
    @Regression
    @Description("Logs in using @Craft credentials, stores the token, and reuses it as a header in the next request.")
    void loginsAndCallsGetUserWithTokenFromStorage(Quest quest,
-                                                      @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
-                                                      LoginDto loginAdminUser) {
+                                                  @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
+                                                  LoginDto loginAdminUser) {
       quest.use(RING_OF_API)
             .request(POST_LOGIN_USER, loginAdminUser)
             .requestAndValidate(
@@ -301,20 +300,20 @@ class UsersAdvancedExamplesTest extends BaseQuest {
 
    @Test
    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
-   @PreQuest({
-         @Journey(
-               value = Preconditions.Data.CREATE_NEW_USER,
-               journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)},
-               order = 2),
-         @Journey(
-               value = Preconditions.Data.CREATE_NEW_USER,
-               journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)},
-               order = 1)
-   })
+   @Journey(
+         value = Preconditions.Data.CREATE_NEW_USER,
+         journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)},
+         order = 1
+   )
+   @Journey(
+         value = Preconditions.Data.CREATE_NEW_USER,
+         journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)},
+         order = 2
+   )
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Regression
-   @Description("Executes a full user lifecycle using AuthenticateViaApi, PreQuest journeys, and a Ripper cleanup.")
-   void executesUserLifecycleWithPreQuestAndRipper(Quest quest) {
+   @Description("Executes a full user lifecycle using AuthenticateViaApi, Journey preconditions, and a Ripper cleanup.")
+   void executesUserLifecycleWithJourneyAndRipper(Quest quest) {
       quest.use(RING_OF_API)
             .validate(() -> {
                CreatedUserDto createdUser =
@@ -332,8 +331,8 @@ class UsersAdvancedExamplesTest extends BaseQuest {
    @Regression
    @Description("Uses a custom service ring to log in and call the users endpoint with a preconfigured header.")
    void usesCustomServiceRingToLoginAndFetchUsers(Quest quest,
-                                                       @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
-                                                       LoginDto loginAdminUser) {
+                                                  @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
+                                                  LoginDto loginAdminUser) {
       quest.use(RING_OF_CUSTOM)
             .loginUserAndAddSpecificHeader(loginAdminUser)
             .drop()
@@ -349,8 +348,8 @@ class UsersAdvancedExamplesTest extends BaseQuest {
    @Regression
    @Description("Delegates the entire flow to a custom service ring that validates all users.")
    void usesCustomServiceRingToValidateAllUsers(Quest quest,
-                                                     @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
-                                                     LoginDto loginAdminUser) {
+                                                @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
+                                                LoginDto loginAdminUser) {
       quest.use(RING_OF_CUSTOM)
             .loginUserAndAddSpecificHeader(loginAdminUser)
             .requestAndValidateGetAllUsers()

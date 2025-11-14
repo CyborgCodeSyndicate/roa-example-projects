@@ -1,8 +1,8 @@
 package io.cyborgcode.api.test.framework.api.authentication;
 
-import io.cyborgcode.api.test.framework.data.retriever.TestData;
+import io.cyborgcode.api.test.framework.data.test_data.Data;
+import io.cyborgcode.api.test.framework.data.test_data.DataProperties;
 import io.cyborgcode.roa.api.authentication.Credentials;
-import org.aeonbits.owner.ConfigCache;
 
 /**
  * AdminAuth
@@ -10,7 +10,7 @@ import org.aeonbits.owner.ConfigCache;
  * Implementation of {@link Credentials} used by the ROA framework to authenticate
  * against Reqres (or a similar target) using admin-level test credentials.
  * <p>
- * The username and password are resolved from {@link TestData}, which is backed by
+ * The username and password are resolved from {@link DataProperties}, which is backed by
  * the Owner configuration and externalized test properties. This allows:
  * <ul>
  *   <li>Centralized management of authentication data for tests</li>
@@ -20,16 +20,14 @@ import org.aeonbits.owner.ConfigCache;
  */
 public class AdminAuth implements Credentials {
 
-   private static final TestData DATA_PROPERTIES = ConfigCache.getOrCreate(TestData.class);
-
    @Override
    public String username() {
-      return DATA_PROPERTIES.username();
+      return Data.testData().username();
    }
 
    @Override
    public String password() {
-      return DATA_PROPERTIES.password();
+      return Data.testData().password();
    }
 
 }

@@ -1,13 +1,12 @@
-package io.cyborgcode.api.test.framework.tutorial;
+package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
-import io.cyborgcode.api.test.framework.data.retriever.TestData;
+import io.cyborgcode.api.test.framework.data.test_data.Data;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.validator.core.Assertion;
 import io.qameta.allure.Description;
-import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
@@ -29,13 +28,11 @@ import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 @API
 class LoginNegativeScenariosTest extends BaseQuest {
 
-   private static final TestData DATA = ConfigCache.getOrCreate(TestData.class);
-
    @Test
    @Description("Verifies that a login request without password returns 400 and MISSING_PASSWORD_ERROR.")
    void returns400AndErrorWhenPasswordIsMissing(Quest quest) {
       LoginDto login = LoginDto.builder()
-            .email(DATA.username())
+            .email(Data.testData().username())
             .build();
 
       quest.use(RING_OF_API)
@@ -53,7 +50,7 @@ class LoginNegativeScenariosTest extends BaseQuest {
    @Description("Verifies that a login request without email returns 400 and MISSING_EMAIL_ERROR.")
    void returns400AndErrorWhenEmailIsMissing(Quest quest) {
       LoginDto login = LoginDto.builder()
-            .password(DATA.password())
+            .password(Data.testData().password())
             .build();
 
       quest.use(RING_OF_API)
@@ -72,7 +69,7 @@ class LoginNegativeScenariosTest extends BaseQuest {
    void returns400AndErrorWhenEmailIsInvalid(Quest quest) {
       LoginDto login = LoginDto.builder()
             .email(INVALID_EMAIL)
-            .password(DATA.password())
+            .password(Data.testData().password())
             .build();
 
       quest.use(RING_OF_API)
