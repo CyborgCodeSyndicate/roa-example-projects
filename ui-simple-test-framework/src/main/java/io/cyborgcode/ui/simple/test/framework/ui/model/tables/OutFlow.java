@@ -12,6 +12,28 @@ import lombok.Setter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 
+/**
+ * Row projection model for the "Outflow" report table.
+ *
+ * <p>This model maps a single table row into strongly-typed cells using ROA table
+ * annotations. The class is wired to the table DOM via {@link TableInfo},
+ * and each field is bound to a specific cell and header using
+ * {@link TableCellLocator}.
+ *
+ * <p>Integration:
+ * <ul>
+ *   <li>{@link TableInfo} declares the table container, rows, and header row locators
+ *       (container: {@code #report-1016}).</li>
+ *   <li>{@link TableCellLocator} binds each {@link TableCell} to its column cell locator
+ *       and corresponding header locator to ensure stable column mapping.</li>
+ *   <li>{@link CustomCellInsertion} on {@code details} uses {@code CustomClickButton}
+ *       to trigger an action inside the cell (clicks an {@code <img>} element).</li>
+ *   <li>Used together with the {@code Tables.OUTFLOW} element to project table rows into instances of this
+ *       model for readable assertions.</li>
+ * </ul>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @TableInfo(
       tableContainerLocator = @FindBy(id = "report-1016"),
       rowsLocator = @FindBy(xpath = "(//tbody)[4]//tr//td/.."),

@@ -10,28 +10,51 @@ import io.cyborgcode.ui.simple.test.framework.ui.types.ButtonFieldTypes;
 import java.util.function.Consumer;
 import org.openqa.selenium.By;
 
+/**
+ * Registry of button UI elements for the Zero Bank demo application.
+ *
+ * <p>Each enum constant defines a specific button with its Selenium {@link By}
+ * locator, concrete component type (see {@link ButtonComponentType}),
+ * and optional before/after synchronization hooks to handle dynamic page behavior.
+ *
+ * <p>Implements {@link ButtonUiElement} to integrate with ROA fluent UI testing API, enabling operations like:
+ *
+ * <p>Example usage:
+ * <pre>{@code
+ * quest
+ *     .use(Rings.RING_OF_UI)
+ *     .button().click(ButtonFields.SIGN_IN_BUTTON);
+ * }</pre>
+ *
+ * <p>Buttons can declare custom wait strategies via {@link SharedUi} and {@link ContextConsumer}
+ * to ensure presence/clickability, wait for overlays, or verify element removal after interaction.
+ * These patterns help stabilize interactions against asynchronous UI updates and page transitions.
+ *
+ * <p>The lifecycle hooks are exposed through {@link #before()} and {@link #after()}, which return
+ * {@link Consumer} instances executed with the active {@link SmartWebDriver}.
+ * This allows per-control synchronization without duplicating waits inside tests.
+ *
+ * <p>Typical usage targets Bootstrap-styled buttons via the {@link ButtonFieldTypes}
+ * mapping to the framework’s {@code Button} component implementation.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 public enum ButtonFields implements ButtonUiElement {
 
-   SIGN_IN_BUTTON(By.id("signin_button"), ButtonFieldTypes.BOOTSTRAP_INPUT_TYPE, SharedUi.WAIT_FOR_PRESENCE),
-   SIGN_IN_FORM_BUTTON(By.cssSelector("input[value='Sign in']"), ButtonFieldTypes.BOOTSTRAP_INPUT_TYPE),
-   SUBMIT_BUTTON(By.id("btn_submit"), ButtonFieldTypes.BOOTSTRAP_INPUT_TYPE),
-   CALCULATE_COST_BUTTON(By.id("pc_calculate_costs"), ButtonFieldTypes.BOOTSTRAP_INPUT_TYPE),
-   PURCHASE_BUTTON(By.id("purchase_cash"), ButtonFieldTypes.BOOTSTRAP_INPUT_TYPE),
-   MORE_SERVICES_BUTTON(By.id("online-banking"), ButtonFieldTypes.BOOTSTRAP_INPUT_TYPE),
-   FIND_SUBMIT_BUTTON(By.cssSelector("button[type='submit']"), ButtonFieldTypes.BOOTSTRAP_INPUT_TYPE),
-   PAY_BUTTON(By.id("pay_saved_payees"), ButtonFieldTypes.BOOTSTRAP_INPUT_TYPE);
+   SIGN_IN_BUTTON(By.id("signin_button"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE, SharedUi.WAIT_FOR_PRESENCE),
+   SIGN_IN_FORM_BUTTON(By.cssSelector("input[value='Sign in']"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE),
+   SUBMIT_BUTTON(By.id("btn_submit"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE),
+   CALCULATE_COST_BUTTON(By.id("pc_calculate_costs"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE),
+   PURCHASE_BUTTON(By.id("purchase_cash"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE),
+   MORE_SERVICES_BUTTON(By.id("online-banking"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE),
+   FIND_SUBMIT_BUTTON(By.cssSelector("button[type='submit']"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE),
+   PAY_BUTTON(By.id("pay_saved_payees"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE);
 
    private final By locator;
    private final ButtonComponentType componentType;
    private final Consumer<SmartWebDriver> before;
    private final Consumer<SmartWebDriver> after;
 
-
-   ButtonFields(final By locator) {
-      this(locator, null, smartWebDriver -> {
-      }, smartWebDriver -> {
-      });
-   }
 
    ButtonFields(final By locator, final ButtonComponentType componentType) {
       this(locator, componentType, smartWebDriver -> {

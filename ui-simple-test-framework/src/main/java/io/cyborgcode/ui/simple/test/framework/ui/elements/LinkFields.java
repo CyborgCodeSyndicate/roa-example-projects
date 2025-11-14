@@ -6,6 +6,27 @@ import io.cyborgcode.roa.ui.selenium.LinkUiElement;
 import io.cyborgcode.ui.simple.test.framework.ui.types.LinkFieldTypes;
 import org.openqa.selenium.By;
 
+/**
+ * Registry of link UI elements for the Zero Bank demo application.
+ *
+ * <p>Each enum constant defines a specific link with its Selenium {@link By}
+ * locator and concrete component type (see {@link LinkComponentType}).
+ * 
+ * <p>Implements {@link LinkUiElement} to integrate with ROA fluent UI testing API
+ * for navigating and triggering link-driven flows.
+ *
+ * <p>Example usage:
+ * <pre>{@code
+ * quest
+ *     .use(Rings.RING_OF_UI)
+ *     .link().click(LinkFields.TRANSFER_FUNDS_LINK);
+ * }</pre>
+ *
+ * <p>Typical usage targets Bootstrap-styled links via {@link LinkFieldTypes}, enabling
+ * consistent identification and interaction across flows.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 public enum LinkFields implements LinkUiElement {
 
    TRANSFER_FUNDS_LINK(By.id("transfer_funds_link"), LinkFieldTypes.BOOTSTRAP_LINK_TYPE),

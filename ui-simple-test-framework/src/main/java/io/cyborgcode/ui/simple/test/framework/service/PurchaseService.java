@@ -10,6 +10,20 @@ import io.cyborgcode.ui.simple.test.framework.ui.model.PurchaseForeignCurrency;
 
 import static io.cyborgcode.ui.simple.test.framework.base.Rings.RING_OF_UI;
 
+/**
+ * High-level, domain-specific service for UI application test operations.
+ *
+ * <p> This custom fluent service extends {@link FluentService} and is registered as the
+ * "PurchaseService" ring via {@code @Ring}. It provides business-logic-focused test operations
+ * that abstract complex UI interaction sequences into reusable, readable methods.
+ * Tests access this service via {@code quest.use(RING_OF_PURCHASE_CURRENCY)}.
+
+ * <p> This service internally delegates to the UI ring ({@code RING_OF_UI}) for low-level
+ * Selenium operations, maintaining the separation between test orchestration and
+ * element interaction logic.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @Ring("PurchaseService")
 public class PurchaseService extends FluentService {
 

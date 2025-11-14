@@ -14,6 +14,19 @@ import static io.cyborgcode.ui.simple.test.framework.ui.elements.InputFields.Dat
 import static io.cyborgcode.ui.simple.test.framework.ui.elements.RadioFields.Data.DOLLARS_RADIO_FIELD;
 import static io.cyborgcode.ui.simple.test.framework.ui.elements.SelectFields.Data.PC_CURRENCY_DDL;
 
+/**
+ * Domain model representing the "Purchase Foreign Currency" flow input.
+ *
+ * <p>This model is used to drive UI insertion for the Purchase Foreign Currency form. Fields annotated with
+ * {@link InsertionElement} enable automatic form filling via ROA insertion mechanism: 
+ * {@code quest.use(Rings.RING_OF_UI).insertion().insertData(purchase)} 
+ * will populate the select, input, and radio controls in the defined order.
+ *
+ * <p>The {@code @InsertionElement} annotations map each field to a specific UI element and execution order,
+ * abstracting manual input logic and improving test maintainability and readability.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

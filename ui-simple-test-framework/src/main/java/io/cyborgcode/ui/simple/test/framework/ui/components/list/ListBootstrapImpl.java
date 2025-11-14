@@ -16,6 +16,29 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 
+/**
+ * Bootstrap-specific implementation of the {@link ItemList} component.
+ *
+ * <p>This class provides concrete logic for interacting with Bootstrap-styled list groups
+ * (lists composed of {@code <li>} items with nested {@code <a>} labels). It is automatically
+ * selected by ROA component resolution mechanism when a list field is tagged with
+ * {@link ListFieldTypes#BOOTSTRAP_LIST_TYPE} via the {@link ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ * <ul>
+ *   <li>Select or deselect items by label, container, or direct locator</li>
+ *   <li>Strategy-driven selection (RANDOM, FIRST, LAST, ALL) via {@link Strategy}</li>
+ *   <li>State checks: selected, enabled, visible — for specific labels or locators</li>
+ *   <li>Retrieve item labels: {@code getSelected(...)} and {@code getAll(...)}</li>
+ *   <li>Consistent label resolution via nested {@code <a>} elements</li>
+ * </ul>
+ *
+ * <p>This implementation aligns with Bootstrap list markup and class conventions:
+ * selected state via {@code selected} CSS class, disabled state via {@code disabled} CSS class,
+ * and item labeling via anchor text.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @ImplementationOfType(ListFieldTypes.Data.BOOTSTRAP_LIST)
 public class ListBootstrapImpl extends BaseComponent implements ItemList {
 
@@ -184,7 +207,7 @@ public class ListBootstrapImpl extends BaseComponent implements ItemList {
    @Override
    public List<String> getSelected(final SmartWebElement container) {
       List<SmartWebElement> listItems = findListItems(container, true);
-      return listItems.stream().map(this::getLabel).collect(Collectors.toList());
+      return listItems.stream().map(this::getLabel).toList();
    }
 
 
@@ -198,7 +221,7 @@ public class ListBootstrapImpl extends BaseComponent implements ItemList {
    @Override
    public List<String> getAll(final SmartWebElement container) {
       List<SmartWebElement> listItems = findListItems(container, null);
-      return listItems.stream().map(this::getLabel).collect(Collectors.toList());
+      return listItems.stream().map(this::getLabel).toList();
    }
 
 
@@ -216,8 +239,9 @@ public class ListBootstrapImpl extends BaseComponent implements ItemList {
       if (Objects.isNull(onlySelected)) {
          return listItems;
       }
-      return onlySelected ? listItems.stream().filter(this::isSelected).toList() :
-            listItems.stream().filter(listItem -> !isSelected(listItem)).toList();
+      return onlySelected.booleanValue()
+            ? listItems.stream().filter(this::isSelected).toList()
+            : listItems.stream().filter(listItem -> !isSelected(listItem)).toList();
    }
 
 
@@ -237,7 +261,7 @@ public class ListBootstrapImpl extends BaseComponent implements ItemList {
    private void performActionOnListItemsByLocator(By[] itemLocator, boolean select) {
       List<SmartWebElement> listItems = Arrays.stream(itemLocator)
             .map(driver::findSmartElement)
-            .collect(Collectors.toList());
+            .toList();
       listItems = listItems.stream().filter(listItem -> select != isSelected(listItem)).toList();
       listItems.forEach(this::clickIfEnabled);
    }
@@ -296,7 +320,7 @@ public class ListBootstrapImpl extends BaseComponent implements ItemList {
       Set<String> labelSet = Set.of(labels);
       return listItems.stream()
             .filter(listItem -> labelSet.contains(getLabel(listItem)))
-            .collect(Collectors.toList());
+            .toList();
    }
 
 
@@ -356,11 +380,11 @@ public class ListBootstrapImpl extends BaseComponent implements ItemList {
 
 
    private boolean isSelected(SmartWebElement listItem) {
-      return Objects.requireNonNull(listItem.getAttribute("class")).contains(SELECTED_STATE);
+      return Objects.requireNonNull(listItem.getDomAttribute("class")).contains(SELECTED_STATE);
    }
 
 
    private boolean isEnabled(SmartWebElement listItem) {
-      return !Objects.requireNonNull(listItem.getAttribute("class")).contains(DISABLED_STATE);
+      return !Objects.requireNonNull(listItem.getDomAttribute("class")).contains(DISABLED_STATE);
    }
 }
