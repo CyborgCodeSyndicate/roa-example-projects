@@ -15,7 +15,6 @@ package io.cyborgcode.api.test.framework.api.extractors;
 public enum ApiResponsesJsonPaths {
 
    // --- General / Root Keys ---
-   ROOT("$"),
    TOTAL("total"),
    TOTAL_PAGES("total_pages"),
    PER_PAGE("per_page"),
@@ -23,7 +22,6 @@ public enum ApiResponsesJsonPaths {
    // --- Support Information ---
    SUPPORT_URL("support.url"),
    SUPPORT_TEXT("support.text"),
-   SUPPORT_URL_EXPLICIT("support.url"),
 
    // --- Data Container ---
    DATA("data"),
@@ -37,23 +35,8 @@ public enum ApiResponsesJsonPaths {
    SINGLE_USER_EMAIL_EXPLICIT("data.email"),
 
    // --- Create User Response Fields ---
-   CREATE_USER_NAME("name"),
-   CREATE_USER_JOB("job"),
    CREATE_USER_NAME_RESPONSE("name"),
    CREATE_USER_JOB_RESPONSE("job"),
-
-   // --- Resource List (Indexed Fields) ---
-   RESOURCE_ID_BY_INDEX("data[%d].id"),
-   RESOURCE_NAME_BY_INDEX("data[%d].name"),
-   RESOURCE_COLOR_BY_INDEX("data[%d].color"),
-
-   // --- Single Resource (Non-Indexed Fields) ---
-   RESOURCE_ID("data.id"),
-   RESOURCE_NAME("data.name"),
-   RESOURCE_YEAR("data.year"),
-   RESOURCE_COLOR("data.color"),
-   RESOURCE_PANTONE("data.pantone_value"),
-   RESOURCE_PAGE("page"),
 
    // --- Miscellaneous ---
    TOKEN("token"),

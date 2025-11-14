@@ -5,13 +5,12 @@ import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.api.test.framework.api.dto.response.GetUsersDto;
 import io.cyborgcode.api.test.framework.api.dto.response.UserData;
 import io.cyborgcode.api.test.framework.data.constants.TestConstants;
-import io.cyborgcode.api.test.framework.data.retriever.TestData;
+import io.cyborgcode.api.test.framework.data.test_data.Data;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.quest.QuestHolder;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
 import io.cyborgcode.roa.framework.storage.StorageKeysTest;
 import io.restassured.response.Response;
-import org.aeonbits.owner.ConfigCache;
 
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
@@ -31,8 +30,6 @@ import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEA
  */
 public final class DataCreatorFunctions {
 
-   private static final TestData DATA_PROPERTIES = ConfigCache.getOrCreate(TestData.class);
-
    private DataCreatorFunctions() {
    }
 
@@ -45,8 +42,8 @@ public final class DataCreatorFunctions {
 
    public static LoginDto loginAdminUser() {
       return LoginDto.builder()
-            .email(DATA_PROPERTIES.username())
-            .password(DATA_PROPERTIES.password())
+            .email(Data.testData().username())
+            .password(Data.testData().password())
             .build();
    }
 

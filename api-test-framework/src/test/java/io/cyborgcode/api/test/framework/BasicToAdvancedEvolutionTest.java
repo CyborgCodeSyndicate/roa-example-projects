@@ -59,7 +59,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * - Encapsulated flows via {@code RING_OF_EVOLUTION}.
  */
 @API
-class UserLifecycleEvolutionTest extends BaseQuest {
+class BasicToAdvancedEvolutionTest extends BaseQuest {
 
    @Test
    @Regression

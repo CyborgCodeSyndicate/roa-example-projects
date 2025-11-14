@@ -48,9 +48,7 @@ public class TestConstants {
       private Pagination() {
       }
 
-      public static final int PAGE_ONE = 1;
       public static final int PAGE_TWO = 2;
-      public static final int PAGE_THREE = 3;
       public static final List<Integer> TOTAL_USERS_IN_PAGE_RANGE = List.of(5, 15);
    }
 
@@ -62,8 +60,6 @@ public class TestConstants {
       public static final String SUPPORT_TEXT_PREFIX = "Tired of writing";
       public static final String SUPPORT_URL_REGEX =
             "https:\\/\\/contentcaddy\\.io\\?utm_source=reqres&utm_medium=json&utm_campaign=referral";
-      public static final String SUPPORT_TEXT_FULL = "Tired of writing endless social media content?";
-      public static final String SUPPORT_TEXT_BRAND = "Content Caddy";
    }
 
    public static class FileConstants {
@@ -135,8 +131,6 @@ public class TestConstants {
       public static final String USER_SENIOR_JOB = "Senior Leader";
       public static final String USER_INTERMEDIATE_NAME = "Mr. Morpheus";
       public static final String USER_INTERMEDIATE_JOB = "Intermediate Leader";
-      public static final String USER_JUNIOR_NAME = "Michael suffix";
-      public static final String USER_JUNIOR_JOB = "Junior Lawson worker";
    }
 
    public static class Login {
@@ -149,17 +143,4 @@ public class TestConstants {
       public static final String INVALID_EMAIL = "wrong.email@reqres.in";
    }
 
-   public static class Resources {
-      private Resources() {
-      }
-
-      public static final int RESOURCE_ONE_ID = 1;
-      public static final String RESOURCE_ONE_NAME = "cerulean";
-      public static final int RESOURCE_TWO_ID = 2;
-      public static final String RESOURCE_TWO_NAME = "fuchsia rose";
-      public static final int RESOURCE_TWO_YEAR = 2001;
-      public static final String RESOURCE_TWO_COLOR = "#C74375";
-      public static final String RESOURCE_TWO_PANTONE = "17-2031";
-      public static final int RESOURCE_INVALID_ID = 23;
-   }
 }

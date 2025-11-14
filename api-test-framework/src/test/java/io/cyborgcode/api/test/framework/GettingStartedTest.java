@@ -2,14 +2,13 @@ package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
 import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
-import io.cyborgcode.api.test.framework.data.retriever.TestData;
+import io.cyborgcode.api.test.framework.data.test_data.Data;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.validator.core.Assertion;
 import io.qameta.allure.Description;
-import org.aeonbits.owner.ConfigCache;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
@@ -38,24 +37,23 @@ import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_OK;
 
-/**s
+/**
+ * s
  * Minimal entry point for RoA-style API testing with Reqres.
  * <p>
  * IMPORTANT:
  * - This class is annotated with {@link API}, which is required when using RING_OF_API
- *   and the RoA API DSL.
+ * and the RoA API DSL.
  * - Demonstrates:
- *   - Using {@code quest.use(RING_OF_API)}
- *   - Basic GET with query/path parameters
- *   - Basic POST with a request DTO
- *   - Simple assertions on status, headers, and body
+ * - Using {@code quest.use(RING_OF_API)}
+ * - Basic GET with query/path parameters
+ * - Basic POST with a request DTO
+ * - Simple assertions on status, headers, and body
  * For advanced features (preconditions, authentication, ripper, custom rings, evolutions),
  * see the dedicated example classes.
  */
 @API
 class GettingStartedTest extends BaseQuest {
-
-   private static final TestData DATA = ConfigCache.getOrCreate(TestData.class);
 
    @Test
    @Regression
@@ -109,8 +107,8 @@ class GettingStartedTest extends BaseQuest {
    @Description("Verifies that POST_LOGIN_USER with valid credentials returns 200 and a non-null token.")
    void returns200AndTokenWhenCredentialsAreValid(Quest quest) {
       LoginDto loginRequest = LoginDto.builder()
-            .email(DATA.username())
-            .password(DATA.password())
+            .email(Data.testData().username())
+            .password(Data.testData().password())
             .build();
 
       quest.use(RING_OF_API)
