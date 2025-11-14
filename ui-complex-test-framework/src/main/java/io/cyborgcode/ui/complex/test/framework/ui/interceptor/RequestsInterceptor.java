@@ -1,6 +1,7 @@
 package io.cyborgcode.ui.complex.test.framework.ui.interceptor;
 
 import io.cyborgcode.roa.ui.parameters.DataIntercept;
+import io.cyborgcode.ui.complex.test.framework.data.extractor.DataExtractorFunctions;
 
 /**
  * Registry of network request interception patterns for capturing UI traffic.
@@ -19,7 +20,7 @@ import io.cyborgcode.roa.ui.parameters.DataIntercept;
  * </p>
  * <p>
  * These interceptors integrate with ROA's {@code @Intercept} annotation and are used
- * in conjunction with {@link io.cyborgcode.ui.complex.test.framework.data.extractor.DataExtractorFunctions}
+ * in conjunction with {@link DataExtractorFunctions}
  * to parse response bodies and extract values for assertions or late-bound data creation.
  * </p>
  * <p>

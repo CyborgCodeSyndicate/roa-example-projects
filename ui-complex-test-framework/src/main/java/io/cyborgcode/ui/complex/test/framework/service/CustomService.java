@@ -19,7 +19,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
 import java.util.Objects;
 
+import static io.cyborgcode.roa.framework.storage.StorageKeysTest.PRE_ARGUMENTS;
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_UI;
+import static io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator.VALID_ORDER;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields.NEW_ORDER_BUTTON;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields.SIGN_IN_BUTTON;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.*;
@@ -43,6 +45,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Ring("Custom")
 public class CustomService extends FluentService {
 
+   private static final By HEADER_LOCATOR = By.cssSelector("h3[class='name']");
+   private static final By LOGOUT_LOCATOR = By.tagName("vaadin-login-overlay");
 
    public CustomService login(String username, String password) {
       quest
@@ -56,7 +60,6 @@ public class CustomService extends FluentService {
       return this;
    }
 
-
    public CustomService login(Seller seller) {
       quest
             .use(RING_OF_UI)
@@ -69,7 +72,6 @@ public class CustomService extends FluentService {
       return this;
    }
 
-
    public CustomService loginUsingInsertion(Seller seller) {
       quest
             .use(RING_OF_UI)
@@ -81,14 +83,13 @@ public class CustomService extends FluentService {
       return this;
    }
 
-
    public CustomService logout() {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
             .link().click(LinkFields.LOGOUT_LINK)
             .validate(() -> quest.artifact(RING_OF_UI, SmartWebDriver.class).getWait()
-                  .until(ExpectedConditions.presenceOfElementLocated(By.tagName("vaadin-login-overlay"))));
+                  .until(ExpectedConditions.presenceOfElementLocated(LOGOUT_LOCATOR)));
       return this;
    }
 
@@ -110,38 +111,12 @@ public class CustomService extends FluentService {
       return this;
    }
 
-   /*public CustomService createOrder(Order order) {
-      quest
-            .use(EARTH)
-            .button().click(ButtonFields.NEW_ORDER_BUTTON)
-            .input().insert(InputFields.CUSTOMER_FIELD, order.getCustomerName())
-            .input().validateValue(InputFields.CUSTOMER_FIELD, order.getCustomerName())
-            .select().selectOptions(SelectFields.PRODUCTS_DDL, Strategy.FIRST)
-            .select().validateSelectedOptions(SelectFields.PRODUCTS_DDL, order.getProduct())
-            .select().validateAvailableOptions(SelectFields.PRODUCTS_DDL, 12)
-            .input().insert(InputFields.NUMBER_FIELD, order.getPhoneNumber())
-            .input().insert(InputFields.DETAILS_FIELD, order.getCustomerDetails())
-            .select().selectOption(SelectFields.LOCATION_DDL, order.getLocation())
-            .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
-            .button().validateIsEnabled(ButtonFields.PLACE_ORDER_BUTTON)
-            .button().click(ButtonFields.PLACE_ORDER_BUTTON);
-      return this;
-   }*/
-
-   //Insertion
    public CustomService createOrder(Order order) {
       quest
             .use(RING_OF_UI)
             .button().click(NEW_ORDER_BUTTON)
             .insertion().insertData(order)
             .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
-            /*.validate(() -> {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            })*/
             .button().click(ButtonFields.PLACE_ORDER_BUTTON);
       return this;
    }
@@ -149,11 +124,7 @@ public class CustomService extends FluentService {
    public CustomService validateOrder(String customer) {
       quest
             .use(RING_OF_UI)
-            .validate(() -> {
-               List<SmartWebElement> elements = quest.artifact(RING_OF_UI, SmartWebDriver.class)
-                     .findSmartElements(By.cssSelector("h3[class='name']"));
-               assertTrue(elements.stream().anyMatch(e -> e.getText().equalsIgnoreCase(customer)));
-            });
+            .validate(() -> findOrderForCustomer(customer));
       return this;
    }
 
@@ -161,11 +132,17 @@ public class CustomService extends FluentService {
       quest
             .use(RING_OF_UI)
             .input().insert(SEARCH_BAR_FIELD, order.getCustomerName())
-            .validate(() -> {
-               List<SmartWebElement> elements = quest.artifact(RING_OF_UI, SmartWebDriver.class)
-                     .findSmartElements(By.cssSelector("h3[class='name']"));
-               assertTrue(elements.stream().anyMatch(e -> e.getText().equalsIgnoreCase(order.getCustomerName())));
-            })
+            .validate(() -> findOrderForCustomer(order.getCustomerName()))
+            .button().click(ButtonFields.CLEAR_SEARCH);
+      return this;
+   }
+
+   public CustomService validateOrder() {
+      Order order = QuestHolder.get().getStorage().sub(PRE_ARGUMENTS).getByClass(VALID_ORDER, Order.class);
+      quest
+            .use(RING_OF_UI)
+            .input().insert(SEARCH_BAR_FIELD, order.getCustomerName())
+            .validate(() -> findOrderForCustomer(order.getCustomerName()))
             .button().click(ButtonFields.CLEAR_SEARCH);
       return this;
    }
@@ -175,13 +152,8 @@ public class CustomService extends FluentService {
             .use(RING_OF_UI)
             .input().insert(SEARCH_BAR_FIELD, customer)
             .validate(() -> {
-               /*try {
-                  Thread.sleep(1000);
-               } catch (InterruptedException e) {
-                  throw new RuntimeException(e);
-               }*/
                List<SmartWebElement> elements = quest.artifact(RING_OF_UI, SmartWebDriver.class)
-                     .findSmartElements(By.cssSelector("h3[class='name']"));
+                     .findSmartElements(HEADER_LOCATOR);
                elements.stream().filter(e -> e.getText().equalsIgnoreCase(customer)).findFirst().get().click();
             })
             .button().click(ButtonFields.CANCEL_ORDER_BUTTON);
@@ -198,12 +170,18 @@ public class CustomService extends FluentService {
       ).toString();
    }
 
-    public CustomService setJsessionCookie(String cookie) {
-                QuestHolder.get().artifact(RING_OF_UI, SmartWebDriver.class)
-                        .getOriginal()
-                        .manage()
-                        .addCookie(new Cookie("JSESSIONID", cookie));
-                return this;
-    }
+   public CustomService setJsessionCookie(String cookie) {
+      QuestHolder.get().artifact(RING_OF_UI, SmartWebDriver.class)
+            .getOriginal()
+            .manage()
+            .addCookie(new Cookie("JSESSIONID", cookie));
+      return this;
+   }
+
+   private void findOrderForCustomer(String customer) {
+      List<SmartWebElement> elements = quest.artifact(RING_OF_UI, SmartWebDriver.class)
+            .findSmartElements(HEADER_LOCATOR);
+      assertTrue(elements.stream().anyMatch(e -> e.getText().equalsIgnoreCase(customer)));
+   }
 
 }

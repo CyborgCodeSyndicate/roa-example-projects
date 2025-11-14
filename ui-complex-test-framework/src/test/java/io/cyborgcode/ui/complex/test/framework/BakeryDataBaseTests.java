@@ -11,7 +11,6 @@ import io.cyborgcode.ui.complex.test.framework.ui.authentication.AppUiLogin;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.db.annotations.DB;
 import io.cyborgcode.roa.db.annotations.DbHook;
-import io.cyborgcode.roa.db.annotations.DbHooks;
 import io.cyborgcode.roa.db.query.QueryResponse;
 import io.cyborgcode.roa.db.storage.StorageKeysDb;
 import io.cyborgcode.roa.framework.annotation.*;
@@ -21,6 +20,7 @@ import io.cyborgcode.roa.ui.annotations.AuthenticateViaUi;
 import io.cyborgcode.roa.ui.annotations.UI;
 import io.cyborgcode.roa.validator.core.Assertion;
 import io.qameta.allure.Description;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -38,20 +38,16 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.EQUALS_IGNORE_CASE
 @UI
 @DB
 @API
-@DbHooks({
-      @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
-})
+@DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
+@DisplayName("Database usage examples")
+// Add class javadoc explaining DBHooks and Database usage: validate against db in preconditions before starting test, validations in tests, and clean-up after test is completed using Ripper feature
 class BakeryDataBaseTests extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Database usage in Test")
-   @PreQuest({
-         @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1),
-         @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
-   })
+   @Description("Database usage in Test") //Explain better
+   @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
+         journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)})
    void createOrderDatabaseValidation(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
@@ -75,15 +71,11 @@ class BakeryDataBaseTests extends BaseQuest {
 
 
    @Test
-   @Description("Database usage in PreQuest and Test")
-   @PreQuest({
-         @Journey(value = Preconditions.Data.SELLER_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1),
-         @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 2),
-         @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 3)
-   })
+   @Description("Database usage in preconditions to validate test data against database before test execution") //Explain better
+   @Journey(value = Preconditions.Data.SELLER_EXIST_IN_DB_PRECONDITION,
+         journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
+   @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
+         journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 2)
    void createOrderPreQuestDatabase(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
@@ -103,12 +95,10 @@ class BakeryDataBaseTests extends BaseQuest {
 
 
    @Test
-   @Description("Database cleanup with Ripper usage")
+   @Description("Database cleanup with Ripper feature usage") //Explain better
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
-   @PreQuest({
-         @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-               journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
-   })
+   @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+         journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
    @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
    void createOrderPreArgumentsAndRipper(Quest quest) {
       quest

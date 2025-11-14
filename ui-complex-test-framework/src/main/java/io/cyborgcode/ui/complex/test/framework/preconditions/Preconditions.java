@@ -30,17 +30,19 @@ import static io.cyborgcode.ui.complex.test.framework.preconditions.Precondition
  */
 public enum Preconditions implements PreQuestJourney<Preconditions> {
 
-   SELLER_PRECONDITION((quest, objects) -> validSellerSetup(quest, (Seller) objects[0])),
+   SELLER_EXIST_IN_DB_PRECONDITION((quest, objects) -> validateSellerExistInDatabase(quest, (Seller) objects[0])),
    ORDER_PRECONDITION((quest, objects) -> validOrderSetup(quest, (Order) objects[0])),
    ORDER_PRECONDITION_LATE((quest, objects) -> validOrderSetup(quest, (Late<Order>) objects[0])),
-   LOGIN_PRECONDITION((quest, objects) -> loginUser(quest, (Seller) objects[0]));
+   LOGIN_PRECONDITION((quest, objects) -> loginUser(quest, (Seller) objects[0])),
+   LOGIN_DEFAULT_PRECONDITION((quest, objects) -> loginDefaultUser(quest));
 
    public static final class Data {
 
-      public static final String SELLER_PRECONDITION = "SELLER_PRECONDITION";
+      public static final String SELLER_EXIST_IN_DB_PRECONDITION = "SELLER_EXIST_IN_DB_PRECONDITION";
       public static final String ORDER_PRECONDITION = "ORDER_PRECONDITION";
       public static final String ORDER_PRECONDITION_LATE = "ORDER_PRECONDITION_LATE";
       public static final String LOGIN_PRECONDITION = "LOGIN_PRECONDITION";
+      public static final String LOGIN_DEFAULT_PRECONDITION = "LOGIN_DEFAULT_PRECONDITION";
 
       private Data() {
       }

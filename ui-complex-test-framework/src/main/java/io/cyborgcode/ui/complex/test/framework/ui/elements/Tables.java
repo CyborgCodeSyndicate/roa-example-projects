@@ -1,26 +1,22 @@
 package io.cyborgcode.ui.complex.test.framework.ui.elements;
 
-import io.cyborgcode.ui.complex.test.framework.ui.model.TableEntry;
+import io.cyborgcode.ui.complex.test.framework.ui.model.tables.TableEntry;
 import io.cyborgcode.roa.ui.components.table.base.TableComponentType;
 import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
 import io.cyborgcode.roa.ui.service.tables.TableElement;
 
 import java.util.function.Consumer;
 
-import static io.cyborgcode.ui.complex.test.framework.ui.elements.TableTypes.SIMPLE;
-
 public enum Tables implements TableElement<Tables> {
 
-   CAMPAIGNS(TableEntry.class),
-   ORDERS(TableEntry.class, SIMPLE);
+   ORDERS(TableEntry.class);
 
    public static final class Data {
 
-       public static final String CAMPAIGNS = "CAMPAIGNS";
-       public static final String ORDERS = "ORDERS";
+      public static final String ORDERS = "ORDERS";
 
-       private Data() {
-       }
+      private Data() {
+      }
 
    }
 
@@ -32,18 +28,6 @@ public enum Tables implements TableElement<Tables> {
    <T> Tables(final Class<T> rowRepresentationClass) {
       this(rowRepresentationClass, null, smartWebDriver -> {
       }, smartWebDriver -> {
-      });
-   }
-
-   <T> Tables(final Class<T> rowRepresentationClass, TableComponentType tableType) {
-      this(rowRepresentationClass, tableType, smartWebDriver -> {
-      }, smartWebDriver -> {
-      });
-   }
-
-   <T> Tables(final Class<T> rowRepresentationClass, TableComponentType tableType,
-         Consumer<SmartWebDriver> before) {
-      this(rowRepresentationClass, tableType, before, smartWebDriver -> {
       });
    }
 

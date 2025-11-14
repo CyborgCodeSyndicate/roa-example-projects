@@ -1,5 +1,6 @@
 package io.cyborgcode.ui.complex.test.framework.preconditions;
 
+import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreatorFunctions;
 import io.cyborgcode.ui.complex.test.framework.db.extractors.DbResponsesJsonPaths;
 import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
 import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
@@ -41,17 +42,14 @@ public final class PreconditionFunctions {
     }
 
    public static void loginUser(SuperQuest quest, Seller seller) {
-      quest
-            .use(RING_OF_CUSTOM)
-            .login(seller)
-            .drop()
-            .use(RING_OF_API)
-            .requestAndValidate(
-                  ENDPOINT_BAKERY.withHeader("Cookie", getJsessionCookie()),
-                  Assertion.builder().target(STATUS).type(IS).expected(HttpStatus.SC_OK).build());
+      loginUserAndValidate(quest, seller);
    }
 
-   public static void validSellerSetup(SuperQuest quest, Seller seller) {
+   public static void loginDefaultUser(SuperQuest quest) {
+      loginUserAndValidate(quest, DataCreatorFunctions.createValidSeller());
+   }
+
+   public static void validateSellerExistInDatabase(SuperQuest quest, Seller seller) {
       quest
             .use(RING_OF_DB)
             .query(QUERY_SELLER_EMAIL.withParam("id", 1))
@@ -79,6 +77,17 @@ public final class PreconditionFunctions {
       quest
             .use(RING_OF_CUSTOM)
             .createOrder(order.create());
+   }
+
+   private static void loginUserAndValidate(SuperQuest quest, Seller seller) {
+      quest
+            .use(RING_OF_CUSTOM)
+            .login(seller)
+            .drop()
+            .use(RING_OF_API)
+            .requestAndValidate(
+                  ENDPOINT_BAKERY.withHeader("Cookie", getJsessionCookie()),
+                  Assertion.builder().target(STATUS).type(IS).expected(HttpStatus.SC_OK).build());
    }
 
 }

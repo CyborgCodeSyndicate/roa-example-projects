@@ -1,51 +1,32 @@
 package io.cyborgcode.ui.complex.test.framework;
 
 import io.cyborgcode.roa.api.annotations.API;
-import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.db.annotations.DB;
 import io.cyborgcode.roa.db.annotations.DbHook;
 import io.cyborgcode.roa.framework.annotation.*;
 import io.cyborgcode.roa.framework.base.BaseQuest;
-import io.cyborgcode.roa.framework.base.BaseQuestSequential;
-import io.cyborgcode.roa.framework.parameters.Late;
 import io.cyborgcode.roa.framework.quest.Quest;
-import io.cyborgcode.roa.framework.quest.QuestHolder;
-import io.cyborgcode.roa.ui.annotations.AuthenticateViaUi;
-import io.cyborgcode.roa.ui.annotations.InterceptRequests;
 import io.cyborgcode.roa.ui.annotations.UI;
-import io.cyborgcode.roa.ui.storage.StorageKeysUi;
+import io.cyborgcode.roa.ui.components.table.base.TableField;
+import io.cyborgcode.roa.ui.components.table.filters.FilterStrategy;
 import io.cyborgcode.roa.validator.core.Assertion;
-import io.cyborgcode.ui.complex.test.framework.data.cleaner.DataCleaner;
 import io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator;
-import io.cyborgcode.ui.complex.test.framework.data.extractor.DataExtractorFunctions;
-import io.cyborgcode.ui.complex.test.framework.data.test_data.StaticData;
 import io.cyborgcode.ui.complex.test.framework.db.hooks.DbHookFlows;
-import io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.AdminCredentials;
-import io.cyborgcode.ui.complex.test.framework.ui.authentication.AppUiLogin;
-import io.cyborgcode.ui.complex.test.framework.ui.interceptor.RequestsInterceptor;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields;
+import io.cyborgcode.ui.complex.test.framework.ui.elements.Tables;
 import io.cyborgcode.ui.complex.test.framework.ui.model.Order;
 import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
+import io.cyborgcode.ui.complex.test.framework.ui.model.tables.TableEntry;
 import io.qameta.allure.Description;
-import io.restassured.response.Response;
-import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
 import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
-import static io.cyborgcode.roa.framework.storage.DataExtractorsTest.staticTestData;
-import static io.cyborgcode.roa.framework.storage.StorageKeysTest.PRE_ARGUMENTS;
 import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
-import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
-import static io.cyborgcode.ui.complex.test.framework.api.AppEndpoints.*;
+import static io.cyborgcode.roa.ui.storage.DataExtractorsUi.tableRowExtractor;
+import static io.cyborgcode.roa.ui.validator.TableAssertionTypes.*;
+import static io.cyborgcode.roa.ui.validator.UiTablesAssertionTarget.TABLE_VALUES;
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.*;
-import static io.cyborgcode.ui.complex.test.framework.preconditions.Preconditions.Data.LOGIN_PRECONDITION;
-import static io.cyborgcode.ui.complex.test.framework.service.CustomService.getJsessionCookie;
-import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @UI
@@ -56,6 +37,59 @@ class BakeryTest extends BaseQuest {
 
 
     @Test
+    @Regression
+    @Description("Order creation flow using craft and insertion features")
+    void createOrderUsingCraftAndInsertionFeatures(Quest quest,
+                                                   @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
+                                                   @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+        quest
+                .use(RING_OF_UI)
+                .browser().navigate(getUiConfig().baseUrl())
+                .insertion().insertData(seller)
+                .button().click(ButtonFields.SIGN_IN_BUTTON)
+                .input().insert(InputFields.SEARCH_BAR_FIELD, "Lionel Huber")
+                .table().readTable(Tables.ORDERS)
+                .table().validate(
+                        Tables.ORDERS,
+                        Assertion.builder().target(TABLE_VALUES).type(TABLE_NOT_EMPTY).expected(true).soft(true).build(),
+                        Assertion.builder().target(TABLE_VALUES).type(TABLE_ROW_COUNT).expected(25).soft(true).build())
+                /*.validate(() -> Assertions.assertEquals(
+                        "Lionel Huber",
+                        retrieve(tableRowExtractor(Tables.CAMPAIGNS, "Today"),
+                                TableEntry.class).getRow().getText(),
+                        "Wrong row value"))*/
+                .complete();
+    }
+
+    /*@Test
+    @Description("PreQuest, Craft and Service usage")
+    @Journey(value = Preconditions.Data.LOGIN_DEFAULT_PRECONDITION)
+    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+            journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
+    void createOrderPreQuest(Quest quest) {
+        quest
+                .use(RING_OF_CUSTOM)
+                .validateOrder()
+                .complete();
+    }*/
+
+
+    /*@Test
+    @Description("Authenticate, PreQuest, Service and Ripper usage")
+    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
+    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+            journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
+    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
+            journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER2)})
+    void createOrderPreArgumentsAndRipper(Quest quest) {
+        quest
+                .use(RING_OF_CUSTOM)
+                .validateOrder()
+                .complete();
+    }*/
+
+
+    /*@Test
     @Description("Interceptor with Storage and Late data re-usage")
     @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
     @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
@@ -73,7 +107,7 @@ class BakeryTest extends BaseQuest {
                 .interceptor().validateResponseHaveStatus(
                         RequestsInterceptor.INTERCEPT_REQUEST_AUTH.getEndpointSubString(), 2, true)
                 .complete();
-    }
+    }*/
 
     /*@Test
     @Description("Interceptor raw usage")
