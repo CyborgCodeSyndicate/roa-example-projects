@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.evolution;
+package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.api.authentication.AppAuth;

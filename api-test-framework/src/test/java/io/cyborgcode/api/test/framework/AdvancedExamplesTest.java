@@ -1,4 +1,4 @@
-package io.cyborgcode.api.test.framework.tutorial;
+package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
 import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
@@ -118,7 +118,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * - usage of a custom ring ({@code RING_OF_CUSTOM}) for reusable services.
  */
 @API
-class UsersAdvancedExamplesTest extends BaseQuest {
+class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
