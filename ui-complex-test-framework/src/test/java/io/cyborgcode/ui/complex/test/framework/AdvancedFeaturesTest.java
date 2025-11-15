@@ -52,8 +52,9 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Insertion service feature: maps model fields to UI controls in one operation") //Explain better
-   void insertionFeature(Quest quest,
+   @Description("Craft and Insertion service features: Craft provides a typed model instance resolved by the data " +
+           "and then creator maps model fields to UI controls in one operation") //Explain better
+   void craftAndInsertionFeatures(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
@@ -115,7 +116,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    @Test
    @Regression
    @Description("Authentication feature: Login is handled once via @AuthenticateViaUi with cache credentials " +
-         "for session re-usage")
+         "for session re-usage") //Explain better
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
    void authenticationFeatureWithCacheCredentials(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
