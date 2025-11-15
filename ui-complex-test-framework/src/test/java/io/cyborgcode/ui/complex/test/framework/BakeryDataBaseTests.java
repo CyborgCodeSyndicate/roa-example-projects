@@ -35,17 +35,25 @@ import static io.cyborgcode.roa.framework.storage.StorageKeysTest.PRE_ARGUMENTS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.CONTAINS_ALL;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.EQUALS_IGNORE_CASE;
 
+/**
+ * Database-centric tests demonstrating:
+ * - DbHook to initialize H2 before tests
+ * - DB validations inside test flows
+ * - DB validations in preconditions (Journeys) before executing UI steps
+ * - Cleanup of created data using the Ripper feature after test execution
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @UI
 @DB
 @API
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 @DisplayName("Database usage examples")
-// Add class javadoc explaining DBHooks and Database usage: validate against db in preconditions before starting test, validations in tests, and clean-up after test is completed using Ripper feature
 class BakeryDataBaseTests extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Database usage in Test") //Explain better
+   @Description("Demonstrates database validation within test execution") //Explain better
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
          journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)})
    void createOrderDatabaseValidation(Quest quest,
@@ -71,7 +79,7 @@ class BakeryDataBaseTests extends BaseQuest {
 
 
    @Test
-   @Description("Database usage in preconditions to validate test data against database before test execution") //Explain better
+   @Description("Demonstrates database validation in Journey preconditions before test execution") //Explain better
    @Journey(value = Preconditions.Data.SELLER_EXIST_IN_DB_PRECONDITION,
          journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
@@ -95,7 +103,7 @@ class BakeryDataBaseTests extends BaseQuest {
 
 
    @Test
-   @Description("Database cleanup with Ripper feature usage") //Explain better
+   @Description("Demonstrates database cleanup using @Ripper feature") //Explain better
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
          journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})

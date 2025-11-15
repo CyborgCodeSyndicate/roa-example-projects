@@ -88,9 +88,9 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Order creation flow using externalized test data properties")
+   @Description("Order creation flow using externalized test data properties for flexibility across environments")
    void createOrderUsingTestDataProperties(Quest quest) {
-      // Explain usage of test data properties
+      // Build models using externalized test data properties
       Seller seller = Seller.builder()
             .username(Data.testData().sellerEmail())
             .password(Data.testData().sellerPassword())
@@ -131,7 +131,7 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    @Description("Order creation flow using static test data feature")
    @StaticTestData(StaticData.class)
    void createOrderUsingStaticTestDataFeature(Quest quest) {
-      // Explain usage of static data trough storage
+      // Retrieve preloaded static test data from storage
       String username = retrieve(staticTestData(StaticData.USERNAME), String.class);
       String password = retrieve(staticTestData(StaticData.PASSWORD), String.class);
       Order order = retrieve(staticTestData(StaticData.ORDER), Order.class);
@@ -162,13 +162,13 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    @Regression
    @Description("Order creation flow using craft feature to create domain objects")
    void createOrderUsingCraftFeature(Quest quest,
-         // Craft: provides a typed model instance resolved by the data creator - Explain better
+         // Craft: provides a typed model instances resolved by the DataCreator
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
-            // Using crafted model values directly in UI steps
+            // Use crafted model values directly in UI steps
             .input().insert(InputFields.USERNAME_FIELD, seller.getUsername())
             .input().insert(InputFields.PASSWORD_FIELD, seller.getPassword())
             .button().click(ButtonFields.SIGN_IN_BUTTON)
@@ -197,7 +197,7 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
-            // insertion(): maps model fields to UI inputs in a single call - Explain better
+            // insertion(): maps model fields to corresponding UI controls in one operation
             .insertion().insertData(seller)
             .button().click(ButtonFields.SIGN_IN_BUTTON)
             .button().click(ButtonFields.NEW_ORDER_BUTTON)
@@ -219,7 +219,7 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
       quest
-            // Use a custom ring (service) exposing domain-specific fluent methods - Explain better
+            // Use a custom ring (service) exposing domain-specific fluent methods
             .use(RING_OF_CUSTOM)
             .login(seller)
             .createOrder(order)
@@ -230,7 +230,7 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    @Test
    @Regression
    @Description("Order creation flow using authentication, craft and custom service features")
-   // @AuthenticateViaUi: auto-login per test as precondition (no cached session) - Explain better
+   // @AuthenticateViaUi: Auto-login per test as precondition (no cached session)
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void createOrderUsingAuthenticationCraftAndCustomServiceFeatures(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
@@ -244,7 +244,7 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    @Test
    @Regression
    @Description("Order creation flow using precondition, craft and custom service features")
-   // PreQuest/Journey: reusable precondition executed before the test - Explain better
+   // Journey: Reusable precondition flows executed before the test in the given order
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
           journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,

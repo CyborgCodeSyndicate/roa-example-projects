@@ -42,18 +42,25 @@ import static io.cyborgcode.ui.complex.test.framework.base.Rings.*;
 import static io.cyborgcode.roa.framework.hooks.HookExecution.BEFORE;
 import static io.cyborgcode.ui.complex.test.framework.service.CustomService.getJsessionCookie;
 
+/**
+ * End-to-end examples showcasing advanced ROA features working together:
+ * Craft and Insertion, Precondition Journeys, UI Authentication, Storage/StaticTestData,
+ * Request Interceptors with custom extraction, Late data creation, and Ripper cleanup.
+ * The H2 database is initialized before the suite via a DbHook.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @UI
 @DB
 @API
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 @DisplayName("Advanced Features usage examples")
-// Add class javadoc
 class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Craft and Insertion service features: Craft provides a typed model instance resolved by the data " +
-           "and then creator maps model fields to UI controls in one operation") //Explain better
+   @Description("Craft and Insertion features: Obtain typed models via @Craft and populate mapped model fields to UI " +
+           "controls in one operation using insertion service")
    void craftAndInsertionFeatures(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
@@ -74,7 +81,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Precondition feature: usage Journey with no data and no optional order param") //Explain better
+   @Description("Precondition feature: Uses @Journey precondition without data injection")
    @Journey(value = Preconditions.Data.LOGIN_DEFAULT_PRECONDITION)
    void preconditionFeatureUsingJourneyWithoutData(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
@@ -87,7 +94,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Precondition feature: usage Journey with data and optional order param (which Journey to go first)") //Explain better
+   @Description("Precondition feature: Uses multiple ordered @Journey preconditions with data injection")
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
            journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
@@ -101,8 +108,8 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Authentication feature: Login is handled via @AuthenticateViaUi which have optional param to cache " +
-         "credentials for session re-usage") //Explain better
+   @Description("Authentication feature: Automatic login via @AuthenticateViaUi without cache " +
+         "credentials for session re-usage")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void authenticationFeatureWithoutCacheCredentials(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
@@ -115,8 +122,8 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Authentication feature: Login is handled once via @AuthenticateViaUi with cache credentials " +
-         "for session re-usage") //Explain better
+   @Description("Authentication feature: Automatic login via @AuthenticateViaUi with cache credentials " +
+         "for session re-usage")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
    void authenticationFeatureWithCacheCredentials(Quest quest,
          @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
@@ -134,7 +141,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Storage feature: Retrieve storage data stored in test UI fluent steps") //Explain better
+   @Description("Storage feature: Retrieve storage data captured during test UI steps")
    void storageFeatureUsingDataFromFluentSteps(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller) {
       quest
@@ -155,7 +162,8 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Storage feature: Retrieve storage data stored in test precondition as journeyData pre-arguments") //Explain better
+   @Description("Storage feature: Retrieve storage data captured during test precondition as journeyData " +
+           "pre-arguments")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
          journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
@@ -168,7 +176,8 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Static Data with Storage feature: Retrieve storage data stored as static data before test execution") //Explain better
+   @Description("Static Data with Storage feature: Retrieve storage data preloaded as static data before test " +
+           "execution")
    @Journey(value = Preconditions.Data.LOGIN_DEFAULT_PRECONDITION)
    @StaticTestData(StaticData.class)
    void staticTestDataFeatureUsingDataFromStorage(Quest quest) {
@@ -180,7 +189,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Interceptor feature: Use built-in response status validation") //Explain better
+   @Description("Interceptor feature: Use built-in response status validation")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
    void interceptorFeatureUsedForAuthenticateViaUiValidation(Quest quest) {
@@ -194,7 +203,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    @Test
    @Regression
    @Description("Interceptor feature: Extract intercepted responses from storage using custom data extractors for " +
-         "test validation") //Explain better
+         "test validation")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
    void interceptorFeatureUsedForTestDataValidation(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller) {
@@ -214,7 +223,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test()
    @Regression
-   @Description("Interceptor feature: Extract intercepted responses data and use it in Late data creation when needed") //Explain better
+   @Description("Interceptor feature: Extract intercepted responses data and use it for Late data creation when needed")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
    void interceptorFeatureUsedForLateDataCreation(Quest quest,
          @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
@@ -232,7 +241,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Regression
-   @Description("Ripper feature: Deletes data created in the test") //Explain better
+   @Description("Ripper feature: Deletes data created in the test")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
          journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
