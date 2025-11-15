@@ -10,11 +10,32 @@ import io.cyborgcode.roa.ui.util.strategy.StrategyGenerator;
 import io.cyborgcode.ui.simple.test.framework.ui.types.RadioFieldTypes;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NotFoundException;
 
+/**
+ * Bootstrap-specific implementation of the {@link Radio} component.
+ *
+ * <p>This class provides concrete logic for interacting with Bootstrap-styled radio groups
+ * (inputs rendered as {@code <input type="radio">} with label text resolved from a parent container).
+ * It is automatically selected by ROA component resolution mechanism when a radio field is tagged with
+ * {@link RadioFieldTypes#BOOTSTRAP_RADIO_TYPE} via the {@link ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ * <ul>
+ *   <li>Select a radio by label, locator, or container; or select via {@link Strategy}
+ *       (RANDOM, FIRST, LAST)</li>
+ *   <li>Check state: selected, enabled, visible</li>
+ *   <li>Retrieve the selected radio label or enumerate all radio labels</li>
+ *   <li>Resolve label text via a parent container of the {@code input[type='radio']}</li>
+ * </ul>
+ *
+ * <p>This implementation aligns with Bootstrap’s class-based state conventions:
+ * selection via {@code checked}, disabled via {@code disabled}, and visibility via the absence of {@code hidden}.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @ImplementationOfType(RadioFieldTypes.Data.BOOTSTRAP_RADIO)
 public class RadioBootstrapImpl extends BaseComponent implements Radio {
 
@@ -96,7 +117,7 @@ public class RadioBootstrapImpl extends BaseComponent implements Radio {
    @Override
    public boolean isSelected(final By radioButtonLocator) {
       SmartWebElement radioButton = driver.findSmartElement(radioButtonLocator);
-      return isElementEnabled(radioButton);
+      return isElementSelected(radioButton);
    }
 
 
@@ -141,7 +162,7 @@ public class RadioBootstrapImpl extends BaseComponent implements Radio {
    public List<String> getAll(final SmartWebElement container) {
       return container.findSmartElements(RADIO_ELEMENT_SELECTOR)
             .stream().map(this::getElementText)
-            .collect(Collectors.toList());
+            .toList();
    }
 
 
@@ -180,18 +201,24 @@ public class RadioBootstrapImpl extends BaseComponent implements Radio {
    }
 
 
+   private boolean hasClass(SmartWebElement element, String classToken) {
+      String classes = element.getDomAttribute("class");
+      return classes != null && classes.contains(classToken);
+   }
+
+
    private boolean isElementEnabled(SmartWebElement radioButtonElement) {
-      return !Objects.requireNonNull(radioButtonElement.getAttribute("class")).contains(DISABLED_CLASS_INDICATOR);
+      return !hasClass(radioButtonElement, DISABLED_CLASS_INDICATOR);
    }
 
 
    private boolean isElementSelected(SmartWebElement radioButtonElement) {
-      return Objects.requireNonNull(radioButtonElement.getAttribute("class")).contains(CHECKED_CLASS_INDICATOR);
+      return hasClass(radioButtonElement, CHECKED_CLASS_INDICATOR);
    }
 
 
    private boolean isElementVisible(SmartWebElement radioButtonElement) {
-      return !Objects.requireNonNull(radioButtonElement.getAttribute("class")).contains(VISIBLE_CLASS_INDICATOR);
+      return !hasClass(radioButtonElement, VISIBLE_CLASS_INDICATOR);
    }
 
 

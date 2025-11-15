@@ -11,6 +11,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.openqa.selenium.support.FindBy;
 
+/**
+ * Row projection model for the "Credit Accounts" table.
+ *
+ * <p>This model maps a single table row into strongly-typed cells using ROA table
+ * annotations. The class is wired to the table DOM via {@link TableInfo}, and each
+ * field is bound to a specific cell and header using {@link TableCellLocator}.
+ *
+ * <p>Integration:
+ * <ul>
+ *   <li>{@link TableInfo} declares the table container, rows,
+ *       and header row locators (container: third {@code .board-content} section).</li>
+ *   <li>{@link TableCellLocator} binds each
+ *       {@link TableCell} to its column cell locator and corresponding
+ *       header locator to ensure stable column mapping.</li>
+ *   <li>{@link CellInsertion} on {@code account} enables link interaction within that cell using
+ *       {@link LinkComponentType} with {@code componentType = LinkFieldTypes.Data.BOOTSTRAP_LINK}.</li>
+ *   <li>Used together with the {@code Tables.CREDIT_ACCOUNTS} element to project table rows into instances of this
+ *       model for readable assertions.</li>
+ * </ul>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @TableInfo(
       tableContainerLocator = @FindBy(xpath = "(//div[@class='board-content'])[3]"),
       rowsLocator = @FindBy(css = "tbody tr"),

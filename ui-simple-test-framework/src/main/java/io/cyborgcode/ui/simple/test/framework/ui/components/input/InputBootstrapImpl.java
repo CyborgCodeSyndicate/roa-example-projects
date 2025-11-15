@@ -11,6 +11,29 @@ import java.util.Objects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NotFoundException;
 
+/**
+ * Bootstrap-specific implementation of the {@link Input} component.
+ *
+ * <p>This class provides concrete logic for interacting with Bootstrap-styled input fields
+ * within form containers. It is automatically selected by ROA component resolution
+ * mechanism when an input field is tagged with
+ * {@link InputFieldTypes#BOOTSTRAP_INPUT_TYPE} via the {@link ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ * <ul>
+ *   <li>Insert text into fields by label, locator, or within a container</li>
+ *   <li>Clear field values</li>
+ *   <li>Retrieve current field values via {@code value} DOM attribute</li>
+ *   <li>Check enabled/disabled state via {@code disabled} DOM attribute</li>
+ *   <li>Retrieve validation error messages from {@code error-message} part</li>
+ *   <li>Find fields dynamically by label text</li>
+ * </ul>
+ *
+ * <p>This implementation aligns with Bootstrap’s form structure and class conventions to provide
+ * reliable interactions and validations for inputs in dynamic UIs.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @ImplementationOfType(InputFieldTypes.Data.BOOTSTRAP_INPUT)
 public class InputBootstrapImpl extends BaseComponent implements Input {
 
@@ -199,7 +222,7 @@ public class InputBootstrapImpl extends BaseComponent implements Input {
 
 
    private String getInputFieldValue(SmartWebElement inputField) {
-      return inputField.getAttribute(ELEMENT_VALUE_ATTRIBUTE);
+      return inputField.getDomAttribute(ELEMENT_VALUE_ATTRIBUTE);
    }
 
 
@@ -216,7 +239,7 @@ public class InputBootstrapImpl extends BaseComponent implements Input {
 
 
    private boolean isInputFieldEnabled(SmartWebElement fieldElement) {
-      String classAttribute = fieldElement.getAttribute(FIELD_DISABLE_CLASS_INDICATOR);
+      String classAttribute = fieldElement.getDomAttribute(FIELD_DISABLE_CLASS_INDICATOR);
       return classAttribute == null;
    }
 }

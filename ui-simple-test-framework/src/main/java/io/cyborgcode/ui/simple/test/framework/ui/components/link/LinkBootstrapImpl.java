@@ -10,11 +10,33 @@ import java.util.Objects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
+/**
+ * Bootstrap-specific implementation of the {@link Link} component.
+ *
+ * <p>This class provides concrete logic for interacting with Bootstrap-styled link elements.
+ * It is automatically selected by ROA component resolution mechanism when a link field is
+ * tagged with {@link LinkFieldTypes#BOOTSTRAP_LINK_TYPE} via the {@link ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ * <ul>
+ *   <li>Click or double-click links by text, locator, or within a container</li>
+ *   <li>Check enabled/disabled state via {@code disabled} class attribute</li>
+ *   <li>Check visibility via {@code hidden} DOM attribute</li>
+ *   <li>Find links dynamically by text content</li>
+ *   <li>Interact with links embedded inside table cells via {@link #clickElementInCell(SmartWebElement)}</li>
+ * </ul>
+ *
+ * <p>This implementation aligns with Bootstrap’s markup and attribute conventions to provide
+ * reliable interactions with links in dynamic UIs.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @ImplementationOfType(LinkFieldTypes.Data.BOOTSTRAP_LINK)
 public class LinkBootstrapImpl extends BaseComponent implements Link {
 
    private static final By LINK_LOCATOR = By.cssSelector("span[class='headers']");
    private static final String DISABLED_STATE = "disabled";
+   private static final String HIDDEN_STATE = "hidden";
 
 
    public LinkBootstrapImpl(SmartWebDriver driver) {
@@ -109,28 +131,28 @@ public class LinkBootstrapImpl extends BaseComponent implements Link {
    @Override
    public boolean isVisible(final SmartWebElement container, final String linkText) {
       SmartWebElement link = findLinkInContainer(container, linkText);
-      return isLinkEnabled(link);
+      return isLinkVisible(link);
    }
 
 
    @Override
    public boolean isVisible(final SmartWebElement container) {
       SmartWebElement link = findLinkInContainer(container, null);
-      return isLinkEnabled(link);
+      return isLinkVisible(link);
    }
 
 
    @Override
    public boolean isVisible(final String linkText) {
       SmartWebElement link = findLinkByText(linkText);
-      return isLinkEnabled(link);
+      return isLinkVisible(link);
    }
 
 
    @Override
    public boolean isVisible(final By linkLocator) {
       SmartWebElement link = driver.findSmartElement(linkLocator);
-      return isLinkEnabled(link);
+      return isLinkVisible(link);
    }
 
 
@@ -156,6 +178,10 @@ public class LinkBootstrapImpl extends BaseComponent implements Link {
 
 
    private boolean isLinkEnabled(SmartWebElement link) {
-      return Objects.isNull(link.getAttribute(DISABLED_STATE));
+      return Objects.isNull(link.getDomAttribute(DISABLED_STATE));
+   }
+
+   private boolean isLinkVisible(SmartWebElement link) {
+      return Objects.isNull(link.getDomAttribute(HIDDEN_STATE));
    }
 }

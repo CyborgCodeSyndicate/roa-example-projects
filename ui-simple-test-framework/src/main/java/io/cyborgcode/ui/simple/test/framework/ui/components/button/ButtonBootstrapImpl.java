@@ -10,7 +10,28 @@ import java.util.Objects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
-@ImplementationOfType(ButtonFieldTypes.Data.BOOTSTRAP_INPUT)
+/**
+ * Bootstrap-specific implementation of the {@link Button} component.
+ *
+ * <p>This class provides the concrete logic for interacting with standard HTML
+ * {@code <button>} elements styled by Bootstrap. It is automatically
+ * selected by ROA component resolution mechanism when a button field is tagged with
+ * {@link ButtonFieldTypes#BOOTSTRAP_BUTTON_TYPE} via the {@link ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ * <ul>
+ *   <li>Click buttons by text, locator, or within a container</li>
+ *   <li>Check enabled/disabled state via {@code disabled} DOM attribute</li>
+ *   <li>Check visibility via {@code hidden} DOM attribute</li>
+ *   <li>Find buttons dynamically by text content</li>
+ * </ul>
+ *
+ * <p>This implementation aligns with Bootstrap’s class-based state management to provide
+ * reliable interactions with buttons in dynamic UIs.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
+@ImplementationOfType(ButtonFieldTypes.Data.BOOTSTRAP_BUTTON)
 public class ButtonBootstrapImpl extends BaseComponent implements Button {
 
    private static final By BUTTON_TAG_NAME_SELECTOR = By.tagName("button");
@@ -124,12 +145,12 @@ public class ButtonBootstrapImpl extends BaseComponent implements Button {
 
 
    private boolean isButtonEnabled(SmartWebElement button) {
-      return !Objects.requireNonNull(button.getAttribute("class")).contains(DISABLED_STATE_INDICATOR);
+      return !Objects.requireNonNull(button.getDomAttribute("class")).contains(DISABLED_STATE_INDICATOR);
    }
 
 
    private boolean isButtonVisible(SmartWebElement button) {
-      return !Objects.requireNonNull(button.getAttribute("class")).contains(NOT_VISIBLE_STATE_INDICATOR);
+      return !Objects.requireNonNull(button.getDomAttribute("class")).contains(NOT_VISIBLE_STATE_INDICATOR);
    }
 
 }

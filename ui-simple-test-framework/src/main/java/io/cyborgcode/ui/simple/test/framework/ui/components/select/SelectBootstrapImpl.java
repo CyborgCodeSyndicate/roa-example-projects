@@ -10,10 +10,31 @@ import io.cyborgcode.roa.ui.util.strategy.StrategyGenerator;
 import io.cyborgcode.ui.simple.test.framework.ui.types.SelectFieldTypes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NotFoundException;
 
+/**
+ * Bootstrap-specific implementation of the {@link Select} component.
+ *
+ * <p>This class provides concrete logic for interacting with Bootstrap-styled select elements
+ * (dropdowns composed of {@code <option>} items). It is automatically selected by ROA’s
+ * component resolution mechanism when a select field is tagged with
+ * {@link SelectFieldTypes#BOOTSTRAP_SELECT_TYPE} via the {@link ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ * <ul>
+ *   <li>Select options by visible text (single or multiple) within a container or by locator</li>
+ *   <li>Strategy-driven selection (RANDOM, FIRST, LAST, ALL) via {@link Strategy}</li>
+ *   <li>Inspect options: {@code getAvailableOptions(...)} and {@code getSelectedOptions(...)}</li>
+ *   <li>Check option visibility and enabled state</li>
+ *   <li>Honor Bootstrap semantics: hidden via {@code hidden}, selected via {@code selected}, disabled via {@code disabled}</li>
+ * </ul>
+ *
+ * <p>This implementation aligns with Bootstrap dropdown markup and attribute conventions to ensure
+ * reliable interactions and assertions for select components in dynamic UIs.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 @ImplementationOfType(SelectFieldTypes.Data.BOOTSTRAP_SELECT)
 public class SelectBootstrapImpl extends BaseComponent implements Select {
 
@@ -66,7 +87,7 @@ public class SelectBootstrapImpl extends BaseComponent implements Select {
       List<SmartWebElement> options = getAllOptionsElements(container);
       List<String> availableOptions = options.stream()
             .map(option -> option.getText().trim())
-            .collect(Collectors.toList());
+            .toList();
       closeDdl(container);
       return availableOptions;
    }
@@ -85,7 +106,7 @@ public class SelectBootstrapImpl extends BaseComponent implements Select {
       List<String> checkedOptions = getAllOptionsElements(container).stream()
             .filter(this::checkIfOptionIsSelected)
             .map(SmartWebElement::getText)
-            .collect(Collectors.toList());
+            .toList();
       closeDdl(container);
       return checkedOptions;
    }
@@ -135,7 +156,7 @@ public class SelectBootstrapImpl extends BaseComponent implements Select {
 
 
    protected boolean isOptionEnabled(SmartWebElement option) {
-      return option.getAttribute(DISABLED_CLASS_INDICATOR) == null;
+      return option.getDomAttribute(DISABLED_CLASS_INDICATOR) == null;
    }
 
 
@@ -149,11 +170,12 @@ public class SelectBootstrapImpl extends BaseComponent implements Select {
 
 
    protected List<String> selectOptionByStrategy(List<SmartWebElement> options, Strategy strategy) {
-      List<SmartWebElement> optionElements = getOptionsByStrategy(options, strategy);
-      return optionElements.stream()
-            .peek(SmartWebElement::click)
-            .map(SmartWebElement::getText)
-            .collect(Collectors.toList());
+      return getOptionsByStrategy(options, strategy).stream()
+            .map(element -> {
+               element.click();
+               return element.getText();
+            })
+            .toList();
    }
 
 
@@ -190,16 +212,16 @@ public class SelectBootstrapImpl extends BaseComponent implements Select {
       List<SmartWebElement> options = container.findSmartElements(OPTION_LOCATOR);
       return options.stream()
             .filter(option -> !checkIfOptionIsHidden(option))
-            .collect(Collectors.toList());
+            .toList();
    }
 
 
    protected boolean checkIfOptionIsSelected(SmartWebElement option) {
-      return option.getAttribute(SELECTED_ATTRIBUTE_INDICATOR) != null;
+      return option.getDomAttribute(SELECTED_ATTRIBUTE_INDICATOR) != null;
    }
 
 
    protected boolean checkIfOptionIsHidden(SmartWebElement option) {
-      return option.getAttribute(HIDDEN_ATTRIBUTE_INDICATOR) != null;
+      return option.getDomAttribute(HIDDEN_ATTRIBUTE_INDICATOR) != null;
    }
 }

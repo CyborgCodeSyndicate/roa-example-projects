@@ -6,6 +6,29 @@ import io.cyborgcode.roa.ui.selenium.SelectUiElement;
 import io.cyborgcode.ui.simple.test.framework.ui.types.SelectFieldTypes;
 import org.openqa.selenium.By;
 
+/**
+ * Registry of select (dropdown) UI elements for the Zero Bank demo application.
+ *
+ * <p>Each enum constant defines a specific select control with its Selenium {@link By}
+ * locator and concrete component type (see {@link SelectComponentType}).
+ *
+ * <p>Implements {@link SelectUiElement} to integrate with ROA fluent UI testing API
+ * for selecting options and asserting dropdown state.
+ *
+ * <p>Example usage:
+ * <pre>{@code
+ * quest
+ *     .use(Rings.RING_OF_UI)
+ *     .select().selectOption(SelectFields.PC_CURRENCY_DDL, "Mexico (peso)");
+ * }</pre>
+ *
+ * <p>Typical usage targets Bootstrap-styled selects via {@link SelectFieldTypes},
+ * enabling consistent identification and interaction across flows.
+ *
+ * <p>The nested {@link Data} class provides string constants for annotation-based references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 public enum SelectFields implements SelectUiElement {
 
    TF_FROM_ACCOUNT_DDL(By.id("tf_fromAccountId"), SelectFieldTypes.BOOTSTRAP_SELECT_TYPE),
@@ -18,13 +41,7 @@ public enum SelectFields implements SelectUiElement {
 
    public static final class Data {
 
-      public static final String TF_FROM_ACCOUNT_DDL = "TF_FROM_ACCOUNT_DDL";
-      public static final String TF_TO_ACCOUNT_DDL = "TF_TO_ACCOUNT_DDL";
       public static final String PC_CURRENCY_DDL = "PC_CURRENCY_DDL";
-      public static final String AA_TYPE_DDL = "AA_TYPE_DDL";
-      public static final String SP_PAYEE_DDL = "SP_PAYEE_DDL";
-      public static final String SP_ACCOUNT_DDL = "SP_ACCOUNT_DDL";
-
 
       private Data() {
       }

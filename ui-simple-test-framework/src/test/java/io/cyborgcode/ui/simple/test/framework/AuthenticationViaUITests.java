@@ -17,6 +17,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.ui.simple.test.framework.base.Rings.RING_OF_UI;
+import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.TransferFunds.BROKERAGE_ACCOUNT;
+import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.TransferFunds.CHECKING_ACCOUNT;
+import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.TransferFunds.CREDIT_CARD_ACCOUNT;
+import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.TransferFunds.LOAN_ACCOUNT;
+import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.TransferFunds.SAVINGS_ACCOUNT;
+import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.TransferFunds.SUCCESSFUL_TRANSFER_MESSAGE;
+import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.TransferFunds.TRANSFER_BROKERAGE_TO_CHECKING;
+import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.TransferFunds.TRANSFER_LOAN_TO_CREDIT_CARD;
+import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.TransferFunds.TRANSFER_SAVING_TO_CHECKING;
 
 /**
  * Represents an authenticated UI test suite that integrates with the {@link AuthenticateViaUi}.
@@ -47,13 +56,13 @@ class AuthenticationViaUITests extends BaseQuest {
       quest
             .use(RING_OF_UI)
             .link().click(LinkFields.TRANSFER_FUNDS_LINK)
-            .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, "Loan(Avail. balance = $ 780)")
-            .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, "Credit Card(Avail. balance = $ -265)")
+            .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, LOAN_ACCOUNT)
+            .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, CREDIT_CARD_ACCOUNT)
             .input().insert(InputFields.AMOUNT_FIELD, "300")
-            .input().insert(InputFields.TF_DESCRIPTION_FIELD, "Transfer Amount from Loan to Credit Card")
+            .input().insert(InputFields.TF_DESCRIPTION_FIELD, TRANSFER_LOAN_TO_CREDIT_CARD)
             .button().click(ButtonFields.SUBMIT_BUTTON)
             .button().click(ButtonFields.SUBMIT_BUTTON)
-            .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, "You successfully submitted your transaction.")
+            .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, SUCCESSFUL_TRANSFER_MESSAGE)
             .complete();
    }
 
@@ -65,13 +74,13 @@ class AuthenticationViaUITests extends BaseQuest {
       quest
             .use(RING_OF_UI)
             .link().click(LinkFields.TRANSFER_FUNDS_LINK)
-            .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, "Savings(Avail. balance = $ 1000)")
-            .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, "Checking(Avail. balance = $ -500.2)")
+            .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, SAVINGS_ACCOUNT)
+            .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, CHECKING_ACCOUNT)
             .input().insert(InputFields.AMOUNT_FIELD, "2000")
-            .input().insert(InputFields.TF_DESCRIPTION_FIELD, "Transfer Amount from Savings to Checking")
+            .input().insert(InputFields.TF_DESCRIPTION_FIELD, TRANSFER_SAVING_TO_CHECKING)
             .button().click(ButtonFields.SUBMIT_BUTTON)
             .button().click(ButtonFields.SUBMIT_BUTTON)
-            .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, "You successfully submitted your transaction.")
+            .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, SUCCESSFUL_TRANSFER_MESSAGE)
             .complete();
    }
 
@@ -83,13 +92,13 @@ class AuthenticationViaUITests extends BaseQuest {
       quest
             .use(RING_OF_UI)
             .link().click(LinkFields.TRANSFER_FUNDS_LINK)
-            .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, "Brokerage(Avail. balance = $ 197)")
-            .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, "Checking(Avail. balance = $ -500.2)")
+            .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, BROKERAGE_ACCOUNT)
+            .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, CHECKING_ACCOUNT)
             .input().insert(InputFields.AMOUNT_FIELD, "100")
-            .input().insert(InputFields.TF_DESCRIPTION_FIELD, "Transfer Amount from Brokerage to Checking")
+            .input().insert(InputFields.TF_DESCRIPTION_FIELD, TRANSFER_BROKERAGE_TO_CHECKING)
             .button().click(ButtonFields.SUBMIT_BUTTON)
             .button().click(ButtonFields.SUBMIT_BUTTON)
-            .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, "You successfully submitted your transaction.")
+            .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, SUCCESSFUL_TRANSFER_MESSAGE)
             .complete();
    }
 

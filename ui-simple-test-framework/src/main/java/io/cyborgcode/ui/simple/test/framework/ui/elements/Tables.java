@@ -2,30 +2,50 @@ package io.cyborgcode.ui.simple.test.framework.ui.elements;
 
 import io.cyborgcode.roa.ui.components.table.base.TableComponentType;
 import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
+import io.cyborgcode.roa.ui.service.tables.DefaultTableTypes;
 import io.cyborgcode.roa.ui.service.tables.TableElement;
+import io.cyborgcode.ui.simple.test.framework.ui.functions.SharedUiFunctions;
 import io.cyborgcode.ui.simple.test.framework.ui.model.tables.AllTransactionEntry;
 import io.cyborgcode.ui.simple.test.framework.ui.model.tables.CreditAccounts;
 import io.cyborgcode.ui.simple.test.framework.ui.model.tables.DetailedReport;
 import io.cyborgcode.ui.simple.test.framework.ui.model.tables.FilteredTransactionEntry;
 import io.cyborgcode.ui.simple.test.framework.ui.model.tables.OutFlow;
-import io.cyborgcode.ui.simple.test.framework.ui.functions.SharedUiFunctions;
 import java.util.function.Consumer;
 import org.openqa.selenium.By;
 
 import static io.cyborgcode.roa.ui.service.tables.DefaultTableTypes.DEFAULT;
-import static io.cyborgcode.ui.simple.test.framework.ui.elements.TableTypes.SIMPLE;
 
+
+/**
+ * Registry of table UI elements for the Zero Bank demo application.
+ *
+ * <p>Each enum constant defines a specific table by:
+ * <ul>
+ *   <li>its row projection class (see {@link #rowsRepresentationClass()}),</li>
+ *   <li>an optional {@link TableComponentType} (e.g. {@link DefaultTableTypes#DEFAULT}),</li>
+ *   <li>optional {@code before}/{@code after} synchronization hooks as {@link Consumer}s of {@link SmartWebDriver}.</li>
+ * </ul>
+ *
+ * <p>Implements {@link TableElement} to integrate with ROA table service for locating tables
+ * and working with strongly-typed row models (e.g., {@link FilteredTransactionEntry}, {@link CreditAccounts}).
+ *
+ * <p>Synchronization hooks commonly leverage {@link SharedUiFunctions}
+ * (e.g., {@code waitForPresence(...)}) to handle dynamic loading before interacting with table content.
+ *
+ * <p>Typical usage targets Bootstrap-styled tables while keeping interactions consistent and type-safe
+ * through row representations and component typing.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 public enum Tables implements TableElement<Tables> {
 
-   CAMPAIGNS(AllTransactionEntry.class),
    FILTERED_TRANSACTIONS(FilteredTransactionEntry.class),
    ALL_TRANSACTIONS(AllTransactionEntry.class),
    CREDIT_ACCOUNTS(CreditAccounts.class),
    OUTFLOW(OutFlow.class, DEFAULT,
          driver -> SharedUiFunctions.waitForPresence(driver, By.id("report-1016"))),
    DETAILED_REPORT(DetailedReport.class, DEFAULT,
-         driver -> SharedUiFunctions.waitForPresence(driver, By.id("detailedreport-1041"))),
-   ORDERS(AllTransactionEntry.class, SIMPLE);
+         driver -> SharedUiFunctions.waitForPresence(driver, By.id("detailedreport-1041")));
 
 
    private final Class<?> rowRepresentationClass;
@@ -36,13 +56,6 @@ public enum Tables implements TableElement<Tables> {
 
    <T> Tables(final Class<T> rowRepresentationClass) {
       this(rowRepresentationClass, null, smartWebDriver -> {
-      }, smartWebDriver -> {
-      });
-   }
-
-
-   <T> Tables(final Class<T> rowRepresentationClass, TableComponentType tableType) {
-      this(rowRepresentationClass, tableType, smartWebDriver -> {
       }, smartWebDriver -> {
       });
    }

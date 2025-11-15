@@ -6,6 +6,29 @@ import io.cyborgcode.roa.ui.selenium.InputUiElement;
 import io.cyborgcode.ui.simple.test.framework.ui.types.InputFieldTypes;
 import org.openqa.selenium.By;
 
+/**
+ * Registry of input UI elements for the Zero Bank demo application.
+ *
+ * <p>Each enum constant defines a specific input with its Selenium {@link By} locator
+ * and concrete component type (see {@link InputComponentType}).
+ *
+ * <p>Implements {@link InputUiElement} to integrate with ROA fluent UI testing API for typing,
+ * clearing, and validating input values.
+ *
+ * <p>Example usage:
+ * <pre>{@code
+ * quest
+ *     .use(Rings.RING_OF_UI)
+ *     .input().insert(USERNAME_FIELD, "admin");
+ * }</pre>
+ *
+ * <p>Typical usage targets Bootstrap-styled inputs via {@link InputFieldTypes}, enabling
+ * consistent identification and interaction across flows.
+ *
+ * <p>The nested {@link Data} class provides string constants for annotation-based references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 public enum InputFields implements InputUiElement {
 
    USERNAME_FIELD(By.id("user_login"), InputFieldTypes.BOOTSTRAP_INPUT_TYPE),
@@ -25,20 +48,7 @@ public enum InputFields implements InputUiElement {
 
    public static final class Data {
 
-      public static final String USERNAME_FIELD = "USERNAME_FIELD";
-      public static final String PASSWORD_FIELD = "PASSWORD_FIELD";
-      public static final String AMOUNT_FIELD = "AMOUNT_FIELD";
       public static final String AMOUNT_CURRENCY_FIELD = "AMOUNT_CURRENCY_FIELD";
-      public static final String TF_DESCRIPTION_FIELD = "TF_DESCRIPTION_FIELD";
-      public static final String AA_DESCRIPTION_FIELD = "AA_DESCRIPTION_FIELD";
-      public static final String AA_FROM_DATE_FIELD = "AA_FROM_DATE_FIELD";
-      public static final String AA_TO_DATE_FIELD = "AA_TO_DATE_FIELD";
-      public static final String AA_FROM_AMOUNT_FIELD = "AA_FROM_AMOUNT_FIELD";
-      public static final String AA_TO_AMOUNT_FIELD = "AA_TO_AMOUNT_FIELD";
-      public static final String SP_AMOUNT_FIELD = "SP_AMOUNT_FIELD";
-      public static final String SP_DATE_FIELD = "SP_DATE_FIELD";
-      public static final String SP_DESCRIPTION_FIELD = "SP_DESCRIPTION_FIELD";
-
 
       private Data() {
       }
