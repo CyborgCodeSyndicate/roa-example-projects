@@ -9,14 +9,14 @@ import org.openqa.selenium.By;
 import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
 
 /**
- * Application-specific login implementation for the Bakery Flow UI.
- * <p>
- * This class extends {@link BaseLoginClient} to provide the concrete login workflow
- * for the Bakery application. It integrates with ROA's {@code @AuthenticateViaUi}
- * annotation to perform automatic authentication before test execution.
- * </p>
- * <p>
- * Usage example:
+ * Application-specific login implementation for the test application.
+ *
+ * <p>This class extends {@link BaseLoginClient} to provide the concrete login workflow for the
+ * test application. It integrates with ROA {@code @AuthenticateViaUi} annotation to perform
+ * automatic authentication before test execution.
+ *
+ * <p>Usage example:
+ *
  * <pre>{@code
  * @Test
  * @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
@@ -24,7 +24,8 @@ import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
  *     // Test begins with user authenticated
  * }
  * }</pre>
- * </p>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public class AppUiLogin extends BaseLoginClient {
 

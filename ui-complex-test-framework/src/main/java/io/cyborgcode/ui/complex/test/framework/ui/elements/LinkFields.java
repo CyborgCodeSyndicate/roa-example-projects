@@ -10,23 +10,30 @@ import org.openqa.selenium.By;
 import java.util.function.Consumer;
 
 /**
- * Registry of link/navigation UI elements for the Bakery Flow application.
- * <p>
- * Each enum constant defines a specific link or tab with its Selenium locator,
- * component type, and optional before/after synchronization hooks. Implements
- * {@link LinkUiElement} to integrate with ROA's fluent UI testing API,
- * enabling operations like {@code quest.use(RING_OF_UI).link().click(STOREFRONT_LINK)}.
- * </p>
- * <p>
- * Before/after hooks can be used to wait for page transitions
- * or loading indicators when navigating between views.
- * </p>
- * <p>
- * The nested {@link Data} class provides string constants for annotation-based references.
- * </p>
+ * Registry of link UI elements for the test application.
+ *
+ * <p>Each enum constant defines a specific link or tab with its Selenium locator, component type
+ * (see {@link LinkComponentType}), and optional before/after synchronization hooks.
+ *
+ * <p>Implements {@link LinkUiElement} to integrate with ROA fluent UI testing API for navigating
+ * and triggering link-driven flows.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * quest
+ *     .use(Rings.RING_OF_UI)
+ *     .link().click(LinkFields.STOREFRONT_LINK);
+ * }</pre>
+ *
+ * <p>Before/after hooks can be used to wait for page transitions or loading indicators when
+ * navigating between views.
+ *
+ * <p>The nested {@link Data} class provides string constants for annotation-based references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum LinkFields implements LinkUiElement {
-
    STOREFRONT_LINK(By.cssSelector("a[href='dashboard']"), LinkFieldTypes.VA_LINK_TYPE),
    DASHBOARD_LINK(By.cssSelector("a[href='dashboard']"), LinkFieldTypes.VA_LINK_TYPE),
    LOGOUT_LINK(By.cssSelector("a[href='/logout']"), LinkFieldTypes.VA_LINK_TYPE);

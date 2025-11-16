@@ -10,19 +10,19 @@ import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.D
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.SelectFields.Data.PRODUCTS_DDL;
 
 /**
- * Domain model representing a customer order in the Bakery Flow application.
- * <p>
- * This class encapsulates all order-related data and is used throughout the test suite
- * for creating, validating, and managing orders. Fields annotated with
- * {@link InsertionElement @InsertionElement} enable automatic form filling via ROA's
- * insertion mechanism: {@code quest.use(RING_OF_UI).insertion().insertData(order)}
- * will automatically populate all order form fields (inputs and selects) in the correct sequence.
- * </p>
- * <p>
- * The {@code @InsertionElement} annotation specifies the UI element mapping and execution order,
- * allowing tests to work at the domain level without coupling to low-level UI interactions.
- * This pattern significantly reduces test maintenance when UI structures change.
- * </p>
+ * Domain model representing a customer order in the test application.
+ *
+ * <p>This class encapsulates all order-related data and is used throughout the test suite for
+ * creating, validating, and managing orders. Fields annotated with {@link InsertionElement} enable
+ * automatic form filling via ROA insertion mechanism: {@code
+ * quest.use(RING_OF_UI).insertion().insertData(order)} will automatically populate all order form
+ * fields (inputs and selects) in the correct sequence.
+ *
+ * <p>The {@code @InsertionElement} annotation specifies the UI element mapping and execution order,
+ * allowing tests to work at the domain level without coupling to low-level UI interactions. This
+ * pattern significantly reduces test maintenance when UI structures change.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @NoArgsConstructor
 @AllArgsConstructor

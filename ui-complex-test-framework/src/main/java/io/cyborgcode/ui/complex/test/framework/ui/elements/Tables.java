@@ -1,5 +1,7 @@
 package io.cyborgcode.ui.complex.test.framework.ui.elements;
 
+import io.cyborgcode.roa.ui.service.tables.DefaultTableTypes;
+import io.cyborgcode.ui.complex.test.framework.ui.functions.SharedUiFunctions;
 import io.cyborgcode.ui.complex.test.framework.ui.model.tables.TableEntry;
 import io.cyborgcode.roa.ui.components.table.base.TableComponentType;
 import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
@@ -7,6 +9,28 @@ import io.cyborgcode.roa.ui.service.tables.TableElement;
 
 import java.util.function.Consumer;
 
+/**
+ * Registry of table UI elements for the test application.
+ *
+ * <p>Each enum constant defines a specific table by:
+ *
+ * <ul>
+ *   <li>its row projection class (see {@link #rowsRepresentationClass()}),
+ *   <li>an optional {@link TableComponentType} (e.g. {@link DefaultTableTypes#DEFAULT}),
+ *   <li>optional {@code before}/{@code after} synchronization hooks as {@link Consumer}s of {@link SmartWebDriver}.
+ * </ul>
+ *
+ * <p>Implements {@link TableElement} to integrate with ROA table service for locating tables and
+ * working with strongly-typed row models (e.g., {@link TableEntry}).
+ *
+ * <p>Synchronization hooks commonly leverage {@link SharedUiFunctions} (e.g., {@code
+ * waitForPresence(...)}) to handle dynamic loading before interacting with table content.
+ *
+ * <p>Typical usage targets Vaadin-styled tables while keeping interactions consistent and type-safe
+ * through row representations and component typing.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
 public enum Tables implements TableElement<Tables> {
 
    ORDERS(TableEntry.class);

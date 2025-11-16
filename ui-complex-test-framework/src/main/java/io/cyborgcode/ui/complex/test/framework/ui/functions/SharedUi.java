@@ -7,31 +7,24 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
- * Registry of reusable synchronization functions for UI element interactions.
- * <p>
- * This enum provides pre-configured wait strategies that can be used as before/after
- * hooks in UI element definitions ({@link io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields},
- * {@link io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields}, etc.).
- * Each constant wraps a specific wait condition from {@link SharedUiFunctions}.
- * </p>
- * <p>
- * Available wait strategies:
+ * Reusable UI synchronization strategies for the demo application.
+ *
+ * <p>Each enum constant wraps a wait function (see {@link SharedUiFunctions}) that can be used:
+ *
  * <ul>
- *   <li>{@link #WAIT_FOR_TIMEOUT} — fixed 1-second delay</li>
- *   <li>{@link #WAIT_FOR_LOADING} — waits for Vaadin loading indicators to disappear</li>
- *   <li>{@link #WAIT_FOR_PRESENCE} — waits for element to be visible in the DOM</li>
- *   <li>{@link #WAIT_TO_BE_CLICKABLE} — waits for element to be visible and enabled</li>
- *   <li>{@link #WAIT_TO_BE_REMOVED} — waits for element to be removed from the DOM</li>
+ *   <li>as a plain {@link Consumer}{@code <SmartWebDriver>} (no locator), or
+ *   <li>bound to a specific {@link By} via {@link #asConsumer(By)}.
  * </ul>
- * </p>
- * <p>
- * These functions integrate with ROA's {@link ContextConsumer} pattern, allowing them
- * to be passed as {@code Consumer<SmartWebDriver>} to element hooks, ensuring proper
- * synchronization with dynamic UI behavior.
- * </p>
+ *
+ * <p>Implements {@link ContextConsumer} so it can be passed directly as before/after hooks in UI
+ * element enums (e.g., `ButtonFields`) to stabilize interactions on dynamic pages.
+ *
+ * <p>Backed by custom conditions in {@link ExpectedConditionsStore} to handle transient DOM states
+ * and timing issues in JS-driven UIs.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum SharedUi implements ContextConsumer {
-
    WAIT_FOR_TIMEOUT((driver, by) -> SharedUiFunctions.waitForTimeout(driver)),
    WAIT_FOR_LOADING((driver, by) -> SharedUiFunctions.waitForLoading(driver)),
    WAIT_FOR_PRESENCE(SharedUiFunctions::waitForPresence),

@@ -2,20 +2,17 @@ package io.cyborgcode.ui.complex.test.framework.db.extractors;
 
 /**
  * Registry of JsonPath expressions for extracting data from database query responses.
- * <p>
- * Each enum constant represents a JsonPath expression used to extract specific fields
- * from database query results stored as JSON. The expressions support both direct
- * indexed access (e.g., {@code $[0].EMAIL}) and filtered access by ID
- * (e.g., {@code $[?(@.ID == 1)].EMAIL}).
- * </p>
- * <p>
- * The {@link #getJsonPath(Object...)} method enables dynamic path construction by
- * formatting placeholders with runtime arguments, allowing tests to query specific
- * rows or filter by criteria.
- * </p>
- * <p>
- * These paths integrate with ROA's database validation framework to assert on query
- * results in a readable, maintainable way:
+ *
+ * <p>Each enum constant represents a JsonPath expression used to extract specific fields from
+ * database query results stored as JSON. The expressions support both direct indexed access (e.g.,
+ * {@code $[0].EMAIL}) and filtered access by ID (e.g., {@code $[?(@.ID == 1)].EMAIL}).
+ *
+ * <p>The {@link #getJsonPath(Object...)} method enables dynamic path construction by formatting
+ * placeholders with runtime arguments, allowing tests to query specific rows or filter by criteria.
+ *
+ * <p>These paths integrate with ROA database validation framework to assert on query results in a
+ * readable, maintainable way:
+ *
  * <pre>{@code
  * Assertion.builder()
  *     .target(QUERY_RESULT)
@@ -24,10 +21,10 @@ package io.cyborgcode.ui.complex.test.framework.db.extractors;
  *     .expected("admin@vaadin.com")
  *     .build()
  * }</pre>
- * </p>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum DbResponsesJsonPaths {
-
    DELETED("$[%d].updatedRows"),
    EMAIL("$[%d].EMAIL"),
    EMAIL_BY_ID("$[?(@.ID == %d)].EMAIL"),

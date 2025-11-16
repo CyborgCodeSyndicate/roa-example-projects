@@ -19,26 +19,26 @@ import static io.cyborgcode.roa.ui.util.strategy.StrategyGenerator.*;
 
 /**
  * Vaadin-specific implementation of the {@link Checkbox} component interface.
- * <p>
- * This class provides the concrete logic for interacting with Vaadin checkboxes
- * ({@code <mat-checkbox>} elements) in the Bakery Flow application. It is automatically
- * selected by ROA's component resolution mechanism when a checkbox element is tagged with
- * {@link CheckboxFieldTypes#VA_CHECKBOX_TYPE} via the {@code @ImplementationOfType} annotation.
- * </p>
- * <p>
- * Key capabilities:
+ *
+ * <p>This class provides the concrete logic for interacting with Vaadin checkboxes ({@code
+ * <mat-checkbox>} elements). It is automatically selected by ROA component resolution mechanism
+ * when a checkbox element is tagged with {@link CheckboxFieldTypes#VA_CHECKBOX_TYPE} via the
+ * {@link ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ *
  * <ul>
- *   <li>Select/deselect checkboxes by label text, locator, or strategy (FIRST, LAST, RANDOM, ALL)</li>
- *   <li>Check selection state via {@code checked} DOM attribute</li>
- *   <li>Check enabled/disabled state via {@code disabled} DOM attribute</li>
- *   <li>Retrieve all selected or available checkbox labels</li>
- *   <li>Wait for attribute changes after click to ensure state synchronization</li>
+ *   <li>Select/deselect checkboxes by label text, locator, or strategy (FIRST, LAST, RANDOM, ALL)
+ *   <li>Check selection state via {@code checked} DOM attribute
+ *   <li>Check enabled/disabled state via {@code disabled} DOM attribute
+ *   <li>Retrieve all selected or available checkbox labels
+ *   <li>Wait for attribute changes after click to ensure state synchronization
  * </ul>
- * </p>
- * <p>
- * This implementation handles Vaadin's DOM structure and attribute-based state
- * management, ensuring reliable interaction with checkboxes in dynamic UIs.
- * </p>
+ *
+ * <p>This implementation handles Vaadin's DOM structure and attribute-based state management,
+ * ensuring reliable interaction with checkboxes in dynamic UIs.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @ImplementationOfType(CheckboxFieldTypes.Data.VA_CHECKBOX)
 public class CheckboxVaImpl extends BaseComponent implements Checkbox {

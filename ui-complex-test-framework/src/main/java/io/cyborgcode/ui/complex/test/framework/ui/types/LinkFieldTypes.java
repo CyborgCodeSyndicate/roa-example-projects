@@ -4,24 +4,34 @@ import io.cyborgcode.roa.ui.components.link.LinkComponentType;
 
 /**
  * Registry of link/navigation component type identifiers for the test framework.
- * <p>
- * Each enum constant represents a specific link implementation technology (Material Design,
- * Bootstrap, Vaadin) that can be used to tag link/tab elements. ROA's {@code @ImplementationOfType}
+ *
+ * <p>Each enum constant represents a specific link implementation technology (Material Design,
+ * Bootstrap, Vaadin) that can be used to tag link/tab elements. ROA {@code @ImplementationOfType}
  * annotation uses these type identifiers to automatically select the correct component
  * implementation class at runtime.
- * </p>
- * <p>
- * Available types:
+ *
+ * <p>Available types:
+ *
  * <ul>
- *   <li>{@link #MD_LINK_TYPE} — Material Design links</li>
- *   <li>{@link #BOOTSTRAP_LINK_TYPE} — Bootstrap-styled links</li>
- *   <li>{@link #VA_LINK_TYPE} — Vaadin tabs/links (used in Bakery Flow)</li>
+ *   <li>{@link #MD_LINK_TYPE} — Material Design links
+ *   <li>{@link #BOOTSTRAP_LINK_TYPE} — Bootstrap-styled links
+ *   <li>{@link #VA_LINK_TYPE} — Vaadin tabs/links
  * </ul>
- * </p>
- * <p>
- * The nested {@link Data} class provides string constants used in {@code @ImplementationOfType}
+ *
+ * <p>The nested {@link Data} class provides string constants used in {@code @ImplementationOfType}
  * annotations to link implementation classes (e.g., {@code LinkVaImpl}) to their type.
- * </p>
+ *
+ * <p>Example:
+ *
+ * <pre>{@code
+ * // Implementation class for Vaadin links
+ * @ImplementationOfType(type = LinkFieldTypes.Data.VA_LINK)
+ * public class LinkVaImpl implements LinkComponent {
+ *     // ...
+ * }
+ * }</pre>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum LinkFieldTypes implements LinkComponentType {
 

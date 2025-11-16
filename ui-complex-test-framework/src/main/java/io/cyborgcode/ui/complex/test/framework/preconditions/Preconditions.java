@@ -12,24 +12,28 @@ import java.util.function.BiConsumer;
 import static io.cyborgcode.ui.complex.test.framework.preconditions.PreconditionFunctions.*;
 
 /**
- * Registry of reusable pre-test journeys for the Bakery UI test suite.
- * <p>
- * Each enum constant represents a named precondition that can be referenced from
- * {@link Journey @Journey} annotations to set up required state before test execution.
- * The underlying {@link BiConsumer} receives the active {@link SuperQuest} and any
- * journey data, and is responsible for preparing the required state (e.g., logging in users,
- * creating orders, validating sellers) before the actual test method executes.
- * <p>
- * Centralizing preconditions here keeps setup logic:
+ * Registry of reusable pre-test journeys for the example test suite.
+ *
+ * <p>Each enum constant represents a named precondition that can be referenced from {@link Journey}
+ * annotations to set up required state before test execution. The underlying {@link BiConsumer}
+ * receives the active {@link SuperQuest} and any journey data, and is responsible for preparing the
+ * required state (e.g., logging in users, creating orders, validating sellers) before the actual
+ * test method executes.
+ *
+ * <p>Centralizing preconditions here keeps setup logic:
+ *
  * <ul>
- *   <li>discoverable and type-safe,</li>
- *   <li>reusable across multiple tests,</li>
- *   <li>aligned with the ROA {@link PreQuestJourney} contract,</li>
- *   <li>decoupled from test implementation details.</li>
+ *   <li>discoverable and type-safe,
+ *   <li>reusable across multiple tests,
+ *   <li>aligned with the ROA {@link PreQuestJourney} contract,
+ *   <li>decoupled from test implementation details.
  * </ul>
+ *
+ * <p>The nested {@link Data} class provides string constants for annotation-based references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum Preconditions implements PreQuestJourney<Preconditions> {
-
    SELLER_EXIST_IN_DB_PRECONDITION((quest, objects) -> validateSellerExistInDatabase(quest, (Seller) objects[0])),
    ORDER_PRECONDITION((quest, objects) -> validOrderSetup(quest, (Order) objects[0])),
    ORDER_PRECONDITION_LATE((quest, objects) -> validOrderSetup(quest, (Late<Order>) objects[0])),

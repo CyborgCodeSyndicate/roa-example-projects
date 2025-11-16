@@ -12,22 +12,24 @@ import java.util.List;
 
 /**
  * Factory methods backing {@link DataCreator} entries.
- * <p>
- * Provides centralized, reusable builders for test data objects used across examples.
- * Some factories are context-aware: they can read from the active {@link SuperQuest}
- * storage or apply the late-bound creation pattern demonstrating ROA's
- * ability to extract runtime data from UI responses and reuse it in subsequent test steps.
- * <p>
- * This keeps test classes focused on behavior while delegating all data construction
- * and lookup logic to a single, maintainable location.
+ *
+ * <p>Provides centralized, reusable builders for test data objects used across examples. Some
+ * factories are context-aware: they can read from the active {@link SuperQuest} storage or apply
+ * the late-bound creation pattern demonstrating ROA ability to extract runtime data from UI
+ * responses and reuse it in subsequent test steps.
+ *
+ * <p>This keeps test classes focused on behavior while delegating all data construction and lookup
+ * logic to a single, maintainable location.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public final class DataCreatorFunctions {
 
-    private static final String RESPONSE_BODY_EXTRACTOR = "?v-r=uidl";
-    private static final String JSON_PATH_PRODUCT_NAME = "$..orderCard[?(@.fullName=='John Terry')].items[*].product.name";
-    private static final String JSON_PREFIX = "for(;;);";
+   private static final String RESPONSE_BODY_EXTRACTOR = "?v-r=uidl";
+   private static final String JSON_PATH_PRODUCT_NAME = "$..orderCard[?(@.fullName=='John Terry')].items[*].product.name";
+   private static final String JSON_PREFIX = "for(;;);";
 
-    private DataCreatorFunctions() {
+   private DataCreatorFunctions() {
    }
 
    public static Seller createValidSeller() {

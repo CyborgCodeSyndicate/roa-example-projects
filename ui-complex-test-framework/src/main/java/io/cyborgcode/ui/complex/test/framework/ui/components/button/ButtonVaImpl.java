@@ -11,25 +11,25 @@ import org.openqa.selenium.NoSuchElementException;
 
 /**
  * Vaadin-specific implementation of the {@link Button} component interface.
- * <p>
- * This class provides the concrete logic for interacting with Vaadin buttons
- * ({@code <vaadin-button>} elements) in the Bakery Flow application. It is automatically
- * selected by ROA's component resolution mechanism when a button element is tagged with
- * {@link ButtonFieldTypes#VA_BUTTON_TYPE} via the {@code @ImplementationOfType} annotation.
- * </p>
- * <p>
- * Key capabilities:
+ *
+ * <p>This class provides the concrete logic for interacting with Vaadin buttons ({@code
+ * <vaadin-button>} elements). It is automatically selected by ROA component resolution mechanism
+ * when a button element is tagged with {@link ButtonFieldTypes#VA_BUTTON_TYPE} via the
+ * {@code @ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ *
  * <ul>
- *   <li>Click buttons by text, locator, or within a container</li>
- *   <li>Check enabled/disabled state via {@code disabled} DOM attribute</li>
- *   <li>Check visibility via {@code hidden} DOM attribute</li>
- *   <li>Find buttons dynamically by text content</li>
+ *   <li>Click buttons by text, locator, or within a container
+ *   <li>Check enabled/disabled state via {@code disabled} DOM attribute
+ *   <li>Check visibility via {@code hidden} DOM attribute
+ *   <li>Find buttons dynamically by text content
  * </ul>
- * </p>
- * <p>
- * This implementation handles Vaadin's DOM structure and attribute-based state
- * management, ensuring reliable interaction with buttons in dynamic UIs.
- * </p>
+ *
+ * <p>This implementation handles Vaadin's DOM structure and attribute-based state management,
+ * ensuring reliable interaction with buttons in dynamic UIs.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @ImplementationOfType(ButtonFieldTypes.Data.VA_BUTTON)
 public class ButtonVaImpl extends BaseComponent implements Button {

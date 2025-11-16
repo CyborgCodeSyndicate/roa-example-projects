@@ -8,21 +8,22 @@ import io.cyborgcode.roa.db.service.fluent.DatabaseServiceFluent;
 import lombok.experimental.UtilityClass;
 
 /**
- * Central registry for ROA "rings" (fluent API facades) available to tests in the Bakery suite.
- * <p>
- * A ring represents the concrete fluent service implementation that backs {@link Quest#use(Class)}.
+ * Central registry for ROA "rings" (fluent API facades) used in the example test suite.
+ *
+ * <p>A ring represents the concrete fluent service implementation that backs {@link Quest#use(Class)}.
  * Tests switch between rings to access different testing capabilities:
- * </p>
+ *
  * <ul>
- *   <li>{@link #RING_OF_API} — REST API operations via RestAssured</li>
- *   <li>{@link #RING_OF_DB} — Database query and validation operations</li>
- *   <li>{@link #RING_OF_UI} — Selenium-based UI interactions (inputs, buttons, selects, etc.)</li>
- *   <li>{@link #RING_OF_CUSTOM} — Delegate to a custom higher-level service with reusable flows</li>
+ *   <li>{@link #RING_OF_API} — REST API operations via RestAssured
+ *   <li>{@link #RING_OF_DB} — Database query and validation operations
+ *   <li>{@link #RING_OF_UI} — Selenium-based UI interactions (inputs, buttons, selects, etc.)
+ *   <li>{@link #RING_OF_CUSTOM} — Delegate to a custom higher-level service with reusable flows
  * </ul>
- * <p>
- * This indirection keeps test code expressive while cleanly separating concerns between low-level HTTP,
- * database interactions, UI operations and shared domain-specific actions.
- * </p>
+ *
+ * <p>This indirection keeps test code expressive while cleanly separating concerns between
+ * low-level HTTP, database interactions, UI operations and shared domain-specific actions.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @UtilityClass
 public class Rings {

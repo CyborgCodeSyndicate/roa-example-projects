@@ -11,23 +11,30 @@ import org.openqa.selenium.By;
 import java.util.function.Consumer;
 
 /**
- * Registry of checkbox UI elements for the Bakery Flow application.
- * <p>
- * Each enum constant defines a specific checkbox with its Selenium locator,
- * component type, and optional before/after synchronization hooks. Implements
- * {@link CheckboxUiElement} to integrate with ROA's fluent UI testing API,
- * enabling operations like {@code quest.use(RING_OF_UI).checkbox().select(PAST_ORDERS_CHECKBOX)}.
- * </p>
- * <p>
- * Before/after hooks leverage {@link SharedUi} functions to handle asynchronous page behavior,
+ * Registry of checkbox UI elements for the test application.
+ *
+ * <p>Each enum constant defines a specific checkbox with its Selenium {@link By} locator, component
+ * type (see {@link CheckboxComponentType}), and optional before/after synchronization hooks.
+ *
+ * <p>Implements {@link CheckboxUiElement} to integrate with ROA fluent UI testing API, for
+ * selecting and validating checkbox options.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * quest
+ *     .use(Rings.RING_OF_UI)
+ *     .checkbox().select(CheckboxFields.PAST_ORDERS_CHECKBOX);
+ * }</pre>
+ *
+ * <p>Before/after hooks leverage {@link SharedUi} functions to handle asynchronous page behavior,
  * ensuring checkboxes are fully rendered and interactive before test actions.
- * </p>
- * <p>
- * The nested {@link Data} class provides string constants for annotation-based references.
- * </p>
+ *
+ * <p>The nested {@link Data} class provides string constants for annotation-based references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum CheckboxFields implements CheckboxUiElement {
-
    PAST_ORDERS_CHECKBOX(By.tagName("vaadin-checkbox"), CheckboxFieldTypes.VA_CHECKBOX_TYPE);
 
    public static final class Data {

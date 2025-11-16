@@ -13,25 +13,25 @@ import java.util.Objects;
 
 /**
  * Vaadin-specific implementation of the {@link Link} component interface.
- * <p>
- * This class provides the concrete logic for interacting with Vaadin navigation tabs
- * ({@code <vaadin-tab>} elements) in the Bakery Flow application. It is automatically
- * selected by ROA's component resolution mechanism when a link element is tagged with
- * {@link LinkFieldTypes#VA_LINK_TYPE} via the {@code @ImplementationOfType} annotation.
- * </p>
- * <p>
- * Key capabilities:
+ *
+ * <p>This class provides the concrete logic for interacting with Vaadin links ({@code
+ * <vaadin-tab>} elements). It is automatically selected by ROA component resolution mechanism when
+ * a link element is tagged with {@link LinkFieldTypes#VA_LINK_TYPE} via the
+ * {@link ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ *
  * <ul>
- *   <li>Click or double-click links by text, locator, or within a container</li>
- *   <li>Check enabled/disabled state via {@code disabled} class attribute</li>
- *   <li>Check visibility via {@code hidden} DOM attribute</li>
- *   <li>Find links dynamically by text content</li>
+ *   <li>Click or double-click links by text, locator, or within a container
+ *   <li>Check enabled/disabled state via {@code disabled} class attribute
+ *   <li>Check visibility via {@code hidden} DOM attribute
+ *   <li>Find links dynamically by text content
  * </ul>
- * </p>
- * <p>
- * This implementation handles Vaadin's DOM structure and attribute-based state
- * management, ensuring reliable interaction with navigation tabs in dynamic UIs.
- * </p>
+ *
+ * <p>This implementation handles Vaadin's DOM structure and attribute-based state management,
+ * ensuring reliable interaction with links in dynamic UIs.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @ImplementationOfType(LinkFieldTypes.Data.VA_LINK)
 public class LinkVaImpl extends BaseComponent implements Link {

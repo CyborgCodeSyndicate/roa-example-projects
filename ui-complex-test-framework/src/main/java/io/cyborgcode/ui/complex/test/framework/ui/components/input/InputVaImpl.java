@@ -14,27 +14,27 @@ import java.util.Objects;
 
 /**
  * Vaadin-specific implementation of the {@link Input} component interface.
- * <p>
- * This class provides the concrete logic for interacting with Vaadin input fields
- * ({@code <vaadin-text-field>} elements) in the Bakery Flow application. It is automatically
- * selected by ROA's component resolution mechanism when an input element is tagged with
- * {@link InputFieldTypes#VA_INPUT_TYPE} via the {@code @ImplementationOfType} annotation.
- * </p>
- * <p>
- * Key capabilities:
+ *
+ * <p>This class provides the concrete logic for interacting with Vaadin input fields ({@code
+ * <vaadin-text-field>} elements). It is automatically selected by ROA component resolution
+ * mechanism when an input element is tagged with {@link InputFieldTypes#VA_INPUT_TYPE} via the
+ * {@link ImplementationOfType} annotation.
+ *
+ * <p>Key capabilities:
+ *
  * <ul>
- *   <li>Insert text into fields by label, locator, or within a container</li>
- *   <li>Clear field values</li>
- *   <li>Retrieve current field values via {@code value} DOM attribute</li>
- *   <li>Check enabled/disabled state via {@code disabled} DOM attribute</li>
- *   <li>Retrieve validation error messages from {@code error-message} part</li>
- *   <li>Find fields dynamically by label text</li>
+ *   <li>Insert text into fields by label, locator, or within a container
+ *   <li>Clear field values
+ *   <li>Retrieve current field values via {@code value} DOM attribute
+ *   <li>Check enabled/disabled state via {@code disabled} DOM attribute
+ *   <li>Retrieve validation error messages from {@code error-message} part
+ *   <li>Find fields dynamically by label text
  * </ul>
- * </p>
- * <p>
- * This implementation handles Vaadin's DOM structure and attribute-based state
- * management, ensuring reliable interaction with input fields in dynamic UIs.
- * </p>
+ *
+ * <p>This implementation handles Vaadin's DOM structure and attribute-based state management,
+ * ensuring reliable interaction with input fields in dynamic UIs.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @ImplementationOfType(InputFieldTypes.Data.VA_INPUT)
 public class InputVaImpl extends BaseComponent implements Input {

@@ -8,32 +8,31 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import static io.cyborgcode.ui.complex.test.framework.ui.functions.ExpectedConditionsStore.*;
 
 /**
- * Implementation functions for common UI synchronization patterns.
- * <p>
- * This utility class provides static methods that handle waiting for various UI states,
- * particularly for Vaadin-based applications where asynchronous rendering and AJAX updates
- * require careful synchronization. These functions are referenced by {@link SharedUi} enum
- * constants and used as before/after hooks in UI element definitions.
- * </p>
- * <p>
- * Key synchronization patterns:
- * <ul>
- *   <li>{@link #waitForLoading(SmartWebDriver)} — waits for Vaadin loading indicators</li>
- *   <li>{@link #waitForPresence(SmartWebDriver, By)} — waits for element visibility</li>
- *   <li>{@link #waitToBeClickable(SmartWebDriver, By)} — waits for interactive state</li>
- *   <li>{@link #waitToBeRemoved(SmartWebDriver, By)} — waits for element removal</li>
- *   <li>{@link #waitForElementLoading(SmartWebDriver, SmartWebElement)} — waits for element-specific loading attribute</li>
- * </ul>
- * </p>
- * <p>
- * These functions leverage custom {@link ExpectedConditions} from {@link ExpectedConditionsStore}
- * to handle Vaadin-specific DOM attributes and state changes.
- * </p>
+ * Reusable Selenium wait helpers for the demo application.
+ *
+ * <p>This utility centralizes synchronization logic used by UI flows. It wraps {@link SmartWebDriver}
+ * waits and delegates to custom conditions from {@link ExpectedConditionsStore} and
+ * standard Selenium {@link ExpectedConditions} where appropriate.
+ *
+ * <p>These functions are used by higher-level strategies in {@link SharedUi} (via
+ * {@link ContextConsumer}) to compose per-control before/after hooks in UI element enums.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * // Direct wait with SmartWebDriver
+ * SharedUiFunctions.waitForPresence(smartWebDriver, By.id("alert_content"));
+ *
+ * // As an enum hook (see SharedUi)
+ * SharedUi.WAIT_FOR_PRESENCE.accept(smartWebDriver, By.id("btn_submit"));
+ * }</pre>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public class SharedUiFunctions {
 
-    private SharedUiFunctions() {
-    }
+   private SharedUiFunctions() {
+   }
 
    /**
     * Waits for 1 second. This can be used to add a delay when

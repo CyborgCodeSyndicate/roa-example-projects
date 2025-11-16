@@ -13,24 +13,40 @@ import org.openqa.selenium.By;
 import java.util.function.Consumer;
 
 /**
- * Registry of button UI elements for the Bakery Flow application.
- * <p>
- * Each enum constant defines a specific button with its Selenium locator,
- * component type, and optional before/after synchronization hooks to handle dynamic page behavior.
- * Implements {@link ButtonUiElement} to integrate with ROA's fluent UI testing API,
- * enabling operations like {@code quest.use(RING_OF_UI).button().click(SIGN_IN_BUTTON)}.
- * </p>
- * <p>
- * Buttons may use custom wait strategies via {@link SharedUi} to ensure clickability,
- * wait for overlays, or verify element removal after interaction. These patterns handle
- * asynchronous UI updates and modal dialogs.
- * </p>
- * <p>
- * The nested {@link Data} class provides string constants for annotation-based references.
- * </p>
+ * Registry of button UI elements for the test application.
+ *
+ * <p>Each enum constant defines a specific button with its Selenium {@link By} locator, component
+ * type (see {@link ButtonComponentType}), and optional before/after synchronization hooks to handle
+ * dynamic page behavior.
+ *
+ * <p>Implements {@link ButtonUiElement} to integrate with ROA fluent UI testing API, enabling click
+ * operations.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * quest
+ *     .use(Rings.RING_OF_UI)
+ *     .button().click(ButtonFields.SIGN_IN_BUTTON);
+ * }</pre>
+ *
+ * <p>Buttons can declare custom wait strategies via {@link SharedUi} and {@link ContextConsumer} to
+ * ensure presence/clickability, wait for overlays, or verify element removal after interaction.
+ * These patterns help stabilize interactions against asynchronous UI updates and page transitions.
+ *
+ * <p>The lifecycle hooks are exposed through {@link #before()} and {@link #after()}, which return
+ * {@link Consumer} instances executed with the active {@link SmartWebDriver}. This allows
+ * per-control synchronization without duplicating waits inside tests.
+ *
+ * <p>Typical usage targets Vaadin-styled buttons via the {@link ButtonFieldTypes} mapping to the
+ * framework’s {@code Button} component implementation.
+ *
+ * <p>The nested {@link ButtonFields.Data} class provides string constants for annotation-based
+ * references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum ButtonFields implements ButtonUiElement {
-
    SIGN_IN_BUTTON(By.tagName("vaadin-button"), ButtonFieldTypes.VA_BUTTON_TYPE,
          SharedUi.WAIT_FOR_LOADING),
    NEW_ORDER_BUTTON(By.cssSelector("vaadin-button#action"), ButtonFieldTypes.VA_BUTTON_TYPE,

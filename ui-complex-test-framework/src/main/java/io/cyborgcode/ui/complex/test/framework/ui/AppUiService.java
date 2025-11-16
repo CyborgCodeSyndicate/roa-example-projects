@@ -6,30 +6,30 @@ import io.cyborgcode.roa.ui.service.fluent.*;
 import io.cyborgcode.roa.ui.service.tables.TableServiceFluent;
 
 /**
- * Application-specific UI service facade for the Bakery Flow test suite.
- * <p>
- * This class extends {@link UiServiceFluent} to provide a type-safe, fluent API
- * for interacting with UI elements via Selenium. It acts as the "UI ring" in the
- * ROA framework and is accessed via {@code quest.use(RING_OF_UI)}.
- * </p>
- * <p>
- * The service exposes shorthand methods for all UI component types:
+ * Application-specific UI service facade for the demo test application.
+ *
+ * <p>This class extends {@link UiServiceFluent} to provide a type-safe, fluent API for interacting
+ * with UI elements via Selenium. It acts as the "UI ring" in the ROA framework and is accessed via
+ * {@code quest.use(Rings.RING_OF_UI)}.
+ *
+ * <p>The service exposes shorthand methods for all UI component types:
+ *
  * <ul>
- *   <li>{@link #input()} — text input operations</li>
- *   <li>{@link #button()} — button operations</li>
- *   <li>{@link #select()} — dropdown/combo-box interactions</li>
- *   <li>{@link #checkbox()}, {@link #radio()} — selection controls</li>
- *   <li>{@link #table()}, {@link #list()} — complex data display components</li>
- *   <li>{@link #browser()} — navigation and page-level operations</li>
- *   <li>{@link #interceptor()} — network request/response interception</li>
- *   <li>{@link #insertion()} — automatic form filling from domain objects</li>
- *   <li>{@link #validate()} — custom validation logic</li>
+ *   <li>{@link #input()} — text input operations
+ *   <li>{@link #button()} — button operations
+ *   <li>{@link #select()} — dropdown/combo-box interactions
+ *   <li>{@link #checkbox()} — selection controls
+ *   <li>{@link #table()} and {@link #list()} — complex data display components
+ *   <li>{@link #browser()} — navigation and page-level operations
+ *   <li>{@link #interceptor()} — network request/response interception
+ *   <li>{@link #insertion()} — automatic form filling from domain objects
+ *   <li>{@link #validate()} — custom validation logic
  * </ul>
- * </p>
- * <p>
- * This service maintains the fluent chain pattern, allowing tests to compose
- * complex UI interaction sequences in a readable, declarative style.
- * </p>
+ *
+ * <p>This service maintains the fluent chain pattern, allowing tests to compose complex UI
+ * interaction sequences in a readable, declarative style.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public class AppUiService extends UiServiceFluent<AppUiService> {
 
@@ -59,10 +59,6 @@ public class AppUiService extends UiServiceFluent<AppUiService> {
       return getButtonField();
    }
 
-   public RadioServiceFluent<AppUiService> radio() {
-      return getRadioField();
-   }
-
    public SelectServiceFluent<AppUiService> select() {
       return getSelectField();
    }
@@ -77,10 +73,6 @@ public class AppUiService extends UiServiceFluent<AppUiService> {
 
    public LinkServiceFluent<AppUiService> link() {
       return getLinkField();
-   }
-
-   public AlertServiceFluent<AppUiService> alert() {
-      return getAlertField();
    }
 
    public NavigationServiceFluent<AppUiService> browser() {

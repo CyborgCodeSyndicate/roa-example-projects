@@ -7,31 +7,28 @@ import org.apache.logging.log4j.util.TriConsumer;
 import java.util.Map;
 
 /**
- * Registry of database hook flows for the Bakery UI test suite.
- * <p>
- * Each enum constant represents a reusable database setup/teardown operation that can be
- * referenced from {@code @DbHook} annotations. The underlying {@link TriConsumer} receives
- * the {@link DatabaseService}, shared storage, and optional arguments to execute database
- * operations before/after tests.
- * </p>
- * <p>
- * Hook flows are typically used for:
+ * Registry of database hook flows for the example test suite.
+ *
+ * <p>Each enum constant represents a reusable database setup/teardown operation that can be
+ * referenced from {@code @DbHook} annotations. The underlying {@link TriConsumer} receives the
+ * {@link DatabaseService}, shared storage, and optional arguments to execute database operations
+ * before/after tests.
+ *
+ * <p>Hook flows are typically used for:
+ *
  * <ul>
- *   <li>initializing in-memory databases with schema and seed data,</li>
- *   <li>executing queries and storing results in test storage for assertions,</li>
- *   <li>cleaning up database state after test execution.</li>
+ *   <li>initializing in-memory or other databases with schema and seed data,
+ *   <li>executing queries and storing results in test storage for assertions,
+ *   <li>cleaning up database state after test execution.
  * </ul>
- * </p>
- * <p>
- * The nested {@link Data} class provides string constants for annotation-based references,
- * decoupling test code from enum names.
- * </p>
+ *
+ * <p>The nested {@link Data} class provides string constants for annotation-based references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum DbHookFlows implements DbHookFlow<DbHookFlows> {
-
    INITIALIZE_H2((service, storage, args) -> DbHookFunctions.initializeH2(service)),
    QUERY_SAVE_IN_STORAGE_H2(DbHookFunctions::getFromDbSaveInStorage);
-
 
    public static final class Data {
 

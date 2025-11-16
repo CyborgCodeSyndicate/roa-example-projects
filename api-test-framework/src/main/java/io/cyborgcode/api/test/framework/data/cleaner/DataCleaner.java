@@ -15,8 +15,7 @@ import java.util.function.Consumer;
  *   <li>{@link #DELETE_ADMIN_USER} — removes the admin user created during tests.</li>
  * </ul>
  * <p>
- * The nested {@link Data} class exposes string keys that can be referenced in annotations,
- * decoupling test code from the enum name while keeping the mapping explicit.
+ * The nested {@link Data} class provides string constants for annotation-based references.
  * </p>
  */
 public enum DataCleaner implements DataRipper<DataCleaner> {

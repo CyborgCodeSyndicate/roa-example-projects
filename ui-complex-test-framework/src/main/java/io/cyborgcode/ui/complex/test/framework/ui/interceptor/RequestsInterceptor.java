@@ -5,27 +5,18 @@ import io.cyborgcode.ui.complex.test.framework.data.extractor.DataExtractorFunct
 
 /**
  * Registry of network request interception patterns for capturing UI traffic.
- * <p>
- * Each enum constant defines a URL substring pattern used to intercept and capture
- * specific network requests made by the Vaadin UI. This enables tests to extract
- * runtime data from AJAX responses, validate backend communication, and create
- * context-aware test data.
- * </p>
- * <p>
- * Available interception patterns:
- * <ul>
- *   <li>{@link #INTERCEPT_REQUEST_AUTH} — captures Vaadin UIDL (UI Definition Language) requests</li>
- *   <li>{@link #INTERCEPT_REQUEST_LOGIN} — captures login endpoint requests</li>
- * </ul>
- * </p>
- * <p>
- * These interceptors integrate with ROA's {@code @Intercept} annotation and are used
- * in conjunction with {@link DataExtractorFunctions}
- * to parse response bodies and extract values for assertions or late-bound data creation.
- * </p>
- * <p>
- * The nested {@link Data} class provides string constants for annotation-based references.
- * </p>
+ *
+ * <p>Each enum constant defines a URL substring pattern used to intercept and capture specific
+ * network requests made by the Vaadin UI. This enables tests to extract runtime data from AJAX
+ * responses, validate backend communication, and create context-aware test data.
+ *
+ * <p>These interceptors integrate with ROA {@code @Intercept} annotation and are used in
+ * conjunction with {@link DataExtractorFunctions} to parse response bodies and extract values for
+ * assertions or late-bound data creation.
+ *
+ * <p>The nested {@link Data} class provides string constants for annotation-based references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum RequestsInterceptor implements DataIntercept<RequestsInterceptor> {
 

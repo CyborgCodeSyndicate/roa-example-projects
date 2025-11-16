@@ -8,17 +8,17 @@ import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.Da
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.Data.USERNAME_FIELD;
 
 /**
- * Domain model representing a seller/user in the Bakery Flow application.
- * <p>
- * This class is used for authentication and user management tests. Fields annotated with
- * {@link InsertionElement @InsertionElement} enable automatic form filling via ROA's
- * insertion mechanism: {@code quest.use(RING_OF_UI).insertion().insertData(seller)}
- * will automatically populate username and password fields in the correct order.
- * </p>
- * <p>
- * The {@code @InsertionElement} annotation maps each field to a specific UI element
- * and execution order, abstracting the manual input logic and making tests more maintainable.
- * </p>
+ * Domain model representing a seller/user in the test application.
+ *
+ * <p>This class is used for authentication and user management tests. Fields annotated with
+ * {@link InsertionElement} enable automatic form filling via ROA insertion mechanism: {@code
+ * quest.use(RING_OF_UI).insertion().insertData(seller)} will automatically populate username and
+ * password fields in the correct order.
+ *
+ * <p>The {@code @InsertionElement} annotation maps each field to a specific UI element and
+ * execution order, abstracting the manual input logic and making tests more maintainable.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @NoArgsConstructor
 @AllArgsConstructor

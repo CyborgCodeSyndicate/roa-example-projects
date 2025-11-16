@@ -22,21 +22,12 @@ import static io.cyborgcode.ui.complex.test.framework.db.queries.AppQueries.QUER
 
 /**
  * Provides reusable cleanup routines invoked by {@link DataCleaner}.
- * <p>
- * Each method in this class is designed to be called from ROA's
- * {@code @Ripper}/{@link DataRipper}
- * mechanism via a {@link SuperQuest}, encapsulating teardown logic
- * (such as test data deletion) outside of individual test methods.
- * </p>
- * <p>
- * The {@link #cleanAllOrders(SuperQuest)} method demonstrates a typical cleanup pattern:
- * <ol>
- *   <li>Retrieve all orders created during the test from storage</li>
- *   <li>For each order, execute DELETE queries via the DB ring</li>
- *   <li>Validate deletion success using database assertions</li>
- *   <li>Clean up related data (order products) to maintain referential integrity</li>
- * </ol>
- * </p>
+ *
+ * <p>Each method in this class is designed to be called from ROA {@code @Ripper}/{@link DataRipper}
+ * mechanism via a {@link SuperQuest}, encapsulating teardown logic (such as test data
+ * deletion) outside of individual test methods.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public final class DataCleanerFunctions {
 

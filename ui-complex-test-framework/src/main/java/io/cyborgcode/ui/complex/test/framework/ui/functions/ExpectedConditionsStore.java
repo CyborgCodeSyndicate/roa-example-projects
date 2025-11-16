@@ -7,28 +7,32 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
- * Custom Selenium {@link ExpectedCondition} implementations for Vaadin UI testing.
- * <p>
- * This utility class provides wait conditions tailored to Vaadin's DOM structure and
- * asynchronous rendering behavior. Unlike standard Selenium {@link org.openqa.selenium.support.ui.ExpectedConditions},
- * these conditions handle Vaadin-specific attributes (e.g., {@code loading}, {@code disabled})
- * and gracefully handle {@link StaleElementReferenceException}s common in dynamic UIs.
- * </p>
- * <p>
- * Available conditions:
- * <ul>
- *   <li>{@link #visibilityOfElementLocatedCustom(By)} — checks if element is displayed</li>
- *   <li>{@link #invisibilityOfElementLocatedCustom(By)} — checks if element is hidden or removed</li>
- *   <li>{@link #elementToBeClickableCustom(By)} — checks if element is visible and enabled</li>
- *   <li>{@link #attributeLoadingToBeRemovedCustom(SmartWebElement)} — waits for Vaadin loading attribute removal</li>
- * </ul>
- * </p>
- * <p>
- * These conditions are used by {@link SharedUiFunctions} to implement robust synchronization
- * strategies for the Bakery Flow test suite.
- * </p>
+ * Custom Selenium {@link ExpectedCondition} utilities for robust UI waits.
+ *
+ * <p>This class provides synchronization conditions tailored for dynamic, JavaScript-driven pages
+ * used in the demo application. Compared to standard Selenium {@link ExpectedConditions}, these
+ * helpers are designed to be resilient to transient DOM states and common timing issues (e.g.,
+ * {@link StaleElementReferenceException}).
+ *
+ * <p>These conditions are consumed by {@link SharedUiFunctions} and higher-level wait strategies
+ * (see {@link SharedUi}) to keep tests stable and expressive.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * // Direct usage with SmartWebDriver
+ * smartWebDriver.getWait().until(ExpectedConditionsStore
+ *         .visibilityOfElementLocatedCustom(By.id("alert_content"))
+ * );
+ *
+ * // Indirect usage via SharedUiFunctions
+ * SharedUiFunctions.waitForPresence(smartWebDriver, By.id("alert_content"));
+ * }</pre>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public class ExpectedConditionsStore {
 

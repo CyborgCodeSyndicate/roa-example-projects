@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Enum-based definition of all API endpoints used in the Bakery Flow application tests.
+ * Enum-based definition of all API endpoints used in the test application.
  * <p>
  * Each constant specifies the HTTP method and relative URL for a given operation and
  * implements {@link Endpoint} to integrate with the ROA fluent API. Endpoints support

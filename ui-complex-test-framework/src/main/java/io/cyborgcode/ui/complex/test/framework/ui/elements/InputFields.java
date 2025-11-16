@@ -12,23 +12,30 @@ import org.openqa.selenium.By;
 import java.util.function.Consumer;
 
 /**
- * Registry of input field UI elements for the Bakery Flow application.
- * <p>
- * Each enum constant defines a specific input field with its Selenium locator,
- * component type, and optional before/after synchronization hooks.
- * Implements {@link InputUiElement} to integrate with ROA's fluent UI testing API,
- * enabling operations like {@code quest.use(RING_OF_UI).input().insert(USERNAME_FIELD, value)}.
- * </p>
- * <p>
- * Before/after hooks leverage {@link SharedUi} functions to handle asynchronous page behavior,
+ * Registry of input field UI elements for the test application.
+ *
+ * <p>Each enum constant defines a specific input field with its Selenium {@link By} locator,
+ * component type (see {@link InputComponentType}), and optional before/after synchronization hooks.
+ *
+ * <p>Implements {@link InputUiElement} to integrate with ROA fluent UI testing API, for typing,
+ * clearing, and validating input values.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * quest
+ *     .use(Rings.RING_OF_UI)
+ *     .input().insert(USERNAME_FIELD, "admin");
+ * }</pre>
+ *
+ * <p>Before/after hooks leverage {@link SharedUi} functions to handle asynchronous page behavior,
  * such as waiting for elements to be present or for loading indicators to disappear.
- * </p>
- * <p>
- * The nested {@link Data} class provides string constants for annotation-based references.
- * </p>
+ *
+ * <p>The nested {@link Data} class provides string constants for annotation-based references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum InputFields implements InputUiElement {
-
    USERNAME_FIELD(By.id("vaadinLoginUsername"), InputFieldTypes.VA_INPUT_TYPE),
    PASSWORD_FIELD(By.id("vaadinLoginPassword"), InputFieldTypes.VA_INPUT_TYPE),
    SEARCH_BAR_FIELD(By.cssSelector("search-bar#search"), InputFieldTypes.VA_INPUT_TYPE,
