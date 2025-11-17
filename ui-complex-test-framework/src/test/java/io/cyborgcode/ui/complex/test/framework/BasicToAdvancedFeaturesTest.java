@@ -58,7 +58,7 @@ import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
 @DB
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 @DisplayName("Progressive UI Features: Basic to Advanced")
-class BasicToAdvancedFeatureTests extends BaseQuest {
+class BasicToAdvancedFeaturesTest extends BaseQuest {
 
    @Test
    @Regression

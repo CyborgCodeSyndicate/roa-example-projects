@@ -49,7 +49,7 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.EQUALS_IGNORE_CASE
 @API
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 @DisplayName("Database usage examples")
-class BakeryDataBaseTests extends BaseQuest {
+class DataBaseTest extends BaseQuest {
 
    @Test
    @Regression
