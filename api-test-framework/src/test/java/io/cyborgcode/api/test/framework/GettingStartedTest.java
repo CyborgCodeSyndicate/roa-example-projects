@@ -16,11 +16,13 @@ import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_USER;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.ERROR;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SINGLE_USER_EMAIL_EXPLICIT;
 import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOKEN;
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
 import static io.cyborgcode.api.test.framework.data.constants.PathVariables.ID_PARAM;
 import static io.cyborgcode.api.test.framework.data.constants.QueryParams.PAGE_PARAM;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Login.MISSING_PASSWORD_ERROR;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.PAGE_TWO;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_LEADER_JOB;
 import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_LEADER_NAME;
@@ -34,11 +36,11 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.NOT_NULL;
 import static io.restassured.http.ContentType.JSON;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_OK;
 
 /**
- * s
  * Minimal entry point for RoA-style API testing with Reqres.
  * <p>
  * IMPORTANT:
@@ -59,9 +61,10 @@ class GettingStartedTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Verifies that GET_ALL_USERS with page=2 returns 200 and a JSON Content-Type.")
-   void returns200AndUsersWhenPageIs2(Quest quest) {
-      quest.use(RING_OF_API)
+   @Description("Shows GET with a query parameter via quest.use(RING_OF_API) + requestAndValidate; minimal status/header checks.")
+   void showsBasicGetWithQueryParamAndMinimalAssertions(Quest quest) {
+      quest
+            .use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
@@ -72,9 +75,10 @@ class GettingStartedTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Verifies that GET_USER for ID_THREE returns 200 and the expected user email.")
-   void returns200AndUserDetailsWhenIdExists(Quest quest) {
-      quest.use(RING_OF_API)
+   @Description("Shows GET with a path parameter using requestAndValidate and validating a field via JSON path.")
+   void showsGetWithPathParamAndJsonPathValidation(Quest quest) {
+      quest
+            .use(RING_OF_API)
             .requestAndValidate(
                   GET_USER.withPathParam(ID_PARAM, ID_THREE),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
@@ -86,14 +90,15 @@ class GettingStartedTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Verifies that POST_CREATE_USER with a valid CreateUserDto returns 201 and echoes the user name.")
-   void createsUserAndReturns201(Quest quest) {
+   @Description("Shows POST with a DTO request body using requestAndValidate and simple body assertions.")
+   void showsPostWithDtoAndSimpleBodyAssertions(Quest quest) {
       CreateUserDto createUserRequest = CreateUserDto.builder()
             .name(USER_LEADER_NAME)
             .job(USER_LEADER_JOB)
             .build();
 
-      quest.use(RING_OF_API)
+      quest
+            .use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
                   createUserRequest,
@@ -106,14 +111,15 @@ class GettingStartedTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Verifies that POST_LOGIN_USER with valid credentials returns 200 and a non-null token.")
-   void returns200AndTokenWhenCredentialsAreValid(Quest quest) {
+   @Description("Shows login POST with DTO credentials and asserting a non-null token via JSON path.")
+   void showsLoginWithDtoAndTokenAssertion(Quest quest) {
       LoginDto loginRequest = LoginDto.builder()
             .email(Data.testData().username())
             .password(Data.testData().password())
             .build();
 
-      quest.use(RING_OF_API)
+      quest
+            .use(RING_OF_API)
             .requestAndValidate(
                   POST_LOGIN_USER,
                   loginRequest,
@@ -123,4 +129,24 @@ class GettingStartedTest extends BaseQuest {
             )
             .complete();
    }
+
+   @Test
+   @Description("Shows negative testing with requestAndValidate: build a DTO missing password, call POST /login, assert 400 and error via JSON path.")
+   void showsNegativeLoginMissingPasswordWithErrorAssertion(Quest quest) {
+      LoginDto login = LoginDto.builder()
+            .email(Data.testData().username())
+            .build();
+
+      quest
+            .use(RING_OF_API)
+            .requestAndValidate(
+                  POST_LOGIN_USER,
+                  login,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
+                  Assertion.builder().target(BODY).key(ERROR.getJsonPath())
+                        .type(IS).expected(MISSING_PASSWORD_ERROR).build()
+            )
+            .complete();
+   }
+
 }

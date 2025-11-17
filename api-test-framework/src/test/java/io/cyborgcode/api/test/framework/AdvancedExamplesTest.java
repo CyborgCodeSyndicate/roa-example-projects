@@ -123,9 +123,10 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Validates the list users endpoint using a comprehensive set of built-in assertions.")
-   void validatesUsersListWithComprehensiveAssertions(Quest quest) {
-      quest.use(RING_OF_API)
+   @Description("Showcases many assertion types in one GET: status/headers, numeric comparisons, regex, contains(all/any), length, null checks...")
+   void showsComprehensiveAssertionsOnUsersList(Quest quest) {
+      quest
+            .use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
@@ -152,14 +153,19 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Retrieves a stored response and validates it using plain JUnit assertions.")
-   void validatesUsersWithJUnitAssertions(Quest quest) {
-      quest.use(RING_OF_API)
+   @Description("Uses request() + validate(): make a request, retrieve the stored response, and assert with plain JUnit (no DSL).")
+   void showsRequestThenValidateWithPlainJUnitAssertions(Quest quest) {
+      quest
+            .use(RING_OF_API)
+            // Make the request only; response is stored under StorageKeysApi.API
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .validate(() -> {
+               // Retrieve stored response and map to DTO
                GetUsersDto users =
                      retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
                            .getBody().as(GetUsersDto.class);
+
+               // Plain JUnit assertions
                assertEquals(PAGE_TWO_DATA_SIZE, users.getData().size(), USER_DATA_SIZE_INCORRECT);
                assertEquals(USER_SEVENTH_FIRST_NAME_LENGTH,
                      users.getData().get(0).getFirstName().length(), FIRST_NAME_LENGTH_INCORRECT);
@@ -168,9 +174,10 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Uses stored list response to fetch a specific user by id in a chained request.")
-   void getsUserFromPreviouslyFetchedUserList(Quest quest) {
-      quest.use(RING_OF_API)
+   @Description("Chains requests: read an id from the stored list response and reuse it as a path param in the next call.")
+   void showsChainedRequestsAndUsingStorage(Quest quest) {
+      quest
+            .use(RING_OF_API)
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .requestAndValidate(
                   GET_USER.withPathParam(
@@ -186,9 +193,10 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Finds a user by first name from a stored list and validates the full user using soft assertions.")
-   void getsUserByFirstNameFromListWithSoftAssertions(Quest quest) {
-      quest.use(RING_OF_API)
+   @Description("Reads the list from storage, finds a user by first name, and validates the full user with soft assertions.")
+   void showsSoftAssertionsAfterFindingUserByFirstNameFromStorage(Quest quest) {
+      quest
+            .use(RING_OF_API)
             .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
             .request(
                   GET_USER.withPathParam(
@@ -217,10 +225,11 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Creates a user using a @Craft model as the request payload.")
-   void createsUserFromCraftModel(Quest quest,
-                                  @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser) {
-      quest.use(RING_OF_API)
+   @Description("Creates a user from an eager @Craft model and validates with a soft assertion.")
+   void showsCraftModelAsRequestWithSoftAssertion(Quest quest,
+                                                  @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser) {
+      quest
+            .use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
                   leaderUser,
@@ -233,18 +242,19 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Combines a GET and POST where the POST body is built lazily using a Late<@Craft> model.")
-   void createsJuniorUserUsingLateCraftModel(Quest quest,
-                                             @Craft(model = DataCreator.Data.USER_JUNIOR)
-                                             Late<CreateUserDto> juniorUser) {
-      quest.use(RING_OF_API)
+   @Description("Combines a GET and POST where the POST body is built lazily via Late<@Craft> (materialized only when create() is called).")
+   void showsLateCraftModelMaterializedOnDemand(Quest quest,
+                                                @Craft(model = DataCreator.Data.USER_JUNIOR)
+                                                Late<CreateUserDto> juniorUser) {
+      quest
+            .use(RING_OF_API)
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
             )
             .requestAndValidate(
                   POST_CREATE_USER,
-                  juniorUser.create(),
+                  juniorUser.create(), // Late<@Craft> is instantiated here on demand
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             )
             .complete();
@@ -252,13 +262,15 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Creates two users using a mix of @Craft and Late<@Craft> models in a chained flow.")
-   void createsTwoUsersUsingCraftAndLateModels(Quest quest,
-                                               @Craft(model = DataCreator.Data.USER_LEADER)
-                                               CreateUserDto leaderUser,
-                                               @Craft(model = DataCreator.Data.USER_SENIOR)
-                                               Late<CreateUserDto> seniorUser) {
-      quest.use(RING_OF_API)
+   @Description("Mixes eager @Craft and lazy Late<@Craft>: eager model is ready up-front; the Late model is instantiated via create() at use time.")
+   void showsMixOfCraftAndLateCraftInChainedFlow(Quest quest,
+                                                 @Craft(model = DataCreator.Data.USER_LEADER)
+                                                 CreateUserDto leaderUser,
+                                                 @Craft(model = DataCreator.Data.USER_SENIOR)
+                                                 Late<CreateUserDto> seniorUser) {
+      quest
+            .use(RING_OF_API)
+            // @Craft model (leaderUser) is already materialized
             .requestAndValidate(
                   POST_CREATE_USER,
                   leaderUser,
@@ -268,6 +280,7 @@ class AdvancedExamplesTest extends BaseQuest {
                   Assertion.builder().target(BODY).key(CREATE_USER_JOB_RESPONSE.getJsonPath())
                         .type(IS).expected(USER_LEADER_JOB).soft(true).build()
             )
+            // Late<@Craft> is created on-demand at this point
             .requestAndValidate(
                   POST_CREATE_USER,
                   seniorUser.create(),
@@ -282,11 +295,12 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Logs in using @Craft credentials, stores the token, and reuses it as a header in the next request.")
-   void loginsAndCallsGetUserWithTokenFromStorage(Quest quest,
-                                                  @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
-                                                  LoginDto loginAdminUser) {
-      quest.use(RING_OF_API)
+   @Description("Logs in using @Craft credentials, stores the token, and reuses it as a header in the next GET call.")
+   void showsTokenReuseFromStorageAcrossRequests(Quest quest,
+                                                 @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
+                                                 LoginDto loginAdminUser) {
+      quest
+            .use(RING_OF_API)
             .request(POST_LOGIN_USER, loginAdminUser)
             .requestAndValidate(
                   GET_USER.withPathParam(ID_PARAM, ID_THREE)
@@ -314,9 +328,10 @@ class AdvancedExamplesTest extends BaseQuest {
    )
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Regression
-   @Description("Executes a full user lifecycle using AuthenticateViaApi, Journey preconditions, and a Ripper cleanup.")
-   void executesUserLifecycleWithJourneyAndRipper(Quest quest) {
-      quest.use(RING_OF_API)
+   @Description("Executes a full user lifecycle using AuthenticateViaApi for auth, Journey preconditions for setup, and Ripper for cleanup.")
+   void showsAuthenticateViaApiWithJourneySetupAndRipperCleanup(Quest quest) {
+      quest
+            .use(RING_OF_API)
             .validate(() -> {
                CreatedUserDto createdUser =
                      retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
@@ -331,11 +346,12 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Uses a custom service ring to log in and call the users endpoint with a preconfigured header.")
-   void usesCustomServiceRingToLoginAndFetchUsers(Quest quest,
-                                                  @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
-                                                  LoginDto loginAdminUser) {
-      quest.use(RING_OF_CUSTOM)
+   @Description("Demonstrates switching rings (services): use a custom ring to log in + header wiring, then return to RING_OF_API for the GET.")
+   void showsSwitchingRingsForLoginThenApiCall(Quest quest,
+                                               @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
+                                               LoginDto loginAdminUser) {
+      quest
+            .use(RING_OF_CUSTOM)
             .loginUserAndAddSpecificHeader(loginAdminUser)
             .drop()
             .use(RING_OF_API)
@@ -348,11 +364,12 @@ class AdvancedExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Delegates the entire flow to a custom service ring that validates all users.")
-   void usesCustomServiceRingToValidateAllUsers(Quest quest,
-                                                @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
-                                                LoginDto loginAdminUser) {
-      quest.use(RING_OF_CUSTOM)
+   @Description("Shows how a custom service ring can slim down tests by encapsulating the full validation flow.")
+   void showsSlimmerTestsViaCustomServiceRing(Quest quest,
+                                              @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
+                                              LoginDto loginAdminUser) {
+      quest
+            .use(RING_OF_CUSTOM)
             .loginUserAndAddSpecificHeader(loginAdminUser)
             .requestAndValidateGetAllUsers()
             .complete();

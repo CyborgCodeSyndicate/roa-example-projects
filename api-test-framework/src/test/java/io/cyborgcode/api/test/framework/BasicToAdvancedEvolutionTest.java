@@ -66,11 +66,12 @@ class BasicToAdvancedEvolutionTest extends BaseQuest {
    @Test
    @Regression
    @Description("Executes the user lifecycle manually using explicit login, token handling, create, validate, and delete.")
-   void executesUserLifecycleManually(Quest quest) {
+   void showsManualLifecycleWithExplicitLoginAndTokenHandling(Quest quest) {
       final String username = Data.testData().username();
       final String password = Data.testData().password();
 
-      quest.use(RING_OF_API)
+      quest
+            .use(RING_OF_API)
             .request(POST_LOGIN_USER, new LoginDto(username, password));
 
       String token = retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
@@ -113,13 +114,14 @@ class BasicToAdvancedEvolutionTest extends BaseQuest {
    @Regression
    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
    @Description("Executes the user lifecycle using @AuthenticateViaApi instead of manual token handling.")
-   void executesUserLifecycleWithApiAuthentication(Quest quest) {
+   void showsApiLevelAuthenticationWithAuthenticateViaApi(Quest quest) {
       CreateUserDto leaderUser =
             CreateUserDto.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build();
       CreateUserDto intermediateUser =
             CreateUserDto.builder().name(USER_INTERMEDIATE_NAME).job(USER_INTERMEDIATE_JOB).build();
 
-      quest.use(RING_OF_API)
+      quest
+            .use(RING_OF_API)
             .requestAndValidate(
                   POST_CREATE_USER,
                   leaderUser,
@@ -160,8 +162,9 @@ class BasicToAdvancedEvolutionTest extends BaseQuest {
          order = 1
    )
    @Description("Executes the user lifecycle using @Journey to prepare users before the test body runs.")
-   void executesUserLifecycleWithJourney(Quest quest) {
-      quest.use(RING_OF_API)
+   void showsPreconditionsWithJourneyDataSetup(Quest quest) {
+      quest
+            .use(RING_OF_API)
             .validate(() -> {
                CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
                      .getBody().as(CreatedUserDto.class);
@@ -193,8 +196,9 @@ class BasicToAdvancedEvolutionTest extends BaseQuest {
    )
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Description("Executes the user lifecycle with @Journey data setup and @Ripper cleanup after the test.")
-   void executesUserLifecycleWithJourneyAndRipper(Quest quest) {
-      quest.use(RING_OF_API)
+   void showsJourneySetupWithRipperCleanup(Quest quest) {
+      quest
+            .use(RING_OF_API)
             .validate(() -> {
                CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
                      .getBody().as(CreatedUserDto.class);
@@ -222,8 +226,9 @@ class BasicToAdvancedEvolutionTest extends BaseQuest {
    )
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
    @Description("Executes the user lifecycle using a custom evolution ring that encapsulates validation logic.")
-   void executesUserLifecycleUsingEvolutionRing(Quest quest) {
-      quest.use(RING_OF_EVOLUTION)
+   void showsEncapsulatedValidationUsingEvolutionRing(Quest quest) {
+      quest
+            .use(RING_OF_EVOLUTION)
             .validateCreatedUser()
             .complete();
    }

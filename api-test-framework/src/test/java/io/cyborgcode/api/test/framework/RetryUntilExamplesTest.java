@@ -8,10 +8,8 @@ import io.cyborgcode.roa.framework.retry.RetryCondition;
 import io.cyborgcode.roa.framework.retry.RetryConditionImpl;
 import io.cyborgcode.roa.validator.core.Assertion;
 import io.qameta.allure.Description;
-
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
@@ -46,10 +44,11 @@ class RetryUntilExamplesTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Retries until a custom condition is met, then calls GET_ALL_USERS.")
-   void waitsUntilConditionMetThenGetsUsers(Quest quest) {
+   @Description("Feature demo: retryUntil — poll a custom condition every 1s (max 10s) and, once satisfied, proceed with a normal GET and assert 200.")
+   void showsRetryUntilPollingThenGetsUsers(Quest quest) {
       AtomicInteger probeCounter = new AtomicInteger(0);
 
+      // Define a simple condition that becomes true on the 3rd probe
       RetryCondition<Boolean> condition = new RetryConditionImpl<>(
             service -> {
                int attempt = probeCounter.incrementAndGet();
@@ -58,12 +57,15 @@ class RetryUntilExamplesTest extends BaseQuest {
             result -> result
       );
 
-      quest.use(RING_OF_API)
+      quest
+            .use(RING_OF_API)
+            // Wait up to 10s, polling every 1s, until the condition is true
             .retryUntil(
                   condition,
                   Duration.ofSeconds(10),
                   Duration.ofSeconds(1)
             )
+            // After the condition is met, run a normal API request and validate
             .requestAndValidate(
                   GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
                   Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
