@@ -7,6 +7,8 @@ import lombok.experimental.UtilityClass;
  * <p>
  * Keeps failure messages consistent and readable while avoiding duplication
  * in individual test classes.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @UtilityClass
 public final class AssertionMessages {

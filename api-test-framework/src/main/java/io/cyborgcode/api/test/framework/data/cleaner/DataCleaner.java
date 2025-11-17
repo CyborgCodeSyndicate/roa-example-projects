@@ -18,6 +18,8 @@ import java.util.function.Consumer;
  * The nested {@link Data} class exposes string keys that can be referenced in annotations,
  * decoupling test code from the enum name while keeping the mapping explicit.
  * </p>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum DataCleaner implements DataRipper<DataCleaner> {
 

@@ -27,6 +27,8 @@ import static io.cyborgcode.api.test.framework.data.creator.DataCreator.USER_LEA
  * <p>
  * This keeps test classes focused on behavior while delegating all data construction
  * and lookup logic to a single, maintainable location.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public final class DataCreatorFunctions {
 

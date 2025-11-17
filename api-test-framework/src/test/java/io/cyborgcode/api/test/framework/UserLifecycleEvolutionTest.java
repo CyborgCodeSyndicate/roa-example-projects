@@ -57,6 +57,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * - Pre-conditions with {@link Journey}, and {@link JourneyData};
  * - Cleanup with {@link Ripper};
  * - Encapsulated flows via {@code RING_OF_EVOLUTION}.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @API
 class UserLifecycleEvolutionTest extends BaseQuest {

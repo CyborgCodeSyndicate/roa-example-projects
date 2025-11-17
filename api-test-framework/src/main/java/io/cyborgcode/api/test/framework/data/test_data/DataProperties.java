@@ -19,6 +19,8 @@ import org.aeonbits.owner.Config;
  * </ul>
  * This allows the tests to read configuration in a consistent,
  * framework-friendly way without hardcoding values in the test code.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @ConfigSource("test-config")
 @Config.LoadPolicy(Config.LoadType.MERGE)

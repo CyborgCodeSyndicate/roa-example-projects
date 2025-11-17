@@ -51,6 +51,8 @@ import static org.apache.http.HttpStatus.SC_OK;
  * - Simple assertions on status, headers, and body
  * For advanced features (preconditions, authentication, ripper, custom rings, evolutions),
  * see the dedicated example classes.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @API
 class GettingStartedTest extends BaseQuest {

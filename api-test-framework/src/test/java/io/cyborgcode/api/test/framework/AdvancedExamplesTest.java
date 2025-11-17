@@ -115,6 +115,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * - dynamic path/header values from previous responses
  * - {@link AuthenticateViaApi}, {@link Journey}, and {@link Ripper} flows
  * - usage of a custom ring ({@code RING_OF_CUSTOM}) for reusable services.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @API
 class AdvancedExamplesTest extends BaseQuest {

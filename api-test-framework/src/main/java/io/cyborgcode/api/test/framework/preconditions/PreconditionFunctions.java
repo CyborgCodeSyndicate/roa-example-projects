@@ -16,6 +16,8 @@ import static org.apache.http.HttpStatus.SC_CREATED;
  * Each method encapsulates a concrete setup step (for example, creating a user) that can be
  * triggered via {@code @PreQuest} journeys before a test executes, keeping test methods
  * focused on verification rather than state preparation.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public final class PreconditionFunctions {
 

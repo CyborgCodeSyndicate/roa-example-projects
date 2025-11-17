@@ -24,6 +24,8 @@ import static io.cyborgcode.api.test.framework.data.constants.Headers.AUTHORIZAT
  *       authentication without repeating login flows in each test.</li>
  * </ul>
  * Intended as a reusable template for plugging in any real application authentication strategy.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public class AppAuth extends BaseAuthenticationClient {
 

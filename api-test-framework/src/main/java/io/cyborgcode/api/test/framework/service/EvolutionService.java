@@ -30,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *   <li>Used in the evolution tests via {@code quest.use(RING_OF_EVOLUTION)} to demonstrate
  *       how to gradually refactor scenarios into shared building blocks.</li>
  * </ul>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @Ring("Ring of Evolution")
 public class EvolutionService extends FluentService {

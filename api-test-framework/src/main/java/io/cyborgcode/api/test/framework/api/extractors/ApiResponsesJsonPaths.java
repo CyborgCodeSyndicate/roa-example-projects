@@ -11,6 +11,8 @@ package io.cyborgcode.api.test.framework.api.extractors;
  *   <li>easy to update in one place if the API contract changes.</li>
  * </ul>
  * Supports indexed paths via {@link #getJsonPath(Object...)} for list-based responses.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum ApiResponsesJsonPaths {
 

@@ -24,6 +24,8 @@ import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 /**
  * Demonstrates how to validate negative login scenarios with RoA against Reqres:
  * missing password, missing email, and invalid email, all returning 400 with proper error messages.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @API
 class LoginNegativeScenariosTest extends BaseQuest {

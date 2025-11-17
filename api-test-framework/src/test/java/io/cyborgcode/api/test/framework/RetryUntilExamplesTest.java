@@ -38,6 +38,8 @@ import static org.apache.http.HttpStatus.SC_OK;
  *   <li>Waiting for an environment/service to become ready (health check, feature flag, etc.).</li>
  *   <li>Synchronizing test flows that depend on external state.</li>
  * </ul>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @API
 class RetryUntilExamplesTest extends BaseQuest {

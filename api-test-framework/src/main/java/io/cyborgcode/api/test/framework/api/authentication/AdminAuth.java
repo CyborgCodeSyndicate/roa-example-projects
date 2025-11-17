@@ -17,6 +17,8 @@ import io.cyborgcode.roa.api.authentication.Credentials;
  *   <li>Clean integration with {@code @AuthenticateViaApi(credentials = AdminAuth.class, ...)}</li>
  *   <li>Reusability across multiple test classes without hardcoding secrets</li>
  * </ul>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public class AdminAuth implements Credentials {
 

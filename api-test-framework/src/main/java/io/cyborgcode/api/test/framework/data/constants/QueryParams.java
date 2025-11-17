@@ -6,6 +6,8 @@ import lombok.experimental.UtilityClass;
  * Shared query parameter names for endpoint calls.
  * <p>
  * Keeps parameter usage consistent across all examples.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @UtilityClass
 public class QueryParams {

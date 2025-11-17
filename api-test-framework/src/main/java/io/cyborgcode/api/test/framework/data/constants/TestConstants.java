@@ -17,6 +17,8 @@ import lombok.experimental.UtilityClass;
  * </ul>
  * These constants document the assumptions about the public Reqres API
  * that the tutorial tests assert against.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @UtilityClass
 public class TestConstants {
