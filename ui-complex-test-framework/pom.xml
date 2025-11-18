@@ -15,16 +15,14 @@
     <version>1.0.0</version>
 
     <properties>
-        <ui.config.file>config</ui.config.file>
-        <api.config.file>config</api.config.file>
-        <db.config.file>config</db.config.file>
-        <test.data.file>test_data</test.data.file>
-        <framework.config.file>config</framework.config.file>
-        <!--<include.tags>Regression</include.tags>-->
-        <!--<exclude.tags></exclude.tags>-->
-        <test.env></test.env>
+        <ui.config.file>config-prod</ui.config.file>
+        <api.config.file>config-prod</api.config.file>
+        <db.config.file>config-prod</db.config.file>
+        <test.data.file>test_data-prod</test.data.file>
+        <framework.config.file>config-prod</framework.config.file>
+        <logFileName>logs/ui-example.log</logFileName>
+        <extended.logging>false</extended.logging>
     </properties>
-
 
     <dependencies>
         <dependency>
@@ -54,5 +52,48 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <ui.config.file>config-dev</ui.config.file>
+                <api.config.file>config-dev</api.config.file>
+                <db.config.file>config-dev</db.config.file>
+                <framework.config.file>config-dev</framework.config.file>
+                <test.data.file>test_data-dev</test.data.file>
+                <logFileName>logs/ui-example-dev.log</logFileName>
+                <extended.logging>false</extended.logging>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>staging</id>
+            <properties>
+                <ui.config.file>config-staging</ui.config.file>
+                <api.config.file>config-staging</api.config.file>
+                <db.config.file>config-staging</db.config.file>
+                <framework.config.file>config-staging</framework.config.file>
+                <test.data.file>test_data-staging</test.data.file>
+                <logFileName>logs/ui-example-staging.log</logFileName>
+                <extended.logging>false</extended.logging>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <ui.config.file>config-prod</ui.config.file>
+                <api.config.file>config-prod</api.config.file>
+                <db.config.file>config-prod</db.config.file>
+                <framework.config.file>config-prod</framework.config.file>
+                <test.data.file>test_data-prod</test.data.file>
+                <logFileName>logs/ui-example.log</logFileName>
+                <extended.logging>false</extended.logging>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

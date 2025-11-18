@@ -55,9 +55,9 @@ class DataBaseTest extends BaseQuest {
    @Regression
    @Description("Demonstrates database validation within test execution") //Explain better
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
-         journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)})
+         journeyData = {@JourneyData(DataCreator.Data.SELLER)})
    void createOrderDatabaseValidation(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
             .validateOrder(order)
@@ -81,11 +81,11 @@ class DataBaseTest extends BaseQuest {
    @Test
    @Description("Demonstrates database validation in Journey preconditions before test execution") //Explain better
    @Journey(value = Preconditions.Data.SELLER_EXIST_IN_DB_PRECONDITION,
-         journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
+         journeyData = {@JourneyData(DataCreator.Data.SELLER)}, order = 1)
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
-         journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 2)
+         journeyData = {@JourneyData(DataCreator.Data.SELLER)}, order = 2)
    void createOrderPreQuestDatabase(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
             .validateOrder(order)
@@ -106,12 +106,12 @@ class DataBaseTest extends BaseQuest {
    @Description("Demonstrates database cleanup using @Ripper feature") //Explain better
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-         journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
+         journeyData = {@JourneyData(DataCreator.Data.ORDER)})
    @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
    void createOrderPreArgumentsAndRipper(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)
-            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
+            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class))
             .complete();
    }
 

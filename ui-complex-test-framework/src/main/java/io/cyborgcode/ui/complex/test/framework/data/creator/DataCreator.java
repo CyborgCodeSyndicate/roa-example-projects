@@ -22,15 +22,16 @@ import io.cyborgcode.roa.framework.parameters.Late;
  * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum DataCreator implements DataForge<DataCreator> {
-   VALID_SELLER(DataCreatorFunctions::createValidSeller),
-   VALID_ORDER(DataCreatorFunctions::createValidOrder),
-   VALID_LATE_ORDER(DataCreatorFunctions::createValidLateOrder);
+
+   SELLER(DataCreatorFunctions::createSeller),
+   ORDER(DataCreatorFunctions::createOrder),
+   LATE_ORDER(DataCreatorFunctions::createLateOrder);
 
    public static final class Data {
 
-      public static final String VALID_SELLER = "VALID_SELLER";
-      public static final String VALID_ORDER = "VALID_ORDER";
-      public static final String VALID_LATE_ORDER = "VALID_LATE_ORDER";
+      public static final String SELLER = "SELLER";
+      public static final String ORDER = "ORDER";
+      public static final String LATE_ORDER = "LATE_ORDER";
 
       private Data() {
       }

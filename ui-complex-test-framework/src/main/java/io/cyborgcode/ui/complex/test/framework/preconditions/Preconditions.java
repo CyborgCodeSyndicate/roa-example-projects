@@ -34,6 +34,7 @@ import static io.cyborgcode.ui.complex.test.framework.preconditions.Precondition
  * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum Preconditions implements PreQuestJourney<Preconditions> {
+
    SELLER_EXIST_IN_DB_PRECONDITION((quest, objects) -> validateSellerExistInDatabase(quest, (Seller) objects[0])),
    ORDER_PRECONDITION((quest, objects) -> validOrderSetup(quest, (Order) objects[0])),
    ORDER_PRECONDITION_LATE((quest, objects) -> validOrderSetup(quest, (Late<Order>) objects[0])),

@@ -31,8 +31,8 @@ public class StaticData implements StaticDataProvider {
         Map<String, Object> data = new HashMap<>();
         data.put(USERNAME, Data.testData().username());
         data.put(PASSWORD, Data.testData().password());
-        data.put(SELLER, DataCreatorFunctions.createValidSeller());
-        data.put(ORDER, DataCreatorFunctions.createValidOrder());
+        data.put(SELLER, DataCreatorFunctions.createSeller());
+        data.put(ORDER, DataCreatorFunctions.createOrder());
         return data;
     }
 }

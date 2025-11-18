@@ -21,7 +21,7 @@ import java.util.Objects;
 
 import static io.cyborgcode.roa.framework.storage.StorageKeysTest.PRE_ARGUMENTS;
 import static io.cyborgcode.ui.complex.test.framework.base.Rings.RING_OF_UI;
-import static io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator.VALID_ORDER;
+import static io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator.ORDER;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields.NEW_ORDER_BUTTON;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.ButtonFields.SIGN_IN_BUTTON;
 import static io.cyborgcode.ui.complex.test.framework.ui.elements.InputFields.*;
@@ -137,7 +137,7 @@ public class CustomService extends FluentService {
    }
 
    public CustomService validateOrder() {
-      Order order = QuestHolder.get().getStorage().sub(PRE_ARGUMENTS).getByClass(VALID_ORDER, Order.class);
+      Order order = QuestHolder.get().getStorage().sub(PRE_ARGUMENTS).getByClass(ORDER, Order.class);
       quest
             .use(RING_OF_UI)
             .input().insert(SEARCH_BAR_FIELD, order.getCustomerName())

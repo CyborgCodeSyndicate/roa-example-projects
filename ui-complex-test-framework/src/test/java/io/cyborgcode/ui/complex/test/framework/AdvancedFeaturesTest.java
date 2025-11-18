@@ -62,8 +62,8 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    @Description("Craft and Insertion features: Obtain typed models via @Craft and populate mapped model fields to UI " +
            "controls in one operation using insertion service")
    void craftAndInsertionFeatures(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.SELLER) Seller seller,
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
@@ -84,7 +84,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    @Description("Precondition feature: Uses @Journey precondition without data injection")
    @Journey(value = Preconditions.Data.LOGIN_DEFAULT_PRECONDITION)
    void preconditionFeatureUsingJourneyWithoutData(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
        quest
                .use(RING_OF_CUSTOM)
                .createOrder(order)
@@ -96,13 +96,13 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    @Regression
    @Description("Precondition feature: Uses multiple ordered @Journey preconditions with data injection")
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
-           journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
+           journeyData = {@JourneyData(DataCreator.Data.SELLER)}, order = 1)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-           journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
+           journeyData = {@JourneyData(DataCreator.Data.ORDER)}, order = 2)
    void preconditionFeatureUsingMuliJourneysWithData(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)
-            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
+            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class))
             .complete();
    }
 
@@ -112,7 +112,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
          "credentials for session re-usage")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void authenticationFeatureWithoutCacheCredentials(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
             .createOrder(order)
@@ -126,7 +126,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
          "for session re-usage")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
    void authenticationFeatureWithCacheCredentials(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_API)
             .requestAndValidate(
@@ -143,7 +143,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    @Regression
    @Description("Storage feature: Retrieve storage data captured during test UI steps")
    void storageFeatureUsingDataFromFluentSteps(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller) {
+         @Craft(model = DataCreator.Data.SELLER) Seller seller) {
       quest
             .use(RING_OF_CUSTOM)
             .login(seller)
@@ -166,11 +166,11 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
            "pre-arguments")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-         journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
+         journeyData = {@JourneyData(DataCreator.Data.ORDER)})
    void storageFeatureUsingDataFromPreconditions(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)
-            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
+            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class))
             .complete();
    }
 
@@ -206,7 +206,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
          "test validation")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
    void interceptorFeatureUsedForTestDataValidation(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller) {
+         @Craft(model = DataCreator.Data.SELLER) Seller seller) {
       quest
             .use(RING_OF_CUSTOM)
             .loginUsingInsertion(seller)
@@ -226,9 +226,9 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    @Description("Interceptor feature: Extract intercepted responses data and use it for Late data creation when needed")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
    void interceptorFeatureUsedForLateDataCreation(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order,
-         @Craft(model = DataCreator.Data.VALID_LATE_ORDER) Late<Order> lateOrder) {
+         @Craft(model = DataCreator.Data.SELLER) Seller seller,
+         @Craft(model = DataCreator.Data.ORDER) Order order,
+         @Craft(model = DataCreator.Data.LATE_ORDER) Late<Order> lateOrder) {
       quest
             .use(RING_OF_CUSTOM)
             .loginUsingInsertion(seller)
@@ -244,12 +244,12 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    @Description("Ripper feature: Deletes data created in the test")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-         journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
+         journeyData = {@JourneyData(DataCreator.Data.ORDER)})
    @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
    void ripperFeature(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)
-            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
+            .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class))
             .complete();
    }
 

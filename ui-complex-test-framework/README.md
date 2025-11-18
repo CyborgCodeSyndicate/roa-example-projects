@@ -62,13 +62,15 @@ This section is a conceptual “map” of the module. Later sections show concre
 
 ### 2.1 Quest
 
-**Quest** is the per-test execution context from the core ROA framework.
+**Quest** is the per-test execution context from the core ROA framework. 
+
+Manages the execution flow and data storage for test scenarios. Acts as the central controller for executing test operations, managing service interactions, and storing data during a test run.
 
 It holds:
 
-- the registered **rings** (UI, API, DB, custom),
-- the **per-test storage** (thread-local),
-- the **soft assertion aggregator**, and
+- the registered **rings** (UI, API, DB, custom) - allows transitioning between different testing contexts (rings),
+- the **per-test storage** - storage instance for temporarily holding test data within a test execution,
+- the **soft assertion aggregator** - handles soft assertions for validation checks during the test execution, and
 - access to low-level **artifacts** (e.g., WebDriver, HTTP client, DB connection).
 
 **How you get it**
@@ -113,7 +115,10 @@ Lifecycle variants:
 
 ### 2.2 Rings
 
-A **Ring** is a named capability (UI, API, DB, Custom…) that exposes a fluent DSL.
+A **Ring** is a named capability (UI, API, DB, Custom…) that exposes a fluent DSL. 
+
+It represents the concrete fluent service implementation that backs `Quest.use(Class)`. Tests switch between rings to access different testing capabilities. Rings keeps test code expressive while cleanly separating concerns between
+low-level HTTP, database interactions, UI operations and shared domain-specific actions.
 
 Out of the box this module uses:
 
@@ -126,15 +131,15 @@ Example:
 
 ```java
 quest
-  .use(RING_OF_CUSTOM)
-    .login(seller)              // uses UI under the hood
+    .use(RING_OF_CUSTOM)
+    .login(seller)      // uses UI under the hood
     .createOrder(order)
     .validateOrder(order)
-  .drop()
-  .use(RING_OF_DB)
+    .drop()
+    .use(RING_OF_DB)
     .query(AppQueries.QUERY_ORDER.withParam("id", 1))
     .validate(/* DB assertions */)
-  .complete();
+    .complete();
 ```
 
 ---
@@ -160,11 +165,9 @@ You rarely interact with a raw map; instead you use helpers:
 ```java
 Order order = retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class);
 
-QueryResponse resp =
-  retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class);
+QueryResponse resp = retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class);
 
-String username =
-  retrieve(staticTestData(StaticData.USERNAME), String.class);
+String username = retrieve(staticTestData(StaticData.USERNAME), String.class);
 ```
 
 A dedicated section later ([Storage Integration](#9-storage-integration)) dives into details and best practices.
@@ -497,24 +500,61 @@ If you build your own module, depend on the ROA adapters:
 
 The adapters use **Owner** configuration. This module’s POM sets defaults:
 
-- `ui.config.file=config`
-- `api.config.file=config`
-- `db.config.file=config`
-- `test.data.file=test_data`
+- `ui.config.file=config-prod`
+- `api.config.file=config-prod`
+- `db.config.file=config-prod`
+- `framework.config.file=config-prod`
+- `test.data.file=test_data-prod`
 
-Create matching files under `src/test/resources`.
+Create matching files under `src/main/resources`.
 
-**UI config** (`config.properties` or `ui.config.file` override):
+This module already ships with:
+
+- `config-dev.properties`, `config-staging.properties`, `config-prod.properties`
+- `test_data-dev.properties`, `test_data-staging.properties`, `test_data-prod.properties`
+- `system.properties` (defaults pointing to `*-prod`)
+
+#### Switching environments (profiles and overrides)
+
+- Maven profiles (defined in this module’s `pom.xml`):
+  - `-Pdev`, `-Pstaging`, `-Pprod` (prod is active by default).
+  - Example: `mvn -q -pl ui-complex-test-framework -Pdev test`
+- JVM/System overrides (take precedence over profiles):
+  - Example to force dev files: `-Dui.config.file=config-dev -Dapi.config.file=config-dev -Ddb.config.file=config-dev -Dframework.config.file=config-dev -Dtest.data.file=test_data-dev`
+- Defaults file:
+  - `src/main/resources/system.properties` (points to `*-prod` by default).
+- Naming convention for files in `src/main/resources`:
+  - `config-<env>.properties` and `test_data-<env>.properties`.
+- Precedence:
+  - `-D` system properties > Maven profile defaults > `system.properties` > values inside the referenced property files.
+ - Profiles also set additional flags like `logFileName` and `extended.logging`.
+
+Examples:
+
+```bash
+# Run tests with staging profile
+mvn -q -pl ui-complex-test-framework -Pstaging test
+
+# Run a single test and override only test data to dev
+mvn -q -pl ui-complex-test-framework -Pprod \
+ -Dtest=BasicToAdvancedFeaturesTest#fullE2E \
+ -Dtest.data.file=test_data-dev test
+```
+
+**UI config** (`config-<env>.properties` or `ui.config.file` override):
 
 ```properties
 ui.base.url=https://bakery-flow.demo.vaadin.com/
 browser.type=CHROME
 headless=false
 wait.duration.in.seconds=10
-project.package=io.cyborgcode.ui.complex.test.framework
+default.storage=UI
+use.shadow.root=true
+use.wrap.selenium.function=true
+screenshot.on.passed.test=true
 ```
 
-**API config** (`config.properties` or `api.config.file`):
+**API config** (`config-<env>.properties` or `api.config.file`):
 
 ```properties
 api.base.url=https://bakery-flow.demo.vaadin.com
@@ -524,11 +564,11 @@ log.full.body=false
 shorten.body=800
 ```
 
-**DB config** (`config.properties` or `db.config.file`):
+**DB config** (`config-<env>.properties` or `db.config.file`):
 
 ```properties
-project.package=io.cyborgcode.ui.complex.test.framework
 db.default.type=H2
+db.full.connection.string=jdbc:h2:mem:AppDb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false
 # For external DBs:
 # db.default.host=localhost
 # db.default.port=5432
@@ -537,7 +577,7 @@ db.default.type=H2
 # db.default.password=secret
 ```
 
-**Test data** (`test_data.properties` or override):
+**Test data** (`test_data-<env>.properties` or `test.data.file` override):
 
 ```properties
 username=admin@vaadin.com
@@ -553,8 +593,10 @@ order.product=Strawberry Bun
 
 Notes:
 
-- System properties override file values.
-- You can switch config files by passing, for example: `-Dui.config.file=ui-config`.
+- System properties (`-D...`) override everything.
+- Prefer Maven profiles to switch environments: `-Pdev`, `-Pstaging`, `-Pprod` (prod is default).
+- To override specific files: `-Dui.config.file=... -Dapi.config.file=... -Ddb.config.file=... -Dframework.config.file=... -Dtest.data.file=...`.
+- Module defaults also live in `src/main/resources/system.properties` (points to `*-prod`).
 - Adapters bring additional configuration options; see their individual READMEs for the full list.
 
 ### 7.4 Enable adapters on tests
@@ -586,10 +628,9 @@ In this section we progressively evolve tests from “raw UI steps” to a full-
 
 ```java
 @Test
-@UI
-void manualLoginAndOrder(Quest quest) {
-
-  quest.use(RING_OF_UI)
+void manualLoginAndCreateOrder(Quest quest) {
+  quest
+      .use(RING_OF_UI)
       .browser().navigate(getUiConfig().baseUrl())
       .input().insert(InputFields.USERNAME_FIELD, "admin@vaadin.com")
       .input().insert(InputFields.PASSWORD_FIELD, "admin")
@@ -600,35 +641,75 @@ void manualLoginAndOrder(Quest quest) {
       .select().selectOption(SelectFields.PRODUCTS_DDL, "Strawberry Bun")
       .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
       .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+      .input().insert(InputFields.SEARCH_BAR_FIELD, "John Terry")
+      .table().readTable(Tables.ORDERS)
+      .table().validate(
+            Tables.ORDERS,
+            Assertion.builder().target(TABLE_VALUES).type(TABLE_NOT_EMPTY).expected(true).soft(true).build())
       .complete();
 }
 ```
 
-This demonstrates:
+**What this shows and why it matters:**
 
-- basic **UI ring** usage,
-- **element enums** for locators,
-- chaining until `.complete()`.
+- You start a UI chain with `quest.use(RING_OF_UI)`, then perform readable, typed actions: navigate, type in inputs, click buttons, select dropdown options, read a table, and validate.
+- All locators are centralized in enum registries like `InputFields`, `SelectFields`, and `ButtonFields`. This keeps tests stable when selectors change and documents the UI map in one place.
+- Each interaction automatically applies element-specific waits via the enum’s `before/after` hooks, so you don’t litter tests with WebDriver boilerplate.
+- Validations are gathered as soft assertions in the chain and executed on `.complete()`, making failures more informative.
+
+**Variant: the same flow using externalized test-data properties (no hardcoded values):**
+
+```java
+@Test
+void createOrderUsingTestDataProperties(Quest quest) {
+  quest
+      .use(RING_OF_UI)
+      .browser().navigate(getUiConfig().baseUrl())
+      .input().insert(InputFields.USERNAME_FIELD, Data.testData().sellerEmail())
+      .input().insert(InputFields.PASSWORD_FIELD, Data.testData().sellerPassword())
+      .button().click(ButtonFields.SIGN_IN_BUTTON)
+      .button().click(ButtonFields.NEW_ORDER_BUTTON)
+      .input().insert(InputFields.CUSTOMER_FIELD, Data.testData().customerName())
+      .input().insert(InputFields.DETAILS_FIELD, Data.testData().customerDetails())
+      .input().insert(InputFields.NUMBER_FIELD, Data.testData().phoneNumber())
+      .select().selectOption(LOCATION_DDL, Data.testData().location())
+      .select().selectOptions(PRODUCTS_DDL, Strategy.FIRST)
+      .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
+      .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+      .input().insert(InputFields.SEARCH_BAR_FIELD, Data.testData().customerName())
+      .table().readTable(Tables.ORDERS)
+      .table().validate(
+          Tables.ORDERS,
+          Assertion.builder().target(TABLE_VALUES).type(TABLE_NOT_EMPTY).expected(true).soft(true).build())
+      .complete();
+}
+```
 
 ---
 
 ### 8.2 Step 2 – Move from script to domain flows (CustomService)
 
-Rather than keep login & order creation logic in every test, we move it into `CustomService` and expose **domain methods**:
+Rather than keep login, order creation and validation logic in every test, we move it into `CustomService` and expose **domain methods**:
 
 ```java
-quest.use(RING_OF_CUSTOM)
+@Test
+void wrapLoginAndCreateOrderWithCustomService(Quest quest) {
+quest
+    .use(RING_OF_CUSTOM)
     .login(seller)
     .createOrder(order)
     .validateOrder(order)
     .complete();
+}
 ```
 
-Under the hood, these methods:
+Under the hood, `CustomService` turns low‑level UI steps into business‑level verbs so your tests read like scenarios, not scripts. It:
 
-- call `RING_OF_UI` fluent services,
-- apply waits and assertions,
-- interact with the Vaadin Bakery application in a consistent way.
+- Delegates to `RING_OF_UI` for the granular work (navigate, input, click), but hides selectors and timing concerns.
+- Encapsulates synchronization and validations so retries, waits, and checks live with the flow, not in every test.
+- Shares and reuses state via `Quest` storage (e.g., saving the created order or session cookie for later API/DB steps).
+- Promotes reuse: one place to adjust when the UI changes; all tests benefit instantly.
+- Keeps the test body focused on intent: “login, create order, validate order.”
 
 ---
 
@@ -640,26 +721,28 @@ Instead of building `Seller` and `Order` inline, we ask `DataCreator` to produce
 @Test
 void createOrderUsingCraftAndCustomService(
   Quest quest,
-  @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
-  @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+  @Craft(model = DataCreator.Data.SELLER) Seller seller,
+  @Craft(model = DataCreator.Data.ORDER) Order order) {
 
   quest
-    .use(RING_OF_CUSTOM)
+      .use(RING_OF_CUSTOM)
       .login(seller)
       .createOrder(order)
       .validateOrder(order)
-    .complete();
+      .complete();
 }
 ```
 
 **How to add new creators**
 
+To introduce a new crafted model, add an enum constant in `DataCreator.java` that maps to a factory method, and implement that method in `DataCreatorFunctions.java`. The enum names act as stable keys used by `@Craft(model = DataCreator.Data.YourEnum)`, while the functions centralize how objects are built (often using `Data.testData()` and sensible defaults). Keep factories small and deterministic; prefer composition over ad‑hoc randomization so tests remain reproducible. If your model is runtime‑dependent, expose a `Late<T>` creator alongside the regular one.
+
 ```java
 // DataCreator.java
-VALID_SPECIAL_ORDER("validSpecialOrder", DataCreatorFunctions::createValidSpecialOrder);
+SPECIAL_ORDER(DataCreatorFunctions::createSpecialOrder);
 
 // DataCreatorFunctions.java
-public static Order createValidSpecialOrder(SuperQuest quest) {
+public static Order createSpecialOrder() {
   return Order.builder()
       .customer(Data.testData().customerName())
       .location("Bakery")
@@ -675,13 +758,14 @@ public static Order createValidSpecialOrder(SuperQuest quest) {
 Journeys encapsulate reusable flows that should run **before** the test body, such as default login or preparing orders.
 
 ```java
-@Journey(value = Preconditions.Data.LOGIN_DEFAULT_PRECONDITION)
 @Test
+@Journey(value = Preconditions.Data.LOGIN_DEFAULT_PRECONDITION)
 void preconditionNoData(
   Quest quest,
-  @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+  @Craft(model = DataCreator.Data.ORDER) Order order) {
 
-  quest.use(RING_OF_CUSTOM)
+  quest
+      .use(RING_OF_CUSTOM)
       .createOrder(order)
       .validateOrder(order)
       .complete();
@@ -693,32 +777,36 @@ Journeys can also take data and be ordered:
 ```java
 @Journey(
   value = Preconditions.Data.LOGIN_PRECONDITION,
-  journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)},
+  journeyData = {@JourneyData(DataCreator.Data.SELLER)},
   order = 1)
 @Journey(
   value = Preconditions.Data.ORDER_PRECONDITION,
-  journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)},
+  journeyData = {@JourneyData(DataCreator.Data.ORDER)},
   order = 2)
 @Test
-void preconditionsOrdered(Quest quest) {
+void preconditionsWithDataOrdered(Quest quest) {
 
-  quest.use(RING_OF_CUSTOM)
-      .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
+  quest
+      .use(RING_OF_CUSTOM)
+      .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class))
       .complete();
 }
 ```
 
 **Adding a new journey**
 
+Journeys live in `Preconditions.java` as enum constants that map to functions in `PreconditionFunctions.java`. Each journey is a `BiConsumer<SuperQuest, Object[]>` so it can both access rings (UI/API/DB) and receive optional input via `@JourneyData` (e.g., a `Seller` or `Order`). Add a new enum entry, point it to a function, and implement that function to perform setup steps (login, seed data, DB checks). If the journey produces outputs that the test should use later (like a created `Order`), save them into `StorageKeysTest.PRE_ARGUMENTS` so the test can `retrieve(...)` them. Use `order` to chain multiple journeys deterministically.
+
 ```java
 // Preconditions.java
-SPECIAL_LOGIN_PRECONDITION("specialLoginPrecondition", PreconditionFunctions::loginUser);
+SPECIAL_LOGIN_PRECONDITION((SuperQuest quest, Object[] objects) -> loginUser(quest, (Seller) objects[0]));
+
 
 // PreconditionFunctions.java
-public static void loginUser(SuperQuest quest, Object... data) {
-  Seller seller = (Seller) data[0];
-  quest.use(RING_OF_CUSTOM).login(seller);
-  // optionally store outputs into PRE_ARGUMENTS
+public static void loginUser(SuperQuest quest, Seller seller) {
+   quest
+       .use(RING_OF_CUSTOM)
+       .login(seller);
 }
 ```
 
@@ -729,13 +817,14 @@ public static void loginUser(SuperQuest quest, Object... data) {
 Move login out of tests completely and treat it as a reusable “meta journey”.
 
 ```java
-@AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
 @Test
+@AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
 void authNoCache(
   Quest quest,
   @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
 
-  quest.use(RING_OF_CUSTOM)
+  quest
+      .use(RING_OF_CUSTOM)
       .createOrder(order)
       .validateOrder(order)
       .complete();
@@ -745,16 +834,17 @@ void authNoCache(
 With session caching:
 
 ```java
+@Test
 @AuthenticateViaUi(
   credentials = AdminCredentials.class,
   type = AppUiLogin.class,
   cacheCredentials = true)
-@Test
 void authWithCache(
   Quest quest,
-  @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+  @Craft(model = DataCreator.Data.ORDER) Order order) {
 
-  quest.use(RING_OF_CUSTOM)
+  quest
+      .use(RING_OF_CUSTOM)
       .createOrder(order)
       .validateOrder(order)
       .complete();
@@ -770,25 +860,25 @@ This allows a suite to avoid repeated login for the same user, dramatically spee
 Enable interception with `@InterceptRequests` and then use `DataExtractorFunctions` + JSONPath to pull values out of responses:
 
 ```java
-@InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
 @Test
+@InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
 void extractFromTraffic(
   Quest quest,
-  @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller) {
+  @Craft(model = DataCreator.Data.SELLER) Seller seller) {
 
-  quest.use(RING_OF_CUSTOM)
-      .loginUsingInsertion(seller)
-    .drop()
-    .use(RING_OF_UI)
+  quest
+      .use(RING_OF_CUSTOM)
+      .login(seller)
+      .drop()
+      .use(RING_OF_UI)
       .validate(() -> Assertions.assertEquals(
-        List.of("$197.54"),
-        retrieve(
-          DataExtractorFunctions.responseBodyExtraction(
-            RequestsInterceptor.INTERCEPT_REQUEST_AUTH.getEndpointSubString(),
-            "$[0].changes[?(@.key=='totalPrice')].value",
-            "for(;;);"
-          ),
-          List.class)))
+          List.of("$197.54"),
+          retrieve(
+            DataExtractorFunctions.responseBodyExtraction(
+              RequestsInterceptor.INTERCEPT_REQUEST_AUTH.getEndpointSubString(),
+              "$[0].changes[?(@.key=='totalPrice')].value",
+              "for(;;);"
+            ), List.class)))
       .complete();
 }
 ```
@@ -804,7 +894,7 @@ Key points:
 
 ### 8.7 Step 7 – DB validations with `RING_OF_DB`
 
-Use DB queries and JSONPath-based assertions to verify persisted state:
+Use the DB ring to execute parameterized queries (from `AppQueries`) and validate results with JSONPath‑based assertions. When a query runs, its last `QueryResponse` is stashed in the DB namespace of storage, keyed by the query enum. You can then compose assertions that target specific fields via `DbResponsesJsonPaths`, choose soft or hard checks, and keep DB verification in the same fluent chain. This makes it easy to confirm that UI/API actions truly persisted to the database.
 
 ```java
 @Test
@@ -816,21 +906,21 @@ void validateStoredOrderInDb(
   @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
 
   quest
-    .use(RING_OF_CUSTOM)
+      .use(RING_OF_CUSTOM)
       .validateOrder(order)
-    .drop()
-    .use(RING_OF_DB)
+      .drop()
+      .use(RING_OF_DB)
       .query(AppQueries.QUERY_ORDER.withParam("id", 1))
       .validate(
-        retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class),
-        Assertion.builder()
-          .target(QUERY_RESULT)
-          .key(DbResponsesJsonPaths.PRODUCT_BY_ID.getJsonPath(1))
-          .type(CONTAINS_ALL)
-          .expected(List.of(order.getProduct()))
-          .soft(true)
-          .build())
-    .complete();
+          retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class),
+          Assertion.builder()
+             .target(QUERY_RESULT)
+             .key(DbResponsesJsonPaths.PRODUCT_BY_ID.getJsonPath(1))
+             .type(CONTAINS_ALL)
+             .expected(List.of(order.getProduct()))
+             .soft(true)
+             .build())
+      .complete();
 }
 ```
 
@@ -845,22 +935,24 @@ Ensure created orders are cleaned up after tests finish:
 @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
 @Journey(
   value = Preconditions.Data.ORDER_PRECONDITION,
-  journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)})
+  journeyData = {@JourneyData(DataCreator.Data.ORDER)})
 @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
 void cleanupCreatedOrders(Quest quest) {
 
   quest
-    .use(RING_OF_CUSTOM)
-      .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class))
-    .complete();
+      .use(RING_OF_CUSTOM)
+      .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class))
+      .complete();
 }
 ```
 
-Adding a new cleaner:
+**Adding a new cleaner**
+
+Add a new entry in `DataCleaner.java` that maps to a function in `DataCleanerFunctions.java`. A cleaner typically reads keys or models placed in `PRE_ARGUMENTS` during the test/journeys, then uses `RING_OF_DB` (or API/UI) to delete created records. Keep the logic idempotent and defensive so it’s safe to run even if partial data exists. Register the cleaner in tests with `@Ripper(targets = { ... })` to ensure suites remain isolated and repeatable.
 
 ```java
 // DataCleaner.java
-DELETE_SPECIAL_RECORDS("deleteSpecial", DataCleanerFunctions::deleteSpecialRecords);
+DELETE_SPECIAL_RECORDS(DataCleanerFunctions::deleteSpecialRecords);
 
 // DataCleanerFunctions.java
 public static void deleteSpecialRecords(SuperQuest quest) {
@@ -924,12 +1016,10 @@ Order order = retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class);
 String username = retrieve(staticTestData(StaticData.USERNAME), String.class);
 
 // DB query result for the last run of a given query
-QueryResponse resp =
-  retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class);
+QueryResponse resp = retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class);
 
 // Values stashed by UI services for an element
-List<String> locations =
-  DefaultStorage.retrieve(SelectFields.LOCATION_DDL, List.class);
+List<String> locations = DefaultStorage.retrieve(SelectFields.LOCATION_DDL, List.class);
 ```
 
 ### 9.5 Best practices
@@ -945,41 +1035,33 @@ List<String> locations =
 
 ### 10.1 UiElement enums
 
-Element registries are enums implementing specific interfaces (`InputUiElement`, `ButtonUiElement`, etc.).
+Element registries are enums implementing specific interfaces (e.g., `ButtonUiElement`) that encode the locator, component type, and synchronization strategy for each control. Using `ButtonFields` as an example (see `ButtonFields.java`), each constant defines a `By` locator, a `ButtonComponentType` via `ButtonFieldTypes`, and optional `before/after` hooks for robust timing. This keeps synchronization close to the element and avoids repeating waits across tests.
 
 ```java
-public enum InputFields implements InputUiElement {
-
-  USERNAME_FIELD(
-    By.id("vaadinLoginUsername"),
-    InputFieldTypes.VA_INPUT_TYPE
-  ),
-
-  PASSWORD_FIELD(
-    By.id("vaadinLoginPassword"),
-    InputFieldTypes.VA_INPUT_TYPE
-  ),
-
-  SEARCH_BAR_FIELD(
-    By.cssSelector("search-bar#search"),
-    InputFieldTypes.VA_INPUT_TYPE,
-    SharedUi.WAIT_FOR_PRESENCE,
-    SharedUi.WAIT_FOR_LOADING
-  );
-
-  // ... componentType(), locator(), before()/after() ...
+public enum ButtonFields implements ButtonUiElement {
+  SIGN_IN_BUTTON(By.tagName("vaadin-button"), ButtonFieldTypes.VA_BUTTON_TYPE,
+      SharedUi.WAIT_FOR_LOADING),
+  NEW_ORDER_BUTTON(By.cssSelector("vaadin-button#action"), ButtonFieldTypes.VA_BUTTON_TYPE,
+      SharedUi.WAIT_TO_BE_CLICKABLE, ButtonFields::waitForPresence),
+  PLACE_ORDER_BUTTON(By.cssSelector("vaadin-button#save"), ButtonFieldTypes.VA_BUTTON_TYPE,
+      SharedUi.WAIT_TO_BE_CLICKABLE, SharedUi.WAIT_TO_BE_REMOVED);
 }
+
+// Usage
+quest.use(RING_OF_UI)
+    .button().click(ButtonFields.SIGN_IN_BUTTON);
 ```
 
-Benefits:
+Why this pattern helps:
 
-- single source of truth for locators,
-- per-element waits (`before`/`after`) baked into the enum values,
-- type-safe usage from fluent services and insertion.
+- Single source of truth for selectors and behavior (no magic strings in tests).
+- `ButtonFieldTypes` binds each enum to the correct component implementation, enabling typed operations (`click`, visibility checks) with adapter-specific behavior.
+- Element‑level `before/after` hooks (e.g., wait to be clickable, wait for overlay to disappear) stabilize flows against async UI changes.
+- The same approach applies to other element types (`InputFields`, `SelectFields`, `Tables`), producing a consistent, maintainable UI map.
 
 ### 10.2 Mapping domain models to UI with `@InsertionElement`
 
-Annotate your models so the framework can auto-fill forms:
+Annotate model fields with `@InsertionElement` to declare how each property maps to the UI (which enum registry and the order of operations). With this mapping in place, `insertion().insertData(model)` walks the fields and performs the right UI actions automatically (type, select, etc.). This keeps tests at the domain level and removes repetitive glue code. See `Order.java` for a complete example of mapping inputs and selects with execution order.
 
 ```java
 @Data
@@ -1001,6 +1083,31 @@ Then use:
 ```java
 quest.use(RING_OF_UI)
     .insertion().insertData(order);
+```
+Full flow example using **insertion**:
+
+```java
+@Test
+void createOrderUsingCraftAndInsertionFeatures(Quest quest,
+     @Craft(model = DataCreator.Data.SELLER) Seller seller,
+     @Craft(model = DataCreator.Data.ORDER) Order order) {
+
+  quest
+      .use(RING_OF_UI)
+      .browser().navigate(getUiConfig().baseUrl())
+      .insertion().insertData(seller) // insertion: maps model fields to corresponding UI controls in one operation
+      .button().click(ButtonFields.SIGN_IN_BUTTON)
+      .button().click(ButtonFields.NEW_ORDER_BUTTON)
+      .insertion().insertData(order)  // insertion: maps model fields to corresponding UI controls in one operation
+      .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
+      .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+      .input().insert(InputFields.SEARCH_BAR_FIELD, order.getCustomerName())
+      .table().readTable(Tables.ORDERS)
+      .table().validate(
+          Tables.ORDERS,
+          Assertion.builder().target(TABLE_VALUES).type(TABLE_NOT_EMPTY).expected(true).soft(true).build())
+      .complete();
+}
 ```
 
 ### 10.3 Component services via `AppUiService`
@@ -1029,11 +1136,12 @@ This section shows focused scenarios that combine the pieces introduced above.
 Use `@StaticTestData` to load shared constants for the whole test class:
 
 ```java
-@StaticTestData(StaticData.class)
 @Test
+@StaticTestData(StaticData.class)
 void usesStaticData(Quest quest) {
 
-  quest.use(RING_OF_CUSTOM)
+  quest
+      .use(RING_OF_CUSTOM)
       .validateOrder(retrieve(staticTestData(StaticData.ORDER), Order.class))
       .complete();
 }
@@ -1048,15 +1156,16 @@ Ideal for demo data or constants you don’t want to encode in property files.
 `Late<T>` lets you build data after some runtime information is known.
 
 ```java
-@InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
 @Test
+@InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
 void lateData(
   Quest quest,
-  @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
-  @Craft(model = DataCreator.Data.VALID_ORDER) Order order,
-  @Craft(model = DataCreator.Data.VALID_LATE_ORDER) Late<Order> lateOrder) {
+  @Craft(model = DataCreator.Data.SELLER) Seller seller,
+  @Craft(model = DataCreator.Data.ORDER) Order order,
+  @Craft(model = DataCreator.Data.LATE_ORDER) Late<Order> lateOrder) {
 
-  quest.use(RING_OF_CUSTOM)
+  quest
+      .use(RING_OF_CUSTOM)
       .loginUsingInsertion(seller)
       .createOrder(order).validateOrder(order)
       .createOrder(lateOrder.create()).validateOrder(lateOrder.create())
@@ -1064,7 +1173,7 @@ void lateData(
 }
 ```
 
-The `VALID_LATE_ORDER` creator can use values extracted from intercepted responses to build a second order on the fly.
+The `LATE_ORDER` creator can use values extracted from intercepted responses to build a second order on the fly.
 
 ---
 
@@ -1074,7 +1183,7 @@ Map a table to a typed row class, then use fluent table operations and storage:
 
 ```java
 quest
-  .use(RING_OF_UI)
+    .use(RING_OF_UI)
     .input().insert(InputFields.SEARCH_BAR_FIELD, "John Terry")
     .table().readTable(Tables.ORDERS)
     .table().validate(
@@ -1085,24 +1194,23 @@ quest
         .expected(true)
         .soft(true)
         .build())
-  .complete();
+    .complete();
 ```
 
 Access the typed rows:
 
 ```java
 quest
-  .use(RING_OF_UI)
+    .use(RING_OF_UI)
     .table().readTable(Tables.ORDERS)
-  .drop()
-  .use(RING_OF_UI)
+    .drop()
+    .use(RING_OF_UI)
     .validate(() -> {
-      @SuppressWarnings("unchecked")
-      List<TableEntry> rows =
-        (List<TableEntry>) DefaultStorage.retrieve(Tables.ORDERS, List.class);
-      Assertions.assertFalse(rows.isEmpty());
-    })
-  .complete();
+         List<TableEntry> rows =
+         (List<TableEntry>) DefaultStorage.retrieve(Tables.ORDERS, List.class);
+       Assertions.assertFalse(rows.isEmpty());
+       })
+    .complete();
 ```
 
 If your adapter version supports `readRow`:
@@ -1122,25 +1230,27 @@ Combine everything into a single scenario:
 @API
 @DB
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
+// Adapters and hooks registered on class
+
+@Test
 @AuthenticateViaUi(
   credentials = AdminCredentials.class,
   type = AppUiLogin.class,
   cacheCredentials = true)
 @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
-@Test
 void fullE2E(
   Quest quest,
-  @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+  @Craft(model = DataCreator.Data.ORDER) Order order) {
 
   quest
-    // Create via UI (Custom ring wraps UI flows)
-    .use(RING_OF_CUSTOM)
+      // Create via UI (Custom ring wraps UI flows)
+      .use(RING_OF_CUSTOM)
       .createOrder(order)
       .validateOrder(order)
-    .drop()
+      .drop()
 
-    // Reuse session cookie for API validation
-    .use(RING_OF_API)
+      // Reuse session cookie for API validation
+      .use(RING_OF_API)
       .requestAndValidate(
         AppEndpoints.ENDPOINT_BAKERY.withHeader("Cookie", CustomService.getJsessionCookie()),
         Assertion.builder()
@@ -1148,10 +1258,10 @@ void fullE2E(
           .type(IS)
           .expected(HttpStatus.SC_OK)
           .build())
-    .drop()
+      .drop()
 
-    // Validate persisted state in DB
-    .use(RING_OF_DB)
+      // Validate persisted state in DB
+      .use(RING_OF_DB)
       .query(AppQueries.QUERY_ORDER.withParam("id", 1))
       .validate(
         retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class),
@@ -1162,7 +1272,7 @@ void fullE2E(
           .expected(List.of(order.getProduct()))
           .soft(true)
           .build())
-    .complete();
+      .complete();
 }
 ```
 

@@ -21,6 +21,7 @@ import java.util.function.Consumer;
  * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum DataCleaner implements DataRipper<DataCleaner> {
+
    DELETE_CREATED_ORDERS(DataCleanerFunctions::cleanAllOrders);
 
    public static final class Data {

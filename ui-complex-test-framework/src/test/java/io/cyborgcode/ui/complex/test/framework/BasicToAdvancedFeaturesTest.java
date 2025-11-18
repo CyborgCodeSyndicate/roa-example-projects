@@ -163,8 +163,8 @@ class BasicToAdvancedFeaturesTest extends BaseQuest {
    @Description("Order creation flow using craft feature to create domain objects")
    void createOrderUsingCraftFeature(Quest quest,
          // Craft: provides a typed model instances resolved by the DataCreator
-         @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.SELLER) Seller seller,
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
@@ -192,8 +192,8 @@ class BasicToAdvancedFeaturesTest extends BaseQuest {
    @Regression
    @Description("Order creation flow using craft and insertion features")
    void createOrderUsingCraftAndInsertionFeatures(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.SELLER) Seller seller,
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_UI)
             .browser().navigate(getUiConfig().baseUrl())
@@ -216,8 +216,8 @@ class BasicToAdvancedFeaturesTest extends BaseQuest {
    @Regression
    @Description("Order creation flow using craft and custom service features")
    void createOrderUsingCraftAndCustomServiceFeatures(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_SELLER) Seller seller,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.SELLER) Seller seller,
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             // Use a custom ring (service) exposing domain-specific fluent methods
             .use(RING_OF_CUSTOM)
@@ -233,7 +233,7 @@ class BasicToAdvancedFeaturesTest extends BaseQuest {
    // @AuthenticateViaUi: Auto-login per test as precondition (no cached session)
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void createOrderUsingAuthenticationCraftAndCustomServiceFeatures(Quest quest,
-         @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
+         @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
             .createOrder(order)
@@ -246,9 +246,9 @@ class BasicToAdvancedFeaturesTest extends BaseQuest {
    @Description("Order creation flow using precondition, craft and custom service features")
    // Journey: Reusable precondition flows executed before the test in the given order
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
-          journeyData = {@JourneyData(DataCreator.Data.VALID_SELLER)}, order = 1)
+          journeyData = {@JourneyData(DataCreator.Data.SELLER)}, order = 1)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
-          journeyData = {@JourneyData(DataCreator.Data.VALID_ORDER)}, order = 2)
+          journeyData = {@JourneyData(DataCreator.Data.ORDER)}, order = 2)
    void createOrderUsingPreconditionCraftAndCustomServiceFeatures(Quest quest) {
       quest
             .use(RING_OF_CUSTOM)

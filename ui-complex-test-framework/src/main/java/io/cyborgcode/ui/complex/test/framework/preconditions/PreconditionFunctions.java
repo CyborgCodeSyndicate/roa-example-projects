@@ -46,7 +46,7 @@ public final class PreconditionFunctions {
    }
 
    public static void loginDefaultUser(SuperQuest quest) {
-      loginUserAndValidate(quest, DataCreatorFunctions.createValidSeller());
+      loginUserAndValidate(quest, DataCreatorFunctions.createSeller());
    }
 
    public static void validateSellerExistInDatabase(SuperQuest quest, Seller seller) {

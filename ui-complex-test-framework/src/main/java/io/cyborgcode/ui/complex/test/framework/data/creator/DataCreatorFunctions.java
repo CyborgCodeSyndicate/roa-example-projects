@@ -32,14 +32,14 @@ public final class DataCreatorFunctions {
    private DataCreatorFunctions() {
    }
 
-   public static Seller createValidSeller() {
+   public static Seller createSeller() {
       return Seller.builder()
             .username(Data.testData().sellerEmail())
             .password(Data.testData().sellerPassword())
             .build();
    }
 
-   public static Order createValidOrder() {
+   public static Order createOrder() {
       return Order.builder()
             .id(1)
             .customerName(Data.testData().customerName())
@@ -50,7 +50,7 @@ public final class DataCreatorFunctions {
             .build();
    }
 
-   public static Order createValidLateOrder() {
+   public static Order createLateOrder() {
       SuperQuest superQuest = QuestHolder.get();
       List<String> productList = superQuest.getStorage().get(DataExtractorFunctions
                   .responseBodyExtraction(RESPONSE_BODY_EXTRACTOR,
