@@ -1039,19 +1039,51 @@ public static void deleteSpecialRecords(SuperQuest quest) {
 
 ## 9. Storage Integration
 
-Scope & thread-local design:
+This section complements [2.3 Storage](#23-storage) with more detail.
 
-- Every test has its own storage instance tied to its executing thread; discarded on finish.
+### 9.1 Scope & thread-local design
+
+- Every test has its **own storage instance** tied to its executing thread.
+- When the test finishes, its storage is discarded.
 - Parallel execution is safe: data from test A cannot leak into test B.
 
-Namespaces & usage (examples):
+Conceptually:
 
-- UI: intercepted responses, values from components.
-- DB: last `QueryResponse` per query enum.
-- PRE_ARGUMENTS: input/output of journeys and preconditions.
-- API: last `Response` per endpoint; tokens/IDs for chaining.
+```text
+Test Thread 1 → Storage #1
+Test Thread 2 → Storage #2
+...
+```
 
-Read patterns:
+### 9.2 Namespaces & what goes where
+
+Recommended grouping:
+
+- **UI namespace (`StorageKeysUi.UI`)**
+    - intercepted responses,
+    - values read from components (e.g., dropdown options).
+- **API namespace (`StorageKeysApi.API`)**
+    - api responses
+- **DB namespace (`StorageKeysDb.DB`)**
+    - `QueryResponse` objects keyed by `AppQueries` values.
+- **PRE_ARGUMENTS (`StorageKeysTest.PRE_ARGUMENTS`)**
+    - input/output of journeys and preconditions (e.g., created order IDs, pre-created orders).
+
+### 9.3 Write patterns
+
+Many writes happen automatically (e.g., some UI services stash options, interceptors stash responses).
+
+Manual writes:
+
+```java
+quest.getStorage().put(MyKeys.USER_ID, "user123");
+```
+
+Journeys and DB hooks often write results into `PRE_ARGUMENTS` or `DB` namespaces.
+
+### 9.4 Read patterns
+
+Common examples:
 
 ```java
 // Journey output
@@ -1068,18 +1100,20 @@ GetUsersDto users = retrieve(StorageKeysApi.API, AppEndpoints.GET_ALL_USERS, Res
     .getBody().as(GetUsersDto.class);
 ```
 
-Best practices:
+### 9.5 Best practices
 
-- Use enums as keys for discoverability and type safety.
-- Keep direct storage access inside rings/journeys/hooks.
-- Avoid storing huge payloads unless required for assertions.
-- Prefer helper methods (`retrieve`, `staticTestData`) over raw map access.
+- Use **enums** as keys wherever possible for discoverability and type safety.
+- Keep direct storage access inside **rings, journeys, hooks** – not scattered through tests.
+- Avoid storing huge payloads unless you really need them for assertions.
+- Prefer **helper methods** (`retrieve`, `staticTestData`) over raw map access to avoid casting errors.
 
 ---
 
 ## 10. UiElement Pattern & Component Services
 
-Element registries are enums implementing specific interfaces (e.g., `ButtonUiElement`) that encode the locator, component type, and synchronization strategy for each control. Using `ButtonFields` as an example, each constant defines a `By` locator, a `ButtonComponentType` via `ButtonFieldTypes`, and optional `before/after` hooks for robust timing. This keeps synchronization close to the element and avoids repeating waits across tests.
+### 10.1 UiElement enums
+
+Element registries are enums implementing specific interfaces (e.g., `ButtonUiElement`) that encode the locator, component type, and synchronization strategy for each control. Using `ButtonFields` as an example (see `ButtonFields.java`), each constant defines a `By` locator, a `ButtonComponentType` via `ButtonFieldTypes`, and optional `before/after` hooks for robust timing. This keeps synchronization close to the element and avoids repeating waits across tests.
 
 ```java
 public enum ButtonFields implements ButtonUiElement {
@@ -1099,11 +1133,13 @@ quest.use(RING_OF_UI)
 Why this pattern helps:
 
 - Single source of truth for selectors and behavior (no magic strings in tests).
-- `ButtonFieldTypes` binds each enum to the correct component implementation, enabling typed operations with adapter-specific behavior.
-- Element‑level `before/after` hooks stabilize flows against async UI changes.
-- The same approach applies to other element types (`InputFields`, `SelectFields`, `Tables`).
+- `ButtonFieldTypes` binds each enum to the correct component implementation, enabling typed operations (`click`, visibility checks) with adapter-specific behavior.
+- Element‑level `before/after` hooks (e.g., wait to be clickable, wait for overlay to disappear) stabilize flows against async UI changes.
+- The same approach applies to other element types (`InputFields`, `SelectFields`, `Tables`), producing a consistent, maintainable UI map.
 
-Mapping domain models to UI with `@InsertionElement`:
+### 10.2 Mapping domain models to UI with `@InsertionElement`
+
+Annotate model fields with `@InsertionElement` to declare how each property maps to the UI (which enum registry and the order of operations). With this mapping in place, `insertion().insertData(model)` walks the fields and performs the right UI actions automatically (type, select, etc.). This keeps tests at the domain level and removes repetitive glue code. See `Order.java` for a complete example of mapping inputs and selects with execution order.
 
 ```java
 @Data
@@ -1118,33 +1154,70 @@ public class Order {
   @InsertionElement(locatorClass = SelectFields.class, elementEnum = "PRODUCTS_DDL", order = 3)
   private String product;
 }
+```
 
-// Then
+Then use:
+
+```java
 quest.use(RING_OF_UI)
     .insertion().insertData(order);
 ```
+Full flow example using **insertion**:
 
-Component services via `AppUiService` (representative operations):
+```java
+@Test
+void createOrderUsingCraftAndInsertionFeatures(Quest quest,
+     @Craft(model = DataCreator.Data.SELLER) Seller seller,
+     @Craft(model = DataCreator.Data.ORDER) Order order) {
 
-- input() — insert, clear, getValue, validateValue
-- button() — click, validate visibility/enabled/hidden
-- select() — selectOption(s), getSelectedOptions, getAvailableOptions, validateSelected
-- table() — readTable, table-level assertions
-- browser() — navigate, refresh, back, forward
-- interceptor() — access intercepted requests/responses
-- insertion() — insert annotated models via `@InsertionElement`
-- validate() — run custom validation lambdas as part of the chain
+  quest
+      .use(RING_OF_UI)
+      .browser().navigate(getUiConfig().baseUrl())
+      .insertion().insertData(seller) // insertion: maps model fields to corresponding UI controls in one operation
+      .button().click(ButtonFields.SIGN_IN_BUTTON)
+      .button().click(ButtonFields.NEW_ORDER_BUTTON)
+      .insertion().insertData(order)  // insertion: maps model fields to corresponding UI controls in one operation
+      .button().click(ButtonFields.REVIEW_ORDER_BUTTON)
+      .button().click(ButtonFields.PLACE_ORDER_BUTTON)
+      .input().insert(InputFields.SEARCH_BAR_FIELD, order.getCustomerName())
+      .table().readTable(Tables.ORDERS)
+      .table().validate(
+          Tables.ORDERS,
+          Assertion.builder().target(TABLE_VALUES).type(TABLE_NOT_EMPTY).expected(true).soft(true).build())
+      .complete();
+}
+```
+
+### 10.3 Component services via `AppUiService`
+
+`AppUiService` exposes typed component services so tests don’t need to think about low-level Selenium calls.
+
+| Service        | Representative operations                                           |
+|----------------|---------------------------------------------------------------------|
+| `input()`      | `insert`, `clear`, `getValue`, `validateValue`                      |
+| `button()`     | `click`, `validateIsVisible`, `validateIsEnabled/Hidden`           |
+| `select()`     | `selectOption(s)`, `getSelectedOptions`, `getAvailableOptions`, `validateSelected` |
+| `table()`      | `readTable`, `readRow` (if supported), table-level assertions       |
+| `browser()`    | `navigate`, `refresh`, `back`, `forward`                            |
+| `interceptor()`| access intercepted requests/responses                               |
+| `insertion()`  | insert annotated models via `@InsertionElement`                     |
+| `validate()`   | run custom validation lambdas as part of the chain                  |
 
 ---
 
 ## 11. Advanced Examples
 
+This section shows focused scenarios that combine the pieces introduced above.
+
 ### 11.1 Static test data preload
+
+Use `@StaticTestData` to load shared constants for the whole test class:
 
 ```java
 @Test
 @StaticTestData(StaticData.class)
 void usesStaticData(Quest quest) {
+
   quest
       .use(RING_OF_CUSTOM)
       .validateOrder(retrieve(staticTestData(StaticData.ORDER), Order.class))
@@ -1152,7 +1225,13 @@ void usesStaticData(Quest quest) {
 }
 ```
 
+Ideal for demo data or constants you don’t want to encode in property files.
+
+---
+
 ### 11.2 Late data creation based on intercepted responses
+
+`Late<T>` lets you build data after some runtime information is known.
 
 ```java
 @Test
@@ -1172,7 +1251,13 @@ void lateData(
 }
 ```
 
+The `LATE_ORDER` creator can use values extracted from intercepted responses to build a second order on the fly.
+
+---
+
 ### 11.3 Validating tables with typed rows
+
+Map a table to a typed row class, then use fluent table operations and storage:
 
 ```java
 quest
@@ -1190,17 +1275,50 @@ quest
     .complete();
 ```
 
+Access the typed rows:
+
+```java
+quest
+    .use(RING_OF_UI)
+    .table().readTable(Tables.ORDERS)
+    .drop()
+    .use(RING_OF_UI)
+    .validate(() -> {
+         List<TableEntry> rows =
+         (List<TableEntry>) DefaultStorage.retrieve(Tables.ORDERS, List.class);
+       Assertions.assertFalse(rows.isEmpty());
+       })
+    .complete();
+```
+
+If your adapter version supports `readRow`:
+
+```java
+TableEntry first = quest.use(RING_OF_UI).table().readRow(Tables.ORDERS, 0);
+```
+
+---
+
 ### 11.4 Full E2E: UI + API + DB + cleanup
+
+Combine everything into a single scenario:
 
 ```java
 @UI
 @API
 @DB
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
+// Adapters and hooks registered on class
+
 @Test
-@AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
+@AuthenticateViaUi(
+  credentials = AdminCredentials.class,
+  type = AppUiLogin.class,
+  cacheCredentials = true)
 @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
-void fullE2E(Quest quest, @Craft(model = DataCreator.Data.ORDER) Order order) {
+void fullE2E(
+  Quest quest,
+  @Craft(model = DataCreator.Data.ORDER) Order order) {
 
   quest
       // Create via UI (Custom ring wraps UI flows)
@@ -1209,11 +1327,15 @@ void fullE2E(Quest quest, @Craft(model = DataCreator.Data.ORDER) Order order) {
       .validateOrder(order)
       .drop()
 
-      // Call API with same logical session context if needed
+      // Reuse session cookie for API validation
       .use(RING_OF_API)
       .requestAndValidate(
-        AppEndpoints.ENDPOINT_BAKERY,
-        Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build())
+        AppEndpoints.ENDPOINT_BAKERY.withHeader("Cookie", CustomService.getJsessionCookie()),
+        Assertion.builder()
+          .target(STATUS)
+          .type(IS)
+          .expected(HttpStatus.SC_OK)
+          .build())
       .drop()
 
       // Validate persisted state in DB
@@ -1232,66 +1354,92 @@ void fullE2E(Quest quest, @Craft(model = DataCreator.Data.ORDER) Order order) {
 }
 ```
 
+This recipe showcases:
+
+- multi-ring composition,
+- session reuse between UI and API,
+- DB verification,
+- full cleanup via `@Ripper`.
+
 ---
 
 ## 12. Adapter Configuration & Reporting
 
-Adapter configuration:
+### 12.1 Adapter configuration
 
-- UI, API and DB adapters provide Owner properties for base URLs, logging, retries, screenshots, and vendor-specific settings.
-- See adapter READMEs for complete property lists.
+This module does not define new Owner keys; it **reuses** configuration from:
 
-Allure reporting (when on classpath):
+- `ui-interactor-test-framework-adapter`,
+- `api-interactor-test-framework-adapter`,
+- `db-interactor-test-framework-adapter`.
 
-- UI
-  - step-level reporting for component operations,
-  - optional screenshots on pass/fail,
-  - attachments for intercepted traffic.
-- API
-  - request/response attachments (URL, method, headers, body),
-  - status, duration,
-  - validation target maps summarizing assertions.
-- DB
-  - executed SQL snapshots and timing,
-  - row samples,
-  - validation target maps for DB assertions.
+Refer to their individual READMEs for:
 
+- complete property lists,
+- additional flags for logging, screenshots and retries,
+- DB vendor-specific configuration.
+
+### 12.2 Allure reporting
+
+When Allure is on the classpath, ROA adapters typically provide:
+
+- **UI**
+    - step-level reporting for each component operation,
+    - optional screenshots on pass/fail,
+    - attachments for intercepted traffic when enabled.
+
+- **API**
+    - request/response attachments:
+        - URL, method, headers, body, status, duration,
+    - validation target maps summarizing assertions.
+
+- **DB**
+    - executed SQL snapshots and timing,
+    - row samples,
+    - validation target maps for DB assertions.
 ---
 
 ## 13. Troubleshooting
 
-UI
+**Interception not working**
 
-- Interception not working — ensure ChromeDriver matches Chrome; verify `@InterceptRequests` and URL substrings.
-- Authentication flaky — ensure stable post-login locator; avoid transient elements; consider `cacheCredentials = true`.
-- Elements not found — recheck locators in element enums; verify waits and `ui.base.url`.
+- Ensure your ChromeDriver version matches installed Chrome.
+- Check that `RequestsInterceptor` URL substrings match actual network calls.
+- Verify that `@InterceptRequests` is present on the test (or class).
 
-API
+**Authentication is flaky**
 
-- Base URL issues — check `api.base.url` and environment.
-- JSONPath mismatches — verify paths in your JSONPath registry.
-- 401/403 — confirm credentials and auth type when using `@AuthenticateViaApi`.
-- Owner config not loaded — ensure property files exist on classpath; confirm profiles/system props.
-- Excessive logs — tune `api.restassured.logging.enabled` and `api.restassured.logging.level`.
-- Default headers — endpoints can set default headers; override/remove as needed for your API.
+- Confirm `AppUiLogin.successfulLoginElementLocator()` points to a stable element available after login.
+- Avoid depending on transient UI elements (like toasts) for login success.
+- Use `cacheCredentials = true` for long-running suites.
 
-DB
+**Elements not found**
 
-- Hooks not running — confirm `@DbHook` configuration.
-- Query mismatch — ensure query definitions match schema; verify JSONPath extractors.
+- Double-check locators in `InputFields`, `ButtonFields`, etc.
+- Make sure `SharedUi` `before`/`after` waits are suitable for your app.
+- Verify that `ui.base.url` is correct and your app is reachable.
+
+**DB assertions fail unexpectedly**
+
+- Validate that `DbHookFlows.Data.INITIALIZE_H2` (or your hook) is actually running.
+- Check that the query definition in `AppQueries` matches your schema.
+- Inspect the JSONPath in `DbResponsesJsonPaths` and compare with the actual query result.
+
+**Owner config not loaded**
+
+- Confirm that property files exist on the test classpath.
+- Check system property overrides (`ui.config.file`, `api.config.file`, `db.config.file`).
+- Run with `-X` or additional logging if necessary to verify effective config values.
 
 ---
 
 ## 14. Dependencies
 
-Recommended adapters (include only what you use):
+From this module’s POM:
 
 - `io.cyborgcode.roa:ui-interactor-test-framework-adapter`
 - `io.cyborgcode.roa:api-interactor-test-framework-adapter`
 - `io.cyborgcode.roa:db-interactor-test-framework-adapter`
-
-Common extras used in some examples (optional, depending on your setup):
-
 - `org.projectlombok:lombok`
 - `com.fasterxml.jackson.core:jackson-databind`
 - `com.h2database:h2`
