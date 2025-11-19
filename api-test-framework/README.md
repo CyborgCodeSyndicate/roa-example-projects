@@ -79,7 +79,11 @@ This section is a conceptual map; later sections show concrete code.
 - assertion aggregation (soft/hard),
 - access to artifacts (e.g., raw HTTP response).
 
-How you get it (JUnit 5 + ROA):
+#### How you get it (JUnit 5 + ROA):
+
+In JUnit 5 tests, the Quest is injected as a method parameter by the ROA extension when your test:
+- extends BaseQuest / BaseQuestSequential, or
+- is annotated with the ROA meta-annotation that enables Quest injection.
 
 ```java
 
@@ -109,6 +113,7 @@ Artifacts & storage:
 Lifecycle variants:
 
 - `BaseQuest` — per-method `Quest` lifecycle (most common)
+- `BaseQuestSequential` – class-level Quest shared by all tests in the class.
 
 ### 2.2 Rings
 
@@ -124,22 +129,12 @@ Example switching:
 
 ```java
 quest
-      .use(RING_OF_CUSTOM)
-    .
-
-loginUserAndAddSpecificHeader(login)
-  .
-
-drop()
-  .
-
-use(RING_OF_API)
-    .
-
-requestAndValidate(AppEndpoints.GET_ALL_USERS, ...)
-  .
-
-complete();
+  .use(RING_OF_CUSTOM)
+    .loginUserAndAddSpecificHeader(login)
+  .drop()
+  .use(RING_OF_API)
+    .requestAndValidate(AppEndpoints.GET_ALL_USERS, /* assertions */)
+  .complete();
 ```
 
 ### 2.3 Storage
@@ -184,8 +179,7 @@ Hooks & capabilities → Preconditions → Data setup → Test body → Cleanup
 Direct dependencies (see [pom.xml](pom.xml)):
 
 - `io.cyborgcode.roa:api-interactor-test-framework-adapter`
-- `org.projectlombok:lombok`
-- `com.fasterxml.jackson.core:jackson-databind`
+
 
 Profiles and defaults (from POM):
 
@@ -349,7 +343,6 @@ sequenceDiagram
 ```java
 public enum AppEndpoints implements Endpoint<AppEndpoints> {
    GET_ALL_USERS(Method.GET, "/users?{page}"),
-  ...
 
    public RequestSpecification defaultConfiguration() {
       RequestSpecification spec = Endpoint.super.defaultConfiguration();
@@ -378,24 +371,19 @@ public enum AppEndpoints implements Endpoint<AppEndpoints> {
     <groupId>io.cyborgcode.roa</groupId>
     <artifactId>api-interactor-test-framework-adapter</artifactId>
 </dependency>
-<dependency>
-<groupId>org.projectlombok</groupId>
-<artifactId>lombok</artifactId>
-<scope>provided</scope>
-</dependency>
-<dependency>
-<groupId>com.fasterxml.jackson.core</groupId>
-<artifactId>jackson-databind</artifactId>
-</dependency>
 ```
 
 ### 7.3 Configure environment
 
-Default properties come from the active Maven profile (`prod` by default). See:
+The adapter uses Owner configuration. This module’s POM sets defaults and the `prod` profile is active by default. See:
 
 - [`config-dev.properties`](src/main/resources/config-dev.properties)
+- [`config-staging.properties`](src/main/resources/config-staging.properties)
 - [`config-prod.properties`](src/main/resources/config-prod.properties)
-- [`system.properties`](src/main/resources/system.properties)
+- [`test_data-dev.properties`](src/main/resources/test_data-dev.properties)
+- [`test_data-staging.properties`](src/main/resources/test_data-staging.properties)
+- [`test_data-prod.properties`](src/main/resources/test_data-prod.properties)
+- [`system.properties`](src/main/resources/system.properties) (defaults pointing to `*-prod`)
 
 Example (`config-dev.properties`):
 
@@ -407,14 +395,35 @@ api.restassured.logging.level=ALL
 shorten.body=100000
 ```
 
-Switch profile at build time:
+#### Switching environments (profiles and overrides)
+
+- Maven profiles (defined in this module’s `pom.xml`): `-Pdev`, `-Pstaging`, `-Pprod` (prod is default)
+- Module selection (if building the multi-module repo): `-pl api-test-framework`
+- System property overrides (highest precedence) can force specific files
+
+Examples:
 
 ```bash
-mvn -P dev test
-mvn -P prod test
+# Run tests with staging profile
+mvn -q -pl api-test-framework -Pstaging test
+
+# Run with dev profile
+mvn -q -pl api-test-framework -Pdev test
+
+# Run a single test and override only test data to dev
+mvn -q -pl api-test-framework -Pprod \
+-Dtest=GettingStartedTest#showsPostWithDtoAndSimpleBodyAssertions \
+-Dtest.data.file=test_data-dev test
 ```
 
-System overrides (from `system.properties`) include:
+Precedence of effective config values:
+
+1. `-D` system properties
+2. Maven profile defaults
+3. `system.properties`
+4. Values inside the referenced property files
+
+Common system overrides (as seen in `system.properties`):
 
 ```properties
 api.config.file=config-prod
@@ -449,77 +458,25 @@ In this section we progressively evolve tests from minimal GET/POST to richer fl
 
 ```java
 quest.use(RING_OF_API)
-     .
-
-requestAndValidate(
-      GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
-       Assertion.
-
-builder().
-
-target(STATUS).
-
-type(IS).
-
-expected(SC_OK).
-
-build(),
-       Assertion.
-
-builder().
-
-target(HEADER).
-
-key(CONTENT_TYPE).
-
-type(CONTAINS).
-
-expected(JSON.toString()).
-
-build()
+     .requestAndValidate(
+       GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
+       Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
+       Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build()
      )
-           .
-
-complete();
+     .complete();
 ```
 
 ### 8.2 GET with path param and JSONPath assertion
 
 ```java
 quest.use(RING_OF_API)
-     .
-
-requestAndValidate(
-      GET_USER.withPathParam(ID_PARAM, ID_THREE),
-       Assertion.
-
-builder().
-
-target(STATUS).
-
-type(IS).
-
-expected(SC_OK).
-
-build(),
-       Assertion.
-
-builder().
-
-target(BODY).
-
-key(SINGLE_USER_EMAIL_EXPLICIT.getJsonPath())
-      .
-
-type(IS).
-
-expected(USER_THREE_EMAIL).
-
-build()
+     .requestAndValidate(
+       GET_USER.withPathParam(ID_PARAM, ID_THREE),
+       Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
+       Assertion.builder().target(BODY).key(SINGLE_USER_EMAIL_EXPLICIT.getJsonPath())
+                 .type(IS).expected(USER_THREE_EMAIL).build()
      )
-           .
-
-complete();
+     .complete();
 ```
 
 ### 8.3 POST with DTO request body
@@ -530,41 +487,15 @@ CreateUserDto createUserRequest = CreateUserDto.builder()
       .job(USER_LEADER_JOB)
       .build();
 
-quest.
-
-use(RING_OF_API)
-     .
-
-requestAndValidate(
-      POST_CREATE_USER,
-      createUserRequest,
-      Assertion.builder().
-
-target(STATUS).
-
-type(IS).
-
-expected(SC_CREATED).
-
-build(),
-       Assertion.
-
-builder().
-
-target(BODY).
-
-key(CREATE_USER_NAME_RESPONSE.getJsonPath())
-      .
-
-type(IS).
-
-expected(USER_LEADER_NAME).
-
-build()
+quest.use(RING_OF_API)
+     .requestAndValidate(
+       POST_CREATE_USER,
+       createUserRequest,
+       Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
+       Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath())
+                 .type(IS).expected(USER_LEADER_NAME).build()
      )
-           .
-
-complete();
+     .complete();
 ```
 
 ### 8.4 Login POST + token assertion
@@ -575,40 +506,14 @@ LoginDto loginRequest = LoginDto.builder()
       .password(Data.testData().password())
       .build();
 
-quest.
-
-use(RING_OF_API)
-     .
-
-requestAndValidate(
-      POST_LOGIN_USER,
-      loginRequest,
-      Assertion.builder().
-
-target(STATUS).
-
-type(IS).
-
-expected(SC_OK).
-
-build(),
-       Assertion.
-
-builder().
-
-target(BODY).
-
-key(TOKEN.getJsonPath()).
-
-type(NOT_NULL).
-
-expected(true).
-
-build()
+quest.use(RING_OF_API)
+     .requestAndValidate(
+       POST_LOGIN_USER,
+       loginRequest,
+       Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
+       Assertion.builder().target(BODY).key(TOKEN.getJsonPath()).type(NOT_NULL).expected(true).build()
      )
-           .
-
-complete();
+     .complete();
 ```
 
 ### 8.5 Negative login (missing password)
@@ -618,41 +523,15 @@ LoginDto login = LoginDto.builder()
       .email(Data.testData().username())
       .build();
 
-quest.
-
-use(RING_OF_API)
-     .
-
-requestAndValidate(
-      POST_LOGIN_USER,
-      login,
-      Assertion.builder().
-
-target(STATUS).
-
-type(IS).
-
-expected(SC_BAD_REQUEST).
-
-build(),
-       Assertion.
-
-builder().
-
-target(BODY).
-
-key(ERROR.getJsonPath())
-      .
-
-type(IS).
-
-expected(MISSING_PASSWORD_ERROR).
-
-build()
+quest.use(RING_OF_API)
+     .requestAndValidate(
+       POST_LOGIN_USER,
+       login,
+       Assertion.builder().target(STATUS).type(IS).expected(SC_BAD_REQUEST).build(),
+       Assertion.builder().target(BODY).key(ERROR.getJsonPath())
+                 .type(IS).expected(MISSING_PASSWORD_ERROR).build()
      )
-           .
-
-complete();
+     .complete();
 ```
 
 ---
@@ -665,62 +544,29 @@ Use storage to chain requests and assert on typed DTOs.
 
 ```java
 quest.use(RING_OF_API)
-     .
-
-request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
-      .
-
-validate(() ->{
-GetUsersDto users = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
-      .getBody().as(GetUsersDto.class);
-
-assertEquals(PAGE_TWO_DATA_SIZE, users.getData().
-
-size());
-      });
+     .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
+     .validate(() -> {
+       GetUsersDto users = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
+         .getBody().as(GetUsersDto.class);
+       assertEquals(PAGE_TWO_DATA_SIZE, users.getData().size());
+     });
 ```
 
 ### 9.2 Chain calls with dynamic path param from previous response
 
 ```java
 quest.use(RING_OF_API)
-     .
-
-request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
-      .
-
-requestAndValidate(
-      GET_USER.withPathParam(
-            ID_PARAM,
-      retrieve(StorageKeysApi.API, GET_ALL_USERS, Response .class)
-           .
-
-getBody().
-
-as(GetUsersDto .class)
-           .
-
-getData().
-
-get(0).
-
-getId()
+     .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
+     .requestAndValidate(
+       GET_USER.withPathParam(
+         ID_PARAM,
+         retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
+           .getBody().as(GetUsersDto.class)
+           .getData().get(0).getId()
        ),
-             Assertion.
-
-builder().
-
-target(STATUS).
-
-type(IS).
-
-expected(SC_OK).
-
-build()
+       Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
      )
-           .
-
-complete();
+     .complete();
 ```
 
 ---
@@ -731,15 +577,9 @@ complete();
 
 ```java
 quest.use(RING_OF_CUSTOM)
-     .
-
-loginUserAndAddSpecificHeader(loginAdminUser)
-     .
-
-requestAndValidateGetAllUsers()
-     .
-
-complete();
+     .loginUserAndAddSpecificHeader(loginAdminUser)
+     .requestAndValidateGetAllUsers()
+     .complete();
 ```
 
 See: [`CustomService`](src/main/java/io/cyborgcode/api/test/framework/service/CustomService.java)
@@ -748,12 +588,8 @@ See: [`CustomService`](src/main/java/io/cyborgcode/api/test/framework/service/Cu
 
 ```java
 quest.use(RING_OF_EVOLUTION)
-     .
-
-validateCreatedUser()
-     .
-
-complete();
+     .validateCreatedUser()
+     .complete();
 ```
 
 See: `EvolutionService` and  
@@ -766,7 +602,6 @@ See: `EvolutionService` and
 ### 11.1 API-level authentication
 
 ```java
-
 @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
 @Test
 void usesApiAuth(Quest quest) {
@@ -780,7 +615,6 @@ void usesApiAuth(Quest quest) {
 ### 11.2 Journeys as reusable preconditions
 
 ```java
-
 @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
 @Journey(value = Preconditions.Data.CREATE_NEW_USER,
       journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 1)
@@ -799,7 +633,6 @@ void preconditionsRunBeforeTest(Quest quest) {
 ### 11.3 Cleanup with Ripper
 
 ```java
-
 @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
 @Test
 void cleanupAfterTest(Quest quest) {
@@ -823,37 +656,17 @@ Poll a custom condition until it becomes true, then continue with normal calls.
 ```java
 AtomicInteger probeCounter = new AtomicInteger(0);
 RetryCondition<Boolean> condition = new RetryConditionImpl<>(
-      service -> probeCounter.incrementAndGet() >= 3,
-      result -> result
+  service -> probeCounter.incrementAndGet() >= 3,
+  result -> result
 );
 
-quest.
-
-use(RING_OF_API)
-     .
-
-retryUntil(condition, Duration.ofSeconds(10),Duration.
-
-ofSeconds(1))
-      .
-
-requestAndValidate(
-      GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
-       Assertion.
-
-builder().
-
-target(STATUS).
-
-type(IS).
-
-expected(SC_OK).
-
-build()
+quest.use(RING_OF_API)
+     .retryUntil(condition, Duration.ofSeconds(10), Duration.ofSeconds(1))
+     .requestAndValidate(
+       GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
+       Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
      )
-           .
-
-complete();
+     .complete();
 ```
 
 See: [`RetryUntilExamplesTest`](src/test/java/io/cyborgcode/api/test/framework/RetryUntilExamplesTest.java)
@@ -886,14 +699,11 @@ When Allure is on the classpath, API calls typically attach:
 ## 14. Troubleshooting
 
 - Base URL issues — ensure `api.base.url` points to your target environment.
-- JSONPath mismatches — verify paths in [
-  `ApiResponsesJsonPaths`](src/main/java/io/cyborgcode/api/test/framework/api/extractors/ApiResponsesJsonPaths.java).
+- JSONPath mismatches — verify paths in [`ApiResponsesJsonPaths`](src/main/java/io/cyborgcode/api/test/framework/api/extractors/ApiResponsesJsonPaths.java).
 - 401/403 — when using `@AuthenticateViaApi`, confirm credentials and auth type.
 - Owner config not loaded — ensure property files exist on the classpath and profile/system props are correct.
 - Excessive logs — tune `api.restassured.logging.enabled` and `api.restassured.logging.level`.
-- Default headers — [
-  `AppEndpoints.defaultConfiguration()`](src/main/java/io/cyborgcode/api/test/framework/api/AppEndpoints.java) sets JSON
-  and an example API key header; override/remove as needed for your API.
+- Default headers — [`AppEndpoints.defaultConfiguration()`](src/main/java/io/cyborgcode/api/test/framework/api/AppEndpoints.java) sets JSON and an example API key header; override/remove as needed for your API.
 
 ---
 
