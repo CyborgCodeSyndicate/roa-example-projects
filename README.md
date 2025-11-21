@@ -2,8 +2,8 @@
 
 End-to-end UI + API + DB test automation examples on top of ROA (Ring of Automation).
 
-> Quick jump: if you already use ROA and want to run or write tests, go to  
-> [7. Getting Started](#7-getting-started) → [7.4 Enable adapters on tests](#74-enable-adapters-on-tests) and [8. Writing Tests (step-by-step)](#8-writing-tests-step-by-step).
+> Quick jump: if you are already familiar with ROA and just want to run the sample tests, go to:
+> [Writing Simple UI Component Tests](#75-writing-simple-ui-component-tests) or [Writing Simple API Tests](#76-writing-simple-api-tests).
 
 ---
 
@@ -17,20 +17,35 @@ End-to-end UI + API + DB test automation examples on top of ROA (Ring of Automat
    - [Annotations & Phases](#24-annotations--phases)  
 3. [Module Metadata](#3-module-metadata)  
 4. [Project Structure](#4-project-structure)  
-5. [Features & Use Cases](#5-features--use-cases)  
+5. [Features & Use Cases](#5-features--use-cases)
+   - [High-level capabilities](#51-high-level-capabilities)
+   - [Concrete features](#52-concrete-features)
+   - [Typical use cases](#53-typical-use-cases)
 6. [Architecture](#6-architecture)  
    - [Execution Model](#61-execution-model)  
    - [Test Flow](#62-test-flow)  
    - [Bootstrap & Runtime Behavior](#63-bootstrap--runtime-behavior)  
-7. [Getting Started](#7-getting-started)  
-8. [Writing Tests (step-by-step)](#8-writing-tests-step-by-step)  
-9. [Storage Integration](#9-storage-integration)  
+7. [Getting Started](#7-getting-started)
+    - [Prerequisites](#71-prerequisites)
+    - [Add dependencies (to your module)](#72-add-dependencies-to-your-module)
+    - [Configure environment](#73-configure-environment)
+    - [Enable adapters on tests](#74-enable-adapters-on-tests)
+    - [Writing Simple UI Component Tests](#75-writing-simple-ui-component-tests)
+    - [Writing Simple API Tests](#76-writing-simple-api-tests)
+8. [Writing Tests (feature-by-feature)](#8-writing-tests-feature-by-feature)  
+9. [Storage Integration](#9-storage-integration)
+    - [Scope & thread-local design](#91-scope--thread-local-design)
+    - [Namespaces & what goes where](#92-namespaces--what-goes-where)
+    - [Write patterns](#93-write-patterns)
+    - [Read patterns](#94-read-patterns)
+    - [Best practices](#95-best-practices)  
 10. [UiElement Pattern & Component Services](#10-uielement-pattern--component-services)  
-11. [Advanced Examples](#11-advanced-examples)  
-12. [Adapter Configuration & Reporting](#12-adapter-configuration--reporting)  
-13. [Troubleshooting](#13-troubleshooting)  
-14. [Dependencies](#14-dependencies)  
-15. [Author](#15-author)
+11. [Table Testing Guide](#11-table-testing-guide)  
+12. [Advanced Examples](#12-advanced-examples)  
+13. [Adapter Configuration & Reporting](#13-adapter-configuration--reporting)  
+14. [Troubleshooting](#14-troubleshooting)  
+15. [Dependencies](#15-dependencies)  
+16. [Author](#16-author)
 
 ---
 
@@ -114,6 +129,8 @@ Lifecycle variants:
 
 A Ring is a named capability (UI, API, DB, Custom…) that exposes a fluent DSL. Tests switch rings to access different capabilities while keeping code expressive and concerns separated.
 
+It represents the concrete fluent service implementation that backs Quest.use(Class). Tests switch between rings to access different testing capabilities. Rings keeps test code expressive while cleanly separating concerns between low-level HTTP, database interactions, UI operations and shared domain-specific actions.
+
 Common rings used here:
 
 - `RING_OF_UI` – AppUiService (browser UI)
@@ -126,14 +143,13 @@ Example switching:
 
 ```java
 quest
-  .use(RING_OF_UI)
-  .login(seller)
-  .createOrder(order)
-  .validateOrder(order)
-  .drop()
-  .use(RING_OF_API)
-  .requestAndValidate(AppEndpoints.SOME_ENDPOINT, /* assertions */)
-  .complete();
+   .use(RING_OF_UI)
+   .input().insert(InputFields.ORDER_NUMBER, ID_VALUE)
+   .button().click(ButtonFields.FIND_ORDER)
+   .drop()
+   .use(RING_OF_API)
+   .requestAndValidate(AppEndpoints.SOME_ENDPOINT, /* assertions */)
+   .complete();
 ```
 
 ### 2.3 Storage
@@ -153,19 +169,7 @@ Typical namespaces:
 - `StorageKeysApi.API` API namespace  — last responses keyed by endpoints; tokens and IDs between steps.
 - `StorageKeysTest.PRE_ARGUMENTS` PRE_ARGUMENTS  — inputs/outputs of journeys and other pre-steps.
 
-Reads (examples):
-
-```java
-// retrieving value from the API storage
-GetUsersDto users = retrieve(StorageKeysApi.API, AppEndpoints.GET_ALL_USERS, Response.class)
-    .getBody().as(GetUsersDto.class);
-
-// retrieving value from the DB storage
-QueryResponse resp = retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class);
-
-// retrieving value from the PRE_ARGUMENTS storage
-Order order = retrieve(StorageKeysTest.PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class);
-```
+A dedicated section later [Storage Integration](#9-storage-integration) dives into details and best practices.
 
 ### 2.4 Annotations & Phases
 
@@ -201,6 +205,7 @@ You can read this as a mini lifecycle:
 This repo contains multiple example modules. For now, focus on these two:
 
 - UI Complex Test Framework (ui + api + db example)
+- UI Simple Test Framework (ui-only example)
 - API Test Framework (api-only example)
 
 UI Complex Test Framework:
@@ -208,6 +213,14 @@ UI Complex Test Framework:
 - name: `ui-complex-test-framework`
 - groupId: `io.cyborgcode.roa.usage`
 - artifactId: `ui-complex-test-framework`
+- version: `1.0.0`
+- parent: `io.cyborgcode.roa:roa-parent:1.1.4`
+
+UI Complex Test Framework:
+
+- name: `ui-simple-test-framework`
+- groupId: `io.cyborgcode.roa.usage`
+- artifactId: `ui-simple-test-framework`
 - version: `1.0.0`
 - parent: `io.cyborgcode.roa:roa-parent:1.1.4`
 
@@ -252,6 +265,27 @@ UI Complex Test Framework `ui-complex-test-framework`(conceptual structure):
 - api
   - `api/AppEndpoints` — REST endpoints used in examples
 
+UI Simple Test Framework `ui-simple-test-framework`(conceptual structure):
+
+- tests
+    - `GettingStartedTests`
+    - `BasicToAdvancedFeatureTests`
+    - `TableComponentExampleTests`
+    - `AuthenticationViaUITests `
+- rings
+    - `base/Rings` — maps logical rings to fluent implementations
+    - `ui/AppUiService` — UI ring façade
+    - `service/PurchaseService` — domain-level ring (purchase flows)
+- ui
+    - `ui/elements` — enums for fields/components (inputs, buttons, selects, links, tables)
+    - `ui/model` — domain models such as PurchaseForeignCurrency (annotated with `@InsertionElement`)
+    - `ui/authentication` — credentials and login flows
+    - `ui/components` — UI component type definitions
+    - `ui/functions` — utility functions for UI operations
+- data
+    - `data/creator` — `DataCreator`, `DataCreatorFunctions`
+    - `data/test_data` — `Data`, `DataProperties`, `Constants`
+
 API Test Framework `api-test-framework` (conceptual structure):
 
 - tests
@@ -283,7 +317,7 @@ API Test Framework `api-test-framework` (conceptual structure):
 
 ## 5. Features & Use Cases
 
-High-level capabilities:
+### 5.1 High-level capabilities:
 
 - Multi-interface testing — UI, REST API and DB within a single fluent chain.
 - Annotation-driven configuration — class-level (& global) behavior defined declaratively.
@@ -291,9 +325,9 @@ High-level capabilities:
 - Fluent, domain-centric DSL — tests read like scenarios, not scripts.
 - Extensible design — plug in data creators, journeys, rippers, DB hooks, custom rings.
 
-Concrete features (selected):
+### 5.2 Concrete features:
 
-- UI: typed façade with `input()`, `button()`, `select()`, `table()`, `browser()`, `interceptor()`, `insertion()`, `validate()`.
+- UI: typed façade with `input()`, `button()`, `select()`, `table()`, `list()`, `link()`, `alert()`, `radio()`, `browser()`, `interceptor()`, `insertion()`, `validate()`.
 - API: `request()`, `validate()`, `requestAndValidate(...)` with rich assertion types (status, headers, body); DTO mapping; JSONPath extractors.
 - DB: query enums + JSONPath-based assertions; hooks for init/teardown.
 - Data crafting – `DataCreator` factories produce strongly-typed models; `@InsertionElement` lets the framework auto-fill forms.
@@ -303,7 +337,7 @@ Concrete features (selected):
 - DB integration – DB hooks for H2 initialization, query enums + JSONPath-based assertions.
 - Cleanup (Ripper) – `@Ripper` + `DataCleaner` ensure tests leave no residue.
 
-Typical use cases:
+### 5.3 Typical use cases:
 
 - UI-first E2E with domain flows (login, create, validate, clean up).
 - Cross-layer validation (UI creates, API verifies, DB asserts persisted state).
@@ -345,7 +379,7 @@ On top of JUnit 5, the examples add:
     - `@Ripper` uses `DataCleaner` to remove created entities.
     - `@DbHook(when = AFTER, ...)` can run DB teardown if configured.
 
-### 6.37 Bootstrap & Runtime Behavior
+### 6.3 Bootstrap & Runtime Behavior
 
 #### Test Bootstrap & Extensions
 
@@ -514,7 +548,7 @@ This initializes UI, API and DB rings. Add DB hooks as needed:
 class MyDbTests extends BaseQuest { }
 ```
 
-### 7.5 Writing Simple Component Tests
+### 7.5 Writing Simple UI Component Tests
 
 The `GettingStartedTests` class demonstrates fundamental UI component interactions and serves as your starting point for writing tests. This section walks through a complete example that covers the most common UI operations you'll use in your tests.
 
@@ -523,7 +557,7 @@ The `GettingStartedTests` class demonstrates fundamental UI component interactio
 1. **Test Setup**: Use `@Test()` annotation and inject `Quest quest` parameter
 2. **Ring Activation**: Call `.use(RING_OF_UI)` to access UI component services
 3. **Component Interactions**: Chain fluent method calls for UI operations
-4. **Release Active Ring**: Call `.drop()` to release the current ring/service context
+4. **Release Active Ring**: Optionally call `.drop()` to release the current ring/service context
 5. **Test Completion**: End with `.complete()`
 
 ```java
@@ -591,22 +625,15 @@ public static final String SUCCESSFUL_TRANSFER_MESSAGE = "You successfully submi
 - **Refactoring support**: IDE can find all usages of a constant
 - **Consistency**: Same values used across multiple tests
 
-#### Quest Lifecycle Management
-
-1. **`.use(RING_OF_UI)`**: Activates the UI service ring, making component services available
-2. **Component operations**: Chain fluent method calls for your test scenario
-3. **`.drop()`**: Releases the current ring (optional but recommended for clarity)
-4. **`.complete()`**: Finalizes the test, triggers cleanup, and reports results
-
 #### Getting Started Checklist
 
-1. **Extend `BaseQuest`**: Your test class should extend this base class
-2. **Add `@UI` annotation**: Enables UI testing capabilities at the class level
-3. **Inject `Quest quest`**: Add this parameter to your test method
-4. **Start with `.use(RING_OF_UI)`**: Activate UI component services
-5. **Use element enums**: Reference `ButtonFields`, `InputFields`, etc. instead of raw locators
-6. **Use constants**: Reference `Constants` class for test data and expected values
-7. **End with `.complete()`**: Always finalize your test execution
+1. **Extend `BaseQuest`** (per-method Quest; parallel at test method level) or **`BaseQuestSequential`** (class-level Quest; sequential across the class)
+2. **Annotate the class with `@UI`** (enables UI testing capabilities at the class level)
+3. **Inject `Quest quest`** as a parameter to your test method
+4. **Start with `.use(RING_OF_UI)`** to activate the UI component services
+5. **Use element enums** (reference `ButtonFields`, `InputFields`, etc. instead of raw locators)
+6. **Use constants** (reference `Constants` class for test data and expected values)
+7. **End with `.complete()`** (always finalize your test execution)
 
 ### 7.6 Writing Simple API Tests
 
@@ -647,15 +674,15 @@ void showsBasicGetWithQueryParamAndMinimalAssertions(Quest quest) {
 - **Inject `Quest quest`** as a parameter
 - **Use `.use(RING_OF_API)`** to activate the API ring
 - **Use `.requestAndValidate(...)`** with assertions on `STATUS`, `HEADER`, `BODY`
-- **End with `.complete()`**
+- **End with `.complete()`** (always finalize your test execution)
 
 ---
 
-## 8. Writing Tests (step-by-step)
+## 8. Writing Tests (feature-by-feature)
 
 We follow the UI and API oriented progression.
 
-### 8.1 Step 1 – First UI and API tests (manual steps)
+### 8.1 Step 1 – First UI and API tests
 
 ```java
 @Test
@@ -737,6 +764,8 @@ quest
 
 ### 8.2 Step 2 – Move from script to domain flows (CustomService)
 
+Rather than keep login, order creation and validation logic in every test, we move it into CustomService and expose domain methods:
+
 ```java
 @Test
 void wrapLoginAndCreateOrderWithCustomService(Quest quest) {
@@ -749,7 +778,13 @@ void wrapLoginAndCreateOrderWithCustomService(Quest quest) {
 }
 ```
 
-Under the hood, `CustomService` converts low‑level steps into business‑level verbs so tests read like scenarios. It delegates to UI/API rings, encapsulates waits/validations, and shares state via storage.
+Under the hood, `CustomService` turns low‑level UI steps into business‑level verbs so your tests read like scenarios, not scripts. It:
+
+- Delegates to `RING_OF_UI` for the granular work (navigate, input, click), but hides selectors and timing concerns.
+- Encapsulates synchronization and validations so retries, waits, and checks live with the flow, not in every test.
+- Shares and reuses state via `Quest` storage (e.g., saving the created order or session cookie for later API/DB steps).
+- Promotes reuse: one place to adjust when the UI changes; all tests benefit instantly.
+- Keeps the test body focused on intent: “login, create order, validate order.”
 
 #### API example via CustomService:
 
@@ -1086,16 +1121,19 @@ Journeys and DB hooks often write results into `PRE_ARGUMENTS` or `DB` namespace
 Common examples:
 
 ```java
-// Journey output
+// Journey output retrieved from PRE_ARGUMENTS
 Order order = retrieve(PRE_ARGUMENTS, DataCreator.VALID_ORDER, Order.class);
 
-// Static test data
+// Static test data retrieved from the configured static data store
 String username = retrieve(staticTestData(StaticData.USERNAME), String.class);
 
-// DB query result for the last run of a given query
+// Last DB query execution result retrieved from the database storage
 QueryResponse resp = retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class);
 
-// API response mapped to DTO
+// UI input field editability state retrieved from the UI storage
+Boolean enabled = retrieve(StorageKeysUi.UI, InputFields.USERNAME_FIELD, Boolean.class);
+
+// API response mapped to DTO retrieved from the API storage
 GetUsersDto users = retrieve(StorageKeysApi.API, AppEndpoints.GET_ALL_USERS, Response.class)
     .getBody().as(GetUsersDto.class);
 ```
@@ -1205,11 +1243,268 @@ void createOrderUsingCraftAndInsertionFeatures(Quest quest,
 
 ---
 
-## 11. Advanced Examples
+## 11. Table Testing Guide
+
+The `TableComponentExampleTests` class demonstrates comprehensive table testing capabilities in the ROA framework. This section provides practical examples for reading, validating, and interacting with tabular data in your UI tests.
+
+### 11.1 Table Testing Overview
+
+The framework provides powerful table operations through the `.table()` service, supporting:
+
+- **Full table reading** - Load entire tables into typed objects
+- **Selective column reading** - Read only specific columns you need
+- **Row range reading** - Read subsets of rows by index range
+- **Search-based row reading** - Find and read rows by criteria
+- **Rich validation** - Multiple assertion types for comprehensive table validation
+- **Cell-level interactions** - Insertion data or click elements within table cells
+
+### 11.2 Complete Table Reading and Validation
+
+The most comprehensive example shows reading an entire table and applying multiple validation types:
+
+```java
+@Test
+@Description("Read entire table and validate using table assertion types")
+@Regression
+void readEntireTable_validateWithAssertionTypes(Quest quest) {
+  quest
+        .use(RING_OF_UI)
+        // table(): entry point for table component interactions (read/validate/click)
+        // readTable(table): reads the entire table into the framework's storage for later assertions
+        .table().readTable(Tables.FILTERED_TRANSACTIONS)
+        // table().validate(): fluent assertions targeting table values/elements using TableAssertionTypes
+        .table().validate(
+              Tables.FILTERED_TRANSACTIONS,
+              Assertion.builder().target(TABLE_VALUES).type(TABLE_NOT_EMPTY).expected(true).soft(true).build(),
+              Assertion.builder().target(TABLE_VALUES).type(TABLE_ROW_COUNT).expected(2).soft(true).build(),
+              Assertion.builder().target(TABLE_VALUES).type(EVERY_ROW_CONTAINS_VALUES).expected(List.of(ONLINE_TRANSFER_REFERENCE)).soft(true).build(),
+              Assertion.builder().target(TABLE_VALUES).type(TABLE_DOES_NOT_CONTAIN_ROW).expected(ROW_VALUES_NOT_CONTAINED).soft(true).build(),
+              Assertion.builder().target(TABLE_VALUES).type(ALL_ROWS_ARE_UNIQUE).expected(true).soft(true).build(),
+              Assertion.builder().target(TABLE_VALUES).type(NO_EMPTY_CELLS).expected(false).soft(true).build(),
+              Assertion.builder().target(TABLE_VALUES).type(COLUMN_VALUES_ARE_UNIQUE).expected(1).soft(true).build(),
+              Assertion.builder().target(TABLE_VALUES).type(TABLE_DATA_MATCHES_EXPECTED).expected(ONLINE_TRANSFERS_EXPECTED_TABLE).soft(true).build(),
+              Assertion.builder().target(TABLE_ELEMENTS).type(ALL_CELLS_ENABLED).expected(true).soft(true).build(),
+              Assertion.builder().target(TABLE_ELEMENTS).type(ALL_CELLS_CLICKABLE).expected(true).soft(true).build())
+        // readRow(): narrows context to a single row by index for row-level assertions
+        .table().readRow(Tables.FILTERED_TRANSACTIONS, 1)
+        .table().validate(
+              Tables.FILTERED_TRANSACTIONS,
+              Assertion.builder().target(ROW_VALUES).type(ROW_NOT_EMPTY).expected(true).soft(true).build(),
+              Assertion.builder().target(ROW_VALUES).type(ROW_CONTAINS_VALUES).expected(List.of(TRANSFER_DATE_1, ONLINE_TRANSFER_REFERENCE)).soft(true).build())
+        .complete();
+}
+```
+
+**Key Learning Points:**
+
+- **Table Reading**: `.table().readTable(Tables.FILTERED_TRANSACTIONS)` loads the entire table
+- **Multiple Validations**: Apply various assertion types in a single validation call
+- **Row-Level Focus**: `.table().readRow(table, index)` for specific row validations
+- **Soft Assertions**: All assertions use `.soft(true)` to collect all failures before reporting
+
+### 11.3 Table Assertion Types
+
+The framework provides comprehensive assertion types for different validation scenarios:
+
+#### Content Validation
+- `TABLE_NOT_EMPTY` - Ensures table has data
+- `TABLE_ROW_COUNT` - Validates exact number of rows
+- `NO_EMPTY_CELLS` - Checks for empty cells (expected false means empty cells are allowed)
+- `TABLE_DATA_MATCHES_EXPECTED` - Compares entire table against expected data structure
+
+#### Row and Column Validation
+- `EVERY_ROW_CONTAINS_VALUES` - Ensures all rows contain specified values
+- `ROW_CONTAINS_VALUES` - Validates specific row contains expected values
+- `TABLE_DOES_NOT_CONTAIN_ROW` - Ensures table doesn't contain unwanted data
+- `ALL_ROWS_ARE_UNIQUE` - Validates no duplicate rows
+- `COLUMN_VALUES_ARE_UNIQUE` - Checks uniqueness within specific column
+
+#### Element State Validation
+- `ALL_CELLS_ENABLED` - Validates all table cells are enabled
+- `ALL_CELLS_CLICKABLE` - Ensures all cells are clickable
+- `ROW_NOT_EMPTY` - Validates specific row is not empty
+
+### 11.4 Selective Column Reading
+
+Read only the columns you need for more efficient testing:
+
+```java
+@Test
+@Description("Read table with specific columns and validate target cell value")
+@Regression
+void readTableWithSpecifiedColumns_validateCell(Quest quest) {
+  quest
+        .use(RING_OF_UI)
+        .button().click(ButtonFields.FIND_SUBMIT_BUTTON)
+        // readTable(table, columns...): reads specific columns from the table into the framework's storage
+        .table().readTable(Tables.FILTERED_TRANSACTIONS, 
+              TableField.of(FilteredTransactionEntry::setDescription),
+              TableField.of(FilteredTransactionEntry::setWithdrawal))
+        // validate(): uses a lambda for arbitrary assertions when a built-in assertion type isn't suitable
+        .validate(() -> Assertions.assertEquals(
+              "50",
+              retrieve(tableRowExtractor(Tables.FILTERED_TRANSACTIONS, TRANSACTION_DESCRIPTION_OFFICE_SUPPLY),
+                    FilteredTransactionEntry.class).getWithdrawal().getText(),
+              "Wrong deposit value")
+        )
+        .complete();
+}
+```
+
+**Benefits of Selective Reading:**
+- **Performance** - Only read data you need to validate
+- **Memory efficiency** - Reduce storage footprint for large tables
+- **Focused testing** - Clear intent about what data matters for the test
+- **Type safety** - `TableField.of(FilteredTransactionEntry::setDescription)` provides compile-time checking
+
+### 11.5 Row Range Reading
+
+Read specific subsets of table rows by index range:
+
+```java
+@Test
+@Description("Read table with start/end row range and validate target cell value")
+@Regression
+void readTableWithRowRange_validateCell(Quest quest) {
+  quest
+        .use(RING_OF_UI)
+        .link().click(LinkFields.MY_MONEY_MAP_LINK)
+        // readTable(table, start, end): reads a subset of rows (inclusive indices)
+        .table().readTable(Tables.OUTFLOW, 3, 5)
+        .validate(() -> Assertions.assertEquals(
+              "$375.55",
+              retrieve(tableRowExtractor(Tables.OUTFLOW, RETAIL),
+                    OutFlow.class).getAmount().getText(),
+              "Wrong Amount")
+        )
+        .complete();
+}
+```
+
+**Use Cases for Row Range Reading:**
+- **Large tables** - Focus on specific sections without loading everything
+- **Pagination testing** - Validate specific pages of data
+- **Performance testing** - Test with controlled data sets
+- **Boundary testing** - Validate first/last rows or middle sections
+
+### 11.6 Combined: Specific Columns with Row Range
+
+The most targeted approach combines row range with column selection:
+
+```java
+@Test
+@Description("Read specific columns within row range and validate target cell value")
+@Regression
+void readTableSpecificColumnsWithRowRange_validateCell(Quest quest) {
+  quest
+        .use(RING_OF_UI)
+        .link().click(LinkFields.MY_MONEY_MAP_LINK)
+        // readTable(table, start, end, columns...): subset of rows with specific mapped columns
+        .table().readTable(Tables.OUTFLOW, 3, 5, 
+              TableField.of(OutFlow::setCategory),
+              TableField.of(OutFlow::setAmount))
+        .validate(() -> Assertions.assertEquals(
+              "$375.55",
+              retrieve(tableRowExtractor(Tables.OUTFLOW, RETAIL),
+                    OutFlow.class).getAmount().getText(),
+              "Wrong Amount")
+        )
+        .complete();
+}
+```
+
+**Maximum Efficiency**: This approach provides the most targeted data reading - only specific rows and columns.
+
+### 11.7 Search-Based Row Reading
+
+Find and read rows based on content criteria:
+
+```java
+@Test
+@Description("Read a table row by search criteria and validate target cell value")
+@Regression
+void readTableRowBySearchCriteria_validateCell(Quest quest) {
+  quest
+        .use(RING_OF_UI)
+        .link().click(LinkFields.MY_MONEY_MAP_LINK)
+        // readRow(table, criteria): reads a row matching the provided search values
+        .table().readRow(Tables.OUTFLOW, List.of(RETAIL))
+        .validate(() -> Assertions.assertEquals(
+              "$375.55",
+              retrieve(tableRowExtractor(Tables.OUTFLOW),
+                    OutFlow.class).getAmount().getText(),
+              "Wrong Amount")
+        )
+        .complete();
+}
+```
+
+**Search-Based Benefits:**
+- **Dynamic data** - Find rows regardless of position changes
+- **Content-driven** - Search by actual data values, not positions
+- **Robust tests** - Tests survive table reordering or data changes
+- **Business logic focus** - Find data by meaningful criteria
+
+### 11.8 Data Retrieval Patterns
+
+The framework provides consistent patterns for accessing table data after reading:
+
+#### Basic Table Data Retrieval
+```java
+// Get all table data
+List<FilteredTransactionEntry> allRows = 
+  retrieve(StorageKeysUi.UI, Tables.FILTERED_TRANSACTIONS, List.class);
+```
+
+#### Search-Based Row Retrieval
+```java
+// Get specific row by search criteria
+FilteredTransactionEntry specificRow = 
+  retrieve(tableRowExtractor(Tables.FILTERED_TRANSACTIONS, TRANSACTION_DESCRIPTION_OFFICE_SUPPLY),
+    FilteredTransactionEntry.class);
+```
+
+#### Direct Row Access
+```java
+// Get row by index (after readRow operation)
+OutFlow rowData = 
+  retrieve(tableRowExtractor(Tables.OUTFLOW), OutFlow.class);
+```
+
+### 11.9 Table Testing Best Practices
+
+Based on the framework's patterns:
+
+1. **Setup First** - Always navigate and filter before reading tables
+2. **Read Then Validate** - Separate data reading from validation for clarity
+3. **Use Soft Assertions** - Collect multiple failures with `.soft(true)`
+4. **Choose Right Reading Method** - Match reading approach to test needs:
+    - Full table: Comprehensive validation
+    - Column selection: Performance optimization
+    - Row range: Large table handling
+    - Search criteria: Dynamic data finding
+5. **Leverage Constants** - Use `Constants` class values for expected data
+6. **Type Safety** - Use `TableField.of()` with method references for compile-time safety
+7. **Meaningful Assertions** - Choose assertion types that match your validation intent
+
+### 11.10 Common Table Testing Scenarios
+
+The framework supports these typical scenarios:
+
+- **Data Verification**: Ensure search results match expected criteria
+- **Content Validation**: Verify table contains/doesn't contain specific data
+- **Structure Validation**: Check row counts, uniqueness, empty cells
+- **Element State Testing**: Validate clickability and enabled states
+- **Performance Testing**: Use selective reading for large datasets
+- **Dynamic Content**: Use search-based reading for changing data positions
+
+---
+
+## 12. Advanced Examples
 
 This section shows focused scenarios that combine the pieces introduced above.
 
-### 11.1 Static test data preload
+### 12.1 Static test data preload
 
 Use `@StaticTestData` to load shared constants for the whole test class:
 
@@ -1229,7 +1524,7 @@ Ideal for demo data or constants you don’t want to encode in property files.
 
 ---
 
-### 11.2 Late data creation based on intercepted responses
+### 12.2 Late data creation based on intercepted responses
 
 `Late<T>` lets you build data after some runtime information is known.
 
@@ -1255,7 +1550,7 @@ The `LATE_ORDER` creator can use values extracted from intercepted responses to 
 
 ---
 
-### 11.3 Validating tables with typed rows
+### 12.3 Validating tables with typed rows
 
 Map a table to a typed row class, then use fluent table operations and storage:
 
@@ -1299,7 +1594,7 @@ TableEntry first = quest.use(RING_OF_UI).table().readRow(Tables.ORDERS, 0);
 
 ---
 
-### 11.4 Full E2E: UI + API + DB + cleanup
+### 12.4 Full E2E: UI + API + DB + cleanup
 
 Combine everything into a single scenario:
 
@@ -1363,9 +1658,9 @@ This recipe showcases:
 
 ---
 
-## 12. Adapter Configuration & Reporting
+## 13. Adapter Configuration & Reporting
 
-### 12.1 Adapter configuration
+### 13.1 Adapter configuration
 
 This module does not define new Owner keys; it **reuses** configuration from:
 
@@ -1379,7 +1674,7 @@ Refer to their individual READMEs for:
 - additional flags for logging, screenshots and retries,
 - DB vendor-specific configuration.
 
-### 12.2 Allure reporting
+### 13.2 Allure reporting
 
 When Allure is on the classpath, ROA adapters typically provide:
 
@@ -1399,7 +1694,7 @@ When Allure is on the classpath, ROA adapters typically provide:
     - validation target maps for DB assertions.
 ---
 
-## 13. Troubleshooting
+## 14. Troubleshooting
 
 **Interception not working**
 
@@ -1433,7 +1728,7 @@ When Allure is on the classpath, ROA adapters typically provide:
 
 ---
 
-## 14. Dependencies
+## 15. Dependencies
 
 From this module’s POM:
 
@@ -1446,6 +1741,6 @@ From this module’s POM:
 
 ---
 
-## 15. Author
+## 16. Author
 
 **Cyborg Code Syndicate 💍👨💻**
