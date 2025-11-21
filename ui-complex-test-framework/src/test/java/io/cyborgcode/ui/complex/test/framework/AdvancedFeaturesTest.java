@@ -58,7 +58,7 @@ import static io.cyborgcode.ui.complex.test.framework.service.CustomService.getJ
 class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
-   @Regression
+   @Smoke
    @Description("Craft and Insertion features: Obtain typed models via @Craft and populate mapped model fields to UI " +
            "controls in one operation using insertion service")
    void craftAndInsertionFeatures(Quest quest,
