@@ -17,6 +17,8 @@ import lombok.experimental.UtilityClass;
  * </ul>
  * These constants document the assumptions about the public Reqres API
  * that the tutorial tests assert against.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @UtilityClass
 public class TestConstants {
@@ -138,9 +140,6 @@ public class TestConstants {
       }
 
       public static final String MISSING_PASSWORD_ERROR = "Missing password";
-      public static final String MISSING_EMAIL_ERROR = "Missing email or username";
-      public static final String USER_NOT_FOUND_ERROR = "user not found";
-      public static final String INVALID_EMAIL = "wrong.email@reqres.in";
    }
 
 }

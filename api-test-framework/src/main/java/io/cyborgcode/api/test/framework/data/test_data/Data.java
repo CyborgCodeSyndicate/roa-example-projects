@@ -21,6 +21,8 @@ import org.aeonbits.owner.ConfigCache;
  * reference configuration values throughout the test suite without repeatedly
  * instantiating the config interface.
  * </p>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public final class Data {
 

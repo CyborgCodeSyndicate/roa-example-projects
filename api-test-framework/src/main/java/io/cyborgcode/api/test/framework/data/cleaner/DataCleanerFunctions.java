@@ -20,6 +20,8 @@ import static org.apache.http.HttpStatus.SC_NO_CONTENT;
  * {@code @Ripper}/{@link DataRipper}
  * mechanism via a {@link SuperQuest}, encapsulating teardown logic
  * (such as test data deletion) outside of individual test methods.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public final class DataCleanerFunctions {
 

@@ -17,6 +17,8 @@ import java.util.function.Consumer;
  * <p>
  * The nested {@link Data} class provides string constants for annotation-based references.
  * </p>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum DataCleaner implements DataRipper<DataCleaner> {
 

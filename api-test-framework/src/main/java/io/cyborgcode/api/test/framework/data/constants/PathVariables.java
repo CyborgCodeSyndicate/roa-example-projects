@@ -6,6 +6,8 @@ import lombok.experimental.UtilityClass;
  * Shared path variable names for endpoint templates.
  * <p>
  * Avoids scattering raw strings (like {@code "id"}) across test code.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @UtilityClass
 public class PathVariables {

@@ -7,6 +7,8 @@ import lombok.experimental.UtilityClass;
  * <p>
  * Centralizes header-related configuration so that authentication,
  * custom headers, and API keys remain consistent and easy to change.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @UtilityClass
 public class Headers {

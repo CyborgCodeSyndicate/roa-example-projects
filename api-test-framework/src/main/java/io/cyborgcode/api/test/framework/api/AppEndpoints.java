@@ -17,6 +17,8 @@ import static io.cyborgcode.api.test.framework.data.constants.Headers.API_KEY_VA
  * is applied to all endpoints via {@link #defaultConfiguration()}.
  * </p>
  * This centralizes endpoint metadata to keep tests consistent, discoverable, and easy to maintain.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum AppEndpoints implements Endpoint<AppEndpoints> {
 

@@ -17,6 +17,8 @@ import io.cyborgcode.roa.framework.parameters.Late;
  *    <li>allows data to be generated lazily and context-aware,</li>
  *    <li>provides a stable, string-based contract via {@link Data} for annotations.</li>
  * </ul>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum DataCreator implements DataForge<DataCreator> {
 

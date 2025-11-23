@@ -69,6 +69,8 @@ import static org.apache.http.HttpStatus.SC_OK;
  *       "validate users list") are implemented in one place.</li>
  *   <li>Used via {@code quest.use(RING_OF_CUSTOM)}.</li>
  * </ul>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @Ring("Ring of Custom")
 public class CustomService extends FluentService {

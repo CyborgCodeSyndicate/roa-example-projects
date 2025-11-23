@@ -19,6 +19,8 @@ import lombok.experimental.UtilityClass;
  * </ul>
  * This indirection keeps test code expressive while cleanly separating concerns between low-level HTTP,
  * shared domain-specific actions, and tutorial/evolution scenarios.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 @UtilityClass
 public class Rings {

@@ -20,6 +20,8 @@ import java.util.function.BiConsumer;
  *   <li>reusable across multiple tests,</li>
  *   <li>aligned with the ROA {@link PreQuestJourney} contract.</li>
  * </ul>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum Preconditions implements PreQuestJourney<Preconditions> {
 
