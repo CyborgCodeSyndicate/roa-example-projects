@@ -12,6 +12,16 @@ permissions:
   contents: write
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          repository: CyborgCodeSyndicate/roa-example-projects
+#          ref: ${{ inputs.testRepoRef }}
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          path: temp-project
   run:
     uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests.yml@v1.0.1
     with:
