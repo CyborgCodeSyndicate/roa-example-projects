@@ -18,7 +18,7 @@ jobs:
       kind: ui
       project_module: ui-complex-test-framework
       tags_include: Smoke
-      parent_version_override: ${{ inputs.snapshot_version }}
+      #parent_version_override: ${{ inputs.snapshot_version }}
       # optional: tune threads or profiles if needed
       # junit_threads_per_job: 5
       # test_profiles: e2e
