@@ -7,18 +7,23 @@ on:
         description: "Snapshot version to test"
         required: true
         type: string
+    secrets:
+      gh_packages_user:
+        required: true
+      gh_packages_pat:
+        required: true
 
 permissions:
   contents: write
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-        with:
-          repository: CyborgCodeSyndicate/roa-example-projects
+#  setup:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#        with:
+#          repository: CyborgCodeSyndicate/roa-example-projects
 #          ref: ${{ inputs.testRepoRef }}
 #          token: ${{ secrets.GITHUB_TOKEN }}
 #          path: temp-project
@@ -62,5 +67,5 @@ jobs:
       # test_profiles: e2e
       repository: CyborgCodeSyndicate/roa-example-projects
     secrets:
-      maven_user: ${{ secrets.GH_PACKAGES_USER }}
-      maven_token: ${{ secrets.GH_PACKAGES_PAT }}
+      maven_user: ${{ secrets.gh_packages_user }}
+      maven_token: ${{ secrets.gh_packages_pat }}
