@@ -36,15 +36,23 @@ jobs:
 
       - name: Override parent version (optional)
         if: ${{ inputs.snapshot_version != '' }}
+#        run: |
+#          echo "📝 Setting parent version to: ${{ inputs.snapshot_version }}"
+#          MODULES=$(mvn -q help:evaluate -Dexpression=project.modules -DforceStdout | sed -e 's/[][]//g' -e 's/, */,/g')
+#          echo "Detected modules: $MODULES"
+#          mvn -B -ntp -pl "$MODULES" versions:update-parent \
+#            -DparentVersion="[${{ inputs.snapshot_version }}]" \
+#            -DallowSnapshots=true \
+#            -DgenerateBackupPoms=false \
+#            --no-transfer-progress
         run: |
           echo "📝 Setting parent version to: ${{ inputs.snapshot_version }}"
-          MODULES=$(mvn -q help:evaluate -Dexpression=project.modules -DforceStdout | sed -e 's/[][]//g' -e 's/, */,/g')
-          echo "Detected modules: $MODULES"
-          mvn -B -ntp -pl "$MODULES" versions:update-parent \
+          mvn -B -ntp versions:update-parent \
             -DparentVersion="[${{ inputs.snapshot_version }}]" \
             -DallowSnapshots=true \
+            -DprocessAllModules=true \
             -DgenerateBackupPoms=false \
-            --no-transfer-progress
+            --no-transfer-progress  
 
       - name: Verify compile (fail fast if broken)
         run: |
