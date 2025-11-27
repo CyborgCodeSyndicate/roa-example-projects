@@ -24,7 +24,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: CyborgCodeSyndicate/roa-example-projects
-          ref: e2e-flow
+#          ref: ${{ inputs.testRepoRef }}
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          path: temp-project
 
       - name: Setup Maven Environment
         uses: CyborgCodeSyndicate/utilities/pipelines/shared/setup-maven@v1.3.2
@@ -35,6 +37,15 @@ jobs:
 
       - name: Override parent version (optional)
         if: ${{ inputs.snapshot_version != '' }}
+#        run: |
+#          echo "📝 Setting parent version to: ${{ inputs.snapshot_version }}"
+#          MODULES=$(mvn -q help:evaluate -Dexpression=project.modules -DforceStdout | sed -e 's/[][]//g' -e 's/, */,/g')
+#          echo "Detected modules: $MODULES"
+#          mvn -B -ntp -pl "$MODULES" versions:update-parent \
+#            -DparentVersion="[${{ inputs.snapshot_version }}]" \
+#            -DallowSnapshots=true \
+#            -DgenerateBackupPoms=false \
+#            --no-transfer-progress
         run: |
           echo "📝 Setting parent version to: ${{ inputs.snapshot_version }}"
           mvn -B -ntp versions:update-parent \
@@ -47,6 +58,7 @@ jobs:
       - name: Verify compile (fail fast if broken)
         run: |
           mvn -ntp -U compile
+      
 
   run:
     needs: setup
@@ -55,6 +67,10 @@ jobs:
       kind: api
       project_module: api-test-framework
       tags_include: Smoke
+      # parent_version_override: ${{ inputs.snapshot_version }}
+      # optional: tune threads or profiles if needed
+      # junit_threads_per_job: 5
+      # test_profiles: e2e
       repository: CyborgCodeSyndicate/roa-example-projects
     secrets:
       maven_user: ${{ secrets.gh_packages_user }}
