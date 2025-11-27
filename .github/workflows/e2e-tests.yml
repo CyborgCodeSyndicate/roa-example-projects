@@ -17,45 +17,36 @@ permissions:
   contents: write
 
 jobs:
-#  setup:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v4
-#        with:
-#          repository: CyborgCodeSyndicate/roa-example-projects
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          repository: CyborgCodeSyndicate/roa-example-projects
 #          ref: ${{ inputs.testRepoRef }}
 #          token: ${{ secrets.GITHUB_TOKEN }}
 #          path: temp-project
 
-#      - name: Override parent version (optional)
-#        if: ${{ inputs.parent_version_override != '' }}
-#        run: |
-#          echo "📝 Setting parent version to: ${{ inputs.parent_version_override }}"
-#          MODULES=$(mvn -q help:evaluate -Dexpression=project.modules -DforceStdout | sed -e 's/[][]//g' -e 's/, */,/g')
-#          echo "Detected modules: $MODULES"
-#          mvn -B -ntp -pl "$MODULES" versions:update-parent \
-#            -DparentVersion="[${{ inputs.parent_version_override }}]" \
-#            -DallowSnapshots=true \
-#            -DgenerateBackupPoms=false \
-#            --no-transfer-progress
-#
-#      - name: Verify compile (fail fast if broken)
-#        run: |
-#          # Build -pl flag from project_module (optional)
-#          PL_FLAG=""
-#          if [ -n "${{ inputs.project_module }}" ]; then
-#            PL_FLAG='-pl "${{ inputs.project_module }}" -am'
-#          fi
-#          echo "🔎 Verifying compile..."
-#          if [ -n "$PL_FLAG" ]; then
-#            eval mvn -ntp -q -U -DskipTests=true $PL_FLAG compile --no-transfer-progress
-#          else
-#            mvn -ntp -q -U -DskipTests=true compile --no-transfer-progress
-#          fi
+      - name: Override parent version (optional)
+        if: ${{ inputs.snapshot_version != '' }}
+        run: |
+          echo "📝 Setting parent version to: ${{ inputs.snapshot_version }}"
+          MODULES=$(mvn -q help:evaluate -Dexpression=project.modules -DforceStdout | sed -e 's/[][]//g' -e 's/, */,/g')
+          echo "Detected modules: $MODULES"
+          mvn -B -ntp -pl "$MODULES" versions:update-parent \
+            -DparentVersion="[${{ inputs.snapshot_version }}]" \
+            -DallowSnapshots=true \
+            -DgenerateBackupPoms=false \
+            --no-transfer-progress
+
+      - name: Verify compile (fail fast if broken)
+        run: |
+          mvn -ntp -U compile
+      
 
   run:
-#    needs: setup
+    needs: setup
     uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests.yml@e2e-flow
     with:
       kind: api
