@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu Nov 27 09:06:42 UTC 2025","Thu Nov 27 09:06:59 UTC 2025","17261","","Advanced Features usage examples","","io.cyborgcode.ui.complex.test.framework.AdvancedFeaturesTest","craftAndInsertionFeatures","craftAndInsertionFeatures(Quest, Seller, Order)","Craft and Insertion features: Obtain typed models via @Craft and populate mapped model fields to UI controls in one operation using insertion service"
