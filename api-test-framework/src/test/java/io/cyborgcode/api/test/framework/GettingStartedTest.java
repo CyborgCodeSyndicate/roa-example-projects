@@ -5,6 +5,7 @@ import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.api.test.framework.data.test_data.Data;
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Regression;
+import io.cyborgcode.roa.framework.annotation.Smoke;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.validator.core.Assertion;
@@ -56,7 +57,7 @@ import static org.apache.http.HttpStatus.SC_OK;
 class GettingStartedTest extends BaseQuest {
 
    @Test
-   @Regression
+   @Smoke
    @Description("Verifies that GET_ALL_USERS with page=2 returns 200 and a JSON Content-Type.")
    void returns200AndUsersWhenPageIs2(Quest quest) {
       quest.use(RING_OF_API)
