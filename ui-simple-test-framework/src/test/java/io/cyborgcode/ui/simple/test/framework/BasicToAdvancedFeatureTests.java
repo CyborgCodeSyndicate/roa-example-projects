@@ -8,6 +8,7 @@ import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.ui.annotations.AuthenticateViaUi;
 import io.cyborgcode.roa.ui.annotations.UI;
+import io.cyborgcode.ui.complex.test.framework.ui.model.Seller;
 import io.cyborgcode.ui.simple.test.framework.data.creator.DataCreator;
 import io.cyborgcode.ui.simple.test.framework.data.test_data.Data;
 import io.cyborgcode.ui.simple.test.framework.ui.authentication.AdminCredentials;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.roa.ui.config.UiConfigHolder.getUiConfig;
+import static io.cyborgcode.ui.complex.test.framework.data.creator.DataCreator.Data.SELLER;
 import static io.cyborgcode.ui.simple.test.framework.base.Rings.RING_OF_PURCHASE_CURRENCY;
 import static io.cyborgcode.ui.simple.test.framework.base.Rings.RING_OF_UI;
 import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.AppLinks.PAY_BILLS;
@@ -58,13 +60,14 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    @Test
    @Description("Baseline simple flow without advanced framework features")
    @Regression
-   void baseline_simpleFlow_noAdvancedFeatures(Quest quest) {
+   void baseline_simpleFlow_noAdvancedFeatures(Quest quest,
+         @Craft(model = SELLER) Seller seller) {
       quest
             .use(RING_OF_UI)
             .browser().navigate("http://zero.webappsecurity.com/")
             .button().click(ButtonFields.SIGN_IN_BUTTON)
-            .input().insert(InputFields.USERNAME_FIELD, "username")
-            .input().insert(InputFields.PASSWORD_FIELD, "password")
+            .input().insert(InputFields.USERNAME_FIELD, seller.getUsername())
+            .input().insert(InputFields.PASSWORD_FIELD, seller.getPassword())
             .button().click(ButtonFields.SIGN_IN_FORM_BUTTON)
             .browser().back()
             .link().click(LinkFields.TRANSFER_FUNDS_LINK)
