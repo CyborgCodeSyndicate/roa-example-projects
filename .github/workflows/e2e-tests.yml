@@ -52,10 +52,11 @@ jobs:
     needs: setup
     uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests.yml@e2e-flow
     with:
-      kind: api
-      project_module: api-test-framework
+      kind: ui
+      project_module: ui-complex-test-framework
       tags_include: Smoke
       repository: CyborgCodeSyndicate/roa-example-projects
+      ref: e2e-flow
     secrets:
       maven_user: ${{ secrets.gh_packages_user }}
       maven_token: ${{ secrets.gh_packages_pat }}
