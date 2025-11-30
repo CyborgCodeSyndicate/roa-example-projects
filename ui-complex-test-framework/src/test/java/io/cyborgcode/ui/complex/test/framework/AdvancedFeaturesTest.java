@@ -193,7 +193,6 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    }
 
    @Test
-   @Smoke
    @Regression
    @Description("Interceptor feature: Use built-in response status validation")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
@@ -228,7 +227,6 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    }
 
    @Test
-   @Smoke
    @Regression
    @Description("Interceptor feature: Extract intercepted responses data and use it for Late data creation when needed")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
