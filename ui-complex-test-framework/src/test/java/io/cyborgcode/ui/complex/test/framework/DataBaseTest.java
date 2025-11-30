@@ -53,13 +53,14 @@ class DataBaseTest extends BaseQuest {
 
    @Test
    @Regression
-   @Description("Demonstrates database validation within test execution") //Explain better
+   @Description("Demonstrates database validation within test execution")
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
          journeyData = {@JourneyData(DataCreator.Data.SELLER)})
    void createOrderDatabaseValidation(Quest quest,
          @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
+            .createOrder(order)
             .validateOrder(order)
             .drop()
             .use(RING_OF_DB)
@@ -77,9 +78,10 @@ class DataBaseTest extends BaseQuest {
             .complete();
    }
 
-
    @Test
-   @Description("Demonstrates database validation in Journey preconditions before test execution") //Explain better
+   @Smoke
+   @Regression
+   @Description("Demonstrates database validation in Journey preconditions before test execution")
    @Journey(value = Preconditions.Data.SELLER_EXIST_IN_DB_PRECONDITION,
          journeyData = {@JourneyData(DataCreator.Data.SELLER)}, order = 1)
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
@@ -88,6 +90,7 @@ class DataBaseTest extends BaseQuest {
          @Craft(model = DataCreator.Data.ORDER) Order order) {
       quest
             .use(RING_OF_CUSTOM)
+            .createOrder(order)
             .validateOrder(order)
             .drop()
             .use(RING_OF_DB)
@@ -101,9 +104,9 @@ class DataBaseTest extends BaseQuest {
             .complete();
    }
 
-
    @Test
-   @Description("Demonstrates database cleanup using @Ripper feature") //Explain better
+   @Regression
+   @Description("Demonstrates database cleanup using @Ripper feature")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,
          journeyData = {@JourneyData(DataCreator.Data.ORDER)})
