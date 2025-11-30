@@ -1,0 +1,12 @@
+Server=nginx
+Date=Sun, 30 Nov 2025 18:09:01 GMT
+Content-Type=text/html;charset=utf-8
+Transfer-Encoding=chunked
+Connection=keep-alive
+Cache-Control=no-cache, no-store
+Pragma=no-cache
+Expires=Thu, 01 Jan 1970 00:00:00 GMT
+X-Content-Type-Options=nosniff
+X-XSS-Protection=1; mode=block
+X-Frame-Options=DENY
+Content-Encoding=gzip

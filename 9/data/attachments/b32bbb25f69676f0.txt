@@ -1,0 +1,1 @@
+QueryResponse(rows=[{EMAIL=admin@vaadin.com}])
