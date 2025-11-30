@@ -7,26 +7,35 @@
     <parent>
         <groupId>io.cyborgcode.roa</groupId>
         <artifactId>roa-parent</artifactId>
-        <version>1.2.1</version>
+        <version>1.1.4</version>
     </parent>
 
     <groupId>io.cyborgcode.roa.usage</groupId>
-    <artifactId>api-test-framework</artifactId>
+    <artifactId>ui-complex-test-framework</artifactId>
     <version>1.0.0</version>
 
-    <!-- Default values (prod). Profiles below can override. -->
     <properties>
+        <ui.config.file>config-prod</ui.config.file>
         <api.config.file>config-prod</api.config.file>
+        <db.config.file>config-prod</db.config.file>
         <test.data.file>test_data-prod</test.data.file>
         <framework.config.file>config-prod</framework.config.file>
-        <logFileName>logs/api-example.log</logFileName>
-        <extended.logging>true</extended.logging>
+        <logFileName>logs/ui-example.log</logFileName>
+        <extended.logging>false</extended.logging>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.cyborgcode.roa</groupId>
+            <artifactId>ui-interactor-test-framework-adapter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.cyborgcode.roa</groupId>
             <artifactId>api-interactor-test-framework-adapter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.cyborgcode.roa</groupId>
+            <artifactId>db-interactor-test-framework-adapter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -36,28 +45,37 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <profiles>
         <profile>
             <id>dev</id>
             <properties>
+                <ui.config.file>config-dev</ui.config.file>
                 <api.config.file>config-dev</api.config.file>
+                <db.config.file>config-dev</db.config.file>
                 <framework.config.file>config-dev</framework.config.file>
                 <test.data.file>test_data-dev</test.data.file>
-                <logFileName>logs/api-example-dev.log</logFileName>
-                <extended.logging>true</extended.logging>
+                <logFileName>logs/ui-example-dev.log</logFileName>
+                <extended.logging>false</extended.logging>
             </properties>
         </profile>
 
         <profile>
             <id>staging</id>
             <properties>
+                <ui.config.file>config-staging</ui.config.file>
                 <api.config.file>config-staging</api.config.file>
+                <db.config.file>config-staging</db.config.file>
                 <framework.config.file>config-staging</framework.config.file>
                 <test.data.file>test_data-staging</test.data.file>
-                <logFileName>logs/api-example-staging.log</logFileName>
-                <extended.logging>true</extended.logging>
+                <logFileName>logs/ui-example-staging.log</logFileName>
+                <extended.logging>false</extended.logging>
             </properties>
         </profile>
 
@@ -67,41 +85,15 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
+                <ui.config.file>config-prod</ui.config.file>
                 <api.config.file>config-prod</api.config.file>
+                <db.config.file>config-prod</db.config.file>
                 <framework.config.file>config-prod</framework.config.file>
                 <test.data.file>test_data-prod</test.data.file>
-                <logFileName>logs/api-example.log</logFileName>
-                <extended.logging>true</extended.logging>
+                <logFileName>logs/ui-example.log</logFileName>
+                <extended.logging>false</extended.logging>
             </properties>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>github-roa-libraries</id>
-            <name>GitHub Packages for Roa Libraries</name>
-            <url>https://maven.pkg.github.com/CyborgCodeSyndicate/roa-libraries</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>github-roa-plugins</id>
-            <name>GitHub Packages for Roa Libraries</name>
-            <url>https://maven.pkg.github.com/CyborgCodeSyndicate/roa-plugins</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>

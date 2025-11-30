@@ -1,35 +1,35 @@
-package io.cyborgcode.api.test.framework.data.cleaner;
+package io.cyborgcode.ui.complex.test.framework.data.cleaner;
 
 import io.cyborgcode.roa.framework.parameters.DataRipper;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
+
 import java.util.function.Consumer;
 
 /**
- * Defines reusable cleanup (data ripping) operations for the tutorial test suite.
- * <p>
- * This enum integrates with ROA's {@code @Ripper} mechanism via {@link DataRipper}:
- * each constant maps to a function that is executed after the test completes,
- * allowing you to centralize and reuse teardown logic.
- * </p>
+ * Defines reusable cleanup (data ripping) operations for the example test suite.
+ *
+ * <p>This enum integrates with ROA {@code @Ripper} mechanism via {@link DataRipper}: each constant
+ * maps to a function that is executed after the test completes, allowing you to centralize and
+ * reuse teardown logic.
+ *
  * <ul>
- *   <li>{@link #DELETE_ADMIN_USER} — removes the admin user created during tests.</li>
+ *   <li>{@link #DELETE_CREATED_ORDERS} — removes all orders created during the test execution.
  * </ul>
- * <p>
+ *
  * The nested {@link Data} class provides string constants for annotation-based references.
- * </p>
  *
  * @author Cyborg Code Syndicate 💍👨💻
  */
 public enum DataCleaner implements DataRipper<DataCleaner> {
 
-   DELETE_ADMIN_USER(DataCleanerFunctions::deleteAdminUser);
+   DELETE_CREATED_ORDERS(DataCleanerFunctions::cleanAllOrders);
 
    public static final class Data {
 
+      public static final String DELETE_CREATED_ORDERS = "DELETE_CREATED_ORDERS";
+
       private Data() {
       }
-
-      public static final String DELETE_ADMIN_USER = "DELETE_ADMIN_USER";
 
    }
 
@@ -38,6 +38,7 @@ public enum DataCleaner implements DataRipper<DataCleaner> {
    DataCleaner(final Consumer<SuperQuest> cleanUpFunction) {
       this.cleanUpFunction = cleanUpFunction;
    }
+
 
    @Override
    public Consumer<SuperQuest> eliminate() {
