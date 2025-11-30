@@ -1,0 +1,26 @@
+🤖 CYBORG 🤖 2025-11-30T18:10:13,706 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] INFO  [UI] - Creating driver using provider [ChromeDriverProvider]. Headless: [true], Remote: [true], Remote URL: [http://localhost:4444]
+🤖 CYBORG 🤖 2025-11-30T18:10:16,381 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] INFO  [QUEST] - The quest: 'insertionService_populatesFormFromModel(Quest, PurchaseForeignCurrency)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-30T18:10:16,410 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] INFO  [QUEST] - The quest has used the ring: 'UI'
+🤖 CYBORG 🤖 2025-11-30T18:10:17,345 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Clicking button using locator: By.id: signin_button
+🤖 CYBORG 🤖 2025-11-30T18:10:18,186 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Inserting value: 'username' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-11-30T18:10:19,354 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Inserting value: 'password' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-11-30T18:10:20,010 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Clicking button using locator: By.cssSelector: input[value='Sign in']
+🤖 CYBORG 🤖 2025-11-30T18:10:21,369 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.simple.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-11-30T18:10:21,389 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Clicking link BOOTSTRAP_LINK_TYPE using locator By.id: transfer_funds_link
+🤖 CYBORG 🤖 2025-11-30T18:10:22,053 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Selecting items Pay Bills from list BOOTSTRAP_LIST_TYPE using locator By.className: nav-tabs
+🤖 CYBORG 🤖 2025-11-30T18:10:23,889 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Selecting items Purchase Foreign Currency from list BOOTSTRAP_LIST_TYPE using locator By.className: ui-tabs-nav
+🤖 CYBORG 🤖 2025-11-30T18:10:24,485 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Inserting values [Mexico (peso)] for select component BOOTSTRAP_SELECT_TYPE using locator By.id: pc_currency
+🤖 CYBORG 🤖 2025-11-30T18:10:24,499 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Selecting options [Mexico (peso)] in container with locator By.id: pc_currency for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-11-30T18:10:26,396 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Inserting value into component of type: 'BOOTSTRAP_INPUT_TYPE' using locator.
+🤖 CYBORG 🤖 2025-11-30T18:10:26,404 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Inserting value: '100' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-11-30T18:10:27,003 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Inserting values [true] for radio component BOOTSTRAP_RADIO_TYPE using locator By.id: pc_inDollars_true
+🤖 CYBORG 🤖 2025-11-30T18:10:27,011 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Selecting radio button with locator By.id: pc_inDollars_true for radio component BOOTSTRAP_RADIO_TYPE
+🤖 CYBORG 🤖 2025-11-30T18:10:27,738 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] INFO  [UI] - Finished data insertion for [PurchaseForeignCurrency].
+🤖 CYBORG 🤖 2025-11-30T18:10:27,763 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Clicking button using locator: By.id: pc_calculate_costs
+🤖 CYBORG 🤖 2025-11-30T18:10:28,345 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Clicking button using locator: By.id: purchase_cash
+🤖 CYBORG 🤖 2025-11-30T18:10:28,699 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] STEP  [UI] - Getting value from alert located by: By.id: alert_content
+🤖 CYBORG 🤖 2025-11-30T18:10:28,958 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-11-30T18:10:28,961 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-11-30T18:10:28,963 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-30T18:10:28,965 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-30T18:10:28,973 [scenario=BasicToAdvancedFeatureTests.insertionService_populatesFormFromModel] INFO  [QUEST] - The quest of 'insertionService_populatesFormFromModel(Quest, PurchaseForeignCurrency)' has concluded with glory. Status: SUCCESS. Duration: 18 seconds.

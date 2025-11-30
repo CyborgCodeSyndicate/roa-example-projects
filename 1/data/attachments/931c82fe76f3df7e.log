@@ -1,0 +1,20 @@
+🤖 CYBORG 🤖 2025-11-30T18:10:06,605 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [UI] - Creating driver using provider [ChromeDriverProvider]. Headless: [true], Remote: [true], Remote URL: [http://localhost:4444]
+🤖 CYBORG 🤖 2025-11-30T18:10:08,572 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest: 'testScenario_3(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-11-30T18:10:08,600 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest has used the ring: 'UI'
+🤖 CYBORG 🤖 2025-11-30T18:10:11,759 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.simple.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-11-30T18:10:11,774 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Clicking link BOOTSTRAP_LINK_TYPE using locator By.id: transfer_funds_link
+🤖 CYBORG 🤖 2025-11-30T18:10:12,090 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Selecting option Brokerage(Avail. balance = $ 197) in container with locator By.id: tf_fromAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-11-30T18:10:12,097 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Selecting options [Brokerage(Avail. balance = $ 197)] in container with locator By.id: tf_fromAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-11-30T18:10:12,925 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Selecting option Checking(Avail. balance = $ -500.2) in container with locator By.id: tf_toAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-11-30T18:10:12,943 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Selecting options [Checking(Avail. balance = $ -500.2)] in container with locator By.id: tf_toAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-11-30T18:10:13,579 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Inserting value: '100' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-11-30T18:10:14,108 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Inserting value: 'Transfer Amount from Brokerage to Checking' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-11-30T18:10:14,495 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Clicking button using locator: By.id: btn_submit
+🤖 CYBORG 🤖 2025-11-30T18:10:14,788 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Clicking button using locator: By.id: btn_submit
+🤖 CYBORG 🤖 2025-11-30T18:10:14,987 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Getting value from alert located by: By.className: alert
+🤖 CYBORG 🤖 2025-11-30T18:10:15,100 [scenario=AuthenticationViaUITests.testScenario_3] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-11-30T18:10:15,103 [scenario=AuthenticationViaUITests.testScenario_3] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-11-30T18:10:15,106 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-11-30T18:10:15,108 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-11-30T18:10:15,195 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [UI] - WebDriver closed successfully.
+🤖 CYBORG 🤖 2025-11-30T18:10:15,202 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest of 'testScenario_3(Quest)' has concluded with glory. Status: SUCCESS. Duration: 10 seconds.
