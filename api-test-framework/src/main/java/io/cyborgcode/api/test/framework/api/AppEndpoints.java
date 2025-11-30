@@ -22,7 +22,7 @@ import static io.cyborgcode.api.test.framework.data.constants.Headers.API_KEY_VA
  */
 public enum AppEndpoints implements Endpoint<AppEndpoints> {
 
-   GET_ALL_USERS(Method.GET, "/users?{page}"),
+   GET_ALL_USERS(Method.GET, "/users"),
    GET_USER(Method.GET, "/users/{id}"),
    POST_CREATE_USER(Method.POST, "/users"),
    POST_LOGIN_USER(Method.POST, "/login"),
