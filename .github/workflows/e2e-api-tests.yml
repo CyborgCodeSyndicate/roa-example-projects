@@ -50,11 +50,11 @@ jobs:
 
   run:
     needs: setup
-    uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests-sn.yml@e2e-flow
+    uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests-pm.yml@e2e-flow
     with:
       kind: api
       project_module: api-test-framework
-      suite_name: e2e-api
+#      suite_name: e2e-api
       tags_include: Smoke
       repository: CyborgCodeSyndicate/roa-example-projects
       ref: e2e-flow
