@@ -20,7 +20,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-
     <repositories>
         <repository>
             <id>github-roa-libraries</id>
@@ -34,7 +33,6 @@
             </snapshots>
         </repository>
     </repositories>
-
 
 </project>
 

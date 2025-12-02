@@ -13,10 +13,6 @@
     <artifactId>ui-simple-test-framework</artifactId>
     <version>1.0.0</version>
 
-    <properties>
-
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
