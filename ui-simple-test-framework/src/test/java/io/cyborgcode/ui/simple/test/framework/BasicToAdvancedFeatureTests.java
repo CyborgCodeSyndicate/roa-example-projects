@@ -4,6 +4,7 @@ import io.cyborgcode.roa.framework.annotation.Craft;
 import io.cyborgcode.roa.framework.annotation.Journey;
 import io.cyborgcode.roa.framework.annotation.JourneyData;
 import io.cyborgcode.roa.framework.annotation.Regression;
+import io.cyborgcode.roa.framework.annotation.Smoke;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.ui.annotations.AuthenticateViaUi;
@@ -127,6 +128,7 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    @Test
    @Description("Craft injects a typed model instance for data-driven steps")
    @Regression
+   @Smoke
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void craft_injectsModelDataIntoSteps(
          Quest quest,
