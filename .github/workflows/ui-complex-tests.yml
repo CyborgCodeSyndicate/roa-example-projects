@@ -9,7 +9,7 @@ on:
       tagsInclude:
         description: "Tags to include (comma-separated)"
         required: false
-        default: "Smoke"
+        default: "Regression"
       tagsExclude:
         description: "Tags to exclude (comma-separated)"
         required: false
