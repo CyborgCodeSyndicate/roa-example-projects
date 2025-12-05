@@ -1,0 +1,23 @@
+🤖 CYBORG 🤖 2025-12-05T16:28:16,283 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] INFO  [UI] - Creating driver using provider [ChromeDriverProvider]. Headless: [true], Remote: [true], Remote URL: [http://localhost:4444]
+🤖 CYBORG 🤖 2025-12-05T16:28:16,646 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] INFO  [QUEST] - The quest: 'config_properties_retrievedLoginCredentials(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T16:28:16,654 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.simple.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-12-05T16:28:17,478 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Clicking button using locator: By.id: signin_button
+🤖 CYBORG 🤖 2025-12-05T16:28:17,829 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Inserting value: 'username' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:18,152 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Inserting value: 'password' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:18,354 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Clicking button using locator: By.cssSelector: input[value='Sign in']
+🤖 CYBORG 🤖 2025-12-05T16:28:19,151 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Clicking link BOOTSTRAP_LINK_TYPE using locator By.id: transfer_funds_link
+🤖 CYBORG 🤖 2025-12-05T16:28:19,404 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Selecting items Pay Bills from list BOOTSTRAP_LIST_TYPE using locator By.className: nav-tabs
+🤖 CYBORG 🤖 2025-12-05T16:28:20,213 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Selecting items Purchase Foreign Currency from list BOOTSTRAP_LIST_TYPE using locator By.className: ui-tabs-nav
+🤖 CYBORG 🤖 2025-12-05T16:28:20,543 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Selecting option Mexico (peso) in container with locator By.id: pc_currency for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:20,546 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Selecting options [Mexico (peso)] in container with locator By.id: pc_currency for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:21,446 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Inserting value: '100' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:21,696 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Selecting radio button with locator By.id: pc_inDollars_true for radio component BOOTSTRAP_RADIO_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:22,002 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Clicking button using locator: By.id: pc_calculate_costs
+🤖 CYBORG 🤖 2025-12-05T16:28:22,162 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Clicking button using locator: By.id: purchase_cash
+🤖 CYBORG 🤖 2025-12-05T16:28:22,476 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] STEP  [UI] - Getting value from alert located by: By.id: alert_content
+🤖 CYBORG 🤖 2025-12-05T16:28:22,571 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-05T16:28:22,576 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-12-05T16:28:22,580 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-05T16:28:22,585 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-12-05T16:28:22,740 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] INFO  [UI] - WebDriver closed successfully.
+🤖 CYBORG 🤖 2025-12-05T16:28:22,747 [scenario=BasicToAdvancedFeatureTests.config_properties_retrievedLoginCredentials] INFO  [QUEST] - The quest of 'config_properties_retrievedLoginCredentials(Quest)' has concluded with glory. Status: SUCCESS. Duration: 6 seconds.

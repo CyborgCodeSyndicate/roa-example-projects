@@ -1,0 +1,8 @@
+Processed Journey Data:
+-------------------
+Journey: PURCHASE_CURRENCY
+  {
+    "currency" : "Mexico (peso)",
+    "amount" : "100",
+    "usDollar" : true
+  }

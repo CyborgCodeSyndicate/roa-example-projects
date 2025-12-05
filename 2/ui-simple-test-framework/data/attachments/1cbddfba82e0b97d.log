@@ -1,0 +1,24 @@
+🤖 CYBORG 🤖 2025-12-05T16:28:05,695 [scenario=AuthenticationViaUITests.testScenario_1] INFO  [UI] - Chrome driver is downloaded with a compatible version for the installed browser
+🤖 CYBORG 🤖 2025-12-05T16:28:05,895 [scenario=AuthenticationViaUITests.testScenario_1] INFO  [UI] - Creating driver using provider [ChromeDriverProvider]. Headless: [true], Remote: [true], Remote URL: [http://localhost:4444]
+🤖 CYBORG 🤖 2025-12-05T16:28:07,741 [scenario=AuthenticationViaUITests.testScenario_1] INFO  [QUEST] - The quest: 'testScenario_1(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T16:28:07,763 [scenario=AuthenticationViaUITests.testScenario_1] INFO  [QUEST] - The quest has used the ring: 'UI'
+🤖 CYBORG 🤖 2025-12-05T16:28:08,387 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Clicking button using locator: By.id: signin_button
+🤖 CYBORG 🤖 2025-12-05T16:28:08,618 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Inserting value: 'username' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:08,874 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Inserting value: 'password' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:09,154 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Clicking button using locator: By.cssSelector: input[value='Sign in']
+🤖 CYBORG 🤖 2025-12-05T16:28:09,687 [scenario=AuthenticationViaUITests.testScenario_1] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.simple.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-12-05T16:28:09,704 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Clicking link BOOTSTRAP_LINK_TYPE using locator By.id: transfer_funds_link
+🤖 CYBORG 🤖 2025-12-05T16:28:09,930 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Selecting option Loan(Avail. balance = $ 780) in container with locator By.id: tf_fromAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:09,936 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Selecting options [Loan(Avail. balance = $ 780)] in container with locator By.id: tf_fromAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:10,781 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Selecting option Credit Card(Avail. balance = $ -265) in container with locator By.id: tf_toAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:10,791 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Selecting options [Credit Card(Avail. balance = $ -265)] in container with locator By.id: tf_toAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:11,623 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Inserting value: '300' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:12,025 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Inserting value: 'Transfer Amount from Loan to Credit Card' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:12,515 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Clicking button using locator: By.id: btn_submit
+🤖 CYBORG 🤖 2025-12-05T16:28:12,768 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Clicking button using locator: By.id: btn_submit
+🤖 CYBORG 🤖 2025-12-05T16:28:12,971 [scenario=AuthenticationViaUITests.testScenario_1] STEP  [UI] - Getting value from alert located by: By.className: alert
+🤖 CYBORG 🤖 2025-12-05T16:28:13,101 [scenario=AuthenticationViaUITests.testScenario_1] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-05T16:28:13,170 [scenario=AuthenticationViaUITests.testScenario_1] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-12-05T16:28:13,176 [scenario=AuthenticationViaUITests.testScenario_1] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-05T16:28:13,179 [scenario=AuthenticationViaUITests.testScenario_1] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-12-05T16:28:13,197 [scenario=AuthenticationViaUITests.testScenario_1] INFO  [QUEST] - The quest of 'testScenario_1(Quest)' has concluded with glory. Status: SUCCESS. Duration: 10 seconds.

@@ -1,0 +1,23 @@
+🤖 CYBORG 🤖 2025-12-05T16:28:15,665 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] INFO  [UI] - Creating driver using provider [ChromeDriverProvider]. Headless: [true], Remote: [true], Remote URL: [http://localhost:4444]
+🤖 CYBORG 🤖 2025-12-05T16:28:16,374 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] INFO  [QUEST] - The quest: 'craft_injectsModelDataIntoSteps(Quest, PurchaseForeignCurrency)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T16:28:16,378 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] INFO  [QUEST] - The quest has used the ring: 'UI'
+🤖 CYBORG 🤖 2025-12-05T16:28:17,193 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Clicking button using locator: By.id: signin_button
+🤖 CYBORG 🤖 2025-12-05T16:28:17,475 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Inserting value: 'username' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:17,863 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Inserting value: 'password' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:18,244 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Clicking button using locator: By.cssSelector: input[value='Sign in']
+🤖 CYBORG 🤖 2025-12-05T16:28:19,141 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.simple.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-12-05T16:28:19,144 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Clicking link BOOTSTRAP_LINK_TYPE using locator By.id: transfer_funds_link
+🤖 CYBORG 🤖 2025-12-05T16:28:19,387 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Selecting items Pay Bills from list BOOTSTRAP_LIST_TYPE using locator By.className: nav-tabs
+🤖 CYBORG 🤖 2025-12-05T16:28:20,204 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Selecting items Purchase Foreign Currency from list BOOTSTRAP_LIST_TYPE using locator By.className: ui-tabs-nav
+🤖 CYBORG 🤖 2025-12-05T16:28:20,526 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Selecting option Mexico (peso) in container with locator By.id: pc_currency for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:20,533 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Selecting options [Mexico (peso)] in container with locator By.id: pc_currency for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:21,424 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Inserting value: '100' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T16:28:21,755 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Selecting radio button with locator By.id: pc_inDollars_true for radio component BOOTSTRAP_RADIO_TYPE
+🤖 CYBORG 🤖 2025-12-05T16:28:22,081 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Clicking button using locator: By.id: pc_calculate_costs
+🤖 CYBORG 🤖 2025-12-05T16:28:22,267 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Clicking button using locator: By.id: purchase_cash
+🤖 CYBORG 🤖 2025-12-05T16:28:22,658 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] STEP  [UI] - Getting value from alert located by: By.id: alert_content
+🤖 CYBORG 🤖 2025-12-05T16:28:22,758 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-05T16:28:22,762 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-12-05T16:28:22,764 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-05T16:28:22,766 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-12-05T16:28:22,770 [scenario=BasicToAdvancedFeatureTests.craft_injectsModelDataIntoSteps] INFO  [QUEST] - The quest of 'craft_injectsModelDataIntoSteps(Quest, PurchaseForeignCurrency)' has concluded with glory. Status: SUCCESS. Duration: 7 seconds.
