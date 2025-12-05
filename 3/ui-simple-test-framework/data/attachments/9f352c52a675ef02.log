@@ -1,0 +1,23 @@
+🤖 CYBORG 🤖 2025-12-05T17:49:02,639 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [UI] - Creating driver using provider [ChromeDriverProvider]. Headless: [true], Remote: [true], Remote URL: [http://localhost:4444]
+🤖 CYBORG 🤖 2025-12-05T17:49:04,488 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest: 'testScenario_3(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:49:04,508 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest has used the ring: 'UI'
+🤖 CYBORG 🤖 2025-12-05T17:49:04,860 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Clicking button using locator: By.id: signin_button
+🤖 CYBORG 🤖 2025-12-05T17:49:05,060 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Inserting value: 'username' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T17:49:05,289 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Inserting value: 'password' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T17:49:05,492 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Clicking button using locator: By.cssSelector: input[value='Sign in']
+🤖 CYBORG 🤖 2025-12-05T17:49:05,866 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.simple.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-12-05T17:49:05,873 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Clicking link BOOTSTRAP_LINK_TYPE using locator By.id: transfer_funds_link
+🤖 CYBORG 🤖 2025-12-05T17:49:06,126 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Selecting option Brokerage(Avail. balance = $ 197) in container with locator By.id: tf_fromAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T17:49:06,134 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Selecting options [Brokerage(Avail. balance = $ 197)] in container with locator By.id: tf_fromAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T17:49:07,164 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Selecting option Checking(Avail. balance = $ -500.2) in container with locator By.id: tf_toAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T17:49:07,171 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Selecting options [Checking(Avail. balance = $ -500.2)] in container with locator By.id: tf_toAccountId for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T17:49:07,812 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Inserting value: '100' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T17:49:08,159 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Inserting value: 'Transfer Amount from Brokerage to Checking' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T17:49:08,497 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Clicking button using locator: By.id: btn_submit
+🤖 CYBORG 🤖 2025-12-05T17:49:08,721 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Clicking button using locator: By.id: btn_submit
+🤖 CYBORG 🤖 2025-12-05T17:49:08,917 [scenario=AuthenticationViaUITests.testScenario_3] STEP  [UI] - Getting value from alert located by: By.className: alert
+🤖 CYBORG 🤖 2025-12-05T17:49:09,022 [scenario=AuthenticationViaUITests.testScenario_3] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-05T17:49:09,085 [scenario=AuthenticationViaUITests.testScenario_3] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-12-05T17:49:09,092 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-05T17:49:09,098 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-12-05T17:49:09,134 [scenario=AuthenticationViaUITests.testScenario_3] INFO  [QUEST] - The quest of 'testScenario_3(Quest)' has concluded with glory. Status: SUCCESS. Duration: 9 seconds.

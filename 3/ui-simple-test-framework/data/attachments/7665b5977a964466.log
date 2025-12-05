@@ -1,0 +1,23 @@
+🤖 CYBORG 🤖 2025-12-05T17:49:13,614 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] INFO  [UI] - Creating driver using provider [ChromeDriverProvider]. Headless: [true], Remote: [true], Remote URL: [http://localhost:4444]
+🤖 CYBORG 🤖 2025-12-05T17:49:14,310 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] INFO  [QUEST] - The quest: 'authenticateViaUi_perTestNoCache(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:49:14,314 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] INFO  [QUEST] - The quest has used the ring: 'UI'
+🤖 CYBORG 🤖 2025-12-05T17:49:14,890 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Clicking button using locator: By.id: signin_button
+🤖 CYBORG 🤖 2025-12-05T17:49:15,115 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Inserting value: 'username' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T17:49:15,411 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Inserting value: 'password' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T17:49:15,723 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Clicking button using locator: By.cssSelector: input[value='Sign in']
+🤖 CYBORG 🤖 2025-12-05T17:49:16,393 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.simple.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-12-05T17:49:16,395 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Clicking link BOOTSTRAP_LINK_TYPE using locator By.id: transfer_funds_link
+🤖 CYBORG 🤖 2025-12-05T17:49:16,641 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Selecting items Pay Bills from list BOOTSTRAP_LIST_TYPE using locator By.className: nav-tabs
+🤖 CYBORG 🤖 2025-12-05T17:49:17,375 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Selecting items Purchase Foreign Currency from list BOOTSTRAP_LIST_TYPE using locator By.className: ui-tabs-nav
+🤖 CYBORG 🤖 2025-12-05T17:49:17,696 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Selecting option Mexico (peso) in container with locator By.id: pc_currency for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T17:49:17,701 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Selecting options [Mexico (peso)] in container with locator By.id: pc_currency for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-05T17:49:18,545 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Inserting value: '100' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-05T17:49:18,842 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Selecting radio button with locator By.id: pc_inDollars_true for radio component BOOTSTRAP_RADIO_TYPE
+🤖 CYBORG 🤖 2025-12-05T17:49:19,076 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Clicking button using locator: By.id: pc_calculate_costs
+🤖 CYBORG 🤖 2025-12-05T17:49:19,291 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Clicking button using locator: By.id: purchase_cash
+🤖 CYBORG 🤖 2025-12-05T17:49:19,569 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] STEP  [UI] - Getting value from alert located by: By.id: alert_content
+🤖 CYBORG 🤖 2025-12-05T17:49:19,679 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-05T17:49:19,682 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-12-05T17:49:19,685 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-05T17:49:19,688 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-12-05T17:49:19,694 [scenario=BasicToAdvancedFeatureTests.authenticateViaUi_perTestNoCache] INFO  [QUEST] - The quest of 'authenticateViaUi_perTestNoCache(Quest)' has concluded with glory. Status: SUCCESS. Duration: 6 seconds.
