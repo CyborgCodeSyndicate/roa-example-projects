@@ -72,7 +72,7 @@ Who this is for:
 
 - Test engineers who want readable tests without low-level WebDriver/REST/JDBC boilerplate, and need stable, fast, and reliable suites suitable for robust regression runs.
 - Teams adopting ROA who want a practical multi-interface template.
-- Users exploring storage, journeys, authentication helpers, retries, and cross-layer validation.
+- Users exploring storage, preconditions, authentication helpers, retries, and cross-layer validation.
 
 ---
 
@@ -124,6 +124,8 @@ Lifecycle variants:
 
 - `BaseQuest` – per-method `Quest` lifecycle (most common).
 - `BaseQuestSequential` – class-level `Quest` shared by all tests in a class.
+
+**For a detailed explanation of Quest, see the relevant section in the ROA Libraries documentation: [Quest - The Big Idea](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/test-framework/README.md#the-big-idea)**
 
 ### 2.2 Rings
 
@@ -238,7 +240,7 @@ API Test Framework:
 
 High level overview by module.
 
-UI Complex Test Framework `ui-complex-test-framework`(conceptual structure):
+### UI Complex Test Framework `ui-complex-test-framework`(conceptual structure):
 
 - tests
   - `BasicToAdvancedFeaturesTest`
@@ -265,7 +267,7 @@ UI Complex Test Framework `ui-complex-test-framework`(conceptual structure):
 - api
   - `api/AppEndpoints` — REST endpoints used in examples
 
-UI Simple Test Framework `ui-simple-test-framework`(conceptual structure):
+### UI Simple Test Framework `ui-simple-test-framework`(conceptual structure):
 
 - tests
     - `GettingStartedTests`
@@ -286,7 +288,7 @@ UI Simple Test Framework `ui-simple-test-framework`(conceptual structure):
     - `data/creator` — `DataCreator`, `DataCreatorFunctions`
     - `data/test_data` — `Data`, `DataProperties`, `Constants`
 
-API Test Framework `api-test-framework` (conceptual structure):
+### API Test Framework `api-test-framework` (conceptual structure):
 
 - tests
   - `GettingStartedTest`
@@ -456,6 +458,8 @@ Include the adapters you need:
   <artifactId>db-interactor-test-framework-adapter</artifactId>
 </dependency>
 ```
+
+**For a detailed explanation of each adapter (dependency) visit the relevant section in the ROA Libraries documentation: [ROA Libraries](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/README.md#modules-overview)**
 
 ### 7.3 Configure environment
 
@@ -797,7 +801,7 @@ quest
 ```
 ---
 
-### 8.3 Step 3 – Centralize data with DataCreator and @Craft
+### 8.3 Step 3 – Centralize data with DataCreator and Craft
 
 Instead of building `Seller` and `Order` inline, we ask `DataCreator` to produce them.
 
@@ -834,6 +838,7 @@ public static Order createSpecialOrder() {
       .build();
 }
 ```
+**For a more detailed explanation of `DataCreator` and `Craft`, visit the relevant section in the ROA Libraries documentation: [DataForge, Craft, Late & Dynamic Data Creation](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/test-framework/README.md#dataforge-craft-late--dynamic-data-creation)**
 
 ---
 ### 8.4 Step 4 – Journeys as reusable preconditions
@@ -909,6 +914,7 @@ public static void loginUser(SuperQuest quest, Seller seller) {
        .login(seller);
 }
 ```
+**For a more detailed explanation of `Journeys``, visit the relevant section in the ROA Libraries documentation: [PreQuest, Journey & JourneyData System](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/test-framework/README.md#prequest-journey--journeydata-system)**
 
 ---
 
@@ -1039,7 +1045,7 @@ void validateStoredOrderInDb(
 
 ---
 
-### 8.8 Step 8 – Cleanup with @Ripper and DataCleaner
+### 8.8 Step 8 – Cleanup with DataCleaner and Ripper
 
 Ensure created orders are cleaned up after tests finish:
 
@@ -1069,6 +1075,7 @@ public static void deleteSpecialRecords(SuperQuest quest) {
   // retrieve keys from PRE_ARGUMENTS or DB, then delete via RING_OF_DB
 }
 ```
+**For a more detailed explanation of `DataCleaner` and `Ripper`, visit the relevant section in the ROA Libraries documentation: [Ripper, RipperMan & Data Cleanup](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/test-framework/README.md#ripper-ripperman--data-cleanup)**
 
 ---
 
@@ -1144,6 +1151,8 @@ GetUsersDto users = retrieve(StorageKeysApi.API, AppEndpoints.GET_ALL_USERS, Res
 - Keep direct storage access inside **rings, journeys, hooks** – not scattered through tests.
 - Avoid storing huge payloads unless you really need them for assertions.
 - Prefer **helper methods** (`retrieve`, `staticTestData`) over raw map access to avoid casting errors.
+
+**For a deeper explanation of Storage, visit the relevant section in the ROA Libraries documentation: [Storage & Data Extractors](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/test-framework/README.md#storage--data-extractors)**
 
 ---
 
@@ -1522,6 +1531,8 @@ void usesStaticData(Quest quest) {
 
 Ideal for demo data or constants you don’t want to encode in property files.
 
+**For a deeper explanation of `StaticTestData`, visit the relevant section in the ROA Libraries documentation: [StaticDataProvider - Preloading Test Data](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/test-framework/README.md#staticdataprovider---preloading-test-data)**
+
 ---
 
 ### 12.2 Late data creation based on intercepted responses
@@ -1668,12 +1679,6 @@ This module does not define new Owner keys; it **reuses** configuration from:
 - `api-interactor-test-framework-adapter`,
 - `db-interactor-test-framework-adapter`.
 
-Refer to their individual READMEs for:
-
-- complete property lists,
-- additional flags for logging, screenshots and retries,
-- DB vendor-specific configuration.
-
 ### 13.2 Allure reporting
 
 When Allure is on the classpath, ROA adapters typically provide:
@@ -1685,7 +1690,7 @@ When Allure is on the classpath, ROA adapters typically provide:
 
 - **API**
     - request/response attachments:
-        - URL, method, headers, body, status, duration,
+    - URL, method, headers, body, status, duration,
     - validation target maps summarizing assertions.
 
 - **DB**
