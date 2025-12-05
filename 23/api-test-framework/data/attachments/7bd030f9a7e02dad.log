@@ -1,0 +1,17 @@
+🤖 CYBORG 🤖 2025-12-05T17:48:31,649 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,666 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,674 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,684 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] INFO  [QUEST] - The quest: 'waitsUntilConditionMetThenGetsUsers(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:48:31,700 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:33,713 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] INFO  [COMMON] - Condition satisfied on attempt #3, returning result.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,974 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-12-05T17:48:34,212 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-12-05T17:48:34,217 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-12-05T17:48:34,222 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:35,056 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] STEP  [API] - Response with status: 401 received from endpoint: GET-https://reqres.in/api/users?page=2 in 824ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:35,092 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:35,097 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:35 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:35,106 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-05T17:48:35,111 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=401}]
+🤖 CYBORG 🤖 2025-12-05T17:48:35,119 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 200, Actual: 401)
+🤖 CYBORG 🤖 2025-12-05T17:48:35,182 [scenario=RetryUntilExamplesTest.waitsUntilConditionMetThenGetsUsers] INFO  [QUEST] - The quest of 'waitsUntilConditionMetThenGetsUsers(Quest)' has ended in defeat. Status: FAILED. Duration: 3 seconds.

@@ -1,0 +1,16 @@
+🤖 CYBORG 🤖 2025-12-05T17:48:31,298 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,422 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,441 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,455 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] INFO  [QUEST] - The quest: 'validatesUsersWithJUnitAssertions(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:48:31,479 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:31,833 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-12-05T17:48:32,132 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-12-05T17:48:32,142 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-12-05T17:48:32,154 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:33,081 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] STEP  [API] - Response with status: 401 received from endpoint: GET-https://reqres.in/api/users?page=2 in 920ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,114 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:33,118 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:33 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:33,127 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-05T17:48:33,132 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] EXTENDED [QUEST] - Fetching data from storage by key: 'GET_ALL_USERS' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-12-05T17:48:33,210 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] VALIDATION [QUEST] - Hard validation failed: com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "error" (class io.cyborgcode.api.test.framework.api.dto.response.GetUsersDto), not marked as ignorable (7 known properties: "per_page", "total", "total_pages", "data", "page", "_meta", "support"])
+🤖 CYBORG 🤖 2025-12-05T17:48:33,244 [scenario=AdvancedExamplesTest.validatesUsersWithJUnitAssertions] INFO  [QUEST] - The quest of 'validatesUsersWithJUnitAssertions(Quest)' has ended in defeat. Status: FAILED. Duration: 1 seconds.

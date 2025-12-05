@@ -1,0 +1,13 @@
+🤖 CYBORG 🤖 2025-12-05T17:48:33,303 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,321 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,331 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,340 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] INFO  [QUEST] - The quest: 'createsTwoUsersUsingCraftAndLateModels(Quest, CreateUserDto, Late)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,376 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:33,388 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,394 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:33,401 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:33,605 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/users in 197ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,613 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:33,619 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:33 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:33,633 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2025-12-05T17:48:33,744 [scenario=AdvancedExamplesTest.createsTwoUsersUsingCraftAndLateModels] INFO  [QUEST] - The quest of 'createsTwoUsersUsingCraftAndLateModels(Quest, CreateUserDto, Late)' has ended in defeat. Status: FAILED. Duration: 0 seconds.

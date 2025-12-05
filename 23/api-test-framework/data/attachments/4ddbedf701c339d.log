@@ -1,0 +1,13 @@
+🤖 CYBORG 🤖 2025-12-05T17:48:31,299 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,395 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,424 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,451 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] INFO  [QUEST] - The quest: 'createsUserFromCraftModel(Quest, CreateUserDto)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:48:31,502 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:32,217 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-12-05T17:48:32,229 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:32,237 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:33,084 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/users in 835ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,112 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:33,118 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:33 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:33,142 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-12-05T17:48:33,745 [scenario=AdvancedExamplesTest.createsUserFromCraftModel] INFO  [QUEST] - The quest of 'createsUserFromCraftModel(Quest, CreateUserDto)' has ended in defeat. Status: FAILED. Duration: 2 seconds.

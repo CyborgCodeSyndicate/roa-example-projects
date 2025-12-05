@@ -1,0 +1,13 @@
+🤖 CYBORG 🤖 2025-12-05T17:48:31,479 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,512 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,531 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:31,547 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] INFO  [QUEST] - The quest: 'usesCustomServiceRingToLoginAndFetchUsers(Quest, LoginDto)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:48:31,581 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] INFO  [QUEST] - The quest has used the ring: 'Ring of Custom'
+🤖 CYBORG 🤖 2025-12-05T17:48:31,604 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:32,218 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-12-05T17:48:32,225 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:32,231 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:33,081 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/login in 841ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,112 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:33,121 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:33 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:33,744 [scenario=AdvancedExamplesTest.usesCustomServiceRingToLoginAndFetchUsers] INFO  [QUEST] - The quest of 'usesCustomServiceRingToLoginAndFetchUsers(Quest, LoginDto)' has ended in defeat. Status: FAILED. Duration: 2 seconds.

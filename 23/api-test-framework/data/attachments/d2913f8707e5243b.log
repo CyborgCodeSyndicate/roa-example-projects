@@ -1,0 +1,14 @@
+🤖 CYBORG 🤖 2025-12-05T17:48:33,821 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,825 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,832 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,839 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] INFO  [QUEST] - The quest: 'getsUserFromPreviouslyFetchedUserList(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,844 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:33,854 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-12-05T17:48:33,861 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,867 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-12-05T17:48:33,873 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:34,052 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] STEP  [API] - Response with status: 401 received from endpoint: GET-https://reqres.in/api/users?page=2 in 171ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:34,060 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:34,068 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:34 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:34,080 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] EXTENDED [QUEST] - Fetching data from storage by key: 'GET_ALL_USERS' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-12-05T17:48:34,103 [scenario=AdvancedExamplesTest.getsUserFromPreviouslyFetchedUserList] INFO  [QUEST] - The quest of 'getsUserFromPreviouslyFetchedUserList(Quest)' has ended in defeat. Status: FAILED. Duration: 0 seconds.

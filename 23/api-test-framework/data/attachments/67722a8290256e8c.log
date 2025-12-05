@@ -1,0 +1,37 @@
+🤖 CYBORG 🤖 2025-12-05T17:48:33,657 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,661 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,665 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,671 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [QUEST] - The quest: 'executesUserLifecycleWithJourneyAndRipper(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,675 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Updated quest storage with credentials for username: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-12-05T17:48:33,678 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:33,687 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,692 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:33,695 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:34,003 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/login in 304ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:34,008 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:34,011 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:34 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:34,025 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [API] - Successfully authenticated user: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-12-05T17:48:34,043 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [QUEST] - Creating data for: USER_LEADER
+🤖 CYBORG 🤖 2025-12-05T17:48:34,054 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:34,075 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-12-05T17:48:34,090 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:34,094 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:34,278 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/users in 176ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:34,282 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:34,284 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:34 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:34,288 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-05T17:48:34,290 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=401}]
+🤖 CYBORG 🤖 2025-12-05T17:48:34,293 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 201, Actual: 401)
+🤖 CYBORG 🤖 2025-12-05T17:48:34,297 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [QUEST] - The ripper has arrived
+🤖 CYBORG 🤖 2025-12-05T17:48:34,309 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:34,313 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-12-05T17:48:34,318 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] STEP  [API] - Sending request to endpoint DELETE-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-12-05T17:48:34,321 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-12-05T17:48:34,323 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:34,494 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] STEP  [API] - Response with status: 401 received from endpoint: DELETE-https://reqres.in/api/users/3 in 167ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:34,498 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:34,501 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:34 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:34,505 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-05T17:48:34,508 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=401}]
+🤖 CYBORG 🤖 2025-12-05T17:48:34,510 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 204, Actual: 401)
+🤖 CYBORG 🤖 2025-12-05T17:48:34,515 [scenario=AdvancedExamplesTest.executesUserLifecycleWithJourneyAndRipper] INFO  [QUEST] - The quest of 'executesUserLifecycleWithJourneyAndRipper(Quest)' has ended in defeat. Status: FAILED. Duration: 0 seconds.

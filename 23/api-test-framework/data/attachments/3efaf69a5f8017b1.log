@@ -1,0 +1,37 @@
+🤖 CYBORG 🤖 2025-12-05T17:48:32,978 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,034 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,057 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,082 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [QUEST] - The quest: 'executesUserLifecycleUsingEvolutionRing(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,104 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Updated quest storage with credentials for username: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-12-05T17:48:33,142 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:33,904 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,916 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:33,932 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:34,739 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/login in 790ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:34,760 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:34,763 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:34 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:35,215 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [API] - Successfully authenticated user: eve.holt@reqres.in
+🤖 CYBORG 🤖 2025-12-05T17:48:35,275 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [QUEST] - Creating data for: USER_LEADER
+🤖 CYBORG 🤖 2025-12-05T17:48:35,338 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:35,371 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-12-05T17:48:35,379 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:35,385 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:35,603 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/users in 208ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:35,608 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:35,614 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:35 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:35,619 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-05T17:48:35,622 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=401}]
+🤖 CYBORG 🤖 2025-12-05T17:48:35,625 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 201, Actual: 401)
+🤖 CYBORG 🤖 2025-12-05T17:48:35,633 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [QUEST] - The ripper has arrived
+🤖 CYBORG 🤖 2025-12-05T17:48:35,656 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:35,670 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-12-05T17:48:35,676 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] STEP  [API] - Sending request to endpoint DELETE-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-12-05T17:48:35,679 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-12-05T17:48:35,682 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:35,903 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] STEP  [API] - Response with status: 401 received from endpoint: DELETE-https://reqres.in/api/users/3 in 210ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:35,909 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:35,914 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:35 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:35,918 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-05T17:48:35,921 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=401}]
+🤖 CYBORG 🤖 2025-12-05T17:48:35,928 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 204, Actual: 401)
+🤖 CYBORG 🤖 2025-12-05T17:48:35,939 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleUsingEvolutionRing] INFO  [QUEST] - The quest of 'executesUserLifecycleUsingEvolutionRing(Quest)' has ended in defeat. Status: FAILED. Duration: 2 seconds.

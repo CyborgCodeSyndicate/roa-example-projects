@@ -1,0 +1,13 @@
+🤖 CYBORG 🤖 2025-12-05T17:48:33,810 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,815 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,818 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-05T17:48:33,821 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] INFO  [QUEST] - The quest: 'loginsAndCallsGetUserWithTokenFromStorage(Quest, LoginDto)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,831 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-05T17:48:33,844 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-12-05T17:48:33,850 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:33,855 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-05T17:48:34,051 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/login in 187ms.
+🤖 CYBORG 🤖 2025-12-05T17:48:34,058 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-05T17:48:34,062 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] EXTENDED [API] - Response headers: Date=Fri, 05 Dec 2025 17:48:34 GMT
+🤖 CYBORG 🤖 2025-12-05T17:48:34,070 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_LOGIN_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-12-05T17:48:34,102 [scenario=AdvancedExamplesTest.loginsAndCallsGetUserWithTokenFromStorage] INFO  [QUEST] - The quest of 'loginsAndCallsGetUserWithTokenFromStorage(Quest, LoginDto)' has ended in defeat. Status: FAILED. Duration: 0 seconds.
