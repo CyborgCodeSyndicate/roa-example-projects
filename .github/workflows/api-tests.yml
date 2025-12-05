@@ -16,7 +16,7 @@ on:
         default: "Flaky"
 jobs:
   run:
-    uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests.yml@e2e-flow
+    uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests.yml@e2e-workflow
     with:
       kind: api
       project_module: api-test-framework
