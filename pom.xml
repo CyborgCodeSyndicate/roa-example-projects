@@ -10,6 +10,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>api-test-framework</module>
+        <module>ui-simple-test-framework</module>
+        <module>ui-complex-test-framework</module>
     </modules>
 
     <properties>
@@ -17,7 +19,6 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
 
     <repositories>
         <repository>
@@ -32,7 +33,6 @@
             </snapshots>
         </repository>
     </repositories>
-
 
 </project>
 

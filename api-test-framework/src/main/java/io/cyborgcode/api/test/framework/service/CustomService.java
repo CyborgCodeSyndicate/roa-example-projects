@@ -1,6 +1,6 @@
 package io.cyborgcode.api.test.framework.service;
 
-import io.cyborgcode.api.test.framework.rest.dto.request.LoginUser;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
 import io.cyborgcode.roa.api.storage.StorageKeysApi;
 import io.cyborgcode.roa.framework.annotation.Ring;
 import io.cyborgcode.roa.framework.chain.FluentService;
@@ -9,33 +9,33 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.DATA;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.PER_PAGE;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SUPPORT_TEXT;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.SUPPORT_URL;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOKEN;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOTAL;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.TOTAL_PAGES;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_AVATAR_BY_INDEX;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_FIRST_NAME;
-import static io.cyborgcode.api.test.framework.rest.ApiResponsesJsonPaths.USER_ID;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_ALL_USERS;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.GET_USER;
-import static io.cyborgcode.api.test.framework.rest.AppEndpoints.POST_LOGIN_USER;
-import static io.cyborgcode.api.test.framework.utils.Headers.SPECIFIC_HEADER;
-import static io.cyborgcode.api.test.framework.utils.PathVariables.ID_PARAM;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.FileConstants.AVATAR_FILE_EXTENSION;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.PageTwo.PAGE_TWO_CONTAINS_ANY_USER;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.PageTwo.PAGE_TWO_DATA_SIZE;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.PageTwo.PAGE_TWO_EXPECTED_USERS;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Pagination.PAGE_TWO;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Pagination.TOTAL_USERS_IN_PAGE_RANGE;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Support.SUPPORT_TEXT_PREFIX;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Support.SUPPORT_URL_REGEX;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Support.SUPPORT_URL_REQRES_FRAGMENT;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Users.ID_THREE;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Users.USER_ONE_FIRST_NAME;
-import static io.cyborgcode.api.test.framework.utils.TestConstants.Users.USER_SEVENTH_FIRST_NAME_LENGTH;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.DATA;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.PER_PAGE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_TEXT;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_URL;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL_PAGES;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_AVATAR_BY_INDEX;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_FIRST_NAME;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_ID;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_USER;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.data.constants.Headers.EXAMPLE_HEADER;
+import static io.cyborgcode.api.test.framework.data.constants.PathVariables.ID_PARAM;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.FileConstants.AVATAR_FILE_EXTENSION;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.PageTwo.PAGE_TWO_CONTAINS_ANY_USER;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.PageTwo.PAGE_TWO_DATA_SIZE;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.PageTwo.PAGE_TWO_EXPECTED_USERS;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.PAGE_TWO;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.TOTAL_USERS_IN_PAGE_RANGE;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_TEXT_PREFIX;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_URL_REGEX;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_URL_REQRES_FRAGMENT;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.ID_THREE;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_ONE_FIRST_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_SEVENTH_FIRST_NAME_LENGTH;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.BODY;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.HEADER;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
@@ -58,16 +58,30 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.STARTS_WITH;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpStatus.SC_OK;
 
-@Ring("Rivendell")
+/**
+ * Custom ROA service ("ring") containing reusable steps for Reqres tests.
+ * <p>
+ * Instead of repeating the same request + validation logic in multiple tests,
+ * this class groups common flows into methods that can be called fluently.
+ * <ul>
+ *   <li>Keeps test methods short and focused on intent.</li>
+ *   <li>Ensures shared scenarios (like "logged-in user" or
+ *       "validate users list") are implemented in one place.</li>
+ *   <li>Used via {@code quest.use(RING_OF_CUSTOM)}.</li>
+ * </ul>
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
+@Ring("Ring of Custom")
 public class CustomService extends FluentService {
 
-   public CustomService loginUserAndAddSpecificHeader(LoginUser loginUser) {
+   public CustomService loginUserAndAddSpecificHeader(LoginDto loginDto) {
       quest.use(RING_OF_API)
-            .request(POST_LOGIN_USER, loginUser)
+            .request(POST_LOGIN_USER, loginDto)
             .requestAndValidate(
                   GET_USER
                         .withPathParam(ID_PARAM, ID_THREE)
-                        .withHeader(SPECIFIC_HEADER, quest.getStorage().sub(StorageKeysApi.API).get(POST_LOGIN_USER, Response.class)
+                        .withHeader(EXAMPLE_HEADER, quest.getStorage().sub(StorageKeysApi.API).get(POST_LOGIN_USER, Response.class)
                               .getBody()
                               .jsonPath()
                               .getString(TOKEN.getJsonPath())),
