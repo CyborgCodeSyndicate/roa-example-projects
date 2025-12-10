@@ -1,0 +1,16 @@
+🤖 CYBORG 🤖 2025-12-10T17:24:20,837 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:20,961 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:20,978 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:20,996 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] INFO  [QUEST] - The quest: 'createsJuniorUserUsingLateCraftModel(Quest, Late)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-10T17:24:21,031 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:21,337 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-12-10T17:24:21,621 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-12-10T17:24:21,633 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-12-10T17:24:21,653 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:22,540 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] STEP  [API] - Response with status: 401 received from endpoint: GET-https://reqres.in/api/users?page=2 in 871ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:22,568 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:22,575 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:22 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:22,590 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-10T17:24:22,597 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=401}]
+🤖 CYBORG 🤖 2025-12-10T17:24:22,611 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 200, Actual: 401)
+🤖 CYBORG 🤖 2025-12-10T17:24:22,709 [scenario=AdvancedExamplesTest.createsJuniorUserUsingLateCraftModel] INFO  [QUEST] - The quest of 'createsJuniorUserUsingLateCraftModel(Quest, Late)' has ended in defeat. Status: FAILED. Duration: 1 seconds.

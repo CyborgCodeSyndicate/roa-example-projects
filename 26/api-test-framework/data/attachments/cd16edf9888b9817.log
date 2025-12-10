@@ -1,0 +1,13 @@
+🤖 CYBORG 🤖 2025-12-10T17:24:20,837 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:20,870 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:20,913 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:20,952 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] INFO  [QUEST] - The quest: 'usesCustomServiceRingToValidateAllUsers(Quest, LoginDto)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-10T17:24:21,016 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] INFO  [QUEST] - The quest has used the ring: 'Ring of Custom'
+🤖 CYBORG 🤖 2025-12-10T17:24:21,041 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:21,691 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-12-10T17:24:21,708 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:21,716 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:22,540 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/login in 814ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:22,569 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:22,576 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:22 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:23,126 [scenario=AdvancedExamplesTest.usesCustomServiceRingToValidateAllUsers] INFO  [QUEST] - The quest of 'usesCustomServiceRingToValidateAllUsers(Quest, LoginDto)' has ended in defeat. Status: FAILED. Duration: 2 seconds.

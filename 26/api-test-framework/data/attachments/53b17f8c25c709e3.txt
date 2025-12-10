@@ -1,0 +1,5 @@
+{
+    "error": "api_key_required",
+    "message": "Create your API key at https://app.reqres.in to access the ReqRes API.",
+    "signup_url": "https://app.reqres.in"
+}

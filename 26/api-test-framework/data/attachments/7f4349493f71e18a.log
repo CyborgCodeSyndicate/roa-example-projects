@@ -1,0 +1,13 @@
+🤖 CYBORG 🤖 2025-12-10T17:24:25,877 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:25,957 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:25,982 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:25,995 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] INFO  [QUEST] - The quest: 'returns200AndTokenWhenCredentialsAreValid(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-10T17:24:26,014 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:26,731 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-12-10T17:24:26,742 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:26,757 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:27,683 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/login in 908ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:27,713 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:27,723 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:27 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:27,738 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-12-10T17:24:28,163 [scenario=GettingStartedTest.returns200AndTokenWhenCredentialsAreValid] INFO  [QUEST] - The quest of 'returns200AndTokenWhenCredentialsAreValid(Quest)' has ended in defeat. Status: FAILED. Duration: 2 seconds.

@@ -1,0 +1,24 @@
+🤖 CYBORG 🤖 2025-12-10T17:24:22,226 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:22,323 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:22,341 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:22,361 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] INFO  [QUEST] - The quest: 'executesUserLifecycleManually(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-10T17:24:22,387 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:23,184 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-12-10T17:24:23,201 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:23,219 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:23,992 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/login in 757ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:24,019 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:24,024 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:23 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:24,038 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_LOGIN_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-12-10T17:24:24,465 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:24,516 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {}, headers: {Authorization=[Bearer null]}
+🤖 CYBORG 🤖 2025-12-10T17:24:24,532 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-12-10T17:24:24,546 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:24,550 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:24,761 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/users in 199ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:24,765 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:24,769 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:24 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:24,774 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-10T17:24:24,778 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=401}]
+🤖 CYBORG 🤖 2025-12-10T17:24:24,786 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 201, Actual: 401)
+🤖 CYBORG 🤖 2025-12-10T17:24:24,841 [scenario=UserLifecycleEvolutionTest.executesUserLifecycleManually] INFO  [QUEST] - The quest of 'executesUserLifecycleManually(Quest)' has ended in defeat. Status: FAILED. Duration: 2 seconds.

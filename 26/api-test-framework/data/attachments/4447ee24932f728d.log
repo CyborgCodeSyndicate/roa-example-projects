@@ -1,0 +1,14 @@
+🤖 CYBORG 🤖 2025-12-10T17:24:22,855 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:22,860 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:22,866 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:22,872 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] INFO  [QUEST] - The quest: 'getsUserByFirstNameFromListWithSoftAssertions(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-10T17:24:22,881 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:22,892 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-12-10T17:24:22,902 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-12-10T17:24:22,908 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-12-10T17:24:22,914 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:23,130 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] STEP  [API] - Response with status: 401 received from endpoint: GET-https://reqres.in/api/users?page=2 in 203ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:23,139 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:23,146 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:23 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:23,157 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] EXTENDED [QUEST] - Fetching data from storage by key: 'GET_ALL_USERS' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-12-10T17:24:23,179 [scenario=AdvancedExamplesTest.getsUserByFirstNameFromListWithSoftAssertions] INFO  [QUEST] - The quest of 'getsUserByFirstNameFromListWithSoftAssertions(Quest)' has ended in defeat. Status: FAILED. Duration: 0 seconds.

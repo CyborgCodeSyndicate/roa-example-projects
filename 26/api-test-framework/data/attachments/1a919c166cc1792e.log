@@ -1,0 +1,14 @@
+🤖 CYBORG 🤖 2025-12-10T17:24:23,187 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:23,190 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:23,196 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:23,201 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] INFO  [QUEST] - The quest: 'validatesUsersListWithComprehensiveAssertions(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-10T17:24:23,206 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:23,216 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2025-12-10T17:24:23,222 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2025-12-10T17:24:23,229 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-12-10T17:24:23,234 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:23,433 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] STEP  [API] - Response with status: 401 received from endpoint: GET-https://reqres.in/api/users?page=2 in 189ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:23,440 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:23,445 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:23 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:23,454 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] INFO  [API] - Starting response validation with 18 assertion(s).
+🤖 CYBORG 🤖 2025-12-10T17:24:23,477 [scenario=AdvancedExamplesTest.validatesUsersListWithComprehensiveAssertions] INFO  [QUEST] - The quest of 'validatesUsersListWithComprehensiveAssertions(Quest)' has ended in defeat. Status: FAILED. Duration: 0 seconds.

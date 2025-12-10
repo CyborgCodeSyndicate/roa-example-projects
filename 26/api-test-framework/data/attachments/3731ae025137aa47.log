@@ -1,0 +1,13 @@
+🤖 CYBORG 🤖 2025-12-10T17:24:25,877 [scenario=GettingStartedTest.createsUserAndReturns201] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:25,986 [scenario=GettingStartedTest.createsUserAndReturns201] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:26,003 [scenario=GettingStartedTest.createsUserAndReturns201] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:26,019 [scenario=GettingStartedTest.createsUserAndReturns201] INFO  [QUEST] - The quest: 'createsUserAndReturns201(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-10T17:24:26,032 [scenario=GettingStartedTest.createsUserAndReturns201] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:26,732 [scenario=GettingStartedTest.createsUserAndReturns201] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-12-10T17:24:26,741 [scenario=GettingStartedTest.createsUserAndReturns201] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:26,758 [scenario=GettingStartedTest.createsUserAndReturns201] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:27,685 [scenario=GettingStartedTest.createsUserAndReturns201] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/users in 915ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:27,714 [scenario=GettingStartedTest.createsUserAndReturns201] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:27,723 [scenario=GettingStartedTest.createsUserAndReturns201] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:27 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:27,737 [scenario=GettingStartedTest.createsUserAndReturns201] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-12-10T17:24:28,163 [scenario=GettingStartedTest.createsUserAndReturns201] INFO  [QUEST] - The quest of 'createsUserAndReturns201(Quest)' has ended in defeat. Status: FAILED. Duration: 2 seconds.

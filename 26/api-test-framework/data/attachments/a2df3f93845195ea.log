@@ -1,0 +1,24 @@
+🤖 CYBORG 🤖 2025-12-10T17:24:16,138 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:16,240 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:16,252 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:16,263 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] INFO  [QUEST] - The quest: 'executesUserLifecycleManually(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-10T17:24:16,285 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:17,050 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-12-10T17:24:17,065 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:17,088 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:17,954 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/login in 849ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:17,962 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:17,970 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:17 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:17,982 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_LOGIN_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2025-12-10T17:24:18,328 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:18,372 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {}, headers: {Authorization=[Bearer null]}
+🤖 CYBORG 🤖 2025-12-10T17:24:18,389 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-12-10T17:24:18,405 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:18,412 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:18,731 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] STEP  [API] - Response with status: 401 received from endpoint: POST-https://reqres.in/api/users in 311ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:18,743 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:18,747 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:18 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:18,758 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-10T17:24:18,763 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=401}]
+🤖 CYBORG 🤖 2025-12-10T17:24:18,773 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 201, Actual: 401)
+🤖 CYBORG 🤖 2025-12-10T17:24:18,788 [scenario=BasicToAdvancedEvolutionTest.executesUserLifecycleManually] INFO  [QUEST] - The quest of 'executesUserLifecycleManually(Quest)' has ended in defeat. Status: FAILED. Duration: 2 seconds.

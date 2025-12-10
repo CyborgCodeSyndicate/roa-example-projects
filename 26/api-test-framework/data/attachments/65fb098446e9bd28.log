@@ -1,0 +1,14 @@
+🤖 CYBORG 🤖 2025-12-10T17:24:25,877 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:25,915 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:25,933 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-10T17:24:25,955 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] INFO  [QUEST] - The quest: 'returns200AndUserDetailsWhenIdExists(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-10T17:24:25,999 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-10T17:24:26,350 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2025-12-10T17:24:26,656 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2025-12-10T17:24:26,666 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2025-12-10T17:24:26,671 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-10T17:24:27,683 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] STEP  [API] - Response with status: 401 received from endpoint: GET-https://reqres.in/api/users/3 in 1000ms.
+🤖 CYBORG 🤖 2025-12-10T17:24:27,713 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-10T17:24:27,725 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] EXTENDED [API] - Response headers: Date=Wed, 10 Dec 2025 17:24:27 GMT
+🤖 CYBORG 🤖 2025-12-10T17:24:27,736 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-12-10T17:24:28,163 [scenario=GettingStartedTest.returns200AndUserDetailsWhenIdExists] INFO  [QUEST] - The quest of 'returns200AndUserDetailsWhenIdExists(Quest)' has ended in defeat. Status: FAILED. Duration: 2 seconds.
