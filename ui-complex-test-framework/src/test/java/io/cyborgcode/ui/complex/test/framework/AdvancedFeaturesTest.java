@@ -61,10 +61,10 @@ import static io.cyborgcode.ui.complex.test.framework.service.CustomService.getJ
 @API
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 @DisplayName("Advanced Features usage examples")
-@Smoke
 class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
+   @Smoke
    @Regression
    @Description("Craft and Insertion features: Obtain typed models via @Craft and populate mapped model fields to UI " +
            "controls in one operation using insertion service")
