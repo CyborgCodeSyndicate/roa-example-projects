@@ -2,6 +2,7 @@ package io.cyborgcode.api.test.framework;
 
 import io.cyborgcode.roa.api.annotations.API;
 import io.cyborgcode.roa.framework.annotation.Regression;
+import io.cyborgcode.roa.framework.annotation.Smoke;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.framework.retry.RetryCondition;
@@ -43,6 +44,7 @@ import static org.apache.http.HttpStatus.SC_OK;
 class RetryUntilExamplesTest extends BaseQuest {
 
    @Test
+   @Smoke
    @Regression
    @Description("Feature demo: retryUntil — poll a custom condition every 1s (max 10s) and, once satisfied, proceed with a normal GET and assert 200.")
    void showsRetryUntilPollingThenGetsUsers(Quest quest) {

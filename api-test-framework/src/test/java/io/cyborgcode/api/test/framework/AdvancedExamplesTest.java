@@ -19,6 +19,7 @@ import io.cyborgcode.roa.framework.annotation.Journey;
 import io.cyborgcode.roa.framework.annotation.JourneyData;
 import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.annotation.Ripper;
+import io.cyborgcode.roa.framework.annotation.Smoke;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.parameters.Late;
 import io.cyborgcode.roa.framework.quest.Quest;
@@ -119,10 +120,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Cyborg Code Syndicate 💍👨💻
  */
 @API
+@Regression
 class AdvancedExamplesTest extends BaseQuest {
 
    @Test
-   @Regression
+   @Smoke
    @Description("Showcases many assertion types in one GET: status/headers, numeric comparisons, regex, contains(all/any), length, null checks...")
    void showsComprehensiveAssertionsOnUsersList(Quest quest) {
       quest
@@ -152,7 +154,7 @@ class AdvancedExamplesTest extends BaseQuest {
    }
 
    @Test
-   @Regression
+   @Smoke
    @Description("Uses request() + validate(): make a request, retrieve the stored response, and assert with plain JUnit (no DSL).")
    void showsRequestThenValidateWithPlainJUnitAssertions(Quest quest) {
       quest
@@ -173,7 +175,7 @@ class AdvancedExamplesTest extends BaseQuest {
    }
 
    @Test
-   @Regression
+   @Smoke
    @Description("Chains requests: read an id from the stored list response and reuse it as a path param in the next call.")
    void showsChainedRequestsAndUsingStorage(Quest quest) {
       quest
@@ -192,7 +194,7 @@ class AdvancedExamplesTest extends BaseQuest {
    }
 
    @Test
-   @Regression
+   @Smoke
    @Description("Reads the list from storage, finds a user by first name, and validates the full user with soft assertions.")
    void showsSoftAssertionsAfterFindingUserByFirstNameFromStorage(Quest quest) {
       quest
@@ -224,7 +226,7 @@ class AdvancedExamplesTest extends BaseQuest {
    }
 
    @Test
-   @Regression
+   @Smoke
    @Description("Creates a user from an eager @Craft model and validates with a soft assertion.")
    void showsCraftModelAsRequestWithSoftAssertion(Quest quest,
                                                   @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser) {
@@ -241,7 +243,7 @@ class AdvancedExamplesTest extends BaseQuest {
    }
 
    @Test
-   @Regression
+   @Smoke
    @Description("Combines a GET and POST where the POST body is built lazily via Late<@Craft> (materialized only when create() is called).")
    void showsLateCraftModelMaterializedOnDemand(Quest quest,
                                                 @Craft(model = DataCreator.Data.USER_JUNIOR)
@@ -261,7 +263,7 @@ class AdvancedExamplesTest extends BaseQuest {
    }
 
    @Test
-   @Regression
+   @Smoke
    @Description("Mixes eager @Craft and lazy Late<@Craft>: eager model is ready up-front; the Late model is instantiated via create() at use time.")
    void showsMixOfCraftAndLateCraftInChainedFlow(Quest quest,
                                                  @Craft(model = DataCreator.Data.USER_LEADER)
@@ -294,7 +296,7 @@ class AdvancedExamplesTest extends BaseQuest {
    }
 
    @Test
-   @Regression
+   @Smoke
    @Description("Logs in using @Craft credentials, stores the token, and reuses it as a header in the next GET call.")
    void showsTokenReuseFromStorageAcrossRequests(Quest quest,
                                                  @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
@@ -327,7 +329,7 @@ class AdvancedExamplesTest extends BaseQuest {
          order = 2
    )
    @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
-   @Regression
+   @Smoke
    @Description("Executes a full user lifecycle using AuthenticateViaApi for auth, Journey preconditions for setup, and Ripper for cleanup.")
    void showsAuthenticateViaApiWithJourneySetupAndRipperCleanup(Quest quest) {
       quest
@@ -345,7 +347,7 @@ class AdvancedExamplesTest extends BaseQuest {
    }
 
    @Test
-   @Regression
+   @Smoke
    @Description("Demonstrates switching rings (services): use a custom ring to log in + header wiring, then return to RING_OF_API for the GET.")
    void showsSwitchingRingsForLoginThenApiCall(Quest quest,
                                                @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
@@ -363,7 +365,7 @@ class AdvancedExamplesTest extends BaseQuest {
    }
 
    @Test
-   @Regression
+   @Smoke
    @Description("Shows how a custom service ring can slim down tests by encapsulating the full validation flow.")
    void showsSlimmerTestsViaCustomServiceRing(Quest quest,
                                               @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
