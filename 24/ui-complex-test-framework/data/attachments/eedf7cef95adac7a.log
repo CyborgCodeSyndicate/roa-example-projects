@@ -1,0 +1,66 @@
+🤖 CYBORG 🤖 2025-12-11T18:34:29,782 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [UI] - Chrome driver is downloaded with a compatible version for the installed browser
+🤖 CYBORG 🤖 2025-12-11T18:34:29,833 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [UI] - Creating driver using provider [ChromeDriverProvider]. Headless: [true], Remote: [true], Remote URL: [http://localhost:4444]
+🤖 CYBORG 🤖 2025-12-11T18:34:31,440 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest: 'createOrderPreQuestDatabase(Quest, Order)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-11T18:34:31,573 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has used the ring: 'DB'
+🤖 CYBORG 🤖 2025-12-11T18:34:31,594 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [DB] - Obtained database connection for: AppDb
+🤖 CYBORG 🤖 2025-12-11T18:34:31,599 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [DB] - Executing database query: SELECT email FROM sellers WHERE id = 1
+🤖 CYBORG 🤖 2025-12-11T18:34:31,629 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [DB] - Query 'SELECT email FROM sellers WHERE id = 1' executed in 23ms, result count: 1
+🤖 CYBORG 🤖 2025-12-11T18:34:31,639 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [DB] - Starting query response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-11T18:34:31,689 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - ✔ Validation passed: EQUALS_IGNORE_CASE (Expected: admin@vaadin.com, Actual: admin@vaadin.com)
+🤖 CYBORG 🤖 2025-12-11T18:34:31,945 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [DB] - Obtained database connection for: AppDb
+🤖 CYBORG 🤖 2025-12-11T18:34:31,949 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [DB] - Executing database query: SELECT password FROM sellers WHERE id = 1
+🤖 CYBORG 🤖 2025-12-11T18:34:31,953 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [DB] - Query 'SELECT password FROM sellers WHERE id = 1' executed in 0ms, result count: 1
+🤖 CYBORG 🤖 2025-12-11T18:34:31,957 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [DB] - Starting query response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-11T18:34:31,961 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - ✔ Validation passed: EQUALS_IGNORE_CASE (Expected: admin, Actual: admin)
+🤖 CYBORG 🤖 2025-12-11T18:34:32,001 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has used the ring: 'Custom'
+🤖 CYBORG 🤖 2025-12-11T18:34:32,005 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.complex.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-12-11T18:34:33,107 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting value: 'admin@vaadin.com' into input component of type: 'VA_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-11T18:34:33,668 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting value: 'admin' into input component of type: 'VA_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-11T18:34:34,011 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Clicking button using locator: By.tagName: vaadin-button
+🤖 CYBORG 🤖 2025-12-11T18:34:35,018 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Checking if button is visible using locator: By.cssSelector: vaadin-button#action
+🤖 CYBORG 🤖 2025-12-11T18:34:55,196 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-11T18:34:55,215 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-12-11T18:34:55,274 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Checking if input component of type: 'VA_INPUT_TYPE' is enabled.
+🤖 CYBORG 🤖 2025-12-11T18:34:55,368 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-11T18:34:55,372 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-12-11T18:34:55,375 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-11T18:34:55,377 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-11T18:34:55,634 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {}, headers: {Cookie=[JSESSIONID=03E397FC4AE78AF0D58FC9E7662B053A; path=/; domain=bakery-flow.demo.vaadin.com; sameSite=Lax], Accept=[application/json], Content-Type=[application/json]}
+🤖 CYBORG 🤖 2025-12-11T18:34:55,856 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [API] - Sending request to endpoint POST-https://bakery-flow.demo.vaadin.com/storefront.
+🤖 CYBORG 🤖 2025-12-11T18:34:56,890 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [API] - Response with status: 200 received from endpoint: POST-https://bakery-flow.demo.vaadin.com/storefront in 1029ms.
+🤖 CYBORG 🤖 2025-12-11T18:34:57,052 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-11T18:34:57,056 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2025-12-11T18:34:57,059 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has used the ring: 'Custom'
+🤖 CYBORG 🤖 2025-12-11T18:34:57,061 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.complex.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-12-11T18:34:57,213 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Clicking button using locator: By.cssSelector: vaadin-button#action
+🤖 CYBORG 🤖 2025-12-11T18:34:57,979 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting value into component of type: 'VA_INPUT_TYPE' using locator.
+🤖 CYBORG 🤖 2025-12-11T18:34:57,982 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting value: 'John Terry' into input component of type: 'VA_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-11T18:34:58,275 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting value into component of type: 'VA_INPUT_TYPE' using locator.
+🤖 CYBORG 🤖 2025-12-11T18:34:58,278 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting value: 'Address' into input component of type: 'VA_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-11T18:34:58,634 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting value into component of type: 'VA_INPUT_TYPE' using locator.
+🤖 CYBORG 🤖 2025-12-11T18:34:58,638 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting value: '+1-555-7777' into input component of type: 'VA_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-11T18:34:58,919 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting values [Bakery] for select component VA_SELECT_TYPE using locator By.cssSelector: vaadin-combo-box#pickupLocation
+🤖 CYBORG 🤖 2025-12-11T18:34:58,922 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Selecting options [Bakery] in container with locator By.cssSelector: vaadin-combo-box#pickupLocation for select component VA_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-11T18:34:59,595 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting values [Strawberry Bun] for select component VA_SELECT_TYPE using locator By.cssSelector: vaadin-combo-box#products
+🤖 CYBORG 🤖 2025-12-11T18:34:59,598 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Selecting options [Strawberry Bun] in container with locator By.cssSelector: vaadin-combo-box#products for select component VA_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-11T18:35:00,011 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [UI] - Finished data insertion for [Order].
+🤖 CYBORG 🤖 2025-12-11T18:35:00,081 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Clicking button using locator: By.cssSelector: vaadin-button#review
+🤖 CYBORG 🤖 2025-12-11T18:35:00,884 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Clicking button using locator: By.cssSelector: vaadin-button#save
+🤖 CYBORG 🤖 2025-12-11T18:35:01,552 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.complex.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-12-11T18:35:01,595 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Inserting value: 'John Terry' into input component of type: 'VA_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-11T18:35:01,836 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-11T18:35:02,016 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-12-11T18:35:02,081 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [UI] - Clicking button using locator: By.cssSelector: vaadin-button#clear
+🤖 CYBORG 🤖 2025-12-11T18:35:02,764 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-11T18:35:02,767 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has used the ring: 'DB'
+🤖 CYBORG 🤖 2025-12-11T18:35:02,784 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [DB] - Obtained database connection for: AppDb
+🤖 CYBORG 🤖 2025-12-11T18:35:02,786 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [DB] - Executing database query: SELECT product FROM orders WHERE id = 1
+🤖 CYBORG 🤖 2025-12-11T18:35:02,788 [scenario=DataBaseTest.createOrderPreQuestDatabase] STEP  [DB] - Query 'SELECT product FROM orders WHERE id = 1' executed in 1ms, result count: 1
+🤖 CYBORG 🤖 2025-12-11T18:35:02,790 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [DB] - Starting query response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2025-12-11T18:35:02,792 [scenario=DataBaseTest.createOrderPreQuestDatabase] VALIDATION [QUEST] - ✔ Validation passed: EQUALS_IGNORE_CASE (Expected: Strawberry Bun, Actual: Strawberry Bun)
+🤖 CYBORG 🤖 2025-12-11T18:35:02,794 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-11T18:35:02,796 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-12-11T18:35:02,799 [scenario=DataBaseTest.createOrderPreQuestDatabase] WARN  [UI] - Test failed. Taking screenshot for: createOrderPreQuestDatabase(Quest, Order)
+🤖 CYBORG 🤖 2025-12-11T18:35:02,967 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - Screenshot taken and stored for: createOrderPreQuestDatabase(Quest, Order)
+🤖 CYBORG 🤖 2025-12-11T18:35:03,051 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [UI] - WebDriver closed successfully.
+🤖 CYBORG 🤖 2025-12-11T18:35:03,062 [scenario=DataBaseTest.createOrderPreQuestDatabase] INFO  [QUEST] - The quest of 'createOrderPreQuestDatabase(Quest, Order)' has concluded with glory. Status: SUCCESS. Duration: 34 seconds.

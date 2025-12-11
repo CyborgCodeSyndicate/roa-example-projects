@@ -1,0 +1,7 @@
+Processed Journey Data:
+-------------------
+Journey: SELLER
+  {
+    "username" : "admin@vaadin.com",
+    "password" : "admin"
+  }
