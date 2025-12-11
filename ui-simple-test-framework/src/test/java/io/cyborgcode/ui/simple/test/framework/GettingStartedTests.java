@@ -1,6 +1,7 @@
 package io.cyborgcode.ui.simple.test.framework;
 
 import io.cyborgcode.roa.framework.annotation.Regression;
+import io.cyborgcode.roa.framework.annotation.Smoke;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.ui.annotations.UI;
@@ -60,11 +61,12 @@ import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.Tr
  */
 @UI
 @DisplayName("Core Components: Fundamentals and Usage Examples")
+@Regression
 class GettingStartedTests extends BaseQuest {
 
    @Test()
    @Description("Components Covered: Browser, Button, Input, Link, Select, Alert")
-   @Regression
+   @Smoke
    void components_browserButtonInputLinkSelectAlert(Quest quest) {
       quest
             // use(): activates a UI ring (service bundle) for fluent interactions in this quest
@@ -97,7 +99,7 @@ class GettingStartedTests extends BaseQuest {
 
    @Test
    @Description("Components Covered: Browser, Button, Input, Link, List, Select, Radio, Alert")
-   @Regression
+   @Smoke
    void components_listRadio(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -124,7 +126,7 @@ class GettingStartedTests extends BaseQuest {
 
    @Test
    @Description("Component Covered: Validate using Soft Assertions")
-   @Regression
+   @Smoke
    void components_validateUsingSoftAssertions(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -161,7 +163,7 @@ class GettingStartedTests extends BaseQuest {
 
    @Test
    @Description("Component Covered: Validate using Hard Assertions")
-   @Regression
+   @Smoke
    void components_validateUsingHardAssertions(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -192,7 +194,7 @@ class GettingStartedTests extends BaseQuest {
 
    @Test
    @Description("Component Covered: Validate using mixed assertions")
-   @Regression
+   @Smoke
    void components_validateUsingMixedAssertions(Quest quest) {
       quest
             .use(RING_OF_UI)
