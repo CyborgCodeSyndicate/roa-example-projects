@@ -17,6 +17,6 @@ public class Headers {
     public static final String AUTHORIZATION_HEADER_KEY = "Authorization";
     public static final String AUTHORIZATION_HEADER_VALUE = "Bearer ";
     public static final String API_KEY_HEADER = "x-api-key";
-    public static final String API_KEY_VALUE = "reqres-free-v1";
+    public static final String API_KEY_VALUE = "reqres_4e24d3aef2cf4378a2bb06828bd8993b";
 
 }
