@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"broken","Thu Dec 11 10:27:52 UTC 2025","Thu Dec 11 10:27:52 UTC 2025","1","","Advanced Features usage examples","","io.cyborgcode.ui.complex.test.framework.AdvancedFeaturesTest","","Advanced Features usage examples",""
