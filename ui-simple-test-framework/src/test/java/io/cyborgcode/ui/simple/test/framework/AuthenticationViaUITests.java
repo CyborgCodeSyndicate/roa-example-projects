@@ -47,10 +47,9 @@ import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.Tr
 @DisplayName("UI Authentication with Cached Session")
 class AuthenticationViaUITests extends BaseQuest {
 
-   @Test()
-   @Description("Login is handled once via @AuthenticateViaUi and reused")
+   @Test
    @Regression
-   // Uses @AuthenticateViaUi with cacheCredentials=true so login runs once and is reused across tests
+   @Description("Login is handled once via @AuthenticateViaUi and reused")// Uses @AuthenticateViaUi with cacheCredentials=true so login runs once and is reused across tests
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
    void testScenario_1(Quest quest) {
       quest
@@ -66,9 +65,9 @@ class AuthenticationViaUITests extends BaseQuest {
             .complete();
    }
 
-   @Test()
-   @Description("Login session is reused from cached login")
+   @Test
    @Regression
+   @Description("Login session is reused from cached login")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
    void testScenario_2(Quest quest) {
       quest
@@ -84,9 +83,9 @@ class AuthenticationViaUITests extends BaseQuest {
             .complete();
    }
 
-   @Test()
-   @Description("Login session is reused from cached login")
+   @Test
    @Regression
+   @Description("Login session is reused from cached login")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
    void testScenario_3(Quest quest) {
       quest

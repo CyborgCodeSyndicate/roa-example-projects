@@ -56,8 +56,8 @@ import static io.cyborgcode.ui.simple.test.framework.preconditions.Preconditions
 class BasicToAdvancedFeatureTests extends BaseQuest {
 
    @Test
-   @Description("Baseline simple flow without advanced framework features")
    @Regression
+   @Description("Baseline simple flow without advanced framework features")
    void baseline_simpleFlow_noAdvancedFeatures(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -80,8 +80,8 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    }
 
    @Test
-   @Description("Retrieves Login credentials from configuration properties")
    @Regression
+   @Description("Retrieves Login credentials from configuration properties")
    void config_properties_retrievedLoginCredentials(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -105,8 +105,8 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    }
 
    @Test
-   @Description("AuthenticateViaUi performs login per test without session caching")
    @Regression
+   @Description("AuthenticateViaUi performs login per test without session caching")
    // @AuthenticateViaUi: auto-login per test as precondition (no cached session)
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void authenticateViaUi_perTestNoCache(Quest quest) {
@@ -125,8 +125,8 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    }
 
    @Test
-   @Description("Craft injects a typed model instance for data-driven steps")
    @Regression
+   @Description("Craft injects a typed model instance for data-driven steps")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void craft_injectsModelDataIntoSteps(
          Quest quest,
@@ -149,8 +149,8 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    }
 
    @Test
-   @Description("Insertion service maps model fields to UI controls in one operation")
    @Regression
+   @Description("Insertion service maps model fields to UI controls in one operation")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void insertionService_populatesFormFromModel(Quest quest,
          @Craft(model = DataCreator.Data.PURCHASE_CURRENCY) PurchaseForeignCurrency purchaseForeignCurrency) {
@@ -168,8 +168,8 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    }
 
    @Test
-   @Description("Usage of custom service, and switching between different services")
    @Regression
+   @Description("Usage of custom service, and switching between different services")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void customServiceExample_switchBetweenServices(Quest quest,
          @Craft(model = DataCreator.Data.PURCHASE_CURRENCY) PurchaseForeignCurrency purchaseForeignCurrency) {
@@ -186,8 +186,8 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    }
 
    @Test
-   @Description("Perform the entire scenario via a custom ring (service) methods only")
    @Regression
+   @Description("Perform the entire scenario via a custom ring (service) methods only")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    void customServiceExample_usingOnlyCustomMethods(Quest quest,
          @Craft(model = DataCreator.Data.PURCHASE_CURRENCY) PurchaseForeignCurrency purchaseForeignCurrency) {
@@ -200,8 +200,8 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    }
 
    @Test
-   @Description("PreQuest with a single @Journey precondition to set required state")
    @Regression
+   @Description("PreQuest with a single @Journey precondition to set required state")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    // @Journey: reusable precondition executed before the test
    @Journey(value = PURCHASE_CURRENCY_PRECONDITION,
@@ -214,8 +214,8 @@ class BasicToAdvancedFeatureTests extends BaseQuest {
    }
 
    @Test
-   @Description("PreQuest with multiple @Journey entries to compose preconditions, no JourneyData")
    @Regression
+   @Description("PreQuest with multiple @Journey entries to compose preconditions, no JourneyData")
    // Combine multiple journeys to compose the required preconditions
    @Journey(value = USER_LOGIN_PRECONDITION)
    @Journey(value = PURCHASE_CURRENCY_PRECONDITION,

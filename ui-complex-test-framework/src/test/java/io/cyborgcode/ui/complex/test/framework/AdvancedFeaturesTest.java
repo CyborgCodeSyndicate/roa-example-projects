@@ -3,6 +3,7 @@ package io.cyborgcode.ui.complex.test.framework;
 import io.cyborgcode.roa.framework.annotation.Craft;
 import io.cyborgcode.roa.framework.annotation.Journey;
 import io.cyborgcode.roa.framework.annotation.JourneyData;
+import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.annotation.Ripper;
 import io.cyborgcode.roa.framework.annotation.Smoke;
 import io.cyborgcode.roa.framework.annotation.StaticTestData;
@@ -64,6 +65,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Smoke
+   @Regression
    @Description("Craft and Insertion features: Obtain typed models via @Craft and populate mapped model fields to UI " +
            "controls in one operation using insertion service")
    void craftAndInsertionFeatures(Quest quest,
@@ -86,6 +88,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Smoke
+   @Regression
    @Description("Precondition feature: Uses @Journey precondition without data injection")
    @Journey(value = Preconditions.Data.LOGIN_DEFAULT_PRECONDITION)
    void preconditionFeatureUsingJourneyWithoutData(Quest quest,
@@ -99,6 +102,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Smoke
+   @Regression
    @Description("Precondition feature: Uses multiple ordered @Journey preconditions with data injection")
    @Journey(value = Preconditions.Data.LOGIN_PRECONDITION,
            journeyData = {@JourneyData(DataCreator.Data.SELLER)}, order = 1)
@@ -113,6 +117,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Smoke
+   @Regression
    @Description("Authentication feature: Automatic login via @AuthenticateViaUi without cache " +
          "credentials for session re-usage")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
@@ -127,6 +132,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Smoke
+   @Regression
    @Description("Authentication feature: Automatic login via @AuthenticateViaUi with cache credentials " +
          "for session re-usage")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
@@ -146,6 +152,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Smoke
+   @Regression
    @Description("Storage feature: Retrieve storage data captured during test UI steps")
    void storageFeatureUsingDataFromFluentSteps(Quest quest,
          @Craft(model = DataCreator.Data.SELLER) Seller seller) {
@@ -167,6 +174,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Smoke
+   @Regression
    @Description("Storage feature: Retrieve storage data captured during test precondition as journeyData " +
            "pre-arguments")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
@@ -181,6 +189,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Smoke
+   @Regression
    @Description("Static Data with Storage feature: Retrieve storage data preloaded as static data before test " +
            "execution")
    @Journey(value = Preconditions.Data.LOGIN_DEFAULT_PRECONDITION)
@@ -193,7 +202,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    }
 
    @Test
-   @Smoke
+   @Regression
    @Description("Interceptor feature: Use built-in response status validation")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class, cacheCredentials = true)
@@ -206,7 +215,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    }
 
    @Test
-   @Smoke
+   @Regression
    @Description("Interceptor feature: Extract intercepted responses from storage using custom data extractors for " +
          "test validation")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
@@ -227,7 +236,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
    }
 
    @Test
-   @Smoke
+   @Regression
    @Description("Interceptor feature: Extract intercepted responses data and use it for Late data creation when needed")
    @InterceptRequests(requestUrlSubStrings = {RequestsInterceptor.Data.INTERCEPT_REQUEST_AUTH})
    void interceptorFeatureUsedForLateDataCreation(Quest quest,
@@ -246,6 +255,7 @@ class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
    @Smoke
+   @Regression
    @Description("Ripper feature: Deletes data created in the test")
    @AuthenticateViaUi(credentials = AdminCredentials.class, type = AppUiLogin.class)
    @Journey(value = Preconditions.Data.ORDER_PRECONDITION,

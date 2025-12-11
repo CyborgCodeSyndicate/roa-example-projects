@@ -61,12 +61,12 @@ import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.Tr
  */
 @UI
 @DisplayName("Core Components: Fundamentals and Usage Examples")
-@Regression
 class GettingStartedTests extends BaseQuest {
 
-   @Test()
-   @Description("Components Covered: Browser, Button, Input, Link, Select, Alert")
+   @Test
    @Smoke
+   @Regression
+   @Description("Components Covered: Browser, Button, Input, Link, Select, Alert")
    void components_browserButtonInputLinkSelectAlert(Quest quest) {
       quest
             // use(): activates a UI ring (service bundle) for fluent interactions in this quest
@@ -98,8 +98,9 @@ class GettingStartedTests extends BaseQuest {
    }
 
    @Test
-   @Description("Components Covered: Browser, Button, Input, Link, List, Select, Radio, Alert")
    @Smoke
+   @Regression
+   @Description("Components Covered: Browser, Button, Input, Link, List, Select, Radio, Alert")
    void components_listRadio(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -125,8 +126,9 @@ class GettingStartedTests extends BaseQuest {
    }
 
    @Test
-   @Description("Component Covered: Validate using Soft Assertions")
    @Smoke
+   @Regression
+   @Description("Component Covered: Validate using Soft Assertions")
    void components_validateUsingSoftAssertions(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -162,8 +164,9 @@ class GettingStartedTests extends BaseQuest {
    }
 
    @Test
-   @Description("Component Covered: Validate using Hard Assertions")
    @Smoke
+   @Regression
+   @Description("Component Covered: Validate using Hard Assertions")
    void components_validateUsingHardAssertions(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -193,8 +196,9 @@ class GettingStartedTests extends BaseQuest {
    }
 
    @Test
-   @Description("Component Covered: Validate using mixed assertions")
    @Smoke
+   @Regression
+   @Description("Component Covered: Validate using mixed assertions")
    void components_validateUsingMixedAssertions(Quest quest) {
       quest
             .use(RING_OF_UI)

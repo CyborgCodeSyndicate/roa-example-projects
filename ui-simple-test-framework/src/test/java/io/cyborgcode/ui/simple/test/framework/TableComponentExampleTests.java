@@ -89,12 +89,12 @@ import static io.cyborgcode.ui.simple.test.framework.data.test_data.Constants.Tr
  */
 @UI
 @DisplayName("Table Component: Read, Interact and Validate Examples")
-@Regression
 class TableComponentExampleTests extends BaseQuest {
 
    @Test
-   @Description("Read entire table and validate using table assertion types")
    @Smoke
+   @Regression
+   @Description("Read entire table and validate using table assertion types")
    void readEntireTable_validateWithAssertionTypes(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -140,8 +140,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Read table with specific columns and validate target cell value")
    @Smoke
+   @Regression
+   @Description("Read table with specific columns and validate target cell value")
    void readTableWithSpecifiedColumns_validateCell(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -175,8 +176,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Read table with start/end row range and validate target cell value")
    @Smoke
+   @Regression
+   @Description("Read table with start/end row range and validate target cell value")
    void readTableWithRowRange_validateCell(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -200,8 +202,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Read specific columns within row range and validate target cell value")
    @Smoke
+   @Regression
+   @Description("Read specific columns within row range and validate target cell value")
    void readTableSpecificColumnsWithRowRange_validateCell(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -226,8 +229,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Read a table row by search criteria and validate target cell value")
    @Smoke
+   @Regression
+   @Description("Read a table row by search criteria and validate target cell value")
    void readTableRowBySearchCriteria_validateCell(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -251,8 +255,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Read a specific table row with specific columns and validate target cell value")
    @Smoke
+   @Regression
+   @Description("Read a specific table row with specific columns and validate target cell value")
    void readTableRowWithSpecifiedColumns_validateCell(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -277,8 +282,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Read a table row by search criteria with specified columns and validate target cell value")
    @Smoke
+   @Regression
+   @Description("Read a table row by search criteria with specified columns and validate target cell value")
    void readTableRowByCriteriaWithSpecifiedColumns_validateCell(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -303,8 +309,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Click a link inside a cell found by row using cell insertion interface")
    @Smoke
+   @Regression
+   @Description("Click a link inside a cell found by row using cell insertion interface")
    void clickLinkInCertainCell_usingCellInsertion(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -329,8 +336,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Click a button inside a cell found by row using custom insertion interface")
    @Smoke
+   @Regression
+   @Description("Click a button inside a cell found by row using custom insertion interface")
    void clickButtonInCertainCell_usingCustomInsertion(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -355,8 +363,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Click a button inside a cell found by search criteria using custom insertion interface")
    @Smoke
+   @Regression
+   @Description("Click a button inside a cell found by search criteria using custom insertion interface")
    void clickButtonInCellFoundByCriteria_usingCustomInsertion(Quest quest) {
       quest
             .use(RING_OF_UI)
@@ -381,8 +390,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Click a button inside a cell found by row using data object")
    @Smoke
+   @Regression
+   @Description("Click a button inside a cell found by row using data object")
    void clickButtonInCertainCell_usingDataObject(
          Quest quest,
          @Craft(model = DataCreator.Data.OUTFLOW_DATA) OutFlow outFlowDetails) {
@@ -410,8 +420,9 @@ class TableComponentExampleTests extends BaseQuest {
    }
 
    @Test
-   @Description("Click a button inside a cell found by search criteria using data object")
    @Smoke
+   @Regression
+   @Description("Click a button inside a cell found by search criteria using data object")
    void clickButtonInCellFoundByCriteria_usingDataObject(
          Quest quest,
          @Craft(model = DataCreator.Data.OUTFLOW_DATA) OutFlow outFlowDetails) {

@@ -131,6 +131,7 @@ class GettingStartedTest extends BaseQuest {
    }
 
    @Test
+   @Regression
    @Description("Shows negative testing with requestAndValidate: build a DTO missing password, call POST /login, assert 400 and error via JSON path.")
    void showsNegativeLoginMissingPasswordWithErrorAssertion(Quest quest) {
       LoginDto login = LoginDto.builder()
