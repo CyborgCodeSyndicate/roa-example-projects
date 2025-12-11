@@ -1,0 +1,2 @@
+Content-Type=application/json
+x-api-key=reqres_4e24d3aef2cf4378a2bb06828bd8993b
