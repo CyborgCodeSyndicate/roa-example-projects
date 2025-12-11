@@ -1,0 +1,25 @@
+Date=Thu, 11 Dec 2025 18:39:22 GMT
+Content-Type=application/json; charset=utf-8
+Content-Length=84
+Connection=keep-alive
+Access-Control-Allow-Credentials=true
+Access-Control-Allow-Headers=Origin, X-Requested-With, Content-Type, Accept, Authorization, x-api-key
+Access-Control-Allow-Methods=GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Origin=http://localhost:5173
+Etag=W/"54-u4i87lajZKTa3TZKgqd3XPjLu8k"
+Nel={"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
+Referrer-Policy=strict-origin-when-cross-origin
+Report-To={"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=20acSId%2BMid6%2FuluDdmUo6GtzUjFDVkvzxpXagPgDyk%3D\u0026sid=c4c9725f-1ab0-44d8-820f-430df2718e11\u0026ts=1765478362"}],"max_age":3600}
+Reporting-Endpoints=heroku-nel="https://nel.heroku.com/reports?s=20acSId%2BMid6%2FuluDdmUo6GtzUjFDVkvzxpXagPgDyk%3D&sid=c4c9725f-1ab0-44d8-820f-430df2718e11&ts=1765478362"
+Server=cloudflare
+Vary=Origin
+Via=1.1 heroku-router
+X-Content-Type-Options=nosniff
+X-Frame-Options=DENY
+X-Ratelimit-Limit=100
+X-Ratelimit-Remaining=91
+X-Ratelimit-Reset=1765478422
+X-Request-Id=b1dbc66a-66fa-ff5f-a0eb-b68ec377e26b
+X-Xss-Protection=1; mode=block
+cf-cache-status=DYNAMIC
+CF-RAY=9ac71ab70aea233e-ORD
