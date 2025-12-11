@@ -3,7 +3,6 @@ package io.cyborgcode.ui.complex.test.framework;
 import io.cyborgcode.roa.framework.annotation.Craft;
 import io.cyborgcode.roa.framework.annotation.Journey;
 import io.cyborgcode.roa.framework.annotation.JourneyData;
-import io.cyborgcode.roa.framework.annotation.Regression;
 import io.cyborgcode.roa.framework.annotation.Ripper;
 import io.cyborgcode.roa.framework.annotation.Smoke;
 import io.cyborgcode.roa.framework.annotation.StaticTestData;
@@ -61,7 +60,6 @@ import static io.cyborgcode.ui.complex.test.framework.service.CustomService.getJ
 @API
 @DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
 @DisplayName("Advanced Features usage examples")
-@Regression
 class AdvancedFeaturesTest extends BaseQuestSequential {
 
    @Test
