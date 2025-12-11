@@ -76,4 +76,18 @@
         </profile>
     </profiles>
 
+    <repositories>
+        <repository>
+            <id>github-roa-libraries</id>
+            <name>GitHub Packages for Roa Libraries</name>
+            <url>https://maven.pkg.github.com/CyborgCodeSyndicate/roa-libraries</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 </project>
