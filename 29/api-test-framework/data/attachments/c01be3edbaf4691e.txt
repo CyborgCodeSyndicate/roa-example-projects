@@ -1,0 +1,6 @@
+{
+    "name": "Morpheus",
+    "job": "Leader",
+    "id": "229",
+    "createdAt": "2025-12-11T19:56:53.240Z"
+}
