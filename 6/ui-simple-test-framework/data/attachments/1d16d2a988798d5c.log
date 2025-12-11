@@ -1,0 +1,24 @@
+🤖 CYBORG 🤖 2025-12-11T19:56:48,601 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] INFO  [UI] - Chrome driver is downloaded with a compatible version for the installed browser
+🤖 CYBORG 🤖 2025-12-11T19:56:48,822 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] INFO  [UI] - Creating driver using provider [ChromeDriverProvider]. Headless: [true], Remote: [true], Remote URL: [http://localhost:4444]
+🤖 CYBORG 🤖 2025-12-11T19:56:51,506 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] INFO  [QUEST] - The quest: 'baseline_simpleFlow_noAdvancedFeatures(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-11T19:56:51,666 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] INFO  [QUEST] - The quest has used the ring: 'io.cyborgcode.ui.simple.test.framework.ui.AppUiService'
+🤖 CYBORG 🤖 2025-12-11T19:56:52,578 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Clicking button using locator: By.id: signin_button
+🤖 CYBORG 🤖 2025-12-11T19:56:53,523 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Inserting value: 'username' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-11T19:56:54,524 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Inserting value: 'password' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-11T19:56:55,150 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Clicking button using locator: By.cssSelector: input[value='Sign in']
+🤖 CYBORG 🤖 2025-12-11T19:56:56,063 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Clicking link BOOTSTRAP_LINK_TYPE using locator By.id: transfer_funds_link
+🤖 CYBORG 🤖 2025-12-11T19:56:56,682 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Selecting items Pay Bills from list BOOTSTRAP_LIST_TYPE using locator By.className: nav-tabs
+🤖 CYBORG 🤖 2025-12-11T19:56:58,479 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Selecting items Purchase Foreign Currency from list BOOTSTRAP_LIST_TYPE using locator By.className: ui-tabs-nav
+🤖 CYBORG 🤖 2025-12-11T19:56:59,040 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Selecting option Mexico (peso) in container with locator By.id: pc_currency for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-11T19:56:59,053 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Selecting options [Mexico (peso)] in container with locator By.id: pc_currency for select component BOOTSTRAP_SELECT_TYPE
+🤖 CYBORG 🤖 2025-12-11T19:57:01,051 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Inserting value: '100' into input component of type: 'BOOTSTRAP_INPUT_TYPE'.
+🤖 CYBORG 🤖 2025-12-11T19:57:01,693 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Selecting radio button with locator By.id: pc_inDollars_true for radio component BOOTSTRAP_RADIO_TYPE
+🤖 CYBORG 🤖 2025-12-11T19:57:02,255 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Clicking button using locator: By.id: pc_calculate_costs
+🤖 CYBORG 🤖 2025-12-11T19:57:02,494 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Clicking button using locator: By.id: purchase_cash
+🤖 CYBORG 🤖 2025-12-11T19:57:02,996 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] STEP  [UI] - Getting value from alert located by: By.id: alert_content
+🤖 CYBORG 🤖 2025-12-11T19:57:03,209 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2025-12-11T19:57:03,264 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2025-12-11T19:57:03,268 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-11T19:57:03,275 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-12-11T19:57:03,437 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] INFO  [UI] - WebDriver closed successfully.
+🤖 CYBORG 🤖 2025-12-11T19:57:03,481 [scenario=BasicToAdvancedFeatureTests.baseline_simpleFlow_noAdvancedFeatures] INFO  [QUEST] - The quest of 'baseline_simpleFlow_noAdvancedFeatures(Quest)' has concluded with glory. Status: SUCCESS. Duration: 16 seconds.
