@@ -1,0 +1,18 @@
+🤖 CYBORG 🤖 2025-12-12T16:05:59,236 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-12T16:05:59,330 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-12T16:05:59,341 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-12T16:05:59,362 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] INFO  [QUEST] - The quest: 'showsNegativeLoginMissingPasswordWithErrorAssertion(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-12T16:05:59,381 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-12T16:05:59,978 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2025-12-12T16:05:59,992 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-12T16:06:00,007 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-12T16:06:00,790 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] STEP  [API] - Response with status: 400 received from endpoint: POST-https://reqres.in/api/login in 768ms.
+🤖 CYBORG 🤖 2025-12-12T16:06:00,804 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-12T16:06:00,818 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] EXTENDED [API] - Response headers: Date=Fri, 12 Dec 2025 16:06:00 GMT
+🤖 CYBORG 🤖 2025-12-12T16:06:00,836 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-12-12T16:06:01,275 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] EXTENDED [API] - Validation target: [{error=Missing password, AssertionKeyForStatus=400}]
+🤖 CYBORG 🤖 2025-12-12T16:06:01,284 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 400, Actual: 400)
+🤖 CYBORG 🤖 2025-12-12T16:06:01,294 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Missing password, Actual: Missing password)
+🤖 CYBORG 🤖 2025-12-12T16:06:01,302 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-12T16:06:01,313 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-12-12T16:06:01,335 [scenario=GettingStartedTest.showsNegativeLoginMissingPasswordWithErrorAssertion] INFO  [QUEST] - The quest of 'showsNegativeLoginMissingPasswordWithErrorAssertion(Quest)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.

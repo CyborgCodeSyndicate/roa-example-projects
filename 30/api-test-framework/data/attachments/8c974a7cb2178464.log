@@ -1,0 +1,18 @@
+🤖 CYBORG 🤖 2025-12-12T16:05:59,236 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-12T16:05:59,308 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-12T16:05:59,320 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2025-12-12T16:05:59,340 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] INFO  [QUEST] - The quest: 'showsPostWithDtoAndSimpleBodyAssertions(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2025-12-12T16:05:59,360 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2025-12-12T16:05:59,978 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2025-12-12T16:05:59,988 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2025-12-12T16:06:00,001 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] EXTENDED [API] - Request headers: Content-Type=application/json
+🤖 CYBORG 🤖 2025-12-12T16:06:00,773 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 751ms.
+🤖 CYBORG 🤖 2025-12-12T16:06:00,783 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2025-12-12T16:06:00,793 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] EXTENDED [API] - Response headers: Date=Fri, 12 Dec 2025 16:06:00 GMT
+🤖 CYBORG 🤖 2025-12-12T16:06:00,809 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2025-12-12T16:06:01,278 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] EXTENDED [API] - Validation target: [{name=Morpheus, AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2025-12-12T16:06:01,282 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2025-12-12T16:06:01,290 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Morpheus, Actual: Morpheus)
+🤖 CYBORG 🤖 2025-12-12T16:06:01,306 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2025-12-12T16:06:01,312 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2025-12-12T16:06:01,332 [scenario=GettingStartedTest.showsPostWithDtoAndSimpleBodyAssertions] INFO  [QUEST] - The quest of 'showsPostWithDtoAndSimpleBodyAssertions(Quest)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.
