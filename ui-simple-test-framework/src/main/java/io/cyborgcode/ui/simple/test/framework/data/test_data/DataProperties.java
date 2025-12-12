@@ -1,0 +1,33 @@
+package io.cyborgcode.ui.simple.test.framework.data.test_data;
+
+import io.cyborgcode.utilities.config.PropertyConfig;
+import org.aeonbits.owner.Config;
+
+/**
+ * <p> Central configuration interface for test data used by the example suite.
+ *
+ * <p> Backed by the Owner library and {@link PropertyConfig}, it:
+ * <ul>
+ *   <li>Loads values from system properties and a configurable properties file
+ *       (via {@code test.data.file}.properties on the classpath)</li>
+ *   <li>Provides strongly-typed accessors for commonly used values
+ *       such as {@code username} and {@code password}</li>
+ *   <li>Serves as the single source of truth for credentials and other shared test inputs</li>
+ * </ul>
+ *
+ * <p> This allows the tests to read configuration in a consistent,
+ * framework-friendly way without hardcoding values in the test code.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
+@Config.LoadPolicy(Config.LoadType.MERGE)
+@Config.Sources({"system:properties", "classpath:${test.data.file}.properties"})
+public interface DataProperties extends Config {
+
+   @Key("username")
+   String username();
+
+   @Key("password")
+   String password();
+
+}
