@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.cyborgcode.roa</groupId>
         <artifactId>roa-parent</artifactId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
     </parent>
 
     <groupId>io.cyborgcode.roa.usage</groupId>
@@ -27,5 +27,19 @@
             <artifactId>ui-interactor-test-framework-adapter</artifactId>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>github-roa-libraries</id>
+            <name>GitHub Packages for Roa Libraries</name>
+            <url>https://maven.pkg.github.com/CyborgCodeSyndicate/roa-libraries</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>
