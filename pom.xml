@@ -4,36 +4,31 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>io.cyborgcode.roa</groupId>
+        <artifactId>roa-parent</artifactId>
+        <version>1.2.3</version>
+    </parent>
+
     <groupId>io.cyborgcode.roa.usage</groupId>
     <artifactId>example-projects</artifactId>
-    <version>1.0.0</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>api-test-framework</module>
-        <module>ui-simple-test-framework</module>
-        <module>ui-complex-test-framework</module>
-    </modules>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <api.config.file>config-QA</api.config.file>
+        <test.data.file>test_data-QA</test.data.file>
+        <framework.config.file>config-QA</framework.config.file>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>github-roa-libraries</id>
-            <name>GitHub Packages for Roa Libraries</name>
-            <url>https://maven.pkg.github.com/CyborgCodeSyndicate/roa-libraries</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.cyborgcode.roa</groupId>
+            <artifactId>api-interactor-test-framework-adapter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 </project>
-
-
