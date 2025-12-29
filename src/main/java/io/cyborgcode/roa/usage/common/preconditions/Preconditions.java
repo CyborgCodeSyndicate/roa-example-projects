@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import java.util.function.BiConsumer;
 
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
-import static io.cyborgcode.roa.usage.api.ExampleEndpoints.*;
+import static io.cyborgcode.roa.usage.api.Endpoints.*;
 import static io.cyborgcode.roa.usage.api.extractors.ApiResponsesJsonPaths.USER_ID_FROM_RESPONSE;
 import static io.cyborgcode.roa.usage.common.base.Rings.RING_OF_API;
 import static io.cyborgcode.roa.usage.common.data.creator.DataCreator.USER_MODEL;
@@ -29,18 +29,8 @@ import static org.apache.http.HttpStatus.SC_OK;
  */
 public enum Preconditions implements PreQuestJourney<Preconditions> {
 
-
     CREATE_USER_PRECONDITION((quest, objects) -> createUser(quest, (UserRequestDto) objects[0])),
     UPDATE_USER_PRECONDITION((quest, objects) -> updateUser(quest));
-
-
-    public static final class Data {
-        public static final String CREATE_USER_PRECONDITION = "CREATE_USER_PRECONDITION";
-        public static final String UPDATE_USER_PRECONDITION = "UPDATE_USER_PRECONDITION";
-
-        private Data() {
-        }
-    }
 
     private final BiConsumer<SuperQuest, Object[]> function;
 
@@ -60,10 +50,10 @@ public enum Preconditions implements PreQuestJourney<Preconditions> {
 
     private static void createUser(SuperQuest quest, UserRequestDto requestDto) {
         quest.use(RING_OF_API)
-                .requestAndValidate(
-                        POST_CREATE_USER,
-                        requestDto,
-                        Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build());
+                .requestAndValidate(POST_CREATE_USER, requestDto,
+
+                        Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+                );
     }
 
     private static void updateUser(SuperQuest quest) {
@@ -78,12 +68,15 @@ public enum Preconditions implements PreQuestJourney<Preconditions> {
                                 .get(POST_CREATE_USER, Response.class)
                                 .getBody()
                                 .jsonPath()
-                                .getString(USER_ID_FROM_RESPONSE.getJsonPath())),
+                                .getString(USER_ID_FROM_RESPONSE.getJsonPath())
+                        ),
                         UserRequestDto.builder()
                                 .name("Mr. " + juniorUserDto.getName())
                                 .job("Senior " + juniorUserDto.getJob())
                                 .build(),
-                        Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build());
+
+                        Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
+                );
     }
 
 }

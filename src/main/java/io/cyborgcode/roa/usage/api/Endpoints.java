@@ -5,13 +5,10 @@ import io.restassured.http.Method;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Defines API resources, HTTP methods, and their default configurations.
  */
-public enum ExampleEndpoints implements Endpoint<ExampleEndpoints> {
+public enum Endpoints implements Endpoint<Endpoints> {
 
     GET_ALL_USERS(Method.GET, "/users"),
     GET_USER(Method.GET, "/users/{id}"),
@@ -22,7 +19,7 @@ public enum ExampleEndpoints implements Endpoint<ExampleEndpoints> {
     private final Method method;
     private final String url;
 
-    ExampleEndpoints(Method method, String url) {
+    Endpoints(Method method, String url) {
         this.method = method;
         this.url = url;
     }
@@ -38,7 +35,7 @@ public enum ExampleEndpoints implements Endpoint<ExampleEndpoints> {
     }
 
     @Override
-    public ExampleEndpoints enumImpl() {
+    public Endpoints enumImpl() {
         return this;
     }
 

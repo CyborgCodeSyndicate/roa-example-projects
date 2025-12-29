@@ -9,8 +9,8 @@ import io.restassured.response.Response;
 
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.BODY;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
-import static io.cyborgcode.roa.usage.api.ExampleEndpoints.GET_USER;
-import static io.cyborgcode.roa.usage.api.ExampleEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.roa.usage.api.Endpoints.GET_USER;
+import static io.cyborgcode.roa.usage.api.Endpoints.POST_CREATE_USER;
 import static io.cyborgcode.roa.usage.api.extractors.ApiResponsesJsonPaths.*;
 import static io.cyborgcode.roa.usage.common.base.Rings.RING_OF_API;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
@@ -30,11 +30,12 @@ public class UserService extends FluentService {
         quest.use(RING_OF_API)
                 .request(POST_CREATE_USER, userRequestDto)
                 .requestAndValidate(
-                        GET_USER
-                                .withPathParam("id",  quest.getStorage().sub(StorageKeysApi.API).get(POST_CREATE_USER, Response.class)
+                        GET_USER.withPathParam("id", quest.getStorage().sub(StorageKeysApi.API).get(POST_CREATE_USER, Response.class)
                                         .getBody()
                                         .jsonPath()
-                                        .getString(USER_ID_FROM_RESPONSE.getJsonPath())),
+                                        .getString(USER_ID_FROM_RESPONSE.getJsonPath())
+                        ),
+
                         Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
                         Assertion.builder().target(BODY).key(USER_FIRST_NAME.getJsonPath()).type(IS).expected(userRequestDto.getName()).build()
                 );

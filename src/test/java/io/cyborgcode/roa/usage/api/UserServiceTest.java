@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.BODY;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
-import static io.cyborgcode.roa.usage.api.ExampleEndpoints.POST_CREATE_USER;
-import static io.cyborgcode.roa.usage.api.ExampleEndpoints.UPDATE_USER;
+import static io.cyborgcode.roa.usage.api.Endpoints.POST_CREATE_USER;
+import static io.cyborgcode.roa.usage.api.Endpoints.UPDATE_USER;
 import static io.cyborgcode.roa.usage.api.extractors.ApiResponsesJsonPaths.*;
 import static io.cyborgcode.roa.usage.common.base.Rings.RING_OF_API;
 import static io.cyborgcode.roa.usage.common.base.Rings.RING_OF_USER;
@@ -34,8 +34,10 @@ class UserServiceTest extends BaseQuest {
                         UPDATE_USER.withPathParam("id", retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
                                 .getBody()
                                 .jsonPath()
-                                .getString(USER_ID_FROM_RESPONSE.getJsonPath())),
+                                .getString(USER_ID_FROM_RESPONSE.getJsonPath())
+                        ),
                         new UserRequestDto("Mr. John", "Senior Engineer"),
+
                         Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build(),
                         Assertion.builder().target(BODY).key(NAME_FROM_RESPONSE.getJsonPath()).type(IS).expected("Mr. John").build(),
                         Assertion.builder().target(BODY).key(JOB_FROM_RESPONSE.getJsonPath()).type(IS).expected("Senior Engineer").build()
