@@ -16,7 +16,7 @@ public enum DataCreator implements DataForge<DataCreator> {
 
     //2
     private final Late<Object> createDataFunction;
-
+    //2
     DataCreator(final Late<Object> createDataFunction) {
         this.createDataFunction = createDataFunction;
     }
@@ -26,7 +26,7 @@ public enum DataCreator implements DataForge<DataCreator> {
     public Late<Object> dataCreator() {
         return createDataFunction;
     }
-
+    //5
     @Override
     public DataCreator enumImpl() {
         return this;

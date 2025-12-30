@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.BODY;
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
-import static io.cyborgcode.roa.usage.api.extractors.ApiResponsesJsonPaths.*;
 import static io.cyborgcode.roa.usage.common.base.Rings.RING_OF_API;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_CREATED;
@@ -27,11 +26,11 @@ class CraftTest extends BaseQuest {
                 .use(RING_OF_API)
                 .requestAndValidate(Endpoints.POST_CREATE_USER, juniorUserDto,
                         Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
-                        Assertion.builder().target(BODY).key(JOB_FROM_RESPONSE.getJsonPath()).type(IS).expected("Engineer").build()
+                        Assertion.builder().target(BODY).key("job").type(IS).expected("Engineer").build()
                 )
                 .requestAndValidate(Endpoints.POST_CREATE_USER, seniorUserDto.create(),
                         Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
-                        Assertion.builder().target(BODY).key(JOB_FROM_RESPONSE.getJsonPath()).type(IS).expected("Senior Engineer").build()
+                        Assertion.builder().target(BODY).key("job").type(IS).expected("Senior Engineer").build()
                 )
                 .complete();
     }

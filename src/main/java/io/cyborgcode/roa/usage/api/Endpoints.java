@@ -5,9 +5,6 @@ import io.restassured.http.Method;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
-/**
- * Defines API resources, HTTP methods, and their default configurations.
- */
 public enum Endpoints implements Endpoint<Endpoints> {
 
     GET_ALL_USERS(Method.GET, "/users"),

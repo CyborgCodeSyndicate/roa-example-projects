@@ -6,6 +6,7 @@ import io.cyborgcode.roa.framework.annotation.StaticTestData;
 import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.usage.api.dto.request.UserRequestDto;
+import io.cyborgcode.roa.usage.common.base.Rings;
 import io.cyborgcode.roa.usage.common.data.test_data.StaticData;
 import io.cyborgcode.roa.validator.core.Assertion;
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,8 @@ class StaticDataTest extends BaseQuest {
     void dataTest(Quest quest) {
 
         quest
-                .use(RING_OF_API)
-                .requestAndValidate(POST_CREATE_USER,
+                .use(Rings.RING_OF_API)
+                .requestAndValidate(Endpoints.POST_CREATE_USER,
                         new UserRequestDto(
                                 retrieve(staticTestData(StaticData.NAME), String.class),
                                 retrieve(staticTestData(StaticData.JOB), String.class)),

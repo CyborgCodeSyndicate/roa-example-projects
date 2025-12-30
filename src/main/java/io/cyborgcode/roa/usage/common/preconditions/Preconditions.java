@@ -1,32 +1,23 @@
 package io.cyborgcode.roa.usage.common.preconditions;
 
-import io.cyborgcode.roa.api.storage.StorageKeysApi;
+import io.cyborgcode.roa.api.storage.DataExtractorsApi;
 import io.cyborgcode.roa.framework.parameters.PreQuestJourney;
 import io.cyborgcode.roa.framework.quest.SuperQuest;
 import io.cyborgcode.roa.framework.storage.StorageKeysTest;
+import io.cyborgcode.roa.usage.api.Endpoints;
 import io.cyborgcode.roa.usage.api.dto.request.UserRequestDto;
+import io.cyborgcode.roa.usage.common.base.Rings;
+import io.cyborgcode.roa.usage.common.data.creator.DataCreator;
 import io.cyborgcode.roa.validator.core.Assertion;
-import io.restassured.response.Response;
 
 import java.util.function.BiConsumer;
 
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
-import static io.cyborgcode.roa.usage.api.Endpoints.*;
-import static io.cyborgcode.roa.usage.api.extractors.ApiResponsesJsonPaths.USER_ID_FROM_RESPONSE;
-import static io.cyborgcode.roa.usage.common.base.Rings.RING_OF_API;
-import static io.cyborgcode.roa.usage.common.data.creator.DataCreator.USER_MODEL;
+import static io.cyborgcode.roa.framework.base.BaseQuest.DefaultStorage.retrieve;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_OK;
 
-/**
- * Registry of pre-test journeys (Preconditions).
- * <p>
- * This enum implements {@link PreQuestJourney}. You can define setup steps here
- * that run before your test logic. Use the {@code @PreQuest} annotation to attach
- * them to your tests.
- * </p>
- */
 public enum Preconditions implements PreQuestJourney<Preconditions> {
 
     CREATE_USER_PRECONDITION((quest, objects) -> createUser(quest, (UserRequestDto) objects[0])),
@@ -49,9 +40,8 @@ public enum Preconditions implements PreQuestJourney<Preconditions> {
     }
 
     private static void createUser(SuperQuest quest, UserRequestDto requestDto) {
-        quest.use(RING_OF_API)
-                .requestAndValidate(POST_CREATE_USER, requestDto,
-
+        quest.use(Rings.RING_OF_API)
+                .requestAndValidate(Endpoints.POST_CREATE_USER, requestDto,
                         Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
                 );
     }
@@ -59,22 +49,18 @@ public enum Preconditions implements PreQuestJourney<Preconditions> {
     private static void updateUser(SuperQuest quest) {
         UserRequestDto juniorUserDto = quest.getStorage()
                 .sub(StorageKeysTest.PRE_ARGUMENTS)
-                .get(USER_MODEL, UserRequestDto.class);
+                .get(DataCreator.USER_MODEL, UserRequestDto.class);
 
-        quest.use(RING_OF_API)
+        quest.use(Rings.RING_OF_API)
                 .requestAndValidate(
-                        UPDATE_USER.withPathParam("id", quest.getStorage()
-                                .sub(StorageKeysApi.API)
-                                .get(POST_CREATE_USER, Response.class)
-                                .getBody()
-                                .jsonPath()
-                                .getString(USER_ID_FROM_RESPONSE.getJsonPath())
+                        Endpoints.UPDATE_USER.withPathParam("id",
+                                retrieve(DataExtractorsApi.responseBodyExtraction(Endpoints.POST_CREATE_USER,
+                                "id"), String.class)
                         ),
                         UserRequestDto.builder()
                                 .name("Mr. " + juniorUserDto.getName())
                                 .job("Senior " + juniorUserDto.getJob())
                                 .build(),
-
                         Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
                 );
     }

@@ -26,6 +26,11 @@
             <groupId>io.cyborgcode.roa</groupId>
             <artifactId>api-interactor-test-framework-adapter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.cyborgcode.roa</groupId>
+            <artifactId>db-interactor-test-framework-adapter</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

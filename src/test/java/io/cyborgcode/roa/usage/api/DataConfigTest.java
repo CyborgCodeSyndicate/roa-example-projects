@@ -25,14 +25,14 @@ class DataConfigTest extends BaseQuest {
     void dataConfigTest(Quest quest) {
         quest
                 .use(RING_OF_API)
-                .requestAndValidate(POST_CREATE_USER, UserRequestDto.builder()
+                .requestAndValidate(Endpoints.POST_CREATE_USER, UserRequestDto.builder()
                         .name(testData().name())
                         .job(testData().job())
                         .build(),
 
                 Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
-                Assertion.builder().target(BODY).key(NAME_FROM_RESPONSE.getJsonPath()).type(IS).expected(testData().name()).build(),
-                Assertion.builder().target(BODY).key(JOB_FROM_RESPONSE.getJsonPath()).type(IS).expected(testData().job()).build()
+                Assertion.builder().target(BODY).key("name").type(IS).expected(testData().name()).build(),
+                Assertion.builder().target(BODY).key("job").type(IS).expected(testData().job()).build()
                 )
                 .complete();
     }
