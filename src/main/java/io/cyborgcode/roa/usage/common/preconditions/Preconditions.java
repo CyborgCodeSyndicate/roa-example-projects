@@ -20,49 +20,49 @@ import static org.apache.http.HttpStatus.SC_OK;
 
 public enum Preconditions implements PreQuestJourney<Preconditions> {
 
-    CREATE_USER_PRECONDITION((quest, objects) -> createUser(quest, (UserRequestDto) objects[0])),
-    UPDATE_USER_PRECONDITION((quest, objects) -> updateUser(quest));
+   CREATE_USER_PRECONDITION((quest, objects) -> createUser(quest, (UserRequestDto) objects[0])),
+   UPDATE_USER_PRECONDITION((quest, objects) -> updateUser(quest));
 
-    private final BiConsumer<SuperQuest, Object[]> function;
+   private final BiConsumer<SuperQuest, Object[]> function;
 
-    Preconditions(BiConsumer<SuperQuest, Object[]> function) {
-        this.function = function;
-    }
+   Preconditions(BiConsumer<SuperQuest, Object[]> function) {
+      this.function = function;
+   }
 
-    @Override
-    public BiConsumer<SuperQuest, Object[]> journey() {
-        return function;
-    }
+   @Override
+   public BiConsumer<SuperQuest, Object[]> journey() {
+      return function;
+   }
 
-    @Override
-    public Preconditions enumImpl() {
-        return this;
-    }
+   @Override
+   public Preconditions enumImpl() {
+      return this;
+   }
 
-    private static void createUser(SuperQuest quest, UserRequestDto requestDto) {
-        quest.use(Rings.RING_OF_API)
-                .requestAndValidate(Endpoints.POST_CREATE_USER, requestDto,
-                        Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
-                );
-    }
+   private static void createUser(SuperQuest quest, UserRequestDto requestDto) {
+      quest.use(Rings.RING_OF_API)
+            .requestAndValidate(Endpoints.POST_CREATE_USER, requestDto,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+            );
+   }
 
-    private static void updateUser(SuperQuest quest) {
-        UserRequestDto juniorUserDto = quest.getStorage()
-                .sub(StorageKeysTest.PRE_ARGUMENTS)
-                .get(DataCreator.USER_MODEL, UserRequestDto.class);
+   private static void updateUser(SuperQuest quest) {
+      UserRequestDto juniorUserDto = quest.getStorage()
+            .sub(StorageKeysTest.PRE_ARGUMENTS)
+            .get(DataCreator.USER_MODEL, UserRequestDto.class);
 
-        quest.use(Rings.RING_OF_API)
-                .requestAndValidate(
-                        Endpoints.UPDATE_USER.withPathParam("id",
-                                retrieve(DataExtractorsApi.responseBodyExtraction(Endpoints.POST_CREATE_USER,
-                                "id"), String.class)
-                        ),
-                        UserRequestDto.builder()
-                                .name("Mr. " + juniorUserDto.getName())
-                                .job("Senior " + juniorUserDto.getJob())
-                                .build(),
-                        Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
-                );
-    }
+      quest.use(Rings.RING_OF_API)
+            .requestAndValidate(
+                  Endpoints.UPDATE_USER.withPathParam("id",
+                        retrieve(DataExtractorsApi.responseBodyExtraction(Endpoints.POST_CREATE_USER,
+                              "id"), String.class)
+                  ),
+                  UserRequestDto.builder()
+                        .name("Mr. " + juniorUserDto.getName())
+                        .job("Senior " + juniorUserDto.getJob())
+                        .build(),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
+            );
+   }
 
 }

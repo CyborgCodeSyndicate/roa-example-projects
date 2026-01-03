@@ -21,6 +21,30 @@
     </properties>
 
 
+    <profiles>
+        <profile>
+            <id>qa</id>
+            <properties>
+                <api.config.file>config-qa</api.config.file>
+                <framework.config.file>config-qa</framework.config.file>
+                <test.data.file>test_data-qa</test.data.file>
+                <extended.logging>true</extended.logging>
+                <exclude.tags></exclude.tags>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>uat</id>
+            <properties>
+                <api.config.file>config-uat</api.config.file>
+                <framework.config.file>config-uat</framework.config.file>
+                <test.data.file>test_data-uat</test.data.file>
+                <extended.logging>true</extended.logging>
+                <exclude.tags></exclude.tags>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>io.cyborgcode.roa</groupId>

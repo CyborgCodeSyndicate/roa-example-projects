@@ -18,12 +18,14 @@ public class ExampleCredentials implements Credentials {
     @Override
     public String username() {
         // TODO: Replace with your own configuration keys
-        return DATA_PROPERTIES.username();
+        //return DATA_PROPERTIES.username();
+       return null;
     }
 
     @Override
     public String password() {
         // TODO: Replace with your own configuration keys
-        return DATA_PROPERTIES.password();
+        //return DATA_PROPERTIES.password();
+       return null;
     }
 }

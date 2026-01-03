@@ -11,10 +11,10 @@ import org.aeonbits.owner.ConfigCache;
  */
 public final class Data {
 
-    private Data() {
-    }
+   private Data() {
+   }
 
-    public static DataProperties testData() {
-        return ConfigCache.getOrCreate(DataProperties.class);
-    }
+   public static DataProperties testData() {
+      return ConfigCache.getOrCreate(DataProperties.class);
+   }
 }

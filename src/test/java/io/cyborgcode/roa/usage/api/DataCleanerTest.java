@@ -16,19 +16,19 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_CREATED;
 
 @API
-class RipperTest extends BaseQuest {
+class DataCleanerTest extends BaseQuest {
 
-    @Test
-    @Ripper(targets = {"CLEANUP_USER"})
-    void craftTest(Quest quest,
-                   @Craft(model = "USER_MODEL") UserRequestDto juniorUserDto) {
-        quest
-                .use(Rings.RING_OF_API)
-                .requestAndValidate(Endpoints.POST_CREATE_USER, juniorUserDto,
-                        Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
-                        Assertion.builder().target(BODY).key("name").type(IS).expected("John").build(),
-                        Assertion.builder().target(BODY).key("job").type(IS).expected("Engineer").build()
-                )
-                .complete();
-    }
+   @Test
+   @Ripper(targets = {"CLEANUP_USER"})
+   void craftTest(Quest quest,
+                  @Craft(model = "USER_MODEL") UserRequestDto juniorUserDto) {
+      quest
+            .use(Rings.RING_OF_API)
+            .requestAndValidate(Endpoints.POST_CREATE_USER, juniorUserDto,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
+                  Assertion.builder().target(BODY).key("name").type(IS).expected("John").build(),
+                  Assertion.builder().target(BODY).key("job").type(IS).expected("Engineer").build()
+            )
+            .complete();
+   }
 }

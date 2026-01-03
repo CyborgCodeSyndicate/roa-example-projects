@@ -20,26 +20,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @API
 class StorageTest extends BaseQuest {
 
-    @Test
-    void storageTest(Quest quest) {
+   @Test
+   void usingDataStorageTest(Quest quest) {
 
-        quest
-                .use(Rings.RING_OF_API)
-                .request(Endpoints.POST_CREATE_USER, new UserRequestDto("John", "Engineer"))
-                .validate(() -> {
-                    UserResponseDto responseDto = retrieve(StorageKeysApi.API, Endpoints.POST_CREATE_USER,
-                            Response.class)
-                            .getBody().as(UserResponseDto.class);
-                    assertEquals("John", responseDto.getName(), "User name is incorrect");
-                    assertEquals("Engineer", responseDto.getJob(), "User job is incorrect");
-                })
-                .requestAndValidate(
-                        Endpoints.DELETE_USER.withPathParam("id",
-                                retrieve(DataExtractorsApi.responseBodyExtraction(Endpoints.POST_CREATE_USER,
-                                        "id"), String.class)
-                        ),
-                        Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
-                )
-                .complete();
-    }
+      quest
+            .use(Rings.RING_OF_API)
+            .request(Endpoints.POST_CREATE_USER, new UserRequestDto("John", "Engineer"))
+            .validate(() -> {
+               UserResponseDto responseDto = retrieve(StorageKeysApi.API, Endpoints.POST_CREATE_USER,
+                     Response.class)
+                     .getBody().as(UserResponseDto.class);
+               assertEquals("John", responseDto.getName(), "User name is incorrect");
+               assertEquals("Engineer", responseDto.getJob(), "User job is incorrect");
+            })
+            .requestAndValidate(
+                  Endpoints.DELETE_USER.withPathParam("id",
+                        retrieve(DataExtractorsApi.responseBodyExtraction(Endpoints.POST_CREATE_USER,
+                              "id"), String.class)
+                  ),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()
+            )
+            .complete();
+   }
 }

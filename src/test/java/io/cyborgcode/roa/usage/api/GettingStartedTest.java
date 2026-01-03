@@ -14,13 +14,13 @@ import static org.apache.http.HttpStatus.SC_OK;
 @API
 class GettingStartedTest extends BaseQuest {
 
-    @Test
-    void basicTest(Quest quest) {
-        quest
-                .use(Rings.RING_OF_API)
-                .requestAndValidate(Endpoints.GET_USER.withPathParam("id", 1),
-                        Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
-                )
-                .complete();
-    }
+   @Test
+   void basicTest(Quest quest) {
+      quest
+            .use(Rings.RING_OF_API)
+            .requestAndValidate(Endpoints.GET_USER.withPathParam("id", 1),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
+            )
+            .complete();
+   }
 }

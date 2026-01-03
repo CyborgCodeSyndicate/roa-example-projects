@@ -7,40 +7,40 @@ import io.restassured.specification.RequestSpecification;
 
 public enum Endpoints implements Endpoint<Endpoints> {
 
-    GET_ALL_USERS(Method.GET, "/users"),
-    GET_USER(Method.GET, "/users/{id}"),
-    POST_CREATE_USER(Method.POST, "/users"),
-    UPDATE_USER(Method.PUT, "/users/{id}"),
-    DELETE_USER(Method.DELETE, "/users/{id}");
+   GET_ALL_USERS(Method.GET, "/users"),
+   GET_USER(Method.GET, "/users/{id}"),
+   POST_CREATE_USER(Method.POST, "/users"),
+   UPDATE_USER(Method.PUT, "/users/{id}"),
+   DELETE_USER(Method.DELETE, "/users/{id}");
 
-    private final Method method;
-    private final String url;
+   private final Method method;
+   private final String url;
 
-    Endpoints(Method method, String url) {
-        this.method = method;
-        this.url = url;
-    }
+   Endpoints(Method method, String url) {
+      this.method = method;
+      this.url = url;
+   }
 
-    @Override
-    public Method method() {
-        return method;
-    }
+   @Override
+   public Method method() {
+      return method;
+   }
 
-    @Override
-    public String url() {
-        return url;
-    }
+   @Override
+   public String url() {
+      return url;
+   }
 
-    @Override
-    public Endpoints enumImpl() {
-        return this;
-    }
+   @Override
+   public Endpoints enumImpl() {
+      return this;
+   }
 
-    @Override
-    public RequestSpecification defaultConfiguration() {
-        return Endpoint.super.defaultConfiguration()
-                .contentType(ContentType.JSON)
-                .header("x-api-key", "reqres_4e24d3aef2cf4378a2bb06828bd8993b");
-    }
+   @Override
+   public RequestSpecification defaultConfiguration() {
+      return Endpoint.super.defaultConfiguration()
+            .contentType(ContentType.JSON)
+            .header("x-api-key", "reqres_4e24d3aef2cf4378a2bb06828bd8993b");
+   }
 
 }
