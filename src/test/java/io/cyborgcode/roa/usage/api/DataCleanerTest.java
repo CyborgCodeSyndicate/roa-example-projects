@@ -20,8 +20,8 @@ class DataCleanerTest extends BaseQuest {
 
    @Test
    @Ripper(targets = {"CLEANUP_USER"})
-   void craftTest(Quest quest,
-                  @Craft(model = "USER_MODEL") UserRequestDto juniorUserDto) {
+   void usingDataCleanerTest(Quest quest,
+                             @Craft(model = "USER_MODEL") UserRequestDto juniorUserDto) {
       quest
             .use(Rings.RING_OF_API)
             .requestAndValidate(Endpoints.POST_CREATE_USER, juniorUserDto,

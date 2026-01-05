@@ -28,7 +28,7 @@ class PreconditionsTest extends BaseQuest {
          value = "UPDATE_USER_PRECONDITION",
          order = 2
    )
-   void journeyTest(Quest quest) {
+   void usingPreconditionsTest(Quest quest) {
       quest
             .use(RING_OF_API)
             .requestAndValidate(

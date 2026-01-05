@@ -1,12 +1,12 @@
 package io.cyborgcode.roa.usage.api;
 
 import io.cyborgcode.roa.api.annotations.API;
-import io.cyborgcode.roa.api.log.LogApi;
-import io.cyborgcode.roa.framework.base.BaseQuestSequential;
-import io.cyborgcode.roa.framework.base.Services;
+import io.cyborgcode.roa.framework.annotation.Regression;
+import io.cyborgcode.roa.framework.base.BaseQuest;
 import io.cyborgcode.roa.framework.quest.Quest;
 import io.cyborgcode.roa.usage.common.base.Rings;
 import io.cyborgcode.roa.validator.core.Assertion;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
@@ -14,19 +14,10 @@ import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static org.apache.http.HttpStatus.SC_OK;
 
 @API
-class SequentialExecutionTest extends BaseQuestSequential {
-
-   @Override
-   protected void beforeAll(Services services) {
-      LogApi.info("Starting test execution...");
-   }
-
-   @Override
-   protected void afterAll(Services services) {
-      LogApi.info("Test execution completed.");
-   }
+class RunningTest extends BaseQuest {
 
    @Test
+   @Regression
    void getSingleUserTest(Quest quest) {
       quest
             .use(Rings.RING_OF_API)
@@ -37,6 +28,7 @@ class SequentialExecutionTest extends BaseQuestSequential {
    }
 
    @Test
+   @Tag("MyCustomTag")
    void getAllUsersTest(Quest quest) {
       quest
             .use(Rings.RING_OF_API)

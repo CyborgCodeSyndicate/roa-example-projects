@@ -29,8 +29,7 @@ class StaticDataTest extends BaseQuest {
 
    @Test
    @StaticTestData(StaticData.class)
-   void dataTest(Quest quest) {
-
+   void usingStaticDataTest(Quest quest) {
       quest
             .use(Rings.RING_OF_API)
             .requestAndValidate(Endpoints.POST_CREATE_USER,
@@ -44,12 +43,10 @@ class StaticDataTest extends BaseQuest {
             .complete();
    }
 
-
    @ParameterizedTest
    @MethodSource("scenarios")
    @StaticTestData(StaticData.class)
-   void parameterizedTest(Endpoint<?> endpoint, int status, Quest quest) {
-
+   void usingParameterizedTest(Endpoint<?> endpoint, int status, Quest quest) {
       quest
             .use(Rings.RING_OF_API)
             .requestAndValidate(endpoint, new UserRequestDto("John", "Engineer"),

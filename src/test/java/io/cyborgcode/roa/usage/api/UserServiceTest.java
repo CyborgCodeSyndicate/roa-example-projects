@@ -19,7 +19,6 @@ class UserServiceTest extends BaseQuest {
 
    @Test
    void usingCustomServiceFlowTest(Quest quest) {
-
       quest
             .use(Rings.RING_OF_USER)
             .createUser(new UserRequestDto("John", "Engineer"))

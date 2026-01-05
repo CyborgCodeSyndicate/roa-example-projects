@@ -22,7 +22,6 @@ class StorageTest extends BaseQuest {
 
    @Test
    void usingDataStorageTest(Quest quest) {
-
       quest
             .use(Rings.RING_OF_API)
             .request(Endpoints.POST_CREATE_USER, new UserRequestDto("John", "Engineer"))

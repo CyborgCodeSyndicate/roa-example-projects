@@ -17,7 +17,6 @@ import static org.apache.http.HttpStatus.SC_OK;
 public class UserService extends FluentService {
 
    public UserService createUser(UserRequestDto userRequestDto) {
-
       quest
             .use(Rings.RING_OF_API)
             .request(Endpoints.POST_CREATE_USER, userRequestDto)

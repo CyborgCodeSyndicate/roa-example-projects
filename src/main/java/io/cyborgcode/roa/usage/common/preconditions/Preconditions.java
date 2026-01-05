@@ -40,7 +40,8 @@ public enum Preconditions implements PreQuestJourney<Preconditions> {
    }
 
    private static void createUser(SuperQuest quest, UserRequestDto requestDto) {
-      quest.use(Rings.RING_OF_API)
+      quest
+            .use(Rings.RING_OF_API)
             .requestAndValidate(Endpoints.POST_CREATE_USER, requestDto,
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
             );
@@ -51,7 +52,8 @@ public enum Preconditions implements PreQuestJourney<Preconditions> {
             .sub(StorageKeysTest.PRE_ARGUMENTS)
             .get(DataCreator.USER_MODEL, UserRequestDto.class);
 
-      quest.use(Rings.RING_OF_API)
+      quest
+            .use(Rings.RING_OF_API)
             .requestAndValidate(
                   Endpoints.UPDATE_USER.withPathParam("id",
                         retrieve(DataExtractorsApi.responseBodyExtraction(Endpoints.POST_CREATE_USER,

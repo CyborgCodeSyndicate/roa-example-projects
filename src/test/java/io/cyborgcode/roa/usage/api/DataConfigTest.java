@@ -18,14 +18,13 @@ import static org.apache.http.HttpStatus.SC_CREATED;
 class DataConfigTest extends BaseQuest {
 
    @Test
-   void dataConfigTest(Quest quest) {
+   void usingDataAndConfigurationTest(Quest quest) {
       quest
             .use(RING_OF_API)
             .requestAndValidate(Endpoints.POST_CREATE_USER, UserRequestDto.builder()
                         .name(testData().name())
                         .job(testData().job())
                         .build(),
-
                   Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
                   Assertion.builder().target(BODY).key("name").type(IS).expected(testData().name()).build(),
                   Assertion.builder().target(BODY).key("job").type(IS).expected(testData().job()).build()

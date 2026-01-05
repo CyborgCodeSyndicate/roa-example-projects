@@ -15,7 +15,7 @@ import static org.apache.http.HttpStatus.SC_OK;
 class GettingStartedTest extends BaseQuest {
 
    @Test
-   void basicTest(Quest quest) {
+   void gettingStartedTest(Quest quest) {
       quest
             .use(Rings.RING_OF_API)
             .requestAndValidate(Endpoints.GET_USER.withPathParam("id", 1),
