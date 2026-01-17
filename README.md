@@ -430,89 +430,182 @@ For each interaction:
 ---
 
 ## 7. Getting Started
-
-This section focuses on setting up the project for any app under test. Choose the adapters (UI, API, DB) you need — you can enable just one or all of them.
+This section guides you through creating a new ROA test automation project using the archetype and 
+configuring it for your application under test.
 
 ### 7.1 Prerequisites
 
-- Java (as defined by the parent POM/toolchain)
-- Maven
-- Chrome/ChromeDriver if using UI interception (for UI flows)
-- Application(s) under test reachable from your environment properties
-
-### 7.2 Add dependencies (to your module)
-
-Include the adapters you need:
+**GitHub Packages Authentication**
+Since the ROA archetype remote catalog is hosted on *GitHub Packages*, configure authentication in your 
+Maven settings.xml file (located at `~/.m2/settings.xml` on Linux/Mac or `C:\Users\{username}\.m2\settings.xml` on Windows):
 
 ```xml
-<dependency>
-  <groupId>io.cyborgcode.roa</groupId>
-  <artifactId>ui-interactor-test-framework-adapter</artifactId>
-</dependency>
-<dependency>
-  <groupId>io.cyborgcode.roa</groupId>
-  <artifactId>api-interactor-test-framework-adapter</artifactId>
-</dependency>
-<dependency>
-  <groupId>io.cyborgcode.roa</groupId>
-  <artifactId>db-interactor-test-framework-adapter</artifactId>
-</dependency>
+<settings>
+<servers>
+<server>
+<id>github</id>
+<username>YOUR_GITHUB_USERNAME</username>
+<password>YOUR_GITHUB_PERSONAL_ACCESS_TOKEN</password>
+</server>
+</servers>
+</settings>
 ```
 
-**For a detailed explanation of each adapter (dependency) visit the relevant section in the ROA Libraries documentation: [ROA Libraries](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/README.md#modules-overview)**
+### 7.2 Create Project from Archetype
+The ROA Test Framework Archetype generates a complete test automation project pre-configured with your selected capabilities (UI, API, DB).
 
-### 7.3 Configure environment
+**Remote Catalog URL**
+The archetype catalog is version-specific. Find available versions in the [roa-archetype-catalog](https://github.com/CyborgCodeSyndicate/roa-libraries/tree/gh-pages/roa-archetype-catalog) folder.
 
-Adapters use Owner configuration. A typical setup defines defaults via Maven profiles and lets you override via system properties.
+**Catalog URL Format:**
 
-- Profiles: `dev`, `staging`, `prod`
-- Common properties:
-  - UI: `ui.config.file=config-<env>`
-  - API: `api.config.file=config-<env>`
-  - DB: `db.config.file=config-<env>`
-  - Framework: `framework.config.file=config-<env>`
-  - Test data: `test.data.file=test_data-<env>`
-- Defaults file per module: `src/main/resources/system.properties`
+```text
+https://cyborgcodesyndicate.github.io/roa-libraries/roa-archetype-catalog/{version}/archetype-catalog.xml
+```
+**Example with version:** `https://cyborgcodesyndicate.github.io/roa-libraries/roa-archetype-catalog/1.2.3/archetype-catalog.xml`
 
-Naming convention for files in `src/main/resources`:
+#### **Option A: Create via IntelliJ IDEA**
+1. Go to File → New → Project
+2. Select Maven Archetype
+3. Click Manage Catalogs... button
+4. In the dialog:
+* Click **Add (+)** and paste the Remote Catalog URL
+* Give it a name (e.g., "ROA Archetype Catalog")
+* Click **OK**
+5. Back in "New Project" dialog:
+* Select your catalog from the Catalog dropdown
+* Select roa-archetype from the list
+* Choose the desired version
+6. Configure your project (Advanced options):
+* **GroupId:** Your organization (e.g., com.mycompany)
+* **ArtifactId:** Project name (e.g., my-automation-tests)
+* **Version:** `1.0-SNAPSHOT`
+* **Additional Properties:**
+- `modules`: Testing capabilities to include: `API`, `UI`, `DB` (comma-separated)
+- `environments`: Target environments (e.g., `qa`,`uat`,`prod`)
+- `implementationStyle`: `BASIC`, `ADVANCED`, or `AI`
+- `dbType`: Database type if using DB (e.g., `POSTGRES`, `H2`, `MYSQL`)
+- `uiComponents`: UI components to include (e.g., `BUTTON`,`INPUT`,`SELECT`,`TABLE`)
 
-- `config-<env>.properties` and `test_data-<env>.properties`
+7. Click **Create** to generate the project
+8. Build the project: `mvn clean install`
 
-Precedence of effective config values:
-
-1. `-D` system properties  
-2. Maven profile defaults  
-3. `system.properties`  
-4. Values inside the referenced property files
-
-Examples (multi-module builds can add `-pl <module>`):
-
+#### **Option B: Create via Command Line**
+**Windows (PowerShell):**
+```powershell
+mvn "archetype:generate" `
+  "-DarchetypeGroupId=io.cyborgcode.roa" `
+  "-DarchetypeArtifactId=roa-archetype" `
+  "-DarchetypeVersion={version}" `
+  "-DgroupId=com.mycompany" `
+  "-DartifactId=my-automation-tests" `
+  "-Dversion=1.0-SNAPSHOT" `
+  "-Dpackage=com.mycompany" `
+  "-Dmodules=API,UI,DB" `
+  "-Denvironments=qa,uat" `
+  "-DimplementationStyle=ADVANCED" `
+  "-DdbType=POSTGRES" `
+  "-DuiComponents=BUTTON,INPUT,SELECT,TABLE" `
+  "-B"
+```
+**Linux/Mac (Bash):**
 ```bash
-# Run tests with staging profile for a module
-mvn -q -pl <your-module> -Pstaging test
-
-# Run with dev profile
-mvn -q -pl <your-module> -Pdev test
-
-# Run a single test and override only test data to dev
-mvn -q -pl <your-module> -Pprod \
- -Dtest=YourTestClass#yourTestMethod \
- -Dtest.data.file=test_data-dev test
+mvn archetype:generate \
+  -DarchetypeGroupId=io.cyborgcode.roa \
+  -DarchetypeArtifactId=roa-archetype \
+  -DarchetypeVersion={version} \
+  -DgroupId=com.mycompany \
+  -DartifactId=my-automation-tests \
+  -Dversion=1.0-SNAPSHOT \
+  -Dpackage=com.mycompany \
+  -Dmodules=API,UI,DB \
+  -Denvironments=qa,uat \
+  -DimplementationStyle=ADVANCED \
+  -DdbType=POSTGRES \
+  -DuiComponents=BUTTON,INPUT,SELECT,TABLE \
+  -B
 ```
+Replace `{version}` with an actual version from [roa-archetype-catalog](https://github.com/CyborgCodeSyndicate/roa-libraries/tree/gh-pages/roa-archetype-catalog) (e.g., `1.2.3`).
 
-Example API config (config-<env>.properties):
+**Archetype Configuration Properties**
 
-```properties
-api.base.url=https://your-api.example.com
+| Property | Description | Allowed values                                    | Default                   |
+| --- | --- |---------------------------------------------------|---------------------------|
+| `modules` | Capabilities to include | `API`, `UI`, `DB` (comma-separated)               | `API,UI,DB`                 |
+| `implementationStyle` | Test data/preconditions bundle | `BASIC, ADVANCED, AI`                             | `ADVANCED`                  |
+| `dbType` | DB flavor (when DB selected) | `POSTGRES, MYSQL, H2, ORACLE, SQLSERVER, MARIADB` | `POSTGRES`                  |
+| `environments` | Target environments (comma-separated) | any string (e.g., `qa,uat,dev,prod`)                                       | `qa,uat`                    |
+| `uiComponents` | UI element families (when UI selected) | `BUTTON, INPUT, SELECT, TABLE` (comma-separated)  | `BUTTON,INPUT,SELECT,TABLE` |
+| `groupId` | Maven groupId | any                                               | (required)                |
+| `artifactId` | Maven artifactId | any                                               | (required)                |
+| `version` | Project version | any                                               | `1.0-SNAPSHOT`              |
+| `package` | Base package for sources | any                                               | matches groupId           |
+
+**What You Get**
+The archetype generates a compile-ready project with example implementations:
+
+**API Module (when selected):**
+- `ExampleEndpoints.java`: Registry of endpoints (method, path, headers, defaults)
+- `ExampleRequestDto.java` / `ExampleResponseDto.java`: Request/response models
+- `ExampleAuthenticationClient.java`: Auth token/header acquisition flow
+- `ExampleCredentials.java`: Credentials from configuration
+
+**UI Module (when selected):**
+- `InputExampleImpl.java` / `ButtonExampleImpl.java` / `SelectExampleImpl.java` / `Tables.java`: Page component implementations (if selected on project creation)
+- `InputFields.java` / `ButtonFields.java` / `SelectFields.java` / `Tables.java`: Page element registries by type (if selected on project creation)
+- `InputFieldTypes.java` / `ButtonFieldTypes.java` / `SelectFieldTypes.java`: Behavior variants (if selected on project creation)
+- `ExampleAppUiLogin.java`: Browser login flow implementation
+- `ExampleTableModel.java`: Form auto-fill via @InsertionElement
+- `RequestsInterceptor.java`: Network traffic capture/inspection
+- `AppUiService.java`
+
+**DB Module (when selected):**
+- `Databases.java`: DB connection registry (driver, URL, credentials)
+- `ExampleDbQueries.java`: Named SQL queries with parameter placeholders
+
+**Common (always generated):**
+- `Rings.java`: Service registry mapping rings to implementations
+- `CustomService.java`: Multi-step workflows composing API/UI/DB operations
+- `DataProperties.java` / `Data.java`: Typed configuration keys and accessors
+- `DataCreator.java` / `DataCleaner.java` / `Preconditions.java` (when `implementationStyle=ADVANCED`): Data factories, cleanup hooks, reusable preconditions
+
+**Environment Files:**
+When you specify environments (e.g., `-Denvironments=qa,uat`), the archetype generates:
+- `config-{env}.properties` - Environment-specific configuration
+- `test-data-{env}.properties` - Environment-specific test data
+
+**Example:** For `-Denvironments=qa,uat`, you get:
+- `config-qa.properties`, `config-uat.properties`
+- `test-data-qa.properties`, `test-data-uat.properties`
+
+### 7.3 Configure Environment
+The generated project uses Owner configuration with Maven profiles for environment management.
+
+#### Profile Configuration
+Common profiles/environments: `dev`, `uat`, `prod`
+
+**Configuration properties:**
+- UI: `ui.config.file=config-<env>`
+- API: `api.config.file=config-<env>`
+- DB: `db.config.file=config-<env>`
+- Framework: `framework.config.file=config-<env>`
+- Test data: `test.data.file=test_data-<env>`
+
+**Default values:** `src/main/resources/system.properties`
+
+**File naming:** `config-<env>.properties` and `test_data-<env>.properties`
+
+**Example: API Configuration** (`config-qa.properties`)
+```text
+api.base.url=https://your-api-qa.example.com
 api.restassured.logging.enabled=true
 api.restassured.logging.level=ALL
 shorten.body=800
 ```
 
-Example UI config (config-<env>.properties):
-
-```properties
-ui.base.url=https://your-ui.example.com/
+**Example: UI Configuration** (`config-qa.properties`)
+```text
+ui.base.url=https://your-app-qa.example.com/
 browser.type=CHROME
 headless=false
 wait.duration.in.seconds=10
@@ -520,37 +613,57 @@ use.shadow.root=true
 screenshot.on.passed.test=true
 ```
 
-Example DB config (config-<env>.properties):
-
-```properties
+**Example: DB Configuration** (`config-qa.properties`)
+```text
 db.default.type=H2
 db.full.connection.string=jdbc:h2:mem:AppDb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false
 
 # For external DBs:
-db.default.host=localhost
+db.default.host=qa-db.example.com
 db.default.port=5432
 db.default.name=appdb
-db.default.username=app
-db.default.password=secret
+db.default.username=qa_user
+db.default.password=qa_password
 ```
 
-### 7.4 Enable adapters on tests
+### 7.4 Customize for Your Application
+After generation, customize the example classes for your application:
 
-Annotate your test class and extend a Quest base class:
+#### Post-Generation Checklist:
 
-```java
-@UI
-@API
-@DB
-class MyTests extends BaseQuest { }
-```
+1. **Update configuration files:**
+- Set `ui.base.url`, `api.base.url` in `config-{env}.properties`
+- Configure database connections in `config-{env}.properties`
+- Populate test data in `test_data-{env}.properties`
 
-This initializes UI, API and DB rings. Add DB hooks as needed:
+2. **Replace API examples** (if using API module):
+- Update `ExampleEndpoints.java` with your real endpoints
+- Replace `ExampleRequestDto/ResponseDto` with your API models
+- Implement actual auth flow in `ExampleAuthenticationClient.java`
 
-```java
-@DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
-class MyDbTests extends BaseQuest { }
-```
+3. **Update UI elements** (if using UI module):
+- Replace selectors in `InputFields.java`, `ButtonFields.java`, `SelectFields.java`
+- Implement component actions in `InputExampleImpl.java`, `ButtonExampleImpl.java`, `SelectExampleImpl.java`
+- Replace technology types in `InputFieldTypes.java`, `ButtonFieldTypes.java`, `SelectFieldTypes.java`
+- Implement your login flow in `ExampleAppUiLogin.java`
+- Update `ExampleTableModel.java` with your form models
+
+4. **Configure database** (if using DB module):
+- Update `Databases.java` with real connection details
+- Replace queries in `ExampleDbQueries.java` with your SQL
+
+5. **Customize data and flows:**
+- Implement real data creators in DataCreator.java / DataCreatorFunctions.java
+- Add cleanup logic in DataCleaner.java / DataCleanerFunctions.java
+- Build reusable journeys in Preconditions.java / PreconditionFunctions.java
+
+6. **Handle example tests:**
+- Remove or @Disable example tests until wired to real systems
+- Use examples as templates for your actual tests
+
+7. **Verify the build:**
+- Run mvn test to confirm the scaffold compiles
+- Expect to adjust or disable examples until endpoints, locators, and DB are configured
 
 ### 7.5 Writing Simple UI Component Tests
 
@@ -567,28 +680,28 @@ The `GettingStartedTests` class demonstrates fundamental UI component interactio
 ```java
 @Test()
 void components_browserButtonInputLinkSelectAlert(Quest quest) {
-  quest
-        .use(RING_OF_UI)
-        .browser().navigate(getUiConfig().baseUrl())
-        .button().click(ButtonFields.SIGN_IN_BUTTON)
-        .input().insert(InputFields.USERNAME_FIELD, "username")
-        .input().insert(InputFields.PASSWORD_FIELD, "password")
-        .button().click(ButtonFields.SIGN_IN_FORM_BUTTON)
-        .browser().back()
-        .link().click(LinkFields.TRANSFER_FUNDS_LINK)
-        .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, LOAN_ACCOUNT)
-        .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, CREDIT_CARD_ACCOUNT)
-        .input().insert(InputFields.AMOUNT_FIELD, "100")
-        .input().insert(InputFields.TF_DESCRIPTION_FIELD, TRANSFER_LOAN_TO_CREDIT_CARD)
-        .button().click(ButtonFields.SUBMIT_BUTTON)
-        .button().click(ButtonFields.SUBMIT_BUTTON)
-        .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, SUCCESSFUL_TRANSFER_MESSAGE)
-        .drop()
-        .complete();
+    quest
+            .use(RING_OF_UI)
+            .browser().navigate(getUiConfig().baseUrl())
+            .button().click(ButtonFields.SIGN_IN_BUTTON)
+            .input().insert(InputFields.USERNAME_FIELD, "username")
+            .input().insert(InputFields.PASSWORD_FIELD, "password")
+            .button().click(ButtonFields.SIGN_IN_FORM_BUTTON)
+            .browser().back()
+            .link().click(LinkFields.TRANSFER_FUNDS_LINK)
+            .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, LOAN_ACCOUNT)
+            .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, CREDIT_CARD_ACCOUNT)
+            .input().insert(InputFields.AMOUNT_FIELD, "100")
+            .input().insert(InputFields.TF_DESCRIPTION_FIELD, TRANSFER_LOAN_TO_CREDIT_CARD)
+            .button().click(ButtonFields.SUBMIT_BUTTON)
+            .button().click(ButtonFields.SUBMIT_BUTTON)
+            .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, SUCCESSFUL_TRANSFER_MESSAGE)
+            .drop()
+            .complete();
 }
 ```
 
-#### Each component service provides specialized methods for different UI element types:
+#### Component Services
 
 | Service | Purpose | Common Methods | Example Usage |
 |---------|---------|----------------|---------------|
@@ -599,8 +712,9 @@ void components_browserButtonInputLinkSelectAlert(Quest quest) {
 | `select()` | Dropdown selections | `selectOption()`, `getSelectedOptions()` | Choose from dropdowns, verify selections |
 | `alert()` | Message validation | `validateValue()`, `validateIsVisible()` | Verify success/error messages |
 
-#### Instead of using raw CSS selectors or XPath expressions, the framework uses enum-based element definitions:
+#### Element Enums Pattern
 
+Instead of raw selectors:
 ```java
 // Instead of this (brittle):
 driver.findElement(By.id("user_login")).sendKeys("username");
@@ -609,78 +723,50 @@ driver.findElement(By.id("user_login")).sendKeys("username");
 .input().insert(InputFields.USERNAME_FIELD, "username")
 ```
 
-#### **Benefits of Element Enums:**
-- **Compile-time safety**: Typos in element names cause build failures, not runtime errors
-- **IDE support**: Auto-completion and refactoring work seamlessly
-- **Centralized maintenance**: Change a locator once in the enum, update all tests
-- **Built-in synchronization**: Enums can include wait strategies for dynamic elements
+**Benefits:**
+- **Compile-time safety**: Typos cause build failures, not runtime errors
+- **IDE support**: Auto-completion and refactoring
+- **Centralized maintenance**: Change locator once, update all tests
+- **Built-in synchronization**: Enums include wait strategies
 
-#### The `Constants` class centralizes test data and expected values:
+#### Getting Started UI Checklist
 
-```java
-// From Constants.java
-public static final String LOAN_ACCOUNT = "Loan";
-public static final String SUCCESSFUL_TRANSFER_MESSAGE = "You successfully submitted your transaction.";
-```
-
-**Why use Constants:**
-- **Single source of truth**: Change expected text in one place
-- **Readable tests**: `SUCCESSFUL_TRANSFER_MESSAGE` is clearer than a raw string
-- **Refactoring support**: IDE can find all usages of a constant
-- **Consistency**: Same values used across multiple tests
-
-#### Getting Started Checklist
-
-1. **Extend `BaseQuest`** (per-method Quest; parallel at test method level) or **`BaseQuestSequential`** (class-level Quest; sequential across the class)
-2. **Annotate the class with `@UI`** (enables UI testing capabilities at the class level)
-3. **Inject `Quest quest`** as a parameter to your test method
-4. **Start with `.use(RING_OF_UI)`** to activate the UI component services
-5. **Use element enums** (reference `ButtonFields`, `InputFields`, etc. instead of raw locators)
-6. **Use constants** (reference `Constants` class for test data and expected values)
-7. **End with `.complete()`** (always finalize your test execution)
+- Extend `BaseQuest` or `BaseQuestSequential`
+- Annotate with `@UI`
+- Inject `Quest quest` parameter
+- Start with `.use(RING_OF_UI)`
+- Use element enums (reference `ButtonFields`, `InputFields`, etc.)
+- Use constants for test data
+- End with `.complete()`
 
 ### 7.6 Writing Simple API Tests
 
-The `GettingStartedTest` class demonstrates fundamental API interactions and serves as your starting point for writing API tests.
+The `GettingStartedTest` class demonstrates fundamental API interactions.
 
-#### Every API test in this framework follows a consistent pattern:
-
-1. **Test Setup**: Use `@Test` and inject `Quest quest` parameter
-2. **Ring Activation**: Call `.use(RING_OF_API)` to access the REST fluent DSL
-3. **Request and Assertions**: Use `.requestAndValidate(endpoint[, body], assertions...)`
-4. **Release Active Ring**: Optionally call `.drop()` if switching to another ring
-5. **Test Completion**: End with `.complete()`
-
+#### API Test Pattern:
 ```java
 @Test
 @Regression
 @Description("Shows GET with a query parameter via quest.use(RING_OF_API) + requestAndValidate; minimal status/header checks.")
 void showsBasicGetWithQueryParamAndMinimalAssertions(Quest quest) {
-  quest
-        .use(RING_OF_API)
-        .requestAndValidate(
-              GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
-              Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
-              Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build()
-        )
-        .complete();
+    quest
+            .use(RING_OF_API)
+            .requestAndValidate(
+                    GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
+                    Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
+                    Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build()
+            )
+            .complete();
 }
 ```
+#### API Checklist:
 
-**Why this matters:**
-- Uses `quest.use(RING_OF_API)` and a minimal `requestAndValidate(...)` call.
-- Demonstrates query parameters and simple status/header assertions.
-- Builds toward richer flows with DTO bodies and JSONPath body assertions.
-
-**API Checklist:**
-- **Extend `BaseQuest`** (per-method Quest; parallel at test method level) or **`BaseQuestSequential`** (class-level Quest; sequential across the class)
-- **Annotate the class with `@API`** (enables the API ring and the REST client fluent DSL)
-- **Inject `Quest quest`** as a parameter
-- **Use `.use(RING_OF_API)`** to activate the API ring
-- **Use `.requestAndValidate(...)`** with assertions on `STATUS`, `HEADER`, `BODY`
-- **End with `.complete()`** (always finalize your test execution)
-
----
+- Extend `BaseQuest` or `BaseQuestSequential`
+- Annotate with `@API`
+- Inject `Quest quest` parameter
+- Use `.use(RING_OF_API)`
+- Use `.requestAndValidate(...)` with assertions
+- End with `.complete()`
 
 ## 8. Writing Tests (feature-by-feature)
 
