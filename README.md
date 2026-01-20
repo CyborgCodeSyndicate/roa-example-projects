@@ -604,7 +604,7 @@ class MyDbTests extends BaseQuest { }
 
 ### 7.6 Writing Simple UI Component Tests
 
-> **If using archetype (BASIC/ADVANCED style):** Review the generated `GettingStartedUiTest.java` for a complete working example. See [Example Tests - UI Tests](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#ui-tests-gettingstarteduitesjava) in the archetype guide.
+> **If using archetype (BASIC/ADVANCED style):** Review the generated `GettingStartedUiTest.java` for a complete working example. See [Example Tests - UI Tests](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#ui-tests-gettingstarteduitestjava) in the archetype guide.
 
 > **If using archetype (AI style):** No example tests are generated. Use this section as your implementation guide.
 
