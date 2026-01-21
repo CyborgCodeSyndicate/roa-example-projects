@@ -1,0 +1,284 @@
+# **framework-instructions.md (General/Core)**
+
+## Core Framework Principles
+The ROA (Ring of Abstraction) test framework is built on fluent API design, type-safe data injection, 
+declarative validation, and automated lifecycle management.
+
+### Module-Specific Instructions
+**The ROA framework supports modular architecture with independent modules:**
+* Projects may have one or more modules (testing technologies) (ui directory | api directory | db directory):
+* Each module has its own service ring with module-specific operations
+* Module-specific patterns and contracts are documented in separate instruction files
+
+**Module Documentation Structure:**
+* **Core Framework** (this file): Universal concepts applicable to all modules
+* **Module-Specific Instructions**: Module-specific patterns, components, and validation strategies
+    - `ui-framework-instructions.md` - UI testing patterns (if UI module exists)
+    - `api-framework-instructions.md` - API testing patterns (if API module exists)
+    - `db-framework-instructions.md` - Database testing patterns (if DB module exists)
+
+**When working with a module:**
+1. Read this core framework instructions file first
+2. Read the module-specific instructions file for detailed patterns
+3. Check module-specific examples for implementation guidance
+4. Follow module-specific validation patterns (they differ by module)
+
+**Important:** Not all projects have all modules. Only use modules that exist in your project structure.
+
+### Test Class Structure
+**Class Inheritance**
+* Extend `BaseQuest` for standard test execution
+* Extend `BaseQuestSequential` when tests must execute sequentially within the class
+
+### Test Method Structure
+**Quest Object**
+* Every test method must accept a Quest parameter as the first argument
+* The Quest object orchestrates all test operations via fluent API
+* Never instantiate Quest manually; let the framework inject it
+* Quest provides a minimal public API to maintain high-level abstraction
+* Quest does NOT expose internal framework details (driver, storage, configuration)
+
+### Test Categorization
+**Test Tags**
+* Use `@Smoke` annotation for smoke tests that verify critical functionality
+* Use `@Regression` annotation for regression tests that verify existing functionality
+* Tags enable selective test execution in CI/CD pipelines or local runs
+* Multiple tags can be applied to the same test method
+* Use Maven profiles or test runners to filter tests by tags
+
+**Tag Usage**
+```java
+@Test
+@Smoke
+void criticalLoginFlow(Quest quest) {
+// Critical path test
+}
+```
+
+```java
+@Test
+@Regression
+void detailedUserManagement(Quest quest) {
+// Regression coverage test
+}
+```
+
+```java
+@Test
+@Smoke
+@Regression
+void completeCheckoutFlow(Quest quest) {
+// Both smoke and regression
+}
+```
+
+**Service Ring Management**
+* Use `.use(RING_NAME)` to activate a service ring (`RING_OF_API`, `RING_OF_UI`, `RING_OF_DB`, or custom rings)
+* Service rings provide fluent API methods for module-specific operations
+* Use `.drop()` when changing from one ring context to another in multi-module projects
+* Always drop before switching to a different ring to avoid context conflicts
+* All interactions with the system under test MUST go through service rings (never through Quest directly)
+
+**Test Completion**
+* Always end test methods with .complete() to finalize quest execution
+* `.complete()` triggers framework cleanup and reporting
+
+**Validation Requirements**
+* Provide at least one validation in each test (assertion, soft assertion, or custom validation lambda)
+* Use framework assertion builders for declarative validation
+* Different modules use different validation patterns (check module-specific instructions)
+* Use soft assertions (`.soft(true)`) when validating multiple related fields
+* Use `.validate(() -> {})` for custom validation logic not covered by assertion types
+* All validations must use service ring methods, never direct Quest access
+
+### Test Data Management
+**@Craft Annotation**
+* Use `@Craft(model = DataCreator.Data.MODEL_NAME)` for test data injection instead of building objects in tests
+* Define all Craft models in DataCreator enum class
+* Add constants as strings in DataCreator enum Data class for usage in `@Craft` annotations
+* Craft models are eagerly instantiated before test execution
+* Use `Late<@Craft>` for lazy instantiation when model depends on runtime data
+* Call `.create()` on `Late<>` instances to materialize the model on-demand
+
+**Static Constants**
+* Use dedicated constant classes for values expected across multiple tests
+* Organize constants by domain (e.g., TestConstants.Users, TestConstants.Pagination)
+* Use `@StaticData` annotation on tests to retrieve constants when needed
+* Never hardcode magic strings or numbers in test methods
+
+**Configuration Properties**
+* Store environment-specific test data (username, password, URLs) in `test_data-{env}.properties`
+* Use `Data.testData()` to retrieve configuration values
+* Configuration MUST support the environment model requested by the user
+
+**OWNER Library Integration**
+* DataProperties interface MUST use OWNER library annotations for property management
+* Use `@Key("property.name")` to map properties to interface methods
+* Use `@DefaultValue("value")` for fallback values when properties are missing
+* Use `@Config.Sources("classpath:test_data-${env}.properties")` for environment-specific files
+
+**Service Logic & Reusability**
+* Use custom service rings to encapsulate complex multi-step workflows
+* Create domain-specific ring methods instead of repeating logic in tests
+* Define custom rings in the base.Rings class
+* Extract common flows into custom ring methods for reusability
+
+### Test Lifecycle Management
+**@Journey - Preconditions**
+* Use `@Journey` annotation strictly for precondition actions executed before test runtime
+* Define reusable preconditions in `Preconditions` enum class
+* Add constants as strings in `Preconditions` enum Data class for usage in `@Journey` annotations
+* Use `@JourneyData` to pass @Craft models to journeys
+* Use order attribute to control execution sequence when using multiple journeys
+* Access journey-created data via retrieve(PRE_ARGUMENTS, key, Class.class)
+
+**@Ripper - Cleanup**
+* Use `@Ripper` annotation strictly for cleanup operations after test execution
+* Define cleanup targets in `DataCleaner` enum
+* Add constants as strings in DataCleaner enum Data class for usage in `@Ripper` annotations
+* `@Ripper` executes after test completion (success or failure)
+* Ensures test data isolation and prevents database/state pollution
+
+### Advanced Features
+**Late Initialization**
+* Use `Late<@Craft>` for lazy model instantiation
+* Call `.create()` to materialize the model at the point of use
+* Useful when model creation depends on runtime data or execution order
+
+**Interceptors**
+* Use interceptors to modify requests/responses or add cross-cutting concerns
+* Define interceptors for logging, authentication token injection, or request modification
+* Register interceptors at configuration level or per-test as needed
+* Interceptors execute automatically during request/response lifecycle
+
+### Storage and Data Retrieval
+**Framework Storage Mechanism**
+* Framework automatically stores data from various operations (API responses, UI table data, query results, journey outputs)
+* Use retrieve(storageKey, identifier, Class.class) to access stored data
+* Storage persists throughout quest execution within a single test
+* Different storage keys for different contexts: `StorageKeysApi.API`, `StorageKeysDb.DB`, `PRE_ARGUMENTS`
+* **Important:** Quest does not expose the storage mechanism directly via `quest.getStorage()`. Always use `retrieve()` functions with appropriate storage keys.
+
+**Retrieval Patterns**
+```java
+// Retrieve API response
+Response response = retrieve(StorageKeysApi.API, ENDPOINT_NAME, Response.class);
+```
+
+```java
+// Retrieve journey-created data
+User user = retrieve(PRE_ARGUMENTS, DataCreator.USER, User.class);
+```
+
+```java
+// Retrieve database query results
+QueryResponse results = retrieve(StorageKeysDb.DB, QUERY_NAME, QueryResponse.class);
+```
+
+### Assertion Framework
+**Module-Specific Validation:**
+* Different modules may use different validation APIs
+* Some modules use `Assertion.builder()` pattern (API, DB)
+* Some modules use direct validation methods (UI inputs, buttons, alerts, selects, etc.)
+* Always consult module-specific instructions for correct validation patterns
+* Never assume validation patterns are universal across all modules
+
+**Assertion Builder**
+* Use `Assertion.builder()` for declarative, fluent validation
+* All assertions require: target, type, and expected value
+* Optional: soft assertions, custom messages, JsonPath keys
+
+**Common Assertion Targets**
+* `STATUS`: HTTP status codes (API)
+* `BODY`: Response body content (API)
+* `HEADER`: Response headers (API)
+* `QUERY_RESULT`: Database query results (DB)
+* `TABLE_VALUES`: Table data values (UI)
+* `ROW_VALUES`: Specific row values (UI)
+
+**Common Assertion Types**
+* Equality: `IS, NOT, EQUALS_IGNORE_CASE`
+* Comparison: `GREATER_THAN, LESS_THAN, BETWEEN`
+* String: `CONTAINS, STARTS_WITH, ENDS_WITH, MATCHES_REGEX`
+* Collection: `CONTAINS_ALL, CONTAINS_ANY, LENGTH, NOT_EMPTY`
+* Null checks: `NOT_NULL, ALL_NOT_NULL`
+
+**Soft Assertions**
+* Use `.soft(true)` to collect multiple assertion failures
+* All soft assertions in a test execute before reporting failures
+* Useful for validating multiple related fields in one pass
+
+### Custom Validation
+**Lambda Validation**
+* Use `.validate(() -> {})` for custom validation logic not covered by assertion types
+* Access to full JUnit assertion library inside lambda
+* Useful for complex business logic validation or multi-step checks
+
+```java
+.validate(() -> {
+assertEquals(expected, actual, "Custom validation message");
+assertTrue(condition, "Condition not met");
+})
+```
+
+**Soft Assertion Lambda**
+* Use `.validate(softAssertions -> {})` for custom soft assertions
+* Collect multiple custom assertion failures
+
+### Test Execution Control
+**Sequential Execution**
+* Extend BaseQuestSequential when test order matters within a class
+* Tests execute in declaration order (top to bottom)
+* Use sparingly; prefer independent tests
+
+**Parallel Execution**
+* Extend `BaseQuest` for parallel-capable tests
+* Tests must be isolated with no shared mutable state
+* Better CI/CD performance with parallel execution
+
+### Error Handling
+**Framework Error Management**
+* Framework catches and reports errors with context
+* Quest operations fail fast on critical errors
+* Use `.validate()` for expected validation failures
+* Never catch framework exceptions in test code
+
+### Logging and Reporting
+**Allure Integration**
+* Use `@Description("...")` for detailed test descriptions in reports
+* Use `@DisplayName("...")` for readable test names
+* Framework automatically captures screenshots on UI test failures
+* API requests/responses automatically attached to reports
+* Database queries automatically logged
+
+### Environment Configuration
+**Environment Profiles**
+* Support multiple environments via `test_data-{env}.properties`
+* Switch environments using Maven profiles or system properties
+* Environment-specific URLs, credentials, and timeouts
+* Default to dev environment if not specified
+
+### Best Practices
+**Framework Abstraction**
+* Never attempt to access Quest internals directly
+* Always use service ring methods for all operations
+* Respect module-specific patterns and contracts
+* Read module-specific instructions before implementing module code
+
+**Test Independence**
+* Each test must run independently in any order
+* Use `@Journey` for setup, `@Ripper` for cleanup
+* No shared mutable state between tests
+* Generate unique test data per execution
+
+**Readability**
+* Use descriptive test method names
+* Use `@DisplayName` for business-readable names
+* Keep quest chains readable with proper indentation
+* Extract complex logic to custom service rings
+
+**Maintainability**
+* Define reusable components in enums (endpoints, elements, queries)
+* Use constants for magic strings and numbers
+* Keep tests focused on single scenarios
+* Reuse preconditions via `@Journey`

@@ -1,0 +1,325 @@
+app:
+  name: "Zero Bank"
+  domain: "Online Banking"
+  type: "Web Application"
+  version: "1.0"
+  version_date: "2025-12-14"
+  description: >
+    Zero Bank is a web-based online banking application that allows authenticated users
+    to manage their personal financial accounts. The system supports viewing account
+    summaries and account activity, transferring funds between owned accounts, paying
+    bills to registered payees, accessing online statements, and using basic financial
+    overview tools. All banking functionality is accessed through authenticated user
+    sessions and organized by feature-specific pages.
+
+# -------------------------------------------------
+# ACTORS / ROLES
+# -------------------------------------------------
+actors:
+  - id: "anonymous_user"
+    description: "User who has not logged in"
+    capabilities:
+      - view_home_page
+      - view_login_page
+    restrictions:
+      - cannot_access_banking_features
+
+  - id: "authenticated_user"
+    description: "Logged-in banking customer"
+    capabilities:
+      - view_account_summary
+      - view_account_activity
+      - transfer_funds
+      - pay_bills
+      - view_statements
+      - manage_profile
+    restrictions:
+      - cannot_access_other_users_accounts
+
+# -------------------------------------------------
+# AUTHENTICATION
+# -------------------------------------------------
+authentication:
+  type: "Username and password"
+  session_behavior:
+    - "Session created on successful login"
+    - "Session invalidated on logout"
+  failure_modes:
+    - invalid_username
+    - invalid_password
+    - missing_credentials
+
+# -------------------------------------------------
+# CORE FLOWS
+# -------------------------------------------------
+core_flows:
+  - id: "login"
+    name: "User logs into the application"
+    category: "authentication"
+    business_goal: "Allow a registered user to securely access their banking information"
+    actors:
+      - end_user
+    preconditions:
+      - "User is not authenticated"
+      - "User has valid login credentials"
+    steps:
+      - step: 1
+        description: "User navigates to the login area of the application"
+      - step: 2
+        description: "User enters their username and password"
+      - step: 3
+        description: "User submits the login request"
+      - step: 4
+        description: "System validates the provided credentials"
+      - step: 5
+        description: "User is redirected to their account summary on success"
+    alternative_outcomes:
+      - scenario: "Invalid credentials"
+        result: "User remains logged out and sees an authentication error"
+    postconditions:
+      - "User is authenticated"
+      - "User session is active"
+
+  - id: "account_summary"
+    name: "View account summary"
+    category: "accounts"
+    business_goal: "Allow users to see an overview of their owned accounts and balances"
+    actors:
+      - end_user
+    preconditions:
+      - "User is authenticated"
+    steps:
+      - step: 1
+        description: "User navigates to the account summary section"
+      - step: 2
+        description: "System retrieves all accounts owned by the user"
+      - step: 3
+        description: "System displays account types and current balances"
+    postconditions:
+      - "User can see a list of owned accounts"
+
+  - id: "account_activity"
+    name: "View account activity"
+    category: "accounts"
+    business_goal: "Allow users to review transactions for a specific account"
+    actors:
+      - end_user
+    preconditions:
+      - "User is authenticated"
+      - "User owns at least one account"
+    steps:
+      - step: 1
+        description: "User selects an account from their account list"
+      - step: 2
+        description: "System retrieves transaction history for the selected account"
+      - step: 3
+        description: "System displays transactions in chronological order"
+    postconditions:
+      - "User can review past transactions"
+
+  - id: "transfer_funds"
+    name: "Transfer funds between own accounts"
+    category: "payments"
+    business_goal: "Allow users to move money between their own accounts"
+    actors:
+      - end_user
+    preconditions:
+      - "User is authenticated"
+      - "User owns at least two accounts"
+    steps:
+      - step: 1
+        description: "User selects source and destination accounts"
+      - step: 2
+        description: "User enters the transfer amount"
+      - step: 3
+        description: "User confirms the transfer"
+      - step: 4
+        description: "System validates account balances and transfer rules"
+      - step: 5
+        description: "System completes the transfer and updates balances"
+    alternative_outcomes:
+      - scenario: "Insufficient funds"
+        result: "Transfer is rejected and user is informed"
+    postconditions:
+      - "Funds are transferred or transfer is rejected with explanation"
+
+  - id: "pay_bills"
+    name: "Pay bills to registered payees"
+    category: "payments"
+    business_goal: "Allow users to pay bills to predefined service providers"
+    actors:
+      - end_user
+    preconditions:
+      - "User is authenticated"
+      - "At least one payee is registered"
+    steps:
+      - step: 1
+        description: "User selects a payee from the list"
+      - step: 2
+        description: "User enters payment details and amount"
+      - step: 3
+        description: "User confirms the payment"
+      - step: 4
+        description: "System processes the payment"
+    postconditions:
+      - "Payment is completed or rejected with explanation"
+
+  - id: "statements"
+    name: "View account statements"
+    category: "documents"
+    business_goal: "Allow users to access monthly account statements"
+    actors:
+      - end_user
+    preconditions:
+      - "User is authenticated"
+    steps:
+      - step: 1
+        description: "User navigates to the statements section"
+      - step: 2
+        description: "User selects a statement period"
+      - step: 3
+        description: "System displays available statements for the selected period"
+      - step: 4
+        description: "User views or downloads a statement"
+    postconditions:
+      - "User has accessed the selected statement"
+
+  - id: "profile"
+    name: "Manage user profile"
+    category: "user_management"
+    business_goal: "Allow users to view and update their personal information"
+    actors:
+      - end_user
+    preconditions:
+      - "User is authenticated"
+    steps:
+      - step: 1
+        description: "User navigates to the profile section"
+      - step: 2
+        description: "System displays current personal details"
+      - step: 3
+        description: "User updates editable information"
+      - step: 4
+        description: "System validates and saves the changes"
+    postconditions:
+      - "User profile information is updated"
+
+# -------------------------------------------------
+# DOMAIN ENTITIES
+# -------------------------------------------------
+domain_entities:
+  - name: "User"
+    description: >
+      A registered individual who can authenticate into the application
+      and perform banking operations on owned accounts.
+    responsibilities:
+      - "Authenticate into the system"
+      - "View and manage owned accounts"
+      - "Initiate payments and transfers"
+
+  - name: "Account"
+    description: >
+      A financial container owned by a user that holds funds and
+      supports transactions such as transfers and bill payments.
+    responsibilities:
+      - "Store monetary balance"
+      - "Record incoming and outgoing transactions"
+      - "Serve as a source or destination for payments"
+
+  - name: "Transaction"
+    description: >
+      A financial record representing a movement of money into
+      or out of an account.
+    responsibilities:
+      - "Record date, amount, and purpose of a financial movement"
+      - "Provide historical traceability for account activity"
+
+  - name: "Payee"
+    description: >
+      A predefined external entity or service provider to which
+      a user can make payments.
+    responsibilities:
+      - "Receive bill payments from users"
+      - "Be selectable during bill payment flows"
+
+  - name: "Statement"
+    description: >
+      A periodic summary document that provides an overview of
+      account activity for a defined time period.
+    responsibilities:
+      - "Summarize transactions for a given period"
+      - "Be viewable or downloadable by the user"
+
+# -------------------------------------------------
+# TERMINOLOGY
+# -------------------------------------------------
+terminology:
+  - term: "Account"
+    meaning: "A financial container owned by a user, used to hold a balance and record transactions."
+
+  - term: "Account Activity"
+    meaning: "The list of transactions associated with a specific account over time."
+
+  - term: "Payee"
+    meaning: "An external entity registered by a user for the purpose of paying bills."
+
+  - term: "Statement"
+    meaning: "A summarized view of account activity for a defined reporting period."
+
+
+# -------------------------------------------------
+# BUSINESS RULES
+# -------------------------------------------------
+business_rules:
+  - id: "auth_required_for_banking"
+    description: "All banking features require authentication"
+    category: "security"
+
+  - id: "internal_transfers_only"
+    description: "Transfers are allowed only between accounts owned by the logged-in user"
+    category: "payments"
+
+  - id: "positive_transfer_amount"
+    description: "Transfer amount must be greater than zero"
+    category: "validation"
+
+  - id: "sufficient_balance_required"
+    description: "Transfer amount cannot exceed available account balance"
+    category: "validation"
+
+  - id: "payee_selection_required"
+    description: "A valid payee must be selected before bill payment"
+    category: "payments"
+
+  - id: "statement_period_required"
+    description: "A statement period must be selected to view or download a statement"
+    category: "documents"
+
+# -------------------------------------------------
+# USAGE AND QUALITY CONSIDERATIONS
+# -------------------------------------------------
+usage_and_quality_considerations:
+  user_experience:
+    - description: "After login, users primarily navigate through accounts and account-related actions"
+      risk_if_broken: "Users may be unable to find or access their financial data"
+    - description: "Forms require all mandatory information to be provided before submission"
+      risk_if_broken: "Invalid or incomplete data may be submitted"
+
+  security_and_access:
+    - description: "Only authenticated users should be able to access account and transaction information"
+      risk_if_broken: "Sensitive financial data could be exposed"
+    - description: "Authentication failures should not disclose sensitive system information"
+      risk_if_broken: "Increased risk of brute-force or enumeration attacks"
+
+  data_consistency:
+    - description: "Account balances and transactions must reflect the latest available data"
+      risk_if_broken: "Users may make incorrect financial decisions"
+
+# -------------------------------------------------
+# DATA ACCESS (OPTIONAL)
+# -------------------------------------------------
+database:
+  available: false
+  description: >
+    Direct database access is not required for standard test execution.
+    Data validation is expected to be performed via UI and API interactions.
