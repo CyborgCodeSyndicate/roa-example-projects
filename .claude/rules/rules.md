@@ -7,6 +7,8 @@ These rules apply to all Java code and are **enforced through code reviews, Chec
 **For detailed framework concepts and patterns**, see:
 * [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) - Core framework fundamentals
 * [.claude/instructions/ui-framework-instructions.md](../instructions/ui-framework-instructions.md) - UI architecture details
+* [.claude/instructions/api-framework-instructions.md](../instructions/api-framework-instructions.md) - API architecture details
+* [.claude/instructions/db-framework-instructions.md](../instructions/db-framework-instructions.md) - DB architecture details
 
 **For recommended practices (not enforced)**, see:
 * [.claude/rules/best-practices.md](best-practices.md) - Recommended patterns and optimizations

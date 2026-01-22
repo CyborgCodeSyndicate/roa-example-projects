@@ -9,6 +9,8 @@ This document provides **guidelines and best practices** for writing maintainabl
 **For framework fundamentals**, see:
 * [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) - Core framework concepts
 * [.claude/instructions/ui-framework-instructions.md](../instructions/ui-framework-instructions.md) - UI architecture details
+* [.claude/instructions/api-framework-instructions.md](../instructions/api-framework-instructions.md) - API architecture details
+* [.claude/instructions/db-framework-instructions.md](../instructions/db-framework-instructions.md) - DB architecture details
 
 **For code examples**, see:
 * [.claude/ui-test-examples.md](../ui-test-examples.md) - Comprehensive UI testing examples
