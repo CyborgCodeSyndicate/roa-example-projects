@@ -1,4 +1,9 @@
-# **framework-instructions.md (General/Core)**
+# **core-framework-instructions.md**
+
+## About This Document
+**This is the single source of truth for core ROA framework concepts.**
+
+Module-specific files (ui-framework-instructions.md, api-framework-instructions.md, db-framework-instructions.md) reference these core concepts and add module-specific details.
 
 ## Core Framework Principles
 The ROA (Ring of Abstraction) test framework is built on fluent API design, type-safe data injection, 
@@ -51,7 +56,7 @@ declarative validation, and automated lifecycle management.
 @Test
 @Smoke
 void criticalLoginFlow(Quest quest) {
-// Critical path test
+    // Critical path test
 }
 ```
 
@@ -59,7 +64,7 @@ void criticalLoginFlow(Quest quest) {
 @Test
 @Regression
 void detailedUserManagement(Quest quest) {
-// Regression coverage test
+    // Regression coverage test
 }
 ```
 
@@ -68,7 +73,7 @@ void detailedUserManagement(Quest quest) {
 @Smoke
 @Regression
 void completeCheckoutFlow(Quest quest) {
-// Both smoke and regression
+    // Both smoke and regression
 }
 ```
 
@@ -216,8 +221,8 @@ QueryResponse results = retrieve(StorageKeysDb.DB, QUERY_NAME, QueryResponse.cla
 
 ```java
 .validate(() -> {
-assertEquals(expected, actual, "Custom validation message");
-assertTrue(condition, "Condition not met");
+    assertEquals(expected, actual, "Custom validation message");
+    assertTrue(condition, "Condition not met");
 })
 ```
 

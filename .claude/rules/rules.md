@@ -140,7 +140,7 @@ These rules apply to all Java code and are enforced through code reviews, Checks
 * Use secure random number generation (SecureRandom) for security-sensitive operations
 * Follow principle of least privilege; grant minimal permissions
 
-#### Code Quality Tools
+### Code Quality Tools
 **Checkstyle Enforcement**
 * Use the ROA custom Checkstyle configuration for all code
 * Enable Checkstyle in IntelliJ IDEA: Settings → Tools → Checkstyle
@@ -159,7 +159,7 @@ These rules apply to all Java code and are enforced through code reviews, Checks
 * Check test coverage and quality
 * Provide constructive feedback
 
-#### Code Documentation Rules
+### Code Documentation Rules
 **Comments:**
 * NEVER add narrative comments explaining step-by-step what code does
 * NEVER add "thinking process" comments showing reasoning
@@ -219,38 +219,29 @@ These rules apply to all Java code and are enforced through code reviews, Checks
 
 ## ROA Framework Rules
 
-### Quest DSL Requirements
-* All Quest chains MUST end with `.complete()`
-* Use `.drop()` when switching between service ring contexts
+See [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) for complete Quest DSL and framework documentation.
+
+### Quest DSL Requirements (Mandatory Enforcement)
+* All Quest chains MUST end with `.complete()` (compilation requirement)
+* Use `.drop()` when switching between service ring contexts (prevents context errors)
 * Quest parameter MUST be first parameter in test methods
 * Never attempt to access `quest.getDriver()` (method does not exist)
-* Never attempt to access `quest.getStorage()` (use retrieve() methods)
+* Never attempt to access `quest.getStorage()` (method does not exist)
 
 ### Component Architecture (UI)
-**ComponentType Interface Contract**
-* ComponentType enums MUST implement `getType()` method returning `this`
-* Never implement `enumImpl()` in ComponentType enums (wrong interface)
+See [.claude/instructions/ui-framework-instructions.md](../instructions/ui-framework-instructions.md) for complete UI component architecture documentation.
 
-**UiElement Interface Contract**
-* UiElement enums MUST implement `enumImpl()` method returning `this`
-* Never implement `getType()` in UiElement enums (wrong interface)
-
-**Three-Layer Architecture (Mandatory)**
-* UI components require ALL three layers:
-    1. Component Type Registry (`ui/types/*FieldTypes.java`) with `getType()`
-    2. Element Definition (`ui/elements/*Fields.java`) with `enumImpl()`
-    3. Component Implementation (`ui/components/<type>/*Impl.java`) with `@ImplementationOfType`
-* Missing any layer causes runtime component resolution failure
-
-**Component Implementation Requirements**
-* MUST extend `BaseComponent`
-* MUST implement component interface (Button, Input, Alert, etc.)
-* MUST have `@ImplementationOfType` annotation
+**Mandatory Enforcement:**
+* ComponentType enums MUST implement `getType()` (not `enumImpl()`)
+* UiElement enums MUST implement `enumImpl()` (not `getType()`)
+* ALL three layers required (Type Registry, Element Definition, Implementation)
+* Component implementations MUST use `findSmartElement()` (not `findElement()`)
+* Component implementations MUST use `getDomProperty()` (not `getAttribute()`)
+* Component implementations MUST extend `BaseComponent`
+* Component implementations MUST have `@ImplementationOfType` annotation
 * Constructor MUST accept `SmartWebDriver` and call `super(driver)`
-* MUST use `findSmartElement()` (not `findElement()`)
-* MUST use `getDomProperty()` (not deprecated `getAttribute()`)
 
-**UI Service Method Naming**
+**UI Service Method Naming (Mandatory):**
 * When extending `UiServiceFluent`, call correct parent methods:
     - `getAlertField()` not `getAlert()`
     - `getButtonField()` not `getButton()`
@@ -258,7 +249,7 @@ These rules apply to all Java code and are enforced through code reviews, Checks
     - `getSelectField()` not `getSelect()`
 
 ### Validation Rules
-**Component-Specific Validation**
+**Component-Specific Validation (Mandatory)**
 * Alert validation MUST use `.alert().validateValue()` (not `Assertion.builder()`)
 * API/DB validation MUST use `Assertion.builder()`
 * Table validation MUST use `.table().validate(table, Assertion.builder()...)`
@@ -269,61 +260,69 @@ These rules apply to all Java code and are enforced through code reviews, Checks
 * Tests without validation are incomplete and should not be merged
 
 ### Data Management Rules
+See [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) for @Craft details.
+
+**Mandatory Enforcement:**
 * Use `@Craft` for test data injection (not inline object construction in tests)
 * Use `Late<@Craft>` for lazy instantiation when needed
 * Never hardcode test data values in test methods
 * Store test data in configuration files or DataCreator enums
 
 ### Authentication Rules
+See [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) for authentication fundamentals.
+
+**Mandatory Enforcement:**
 * Use `@AuthenticateViaApi` or `@AuthenticateViaUi` for authentication
 * Never implement manual login steps in test methods when authentication annotations exist
 * Store credentials in configuration files (never in code)
 
 ### Precondition and Cleanup Rules
+See [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) for @Journey and @Ripper fundamentals.
+
+**Mandatory Enforcement:**
 * Use `@Journey` for reusable preconditions
 * Use `@Ripper` for automatic cleanup
 * Never rely on manual cleanup that can be skipped on test failure
 
-
 ### Forbidden Practices
 
 **Universal (All Code)**
-❌ Never hardcode credentials or sensitive data
-❌ Never use System.out.println() for logging; use logging framework
-❌ Never catch Throwable or generic Exception without rethrowing
-❌ Never use empty catch blocks
-❌ Never use raw types (e.g., List instead of List<String>)
-❌ Never ignore compiler warnings; address or suppress with justification
-❌ Never use reflection when type-safe alternatives exist
-❌ Never concatenate SQL queries with user input
-❌ Never commit commented-out code; remove it
-❌ Never use mutable static variables
-❌ Never use Thread.sleep() in production code; use proper synchronization
-❌ Never ignore test failures; fix or disable with reason
-❌ Never use wildcard imports
-❌ Never leave comments in the code (e.g., // TODO, // FIXME, // NOTE)
+* ❌ Never hardcode credentials or sensitive data
+* ❌ Never use System.out.println() for logging; use logging framework
+* ❌ Never catch Throwable or generic Exception without rethrowing
+* ❌ Never use empty catch blocks
+* ❌ Never use raw types (e.g., List instead of List<String>)
+* ❌ Never ignore compiler warnings; address or suppress with justification
+* ❌ Never use reflection when type-safe alternatives exist
+* ❌ Never concatenate SQL queries with user input
+* ❌ Never commit commented-out code; remove it
+* ❌ Never use mutable static variables
+* ❌ Never use Thread.sleep() in production code; use proper synchronization
+* ❌ Never ignore test failures; fix or disable with reason
+* ❌ Never use wildcard imports
+* ❌ Never leave comments in the code (e.g., // TODO, // FIXME, // NOTE)
 
 **ROA Framework**
-❌ Never forget `.complete()` at end of Quest chains (compilation requirement)
-❌ Never skip `.drop()` when switching service rings (causes context errors)
-❌ Never try to access `quest.getDriver()` (method does not exist)
-❌ Never try to access `quest.getStorage()` (method does not exist)
+* ❌ Never forget `.complete()` at end of Quest chains (compilation requirement)
+* ❌ Never skip `.drop()` when switching service rings (causes context errors)
+* ❌ Never try to access `quest.getDriver()` (method does not exist)
+* ❌ Never try to access `quest.getStorage()` (method does not exist)
 
 **ROA UI Framework**
-❌ Never implement `enumImpl()` in ComponentType enums (use `getType()`)
-❌ Never implement `getType()` in UiElement enums (use `enumImpl()`)
-❌ Never use `findElement()` in component implementations (use `findSmartElement()`)
-❌ Never use `getAttribute()` in component implementations (use `getDomProperty()`)
-❌ Never use `Assertion.builder()` for alert validation (causes compilation error)
-❌ Never call wrong parent methods (e.g., `getAlert()` instead of `getAlertField()`)
-❌ Never create only 2 of 3 component layers (causes runtime failure)
-❌ Never use raw locators in tests (always use element enum constants)
-❌ Never create tests without validation
+* ❌ Never implement `enumImpl()` in ComponentType enums (use `getType()`)
+* ❌ Never implement `getType()` in UiElement enums (use `enumImpl()`)
+* ❌ Never use `findElement()` in component implementations (use `findSmartElement()`)
+* ❌ Never use `getAttribute()` in component implementations (use `getDomProperty()`)
+* ❌ Never use `Assertion.builder()` for alert validation (causes compilation error)
+* ❌ Never call wrong parent methods (e.g., `getAlert()` instead of `getAlertField()`)
+* ❌ Never create only 2 of 3 component layers (causes runtime failure)
+* ❌ Never use raw locators in tests (always use element enum constants)
+* ❌ Never create tests without validation
 
 **ROA API Framework**
-❌ Never hardcode API URLs in code (use configuration files)
-❌ Never parse JSON manually (use framework JsonPath support)
+* ❌ Never hardcode API URLs in code (use configuration files)
+* ❌ Never parse JSON manually (use framework JsonPath support)
 
 **ROA Database Framework**
-❌ Never concatenate SQL with parameters (use parameterized queries)
-❌ Never hardcode database credentials (use configuration files)
+* ❌ Never concatenate SQL with parameters (use parameterized queries)
+* ❌ Never hardcode database credentials (use configuration files)

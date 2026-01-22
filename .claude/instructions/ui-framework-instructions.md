@@ -1,5 +1,16 @@
 # **ui-framework-instructions.md**
 
+## Prerequisites
+Before implementing UI components or tests, read [core-framework-instructions.md](core-framework-instructions.md) for:
+- Quest object fundamentals
+- Service ring management
+- Test completion requirements (.complete())
+- Test data management (@Craft annotation)
+- Preconditions (@Journey) and cleanup (@Ripper)
+- Validation requirements
+
+This file contains **UI-specific architecture and patterns only**.
+
 ## Interface Contracts
 
 ### ComponentType vs UiElement
@@ -28,22 +39,15 @@ definitions, lifecycle hooks, and table operations.
 * Use `@DisplayName("...")` for descriptive test organization
 
 **Class Inheritance**
-* Extend `BaseQuest` for standard UI test execution
-* Extend `BaseQuestSequential` when tests must execute sequentially
+* See [core-framework-instructions.md](core-framework-instructions.md) for BaseQuest vs BaseQuestSequential
 
 ### Test Method Structure
-**Quest Object**
-* Every UI test method must accept a Quest parameter as the first argument
-* The Quest object orchestrates all UI operations via fluent API
-* Never instantiate `Quest` manually; let the framework inject it
+See [core-framework-instructions.md](core-framework-instructions.md) for Quest object basics, service ring management, and test completion requirements.
 
-**Service Ring Management**
-* Use `.use(RING_OF_UI)` to activate the UI service ring
+**UI-Specific Requirements:**
+* Use `@UI` annotation on test classes
+* Use `.use(RING_OF_UI)` to activate UI service ring
 * Use `.drop()` when switching to other rings if your project has multiple modules
-* Always drop before switching contexts
-
-**Test Completion**
-* Always end test methods with `.complete()` to finalize quest execution
 
 ### UI Component System
 **Component Architecture**
@@ -81,18 +85,14 @@ definitions, lifecycle hooks, and table operations.
 ```java
 // Minimal declaration - only locator and component type
 SIGN_IN_BUTTON(By.tagName("vaadin-button"), ButtonFieldTypes.VA_BUTTON_TYPE)
-```
 
 // With before hook for synchronization
-```java
 NEW_ORDER_BUTTON(By.cssSelector("vaadin-button#action"), ButtonFieldTypes.VA_BUTTON_TYPE,
-SharedUi.WAIT_TO_BE_CLICKABLE)
-```
+    SharedUi.WAIT_TO_BE_CLICKABLE)
 
 // With both before and after hooks
-```java
 DELETE_BUTTON(By.id("delete-btn"), ButtonFieldTypes.VA_BUTTON_TYPE,
-SharedUi.WAIT_TO_BE_CLICKABLE, ButtonFields::waitForRemoval)
+    SharedUi.WAIT_TO_BE_CLICKABLE, ButtonFields::waitForRemoval)
 ```
 
 **Required Properties**
@@ -156,13 +156,13 @@ SharedUi.WAIT_TO_BE_CLICKABLE, ButtonFields::waitForRemoval)
 public enum ButtonFieldTypes implements ButtonComponentType {
     BOOTSTRAP_BUTTON_TYPE,
     VA_BUTTON_TYPE;
-    
+
     public static final class Data {
         public static final String BOOTSTRAP_BUTTON_TYPE = "BOOTSTRAP_BUTTON_TYPE";
         public static final String VA_BUTTON_TYPE = "VA_BUTTON_TYPE";
         private Data() {}
     }
-    
+
     @Override
     public Enum<?> getType() {  // ✅ MUST use getType()
         return this;
@@ -187,17 +187,17 @@ public enum ButtonFieldTypes implements ButtonComponentType {
 ```java
 @ImplementationOfType(ButtonFieldTypes.Data.BOOTSTRAP_BUTTON_TYPE)
 public class ButtonBootstrapImpl extends BaseComponent implements Button {
-    
+
     public ButtonBootstrapImpl(SmartWebDriver driver) {
         super(driver);
     }
-    
+
     @Override
     public void click(By locator) {
         SmartWebElement button = driver.findSmartElement(locator);  // ✅ Use findSmartElement
         button.click();
     }
-    
+
     @Override
     public boolean isEnabled(By locator) {
         SmartWebElement button = driver.findSmartElement(locator);
@@ -213,10 +213,11 @@ public class ButtonBootstrapImpl extends BaseComponent implements Button {
 
 **Smart API Reference:**
 
-|Standard Selenium API  |	Smart API                       |	Why                                             |
-|driver.findElement()   |	    driver.findSmartElement()   |	Returns SmartWebElement with framework features |
-|element.findElement()  |	element.findSmartElement()      |	Nested element search                           |
-|element.getAttribute()	|   element.getDomProperty()        |	Modern DOM property access                      |
+| Standard Selenium API    | Smart API                       | Why                                             |
+|--------------------------|----------------------------------|------------------------------------------------|
+| driver.findElement()     | driver.findSmartElement()        | Returns SmartWebElement with framework features|
+| element.findElement()    | element.findSmartElement()       | Nested element search                          |
+| element.getAttribute()   | element.getDomProperty()         | Modern DOM property access                     |
 
 ### Lifecycle Hooks
 **Before Hooks**
@@ -281,7 +282,7 @@ public class ButtonBootstrapImpl extends BaseComponent implements Button {
 * Define login flows in dedicated login classes (e.g., `AppUiLogin`)
 * Authentication executes before test method starts
 
-### UI component (Button, Input, Select, Alert, etc...) Validation
+### UI Component Validation
 **Component-Specific Validation Methods**
 * UI components use dedicated validation methods, NOT the generic `Assertion.builder()` pattern
 * `Assertion.builder()` is only for API/DB/Table validation
@@ -297,7 +298,6 @@ public class ButtonBootstrapImpl extends BaseComponent implements Button {
 .alert().validateValue(AlertFields.ERROR_MESSAGE, "Expected text", true)
 .alert().validateIsVisible(AlertFields.ERROR_MESSAGE, true)
 .alert().validateIsHidden(AlertFields.SUCCESS_MESSAGE, true)
-Example:
 ```
 
 ```java
@@ -310,33 +310,29 @@ void errorAlertIsDisplayedWithCorrectMessage(Quest quest) {
         .complete();
 }
 ```
+
 **IMPORTANT - Do NOT Use:**
-❌ Assertion.builder() for alert validation
-❌ import io.cyborgcode.roa.ui.validator.UiAlertAssertionTarget - doesn't exist
-❌ import io.cyborgcode.roa.ui.validator.UiAlertAssertionTypes - doesn't exist
+* ❌ Assertion.builder() for alert validation
+* ❌ import io.cyborgcode.roa.ui.validator.UiAlertAssertionTarget - doesn't exist
+* ❌ import io.cyborgcode.roa.ui.validator.UiAlertAssertionTypes - doesn't exist
 
 ### Test Data Management
-**@Craft for Form Data**
-* Use `@Craft(model = DataCreator.Data.MODEL_NAME)` to inject UI form data models.
-* Access model fields via getter methods in UI interaction steps.
-* Use `.insertion().insertData(model)` for automatic form population with crafted models.
-* Use `Late<@Craft>` for lazy instantiation when the form data depends on data produced earlier in the quest.
+See [core-framework-instructions.md](core-framework-instructions.md) for @Craft annotation details.
 
-### Preconditions
-**Journey with UI Preconditions**
-* Use `@Journey` to perform UI or mixed (UI/API/DB) precondition flows before the main test execution.
-* Define UI-related preconditions in the `Preconditions` enum.
-* Add constants as strings in Preconditions enum Data class for usage in `@Journey` annotations.
-* Validate required UI state (e.g., logged-in session, navigation, preloaded data) before test execution.
-* Combine UI journeys with other module journeys using the order attribute if your project has multiple modules.
+**UI-Specific @Craft Usage:**
+* Use `@Craft(model = DataCreator.Data.MODEL_NAME)` to inject UI form data models
+* Access model fields via getter methods in UI interaction steps
+* Use `.insertion().insertData(model)` for automatic form population with crafted models
+* Use `Late<@Craft>` for lazy instantiation when the form data depends on data produced earlier in the quest
 
-### UI-Level Cleanup
-**@Ripper for UI/Data Cleanup**
-* Use `@Ripper` to specify cleanup operations related to UI-created data (users, orders, form submissions, uploaded files).
-* Define cleanup targets in DataCleaner enum.
-* Add constants as strings in DataCleaner enum Data class for usage in `@Ripper` annotations.
-* Cleanup executes after test completion (success or failure).
-* Ensures isolation of UI test data and prevents pollution of the application state across test runs.
+### Preconditions and Cleanup
+See [core-framework-instructions.md](core-framework-instructions.md) for @Journey and @Ripper fundamentals.
+
+**UI-Specific Usage:**
+* Use `@Journey` to perform UI or mixed (UI/API/DB) precondition flows before the main test execution
+* Define UI-related preconditions in the `Preconditions` enum
+* Use `@Ripper` to specify cleanup operations related to UI-created data (users, orders, form submissions, uploaded files)
+* Ensures isolation of UI test data and prevents pollution of the application state across test runs
 
 **Insertion Service**
 * Use `.insertion().insertData(model)` to populate forms automatically
@@ -347,27 +343,21 @@ void errorAlertIsDisplayedWithCorrectMessage(Quest quest) {
 * Use `getUiConfig().baseUrl()` for environment-specific UI URLs
 * Store UI credentials in test_data-{env}.properties
 
-**Validation Requirements**
-* Provide at least one validation in each UI test
-* Use framework assertion builders for declarative validation
-* Use component-specific validation methods (e.g., .alert().validateValue())
-* Use `.validate(() -> {})` for custom validation logic
-
 ### Quest API Surface
 **Quest maintains high-level abstraction and does NOT expose internal details.**
 
 **Available Methods:**
 ```java
 quest
-        .use(RING_OF_UI)
-        .button().click(ButtonFields.SUBMIT_BUTTON)
-        .validate().validateIsVisible(ButtonFields.SUBMIT_BUTTON)
-        .complete();
+    .use(RING_OF_UI)
+    .button().click(ButtonFields.SUBMIT_BUTTON)
+    .button().validateIsVisible(ButtonFields.SUBMIT_BUTTON)
+    .complete();
 ```
 
 **NOT Available:**
-❌ quest.getDriver() - Method doesn't exist
-❌ quest.getStorage() - Method doesn't exist
+* ❌ quest.getDriver() - Method doesn't exist
+* ❌ quest.getStorage() - Method doesn't exist
 
 For validation, use framework services instead:
 ```java
@@ -377,8 +367,8 @@ For validation, use framework services instead:
 })
 
 // ✅ CORRECT
-.validate().validateIsVisible(ButtonElements.USER_BTN)
-.validate().validateIsEnabled(ButtonElements.USER_BTN)
+.button().validateIsVisible(ButtonElements.USER_BTN)
+.button().validateIsEnabled(ButtonElements.USER_BTN)
 ```
 
 ### UI Service Parent Methods
@@ -386,26 +376,25 @@ For validation, use framework services instead:
 
 | Component | ✅ Correct Parent Method | ❌ Wrong Method |
 |-----------|-------------------------|----------------|
-| Alert | `getAlertField()` | `getAlert()` |
-| Button | `getButtonField()` | `getButton()` |
-| Input | `getInputField()` | `getInput()` |
-| Select | `getSelectField()` | `getSelect()` |
-| Radio | `getRadioField()` | `getRadio()` |
-| Checkbox | `getCheckboxField()` | `getCheckbox()` |
-| Link | `getLinkField()` | `getLink()` |
-| List | `getListField()` | `getList()` |
+| Alert     | `getAlertField()`       | `getAlert()`   |
+| Button    | `getButtonField()`      | `getButton()`  |
+| Input     | `getInputField()`       | `getInput()`   |
+| Select    | `getSelectField()`      | `getSelect()`  |
+| Radio     | `getRadioField()`       | `getRadio()`   |
+| Checkbox  | `getCheckboxField()`    | `getCheckbox()`|
+| Link      | `getLinkField()`        | `getLink()`    |
+| List      | `getListField()`        | `getList()`    |
 
 **Example:**
 ```java
 public class AppUiService extends UiServiceFluent<AppUiService> {
-    
+
     public AlertServiceFluent<AppUiService> alert() {
         return getAlertField();  // ✅ Correct
     }
-    
+
     public ButtonServiceFluent<AppUiService> button() {
         return getButtonField();  // ✅ Correct
     }
 }
 ```
-

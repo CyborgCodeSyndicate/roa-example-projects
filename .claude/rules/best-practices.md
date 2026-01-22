@@ -4,6 +4,10 @@
 This document provides guidelines and best practices for writing maintainable, efficient, and reliable 
 tests using the ROA framework. These are recommendations that improve code quality but are not strictly enforced.
 
+For mandatory standards, see [rules.md](rules.md).
+For framework fundamentals, see [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md).
+For UI architecture, see [.claude/instructions/ui-framework-instructions.md](../instructions/ui-framework-instructions.md).
+
 ### Universal Testing Best Practices
 **Test Independence**
 * Each test must run independently in any order
@@ -50,8 +54,10 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Break down lengthy tests into smaller, focused scenarios
 * Long tests are harder to maintain and debug
 
-**ROA Framework Best Practices**
-* `Quest` and DSL Chaining
+### ROA Framework Best Practices
+See [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) for Quest DSL, @Craft, @Journey, @Ripper, and validation fundamentals.
+
+**Recommended Practices:**
 * Use fluent DSL chaining for readability
 * Keep quest chains focused and linear
 * Use `.drop()` when changing contexts between rings
@@ -92,13 +98,13 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Combine multiple journeys with order attribute
 * Ensure cleanup happens even on test failure
 
-**Performance Best Practices**
-* String Operations
+### Performance Best Practices
+**String Operations**
 * Use StringBuilder for string concatenation in loops
 * Use text blocks ("""...""") for multi-line strings
+* Cache compiled regex patterns
 
-**Cache compiled regex patterns**
-* Resource Management
+**Resource Management**
 * Close resources explicitly using try-with-resources
 * Avoid resource leaks (connections, streams, files)
 * Dispose of large objects when no longer needed
@@ -113,8 +119,8 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Use static factory methods instead of constructors when appropriate
 * Avoid premature optimization; measure before optimizing
 
-**Test Data Best Practices**
-* Data Builders and Factories
+### Test Data Best Practices
+**Data Builders and Factories**
 * Use test data builders or factories (e.g., `@Craft` models)
 * Avoid hardcoding test data; use constants or configuration
 * Generate unique test data to avoid conflicts
@@ -126,8 +132,8 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Use database transactions with rollback when appropriate
 * Prevent test data accumulation in test environments
 
-**Assertion Best Practices**
-* Meaningful Assertions
+### Assertion Best Practices
+**Meaningful Assertions**
 * Provide meaningful assertion messages
 * Assert on specific values, not just existence
 * Avoid brittle assertions (e.g., exact timestamp matching)
@@ -138,8 +144,8 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Group related assertions together
 * All soft assertions execute before reporting failures
 
-**CI/CD Best Practices**
-* Build Quality
+### CI/CD Best Practices
+**Build Quality**
 * All builds must pass in CI/CD pipeline before merge
 * CI must run: compile, test, Checkstyle, static analysis
 * Failed builds must be fixed immediately
@@ -152,7 +158,7 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Parallelize test execution for faster feedback
 
 **Quality Gates**
-* Pre-Merge Requirements
+**Pre-Merge Requirements**
 * Code must compile successfully
 * All affected tests must pass
 * All new tests must pass
@@ -167,8 +173,8 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Review test coverage trends
 * Address failing or skipped tests promptly
 
-**Maintainability Best Practices**
-* Code Organization
+### Maintainability Best Practices
+**Code Organization**
 * Group related tests in the same class
 * Organize test classes by feature or domain
 * Keep project structure consistent
@@ -187,7 +193,7 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Use `@Description` for detailed test context
 
 **Debugging Best Practices**
-* Test Failures
+**Test Failures**
 * Investigate failures immediately; don't ignore them
 * Check Allure reports for screenshots, logs, and request/response data
 * Reproduce failures locally before fixing
@@ -200,6 +206,7 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Use framework lifecycle hooks for stability
 
 ### ROA UI Framework Best Practices
+See [.claude/instructions/ui-framework-instructions.md](../instructions/ui-framework-instructions.md) for complete UI component architecture.
 
 **Component Architecture**
 * Always create all three layers when adding new UI components:
@@ -235,7 +242,7 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Every UI test must include at least one validation
 * Use component-specific validation methods:
     - Alerts: `.alert().validateValue(element, expectedText)`
-    - Element state: `.validate().validateIsEnabled(element)`
+    - Element state: `.button().validateIsEnabled(element)`
     - Navigation: `.browser().navigate(protectedUrl)` validates access
 * Do not use `Assertion.builder()` for alert validation (use direct methods)
 * Do not try to access `quest.getDriver()` for validation
@@ -266,7 +273,7 @@ tests using the ROA framework. These are recommendations that improve code quali
 * Use soft assertions for multiple related UI validations:
     - `.alert().validateValue(element, text, true)` for soft alert validation
     - `.checkbox().validateIsVisible(element, true)` for soft visibility checks
-    - `.button().validateIsEnabled(element, true)` for soft visibility checks
+    - `.button().validateIsEnabled(element, true)` for soft state checks
 * Soft assertions allow test to continue and report all failures at once
 * Useful for form validation with multiple error messages
 
@@ -327,52 +334,52 @@ tests using the ROA framework. These are recommendations that improve code quali
 ### Forbidden Practices
 
 **Universal (All Modules)**
-❌ Never hardcode credentials, API keys, or tokens in test code
-❌ Never use `System.out.println()` for logging (use logging framework)
-❌ Never commit code with failing tests or compilation errors
-❌ Never ignore compiler warnings without addressing or justifying
-❌ Never use wildcard imports (e.g., `import java.util.*`)
-❌ Never use empty catch blocks
-❌ Never use raw types (e.g., `List` instead of `List<String>`)
-❌ Never share mutable state between tests
-❌ Never use `Thread.sleep()` in production code (use proper synchronization)
-❌ Never concatenate SQL queries with user input (use parameterized queries)
-❌ Never commit commented-out code (remove it)
+* ❌ Never hardcode credentials, API keys, or tokens in test code
+* ❌ Never use `System.out.println()` for logging (use logging framework)
+* ❌ Never commit code with failing tests or compilation errors
+* ❌ Never ignore compiler warnings without addressing or justifying
+* ❌ Never use wildcard imports (e.g., `import java.util.*`)
+* ❌ Never use empty catch blocks
+* ❌ Never use raw types (e.g., `List` instead of `List<String>`)
+* ❌ Never share mutable state between tests
+* ❌ Never use `Thread.sleep()` in production code (use proper synchronization)
+* ❌ Never concatenate SQL queries with user input (use parameterized queries)
+* ❌ Never commit commented-out code (remove it)
 
 **ROA Framework**
-❌ Never forget `.complete()` at the end of Quest chains
-❌ Never skip `.drop()` when switching between service rings
-❌ Never build test data objects in test methods (use `@Craft`)
-❌ Never skip validation in tests (every test needs at least one assertion)
-❌ Never hardcode test data (use `@Craft` or configuration files)
-❌ Never create tests longer than 50 lines without extracting to service rings
-❌ Never create environment-dependent tests
+* ❌ Never forget `.complete()` at the end of Quest chains
+* ❌ Never skip `.drop()` when switching between service rings
+* ❌ Never build test data objects in test methods (use `@Craft`)
+* ❌ Never skip validation in tests (every test needs at least one assertion)
+* ❌ Never hardcode test data (use `@Craft` or configuration files)
+* ❌ Never create tests longer than 50 lines without extracting to service rings
+* ❌ Never create environment-dependent tests
 
 **ROA UI Framework**
-❌ Never try to access `quest.getDriver()` (not exposed by Quest)
-❌ Never use `findElement()` in component implementations (use `findSmartElement()`)
-❌ Never use `getAttribute()` in component implementations (use `getDomProperty()`)
-❌ Never use `Assertion.builder()` for alert validation (use `.validateValue()`)
-❌ Never implement `enumImpl()` in ComponentType enums (use `getType()`)
-❌ Never implement `getType()` in UiElement enums (use `enumImpl()`)
-❌ Never forget to create component implementations (three-layer architecture required)
-❌ Never call wrong parent methods in UI service (e.g., `getAlert()` instead of `getAlertField()`)
-❌ Never create UI tests without validation
-❌ Never mix validation patterns between different component types
-❌ Never use raw locators in tests (always use element enum constants)
-❌ Never add business logic to element definitions or component implementations
+* ❌ Never try to access `quest.getDriver()` (not exposed by Quest)
+* ❌ Never use `findElement()` in component implementations (use `findSmartElement()`)
+* ❌ Never use `getAttribute()` in component implementations (use `getDomProperty()`)
+* ❌ Never use `Assertion.builder()` for alert validation (use `.validateValue()`)
+* ❌ Never implement `enumImpl()` in ComponentType enums (use `getType()`)
+* ❌ Never implement `getType()` in UiElement enums (use `enumImpl()`)
+* ❌ Never forget to create component implementations (three-layer architecture required)
+* ❌ Never call wrong parent methods in UI service (e.g., `getAlert()` instead of `getAlertField()`)
+* ❌ Never create UI tests without validation
+* ❌ Never mix validation patterns between different component types
+* ❌ Never use raw locators in tests (always use element enum constants)
+* ❌ Never add business logic to element definitions or component implementations
 
 **ROA API Framework**
-❌ Never hardcode API URLs (use configuration files)
-❌ Never parse JSON responses manually (use framework JsonPath support)
-❌ Never ignore HTTP status codes in validation
-❌ Never create duplicate endpoint definitions
+* ❌ Never hardcode API URLs (use configuration files)
+* ❌ Never parse JSON responses manually (use framework JsonPath support)
+* ❌ Never ignore HTTP status codes in validation
+* ❌ Never create duplicate endpoint definitions
 
 **ROA Database Framework**
-❌ Never concatenate SQL queries with parameters (use parameterized queries)
-❌ Never leave database connections open (framework manages them)
-❌ Never hardcode database credentials (use configuration files)
-❌ Never use production database for testing
+* ❌ Never concatenate SQL queries with parameters (use parameterized queries)
+* ❌ Never leave database connections open (framework manages them)
+* ❌ Never hardcode database credentials (use configuration files)
+* ❌ Never use production database for testing
 
 ### Code Review Checklist
 
@@ -416,7 +423,6 @@ tests using the ROA framework. These are recommendations that improve code quali
 - [ ] No code duplication (extracted to reusable components)
 - [ ] Meaningful variable and method names
 - [ ] Proper Javadoc for public classes and methods
-- [ ] Inline comments explain "why" not "what"
 
 ### Troubleshooting Common Issues
 
