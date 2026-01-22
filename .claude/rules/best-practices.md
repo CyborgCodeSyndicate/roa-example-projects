@@ -1,473 +1,757 @@
 # **best-practices.md**
 
 ## **Overview**
-This document provides guidelines and best practices for writing maintainable, efficient, and reliable 
-tests using the ROA framework. These are recommendations that improve code quality but are not strictly enforced.
+This document provides **guidelines and best practices** for writing maintainable, efficient, and reliable tests using the ROA framework. These are **recommendations that improve code quality** but are **not strictly enforced**.
 
-For mandatory standards, see [rules.md](rules.md).
-For framework fundamentals, see [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md).
-For UI architecture, see [.claude/instructions/ui-framework-instructions.md](../instructions/ui-framework-instructions.md).
+**For mandatory standards**, see:
+* [rules.md](rules.md) - Enforced coding standards
 
-### Universal Testing Best Practices
-**Test Independence**
+**For framework fundamentals**, see:
+* [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) - Core framework concepts
+* [.claude/instructions/ui-framework-instructions.md](../instructions/ui-framework-instructions.md) - UI architecture details
+
+**For code examples**, see:
+* [.claude/ui-test-examples.md](../ui-test-examples.md) - Comprehensive UI testing examples
+
+---
+
+## Universal Testing Best Practices
+
+### Test Independence
 * Each test must run independently in any order
 * Tests should not depend on execution sequence
 * No shared mutable state between tests
 * Generate unique test data per execution to avoid conflicts
 
-**Test Isolation**
+**Why:** Independent tests are reliable, parallelizable, and easier to debug.
+
+### Test Isolation
 * Use `@Journey` for setup, `@Ripper` for cleanup
 * Clean up created data after test execution
 * Use separate database instances or rollback transactions
 * Avoid test data pollution across test runs
 
-**Environment Agnostic Tests**
+**Why:** Isolated tests prevent cascading failures and false positives/negatives.
+
+### Environment Agnostic Tests
 * Tests should be data-agnostic and not depend on a single environment
 * Use configuration files (`test_data-{env}.properties`) for environment-specific data
 * Avoid hardcoding environment-specific values (URLs, credentials, IDs)
 * Tests should pass in dev, test, staging, and production environments with proper configuration
 
-**Test Execution Time**
-* Individual tests should complete within 1 minute
+**Why:** Environment-agnostic tests are portable and reduce maintenance burden.
+
+### Test Execution Time
+* Individual tests should complete within **1 minute**
 * Long-running tests should be moved to integration or performance test suites
 * Optimize slow tests by reducing unnecessary waits or operations
 * Use parallel execution for independent tests to improve overall suite speed
 
-**Test Structure**
-* Follow Arrange-Act-Assert (AAA) pattern
+**Why:** Fast tests provide quick feedback and encourage frequent test execution.
+
+### Test Structure
+* Follow **Arrange-Act-Assert (AAA)** pattern
 * One logical assertion per test method
 * Use descriptive test names that explain the scenario
 * Keep test methods focused on single scenarios
 
-**Test Readability**
-* Use @DisplayName for business-readable test names
+**Why:** Well-structured tests are easier to read, understand, and maintain.
+
+**Example:**
+```java
+@Test
+void createUser_withValidData_returnsSuccess(Quest quest, @Craft(...) User user) {
+    // Arrange: Set up preconditions (handled by @Craft)
+
+    // Act: Perform the action
+    quest
+        .use(RING_OF_UI)
+        .browser().navigate(getUiConfig().baseUrl() + "/users/new")
+        .insertion().insertData(user)
+        .button().click(ButtonFields.SAVE)
+
+    // Assert: Verify the outcome
+        .alert().validateValue(AlertFields.SUCCESS, "User created successfully")
+        .complete();
+}
+```
+
+### Test Readability
+* Use `@DisplayName` for business-readable test names
 * Keep quest chains readable with proper indentation
 * Extract complex logic to custom service rings
 * Use meaningful variable names that convey intent
-* For UI tests don't provide the web url directly instead call `getUiConfig().baseUrl()` method
+* For UI tests, use `getUiConfig().baseUrl()` instead of hardcoded URLs
 * Use element enum constants, never raw locators in tests
 * Name element constants descriptively (e.g., `LOGIN_BUTTON` not `BTN1`)
 
-**Test Method Length**
-* Keep test methods concise (recommended: under 50 lines)
+**Why:** Readable tests serve as living documentation and reduce cognitive load.
+
+### Test Method Length
+* Keep test methods concise (recommended: **under 50 lines**)
 * Extract complex flows into custom service ring methods
 * Break down lengthy tests into smaller, focused scenarios
 * Long tests are harder to maintain and debug
 
-### ROA Framework Best Practices
-See [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) for Quest DSL, @Craft, @Journey, @Ripper, and validation fundamentals.
+**Why:** Short, focused tests are easier to understand and less likely to contain hidden bugs.
+
+---
+
+## ROA Framework Best Practices
+
+See [.claude/instructions/core-framework-instructions.md](../instructions/core-framework-instructions.md) for:
+- Quest DSL fundamentals
+- Service ring management
+- @Craft annotation details
+- @Journey and @Ripper patterns
+- Validation requirements
+
+### Quest DSL Chaining
 
 **Recommended Practices:**
 * Use fluent DSL chaining for readability
 * Keep quest chains focused and linear
 * Use `.drop()` when changing contexts between rings
 * Always end with `.complete()`
+* Indent chained methods for visual clarity
 
-**Service Ring Usage**
+**Example:**
+```java
+quest
+    .use(RING_OF_UI)
+    .browser().navigate(getUiConfig().baseUrl())
+    .input().insert(InputFields.USERNAME, "admin")
+    .button().click(ButtonFields.LOGIN)
+    .alert().validateValue(AlertFields.SUCCESS, "Logged in")
+    .complete();
+```
+
+**Why:** Fluent chains improve readability and make test flow obvious.
+
+### Service Ring Usage
 * Extract reusable workflows into custom service rings
 * Keep business logic out of test methods
-* Define custom rings in the base.Rings class
+* Define custom rings in the `base.Rings` class
 * Name ring methods to reflect business actions (e.g., `purchaseCurrency`, `validateOrder`)
 
-**Data Management**
+**Example:**
+```java
+// Bad: Repeating logic in tests
+@Test
+void test1(Quest quest) {
+    quest.use(RING_OF_UI)
+        .browser().navigate(url)
+        .input().insert(field1, value1)
+        .input().insert(field2, value2)
+        .button().click(submit)
+        .complete();
+}
+
+@Test
+void test2(Quest quest) {
+    quest.use(RING_OF_UI)
+        .browser().navigate(url)
+        .input().insert(field1, value1)
+        .input().insert(field2, value2)
+        .button().click(submit)
+        .complete();
+}
+
+// Good: Extract to custom ring
+@Test
+void test1(Quest quest) {
+    quest.use(RING_OF_CUSTOM)
+        .fillLoginForm("user1", "pass1")
+        .submitForm()
+        .complete();
+}
+
+@Test
+void test2(Quest quest) {
+    quest.use(RING_OF_CUSTOM)
+        .fillLoginForm("user2", "pass2")
+        .submitForm()
+        .complete();
+}
+```
+
+**Why:** Custom rings reduce duplication and improve maintainability.
+
+### Data Management
 * Use `@Craft` instead of building objects in tests
 * Use `Late<@Craft>` for lazy instantiation when needed
 * Store constants in dedicated constant classes
 * Use `@StaticData` annotation for constant retrieval
 
-**Validation Practices**
-* Provide at least one validation in each test
-* Use soft assertions (`.soft(true)`) for multiple related validations
+**Why:** Centralized data management reduces duplication and improves maintainability.
+
+### Validation Practices
+* Provide at least one validation in each test (mandatory)
+* Use soft assertions for multiple related validations
 * Use framework assertion builders for declarative validation
 * Use `.validate(() -> {})` for custom validation logic
 
-**Element and Endpoint Definition**
-* Use enum-based definitions for UI elements, API endpoints, and DB queries
-* Keep definitions centralized and organized by domain
-* Use descriptive enum constant names
-* Add lifecycle hooks only when needed (don't over-engineer)
+**Example: Soft Assertions**
+```java
+quest
+    .use(RING_OF_UI)
+    .browser().navigate(getUiConfig().baseUrl() + "/profile")
+    // All validations execute even if one fails
+    .input().validateValue(InputFields.USERNAME, "admin", true)
+    .input().validateValue(InputFields.EMAIL, "admin@example.com", true)
+    .button().validateIsEnabled(ButtonFields.SAVE, true)
+    .complete();
+```
 
-**Authentication**
+**Why:** Soft assertions provide comprehensive feedback when multiple validations fail.
+
+### Authentication
 * Use `@AuthenticateViaApi` or `@AuthenticateViaUi` for automatic authentication
 * Define credentials in dedicated classes
 * Avoid manual login steps in test methods
+* Consider session caching for test suite performance
 
-**Preconditions and Cleanup**
+**Why:** Automatic authentication reduces boilerplate and improves test consistency.
+
+### Preconditions and Cleanup
 * Use `@Journey` for reusable preconditions
 * Use `@Ripper` for automatic cleanup
 * Combine multiple journeys with order attribute
 * Ensure cleanup happens even on test failure
 
-### Performance Best Practices
-**String Operations**
-* Use StringBuilder for string concatenation in loops
-* Use text blocks ("""...""") for multi-line strings
+**Why:** Proper setup and cleanup ensure test isolation and prevent data pollution.
+
+---
+
+## ROA UI Framework Best Practices
+
+See [.claude/instructions/ui-framework-instructions.md](../instructions/ui-framework-instructions.md) for:
+- Three-layer component architecture
+- Interface contracts (ComponentType vs UiElement)
+- Smart API requirements
+- Lifecycle hooks
+- Component validation patterns
+- Table operations
+
+### Component Architecture
+
+**Always Create All Three Layers:**
+When adding new UI components, ensure you create:
+1. **Component Type Registry** (`ui/types/*FieldTypes.java`)
+2. **Element Definition** (`ui/elements/*Fields.java`)
+3. **Component Implementation** (`ui/components/<type>/*Impl.java`)
+
+**Why:** Missing any layer causes runtime component resolution failures.
+
+**Checklist:**
+- [ ] Created ComponentType enum with `getType()` method
+- [ ] Created UiElement enum with `enumImpl()` method
+- [ ] Created component implementation with `@ImplementationOfType`
+- [ ] Component implementation uses Smart API (`findSmartElement`, `getDomProperty`)
+- [ ] Tested component in actual test
+
+### Element Definition Best Practices
+
+**Stable Locators:**
+* Use stable locators: `By.id()`, `By.cssSelector()` with stable attributes
+* Avoid brittle selectors: dynamic classes, translated text, deep XPath
+* Keep element enums declarative (locators + types only)
+* No interaction logic, waits, or assertions in element definitions
+
+**Example:**
+```java
+// Good: Stable locators
+LOGIN_BUTTON(By.id("login-btn"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE)
+USERNAME_FIELD(By.cssSelector("input[data-testid='username']"), InputFieldTypes.BOOTSTRAP_INPUT_TYPE)
+
+// Avoid: Brittle locators
+LOGIN_BUTTON(By.xpath("//div[3]/div[2]/button[1]"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE)
+USERNAME_FIELD(By.linkText("Username"), InputFieldTypes.BOOTSTRAP_INPUT_TYPE)
+```
+
+**Why:** Stable locators reduce test maintenance when UI changes.
+
+### Lifecycle Hooks
+
+**When to Add Hooks:**
+* Add `beforeAction` hooks when element needs explicit wait before interaction
+* Add `afterAction` hooks when you need to wait for state change after interaction
+* Start without hooks; add only when tests fail due to timing issues
+
+**Example:**
+```java
+// Element requires wait before click (dynamic loading)
+SUBMIT_BUTTON(By.id("submit"), 
+              ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE,
+              SharedUi.WAIT_TO_BE_CLICKABLE)
+
+// Element disappears after click (delete action)
+DELETE_BUTTON(By.id("delete"),
+              ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE,
+              SharedUi.WAIT_TO_BE_CLICKABLE,
+              ButtonFields::waitForRemoval)
+```
+
+**Why:** Hooks improve test stability without cluttering test code.
+
+### UI Component Validation
+
+**Use Component-Specific Methods:**
+* Different UI components use different validation patterns
+* Alert: `.alert().validateValue()` (specific method)
+* Button: `.button().validateIsEnabled()` (specific method)
+* Input: `.input().validateValue()` (specific method)
+* API/DB: `Assertion.builder()` (generic builder)
+* Table: `.table().validate(table, Assertion.builder()...)` (hybrid)
+
+**Example:**
+```java
+// Correct: Component-specific validation
+.button().validateIsEnabled(ButtonFields.SUBMIT)
+.alert().validateValue(AlertFields.SUCCESS, "Done")
+.input().validateValue(InputFields.USERNAME, "admin")
+
+// Wrong: Using Assertion.builder() for alerts
+.alert().validate(AlertFields.SUCCESS, Assertion.builder()...)
+```
+
+**Why:** Component-specific methods provide better type safety and clearer intent.
+
+### Soft Assertions for UI
+
+**Use Soft Assertions for Multiple Related Checks:**
+```java
+quest
+    .use(RING_OF_UI)
+    .browser().navigate(getUiConfig().baseUrl() + "/form")
+    // All validations execute before reporting failures
+    .input().validateValue(InputFields.FIELD1, "expected1", true)
+    .input().validateValue(InputFields.FIELD2, "expected2", true)
+    .button().validateIsEnabled(ButtonFields.SUBMIT, true)
+    .complete();
+```
+
+**Why:** Soft assertions provide complete failure picture instead of failing on first error.
+
+---
+
+## Performance Best Practices
+
+### String Operations
+* Use `StringBuilder` for string concatenation in loops
+* Use text blocks for multi-line strings
 * Cache compiled regex patterns
 
-**Resource Management**
+**Example:**
+```java
+// Inefficient: String concatenation in loop
+String result = "";
+for (String item : items) {
+    result += item + ", ";
+}
+
+// Efficient: StringBuilder
+StringBuilder result = new StringBuilder();
+for (String item : items) {
+    result.append(item).append(", ");
+}
+```
+
+**Why:** StringBuilder avoids creating multiple intermediate String objects.
+
+### Resource Management
 * Close resources explicitly using try-with-resources
 * Avoid resource leaks (connections, streams, files)
 * Dispose of large objects when no longer needed
 
-**Stream Usage**
+**Example:**
+```java
+// Try-with-resources ensures cleanup
+try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+    return reader.lines().collect(Collectors.toList());
+}
+```
+
+**Why:** Proper resource management prevents memory leaks and connection exhaustion.
+
+### Stream Usage
 * Use parallel streams only for CPU-intensive operations with large datasets
 * Avoid side effects in stream operations
 * Prefer streams over loops for declarative data processing
 
-**Object Creation**
+**Example:**
+```java
+// Declarative data processing with streams
+List<String> activeUsers = users.stream()
+    .filter(User::isActive)
+    .map(User::getName)
+    .collect(Collectors.toList());
+```
+
+**Why:** Streams provide cleaner, more maintainable code for data transformations.
+
+### Object Creation
 * Reuse immutable objects; avoid unnecessary object creation
 * Use static factory methods instead of constructors when appropriate
 * Avoid premature optimization; measure before optimizing
 
-### Test Data Best Practices
-**Data Builders and Factories**
+**Why:** Reducing object creation reduces garbage collection overhead.
+
+---
+
+## Test Data Best Practices
+
+### Data Builders and Factories
 * Use test data builders or factories (e.g., `@Craft` models)
 * Avoid hardcoding test data; use constants or configuration
 * Generate unique test data to avoid conflicts
 * Use realistic but minimal test data
 
-**Data Cleanup**
-* Clean up created data using @Ripper
+**Example:**
+```java
+// Good: Using @Craft for test data
+@Test
+void createOrder(@Craft(model = DataCreator.Data.ORDER) Order order) {
+    quest.use(RING_OF_CUSTOM)
+        .createOrder(order)
+        .complete();
+}
+
+// Avoid: Hardcoded test data
+@Test
+void createOrder(Quest quest) {
+    Order order = new Order();
+    order.setName("Test Order");
+    order.setAmount(100.0);
+}
+```
+
+**Why:** Data builders provide consistent, maintainable test data.
+
+### Data Cleanup
+* Clean up created data using `@Ripper`
 * Ensure cleanup happens even on test failure
 * Use database transactions with rollback when appropriate
 * Prevent test data accumulation in test environments
 
-### Assertion Best Practices
-**Meaningful Assertions**
+**Why:** Proper cleanup prevents test data pollution and ensures test isolation.
+
+---
+
+## Assertion Best Practices
+
+### Meaningful Assertions
 * Provide meaningful assertion messages
 * Assert on specific values, not just existence
 * Avoid brittle assertions (e.g., exact timestamp matching)
 * Use appropriate assertion types for the validation
 
-**Soft Assertions**
+**Example:**
+```java
+// Good: Specific assertion with message
+.validate(() -> {
+    assertEquals("John Doe", user.getName(), "User name should match expected value");
+})
+
+// Avoid: Generic assertion without context
+.validate(() -> {
+    assertTrue(user.getName() != null);
+})
+```
+
+**Why:** Meaningful assertions provide clear failure messages for faster debugging.
+
+### Soft Assertions
 * Use soft assertions for related validations
 * Group related assertions together
 * All soft assertions execute before reporting failures
 
-### CI/CD Best Practices
-**Build Quality**
+**Why:** Soft assertions provide comprehensive failure information.
+
+---
+
+## CI/CD Best Practices
+
+### Build Quality
 * All builds must pass in CI/CD pipeline before merge
 * CI must run: compile, test, Checkstyle, static analysis
 * Failed builds must be fixed immediately
 * Monitor build times; optimize if builds exceed acceptable duration
 
-**Test Execution in CI**
+**Why:** Continuous integration ensures code quality and prevents broken builds.
+
+### Test Execution in CI
 * Run smoke tests on every commit
 * Run full regression suite nightly or on pull requests
-* Use test tags (@Smoke, @Regression) for selective execution
+* Use test tags (`@Smoke`, `@Regression`) for selective execution
 * Parallelize test execution for faster feedback
 
-**Quality Gates**
-**Pre-Merge Requirements**
+**Example:**
+```bash
+# Run only smoke tests
+mvn test -Dgroups="smoke"
+
+# Run regression tests
+mvn test -Dgroups="regression"
+
+# Run all tests in parallel
+mvn test -DparallelMode=classes -DthreadCount=4
+```
+
+**Why:** Strategic test execution provides fast feedback without sacrificing coverage.
+
+### Quality Gates
+
+**Pre-Merge Requirements:**
 * Code must compile successfully
 * All affected tests must pass
 * All new tests must pass
 * Checkstyle validation must pass
 * Static analysis critical issues must be resolved
 * Code review approval required
-* AI-assisted code quality profile must pass (if configured)
 
-**Continuous Monitoring**
+**Why:** Quality gates prevent problematic code from entering main branch.
+
+**Continuous Monitoring:**
 * Monitor test execution times
 * Track test flakiness and stability
 * Review test coverage trends
 * Address failing or skipped tests promptly
 
-### Maintainability Best Practices
-**Code Organization**
+**Why:** Continuous monitoring identifies quality degradation early.
+
+---
+
+## Maintainability Best Practices
+
+### Code Organization
 * Group related tests in the same class
 * Organize test classes by feature or domain
 * Keep project structure consistent
 * Use meaningful package names
 
-**Reusability**
+**Example:**
+```
+src/test/java/com/example/
+├── user/
+│   ├── UserRegistrationTest.java
+│   ├── UserLoginTest.java
+│   └── UserProfileTest.java
+├── order/
+│   ├── OrderCreationTest.java
+│   └── OrderCancellationTest.java
+```
+
+**Why:** Organized code is easier to navigate and maintain.
+
+### Reusability
 * Extract common flows into service rings
 * Define reusable preconditions via `@Journey`
 * Create shared constants and utilities
 * Avoid code duplication across tests
 
-**Documentation**
+**Why:** Reusable components reduce maintenance burden and improve consistency.
+
+### Documentation
 * Document complex business logic
 * Explain non-obvious test scenarios
 * Keep documentation up-to-date
 * Use `@Description` for detailed test context
 
-**Debugging Best Practices**
-**Test Failures**
+**Example:**
+```java
+@Test
+@Description("Verifies that premium users can access exclusive features " +
+             "after subscription renewal. Tests both immediate access and " +
+             "delayed synchronization scenarios.")
+void premiumUser_accessExclusiveFeatures() {
+    // Test implementation
+}
+```
+
+**Why:** Documentation helps team members understand test intent and business rules.
+
+---
+
+## Debugging Best Practices
+
+### Test Failures
 * Investigate failures immediately; don't ignore them
 * Check Allure reports for screenshots, logs, and request/response data
 * Reproduce failures locally before fixing
 * Add logging for complex scenarios
 
-**Flaky Tests**
+**Why:** Quick failure investigation prevents test suite degradation.
+
+### Flaky Tests
 * Identify and fix flaky tests promptly
-* Add proper waits and synchronization
+* Add proper waits and synchronization (lifecycle hooks)
 * Avoid hardcoded delays
 * Use framework lifecycle hooks for stability
 
-### ROA UI Framework Best Practices
-See [.claude/instructions/ui-framework-instructions.md](../instructions/ui-framework-instructions.md) for complete UI component architecture.
+**Example:**
+```java
+// Avoid: Hardcoded delay
+Thread.sleep(2000);
+button.click();
 
-**Component Architecture**
-* Always create all three layers when adding new UI components:
-    1. Component Type Registry (`ui/types/*FieldTypes.java`)
-    2. Element Definition (`ui/elements/*Fields.java`)
-    3. Component Implementation (`ui/components/<type>/*Impl.java`)
-* Missing any layer causes runtime component resolution failures
-* Follow the three-layer architecture checklist before considering implementation complete
+// Better: Use lifecycle hooks
+SUBMIT_BUTTON(By.id("submit"),
+              ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE,
+              SharedUi.WAIT_TO_BE_CLICKABLE)
+```
 
-**Interface Method Compliance**
-* Use `getType()` in ComponentType enums (e.g., `ButtonFieldTypes`)
-* Use `enumImpl()` in UiElement enums (e.g., `ButtonFields`)
-* Do not mix these methods up - they serve different interfaces
-* Verify method names match interface contracts before compilation
+**Why:** Flaky tests erode confidence in the test suite and waste time.
 
-**Component Implementation Standards**
-* Always use `SmartWebDriver` and `SmartWebElement` APIs in component implementations
-* Use `findSmartElement()` instead of `findElement()` to return correct types
-* Use `getDomProperty()` instead of deprecated `getAttribute()`
-* Extend `BaseComponent` and implement the component interface
-* Add `@ImplementationOfType` annotation linking to component type
-* Constructor must accept `SmartWebDriver` and call `super(driver)`
+### Logging Best Practices
+* Use appropriate log levels (DEBUG for detailed info, INFO for important events)
+* Log meaningful information (what action, what data, what result)
+* Avoid logging sensitive data (passwords, tokens, PII)
+* Use structured logging for easier parsing
 
-**UI Service Method Naming**
-* When extending `UiServiceFluent`, use correct parent method names:
-    - `getAlertField()` not `getAlert()`
-    - `getButtonField()` not `getButton()`
-    - `getInputField()` not `getInput()`
-* Check parent class API documentation for correct method names
-* Create wrapper methods with shorter names (e.g., `alert()` calls `getAlertField()`)
+**Why:** Good logging accelerates debugging and issue investigation.
 
-**UI Test Validation**
-* Every UI test must include at least one validation
-* Use component-specific validation methods:
-    - Alerts: `.alert().validateValue(element, expectedText)`
-    - Element state: `.button().validateIsEnabled(element)`
-    - Navigation: `.browser().navigate(protectedUrl)` validates access
-* Do not use `Assertion.builder()` for alert validation (use direct methods)
-* Do not try to access `quest.getDriver()` for validation
-* Use framework services for all validation logic
+---
 
-**Quest Abstraction**
-* Never access WebDriver directly from Quest object
-* Quest does not expose `getDriver()` or `getStorage()` methods
-* Use framework services instead: `.browser()`, `.button()`, `.input()`, etc.
-* Maintain high-level abstraction in test code
+## Common Anti-Patterns to Avoid
 
-**Validation Pattern Selection**
-* Different UI components use different validation patterns:
-    - Alert: `.alert().validateValue()` (specific method)
-    - API/DB: `Assertion.builder()` (generic builder)
-    - Table: `.table().validate(table, Assertion.builder()...)`
-* Verify the correct validation pattern for each component type
-* Check component's ServiceFluent class for available validation methods
+### Test Anti-Patterns
 
-**Element Definition Best Practices**
-* Use stable locators: `By.id()`, `By.cssSelector()` with stable attributes
-* Avoid brittle selectors: dynamic classes, translated text, deep XPath
-* Keep element enums declarative (locators + types only)
-* No interaction logic, waits, or assertions in element definitions
-* Use nested `Data` class only when string constants are needed for annotations
+**Test Interdependence:**
+```java
+// Bad: Test2 depends on Test1
+@Test
+@Order(1)
+void test1_createUser() { /* creates user */ }
 
-**Soft Assertions for UI**
-* Use soft assertions for multiple related UI validations:
-    - `.alert().validateValue(element, text, true)` for soft alert validation
-    - `.checkbox().validateIsVisible(element, true)` for soft visibility checks
-    - `.button().validateIsEnabled(element, true)` for soft state checks
-* Soft assertions allow test to continue and report all failures at once
-* Useful for form validation with multiple error messages
+@Test
+@Order(2)
+void test2_updateUser() { /* assumes user exists */ }
 
-### ROA API Framework Best Practices
+// Good: Independent tests
+@Test
+@Journey(Preconditions.Data.CREATE_USER)
+void test_updateUser() { /* user created in journey */ }
+```
 
-**Endpoint Definition**
-* Define endpoints in dedicated enums implementing `Endpoint<T>` interface
-* Use descriptive enum constant names that reflect the API operation
-* Override `defaultConfiguration()` only when default behavior needs customization
-* Keep endpoint definitions declarative (method, path, headers only)
-* Avoid business logic in endpoint definitions
+**Hardcoded Test Data:**
+```java
+// Bad
+.input().insert(InputFields.USERNAME, "testuser123")
+.input().insert(InputFields.EMAIL, "test@example.com")
 
-**API Validation**
-* Use `Assertion.builder()` for API response validation
-* Validate status codes, response body fields, and headers
-* Use JsonPath for nested response navigation
-* Store API responses automatically in `StorageKeysApi.API`
-* Retrieve stored responses using `retrieve(StorageKeysApi.API, ENDPOINT_NAME, Response.class)`
+// Good
+@Test
+void test(@Craft(model = DataCreator.Data.USER) User user) {
+    .input().insert(InputFields.USERNAME, user.getUsername())
+    .input().insert(InputFields.EMAIL, user.getEmail())
+}
+```
 
-**Request/Response DTOs**
-* Use Java records for immutable response DTOs
-* Use classes with setters for mutable request DTOs
-* Define DTOs with proper field mappings for serialization
-* Keep DTOs focused on single API endpoint contract
+**Unclear Test Names:**
+```java
+// Bad
+@Test
+void test1() { /* unclear purpose */ }
 
-**API Test Structure**
-* Use `.request()` for simple API calls without immediate validation
-* Use `.requestAndValidate()` for API calls with inline validation
-* Chain multiple API calls in logical sequence
-* Use soft assertions for multiple related API validations
+@Test
+void testButton() { /* which button? */ }
 
-### ROA Database Framework Best Practices
+// Good
+@Test
+void loginButton_whenClicked_redirectsToHomepage() { }
 
-**Database Type Definition**
-* Define database types in enum implementing `DbType<T>` interface
-* Keep database configuration in `Databases` enum
-* Use descriptive names for database connections
-* Define credentials separately in configuration files
+@Test
+void submitOrder_withInvalidData_showsValidationError() { }
+```
 
-**Query Definition**
-* Define parameterized queries with clear parameter names (e.g., `{userId}`)
-* Keep queries focused and single-purpose
-* Use descriptive query constant names
-* Store complex queries in dedicated query classes
+### Code Anti-Patterns
 
-**Database Hooks**
-* Use `@DbHook` for database initialization and cleanup
-* Define setup logic in `beforeAll()` or `beforeEach()`
-* Define cleanup logic in `afterEach()` or `afterAll()`
-* Keep database hooks minimal and focused
+**Excessive Duplication:**
+```java
+// Bad: Same logic repeated
+quest.use(RING_OF_UI)
+    .browser().navigate(url)
+    .input().insert(field1, value1)
+    .input().insert(field2, value2)
+    .button().click(submit)
 
-**Database Validation**
-* Use `QUERY_RESULT` target for database validation
-* Use JsonPath for result navigation
-* Validate specific field values, not just row counts
-* Use database validation as precondition checks when appropriate
+// Good: Extract to custom ring
+quest.use(RING_OF_CUSTOM)
+    .performCommonWorkflow(value1, value2)
+```
 
-### Forbidden Practices
+**God Test:**
+```java
+// Bad: Testing too much
+@Test
+void testEntireApplication() {
+    // 200 lines testing everything
+}
 
-**Universal (All Modules)**
-* ❌ Never hardcode credentials, API keys, or tokens in test code
-* ❌ Never use `System.out.println()` for logging (use logging framework)
-* ❌ Never commit code with failing tests or compilation errors
-* ❌ Never ignore compiler warnings without addressing or justifying
-* ❌ Never use wildcard imports (e.g., `import java.util.*`)
-* ❌ Never use empty catch blocks
-* ❌ Never use raw types (e.g., `List` instead of `List<String>`)
-* ❌ Never share mutable state between tests
-* ❌ Never use `Thread.sleep()` in production code (use proper synchronization)
-* ❌ Never concatenate SQL queries with user input (use parameterized queries)
-* ❌ Never commit commented-out code (remove it)
+// Good: Focused tests
+@Test
+void registration_withValidData_createsUser() { }
 
-**ROA Framework**
-* ❌ Never forget `.complete()` at the end of Quest chains
-* ❌ Never skip `.drop()` when switching between service rings
-* ❌ Never build test data objects in test methods (use `@Craft`)
-* ❌ Never skip validation in tests (every test needs at least one assertion)
-* ❌ Never hardcode test data (use `@Craft` or configuration files)
-* ❌ Never create tests longer than 50 lines without extracting to service rings
-* ❌ Never create environment-dependent tests
+@Test
+void login_withValidCredentials_redirectsToHomepage() { }
+```
 
-**ROA UI Framework**
-* ❌ Never try to access `quest.getDriver()` (not exposed by Quest)
-* ❌ Never use `findElement()` in component implementations (use `findSmartElement()`)
-* ❌ Never use `getAttribute()` in component implementations (use `getDomProperty()`)
-* ❌ Never use `Assertion.builder()` for alert validation (use `.validateValue()`)
-* ❌ Never implement `enumImpl()` in ComponentType enums (use `getType()`)
-* ❌ Never implement `getType()` in UiElement enums (use `enumImpl()`)
-* ❌ Never forget to create component implementations (three-layer architecture required)
-* ❌ Never call wrong parent methods in UI service (e.g., `getAlert()` instead of `getAlertField()`)
-* ❌ Never create UI tests without validation
-* ❌ Never mix validation patterns between different component types
-* ❌ Never use raw locators in tests (always use element enum constants)
-* ❌ Never add business logic to element definitions or component implementations
+---
 
-**ROA API Framework**
-* ❌ Never hardcode API URLs (use configuration files)
-* ❌ Never parse JSON responses manually (use framework JsonPath support)
-* ❌ Never ignore HTTP status codes in validation
-* ❌ Never create duplicate endpoint definitions
+## Summary: Key Recommendations
 
-**ROA Database Framework**
-* ❌ Never concatenate SQL queries with parameters (use parameterized queries)
-* ❌ Never leave database connections open (framework manages them)
-* ❌ Never hardcode database credentials (use configuration files)
-* ❌ Never use production database for testing
+### Test Design
+* Keep tests independent, isolated, and focused
+* Use descriptive names and clear structure (AAA pattern)
+* Target 1-minute execution time per test
+* Extract complex logic to custom rings
 
-### Code Review Checklist
+### Framework Usage
+* Use Quest DSL chaining for readability
+* Use `@Craft` for test data
+* Use `@Journey` for preconditions
+* Use `@Ripper` for cleanup
+* Use component-specific validation methods
 
-**Before Committing**
-- [ ] Code compiles successfully: `mvn clean compile`
-- [ ] All tests pass: `mvn clean test`
-- [ ] Checkstyle validation passes: `mvn checkstyle:check`
-- [ ] No hardcoded credentials or environment-specific data
-- [ ] All Quest chains end with `.complete()`
-- [ ] All tests include at least one validation
-- [ ] Test names are descriptive and use `@DisplayName`
-- [ ] No compiler warnings (or all justified and documented)
-- [ ] No wildcard imports
-- [ ] Test data uses `@Craft` models or configuration files
+### UI Testing
+* Always create all three component layers
+* Use stable locators
+* Add lifecycle hooks only when needed
+* Use Smart API in component implementations
 
-**UI-Specific Checks**
-- [ ] All three component layers created (type, element, implementation)
-- [ ] ComponentType enums use `getType()` method
-- [ ] UiElement enums use `enumImpl()` method
-- [ ] Component implementations use `findSmartElement()` not `findElement()`
-- [ ] Component implementations use `getDomProperty()` not `getAttribute()`
-- [ ] UI service methods call correct parent methods (e.g., `getAlertField()`)
-- [ ] Alert validation uses `.validateValue()` not `Assertion.builder()`
-- [ ] No attempts to access `quest.getDriver()`
+### Code Quality
+* Follow Checkstyle rules consistently
+* Write self-documenting code
+* Use meaningful names
+* Keep methods short and focused
 
-**API-Specific Checks**
-- [ ] Endpoints defined in dedicated enum classes
-- [ ] Response validation uses `Assertion.builder()`
-- [ ] Proper DTOs defined for request/response bodies
-- [ ] No hardcoded API URLs
+### Performance
+* Optimize slow tests
+* Use parallel execution
+* Clean up test data properly
+* Monitor and fix flaky tests
 
-**DB-Specific Checks**
-- [ ] Queries are parameterized (no string concatenation)
-- [ ] Database hooks properly defined with `@DbHook`
-- [ ] Database validation uses `QUERY_RESULT` target
-- [ ] No hardcoded database credentials
+### CI/CD
+* Run smoke tests on every commit
+* Run full regression suite regularly
+* Fix failing builds immediately
+* Monitor test suite health
 
-**Code Quality**
-- [ ] Methods under 50 lines (extract complex logic to service rings)
-- [ ] Test methods under 50 lines
-- [ ] No code duplication (extracted to reusable components)
-- [ ] Meaningful variable and method names
-- [ ] Proper Javadoc for public classes and methods
+---
 
-### Troubleshooting Common Issues
+## References
 
-**Compilation Errors**
+**Mandatory Standards:**
+* [rules.md](rules.md) - Enforced coding standards
 
-**"cannot find symbol: method getDriver()"**
-* Cause: Trying to access `quest.getDriver()`
-* Solution: Use framework services like `.browser().navigate()` instead
+**Framework Fundamentals:**
+* [core-framework-instructions.md](../instructions/core-framework-instructions.md) - Core concepts
+* [ui-framework-instructions.md](../instructions/ui-framework-instructions.md) - UI architecture
 
-**"incompatible types: WebElement cannot be converted to SmartWebElement"**
-* Cause: Using `findElement()` instead of `findSmartElement()` in component implementations
-* Solution: Replace all `findElement()` with `findSmartElement()`
+**Examples:**
+* [ui-test-examples.md](../ui-test-examples.md) - Comprehensive code examples
 
-**"method does not override or implement a method from a supertype"**
-* Cause: Using wrong method name in ComponentType (`enumImpl()` instead of `getType()`)
-* Solution: ComponentType uses `getType()`, UiElement uses `enumImpl()`
+---
 
-**"cannot find symbol: class UiAlertAssertionTarget"**
-* Cause: Trying to use `Assertion.builder()` for alert validation
-* Solution: Use `.alert().validateValue(element, expectedText)` instead
-
-**"cannot find symbol: method getAlert()"**
-* Cause: Calling wrong parent method in UI service class
-* Solution: Use `getAlertField()` not `getAlert()`
-
-**Runtime Errors**
-
-**Component resolution fails at runtime**
-* Cause: Missing component implementation (only created type registry and element definition)
-* Solution: Create all three layers: type, element, and implementation
-
-**"No such element" exceptions in UI tests**
-* Cause: Element not present when interaction attempted
-* Solution: Add lifecycle hooks to element definition for proper synchronization
-
-**Authentication failures**
-* Cause: Incorrect credentials or authentication flow
-* Solution: Verify credentials in configuration files and authentication class implementation
-
-**Test Flakiness**
-
-**Intermittent failures in UI tests**
-* Cause: Timing issues, race conditions, or improper waits
-* Solution: Add proper lifecycle hooks or use framework wait mechanisms
-
-**Tests fail in CI but pass locally**
-* Cause: Environment differences, parallel execution conflicts, or data pollution
-* Solution: Ensure test independence, use unique test data, verify environment configuration
+**Remember:** Best practices are recommendations to improve code quality. They are not strictly enforced but following them will result in more maintainable, reliable, and efficient test suites.
