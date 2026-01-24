@@ -1,7 +1,7 @@
 ---
 name: ui-automation-decision-rules
 description: |
-  Guides UI automation decisions using Chrome DevTools MCP.
+  Guides UI automation decisions using chrome-devtools MCP.
   Ensures stable locator selection, proper UI component modeling,
   correct service layering, and non-flaky end-to-end UI automation.
   Use whenever generating, reviewing, or refactoring UI automation code.
@@ -15,7 +15,7 @@ When working on **UI automation**, always follow these rules:
 
 Before writing or modifying any UI automation code:
 
-- Use **Chrome DevTools MCP** to explore the application
+- Use **chrome-devtools MCP** to explore the application
 - Inspect the DOM to understand structure and hierarchy
 - Identify stable attributes suitable for automation
 - Observe dynamic behavior (SPA rendering, modals, lazy loading)
