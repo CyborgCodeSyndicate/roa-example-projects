@@ -623,7 +623,6 @@ void componentUsageExample(Quest quest) {
 #### Input Validation
 ```java
 .input().validateValue(InputFields.USERNAME, "expected-value")
-.input().validateIsVisible(InputFields.EMAIL)
 .input().validateIsEnabled(InputFields.PASSWORD)
 
 // Soft assertions
