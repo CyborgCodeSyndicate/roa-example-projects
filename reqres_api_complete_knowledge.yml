@@ -1,0 +1,503 @@
+api_name: ReqRes API
+description: Hosted REST API for testing, QA automation, and mock backend operations with predictable fake JSON data
+base_url: https://reqres.in
+openapi_version: 3.0.3
+content_type: application/json
+authentication:
+  x-api-key:
+    header: x-api-key
+    description: Use for classic endpoints (/api/users) and admin/setup calls
+    scope: project-level access
+    usage: Read-only testing, smoke tests, Postman collections
+  bearer_token:
+    header: 'Authorization: Bearer <session_token>'
+    description: Use for per-user data and isolation testing
+    scope: user-level access
+    usage: Per-user data reads/writes, auth behavior validation
+endpoint_categories:
+  classic_testing_endpoints: Standard CRUD operations on users resource for testing
+  authentication_endpoints: Login, register, logout operations
+  app_user_endpoints: Per-user session management with magic links
+  collection_endpoints: Custom collection CRUD operations with user isolation
+endpoints:
+- category: Users
+  path: /api/users
+  method: GET
+  description: Retrieve a paginated list of users
+  authentication: x-api-key (optional for classic endpoints)
+  parameters:
+  - name: page
+    in: query
+    required: false
+    type: integer
+    default: 1
+    description: Page number of results to return
+  - name: per_page
+    in: query
+    required: false
+    type: integer
+    default: 6
+    description: Number of users per page
+  response:
+    status: 200
+    description: Returns paginated array of user objects
+    example:
+      page: 2
+      per_page: 6
+      total: 12
+      total_pages: 2
+      data:
+      - id: 7
+        email: michael.lawson@reqres.in
+        first_name: Michael
+        last_name: Lawson
+        avatar: https://s3.amazonaws.com/uifaces/faces/twitter/follettkyle/128.jpg
+- category: Users
+  path: /api/users/{id}
+  method: GET
+  description: Retrieve a single user by ID
+  authentication: x-api-key (optional)
+  parameters:
+  - name: id
+    in: path
+    required: true
+    type: integer
+    description: User identifier
+  response:
+    status: 200
+    description: Returns single user object with data wrapper
+- category: Users
+  path: /api/users
+  method: POST
+  description: Create a new user
+  authentication: x-api-key (optional)
+  request_body:
+    required: true
+    content_type: application/json
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          example: morpheus
+        job:
+          type: string
+          example: leader
+    example:
+      name: morpheus
+      job: leader
+  response:
+    status: 201
+    description: Returns created user with id and createdAt fields
+    example:
+      name: morpheus
+      job: leader
+      id: '123'
+      createdAt: '2023-08-11T12:00:00.000Z'
+- category: Users
+  path: /api/users/{id}
+  method: PUT
+  description: Update an existing user (full replacement)
+  authentication: x-api-key (optional)
+  parameters:
+  - name: id
+    in: path
+    required: true
+    type: integer
+    format: int64
+    description: User identifier
+  request_body:
+    required: true
+    content_type: application/json
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          example: morpheus
+        job:
+          type: string
+          example: zion resident
+  response:
+    status: 200
+    description: Returns updated user with updatedAt timestamp
+- category: Users
+  path: /api/users/{id}
+  method: PATCH
+  description: Partially update an existing user
+  authentication: x-api-key (optional)
+  parameters:
+  - name: id
+    in: path
+    required: true
+    type: integer
+    description: User identifier
+  request_body:
+    required: true
+    content_type: application/json
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+        job:
+          type: string
+  response:
+    status: 200
+    description: Returns partially updated user with updatedAt timestamp
+- category: Users
+  path: /api/users/{id}
+  method: DELETE
+  description: Delete a user
+  authentication: x-api-key (optional)
+  parameters:
+  - name: id
+    in: path
+    required: true
+    type: integer
+    format: int64
+    description: User identifier
+  response:
+    status: 204
+    description: No Content - successful deletion
+- category: Authentication
+  path: /api/register
+  method: POST
+  description: Register a new user account
+  authentication: None
+  request_body:
+    required: true
+    content_type: application/json
+    schema:
+      type: object
+      required:
+      - email
+      - password
+      properties:
+        email:
+          type: string
+          example: eve.holt@reqres.in
+        password:
+          type: string
+          example: pistol
+  response:
+    status: 200
+    description: Successful registration
+    example:
+      id: 4
+      token: QpwL5tke4Pnpja7X4
+  error_response:
+    status: 400
+    description: Registration failed - missing email or password
+    example:
+      error: Missing email or username
+- category: Authentication
+  path: /api/login
+  method: POST
+  description: Authenticate and create a session
+  authentication: None
+  request_body:
+    required: true
+    content_type: application/json
+    schema:
+      type: object
+      required:
+      - email
+      - password
+      properties:
+        email:
+          type: string
+          example: eve.holt@reqres.in
+        password:
+          type: string
+          example: cityslicka
+  response:
+    status: 200
+    description: Successful login with token
+    example:
+      token: QpwL5tke4Pnpja7X4
+  error_response:
+    status: 400
+    description: Login failed - missing credentials
+    example:
+      error: Missing email or username
+- category: Authentication
+  path: /api/logout
+  method: POST
+  description: End a user session
+  authentication: Bearer token
+  response:
+    status: 200
+    description: Session successfully ended
+- category: App Users
+  path: /api/app-users/login
+  method: POST
+  description: Request magic link for user login
+  authentication: x-api-key (project public key)
+  request_body:
+    required: true
+    content_type: application/json
+    schema:
+      type: object
+      required:
+      - email
+      - project_id
+      properties:
+        email:
+          type: string
+          example: user@example.com
+        project_id:
+          type: string
+          description: Your ReqRes project ID
+  response:
+    status: 200
+    description: Magic link sent - check email for token
+- category: App Users
+  path: /api/app-users/verify
+  method: POST
+  description: Verify magic token and get session token
+  authentication: None
+  request_body:
+    required: true
+    content_type: application/json
+    schema:
+      type: object
+      required:
+      - token
+      properties:
+        token:
+          type: string
+          description: Magic token from email
+  response:
+    status: 200
+    description: Returns session_token for bearer auth
+    example:
+      session_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+- category: Collections
+  path: /app/collections/{collection_name}/records
+  method: GET
+  description: Retrieve all records from a collection (scoped to current user)
+  authentication: 'Authorization: Bearer <session_token>'
+  parameters:
+  - name: collection_name
+    in: path
+    required: true
+    type: string
+    example: todos
+    description: Name of the collection (e.g., todos, notes)
+  response:
+    status: 200
+    description: Returns array of records belonging to authenticated user
+- category: Collections
+  path: /app/collections/{collection_name}/records
+  method: POST
+  description: Create a new record in a collection
+  authentication: 'Authorization: Bearer <session_token>'
+  parameters:
+  - name: collection_name
+    in: path
+    required: true
+    type: string
+    example: todos
+  request_body:
+    required: true
+    content_type: application/json
+    schema:
+      type: object
+      description: Record data - structure depends on collection schema
+  response:
+    status: 201
+    description: Record created and scoped to authenticated user
+- category: Collections
+  path: /app/collections/{collection_name}/records/{record_id}
+  method: PUT
+  description: Update a record in a collection
+  authentication: 'Authorization: Bearer <session_token>'
+  parameters:
+  - name: collection_name
+    in: path
+    required: true
+    type: string
+  - name: record_id
+    in: path
+    required: true
+    type: string
+  request_body:
+    required: true
+    content_type: application/json
+  response:
+    status: 200
+    description: Record updated (only if owned by authenticated user)
+- category: Collections
+  path: /app/collections/{collection_name}/records/{record_id}
+  method: DELETE
+  description: Delete a record from a collection
+  authentication: 'Authorization: Bearer <session_token>'
+  parameters:
+  - name: collection_name
+    in: path
+    required: true
+    type: string
+  - name: record_id
+    in: path
+    required: true
+    type: string
+  response:
+    status: 204
+    description: Record deleted (only if owned by authenticated user)
+- category: Resources
+  path: /api/unknown
+  method: GET
+  description: Retrieve a paginated list of color resources
+  authentication: x-api-key (optional)
+  parameters:
+  - name: page
+    in: query
+    required: false
+    type: integer
+    default: 1
+  - name: per_page
+    in: query
+    required: false
+    type: integer
+    default: 6
+  response:
+    status: 200
+    description: Returns paginated array of color resources
+- category: Resources
+  path: /api/unknown/{id}
+  method: GET
+  description: Retrieve a single color resource by ID
+  authentication: x-api-key (optional)
+  parameters:
+  - name: id
+    in: path
+    required: true
+    type: integer
+  response:
+    status: 200
+    description: Returns single color resource
+schemas:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      email:
+        type: string
+        example: george.bluth@reqres.in
+      first_name:
+        type: string
+        example: George
+      last_name:
+        type: string
+        example: Bluth
+      avatar:
+        type: string
+        example: https://reqres.in/img/faces/1-image.jpg
+  UserRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        example: morpheus
+      job:
+        type: string
+        example: leader
+  PaginatedResponse:
+    type: object
+    properties:
+      page:
+        type: integer
+      per_page:
+        type: integer
+      total:
+        type: integer
+      total_pages:
+        type: integer
+      data:
+        type: array
+common_headers:
+  x-api-key: Project-level API key for classic endpoints and admin operations
+  Authorization: Bearer token for per-user scoped operations
+  Content-Type: application/json (required for all POST/PUT/PATCH)
+  X-Reqres-Env: 'Environment selector: prod or dev (optional)'
+test_automation_notes:
+- 'Two authentication methods: x-api-key for project scope, Bearer token for user scope'
+- Classic /api/users endpoints work without authentication but support x-api-key
+- Collection endpoints require Bearer token from app-user session
+- 'Rate limits: Add backoff in CI environments to avoid 429 errors'
+- 'WAF protection: Use stable user agents to prevent 403 blocks'
+- 'Predictable responses: Same inputs return consistent outputs for test reliability'
+- 'No data persistence: ReqRes does not store request data'
+- 'CORS enabled: Safe for frontend testing'
+- Suitable for Postman collections, Playwright suites, CI/CD pipelines
+common_status_codes:
+  200: Success - request completed
+  201: Created - resource successfully created
+  204: No Content - successful deletion
+  400: Bad Request - missing required fields
+  401: Unauthorized - invalid or missing Bearer token
+  403: Forbidden - WAF block or rate limit
+  404: Not Found - resource does not exist
+  429: Too Many Requests - rate limit exceeded
+usage_examples:
+  list_users_with_key:
+    request: GET https://reqres.in/api/users?page=2
+    headers:
+      x-api-key: YOUR_API_KEY
+    description: Fetch second page of users with API key
+  get_single_user:
+    request: GET https://reqres.in/api/users/2
+    description: Fetch user with ID 2
+  create_user:
+    request: POST https://reqres.in/api/users
+    body:
+      name: morpheus
+      job: leader
+    description: Create a new user
+  update_user_put:
+    request: PUT https://reqres.in/api/users/2
+    body:
+      name: morpheus
+      job: zion resident
+    description: Full update of existing user
+  update_user_patch:
+    request: PATCH https://reqres.in/api/users/2
+    body:
+      job: zion resident
+    description: Partial update of existing user
+  delete_user:
+    request: DELETE https://reqres.in/api/users/2
+    description: Delete user with ID 2
+  register_user:
+    request: POST https://reqres.in/api/register
+    body:
+      email: eve.holt@reqres.in
+      password: pistol
+    description: Register new user account
+  login_user:
+    request: POST https://reqres.in/api/login
+    body:
+      email: eve.holt@reqres.in
+      password: cityslicka
+    description: Authenticate and get token
+  magic_link_login:
+    request: POST https://reqres.in/api/app-users/login
+    headers:
+      x-api-key: YOUR_PUBLIC_KEY
+    body:
+      email: user@example.com
+      project_id: YOUR_PROJECT_ID
+    description: Request magic link for passwordless login
+  verify_magic_token:
+    request: POST https://reqres.in/api/app-users/verify
+    body:
+      token: MAGIC_TOKEN_FROM_EMAIL
+    description: Exchange magic token for session token
+  get_user_collection_data:
+    request: GET https://reqres.in/app/collections/todos/records
+    headers:
+      Authorization: Bearer YOUR_SESSION_TOKEN
+    description: Fetch user-scoped collection records
