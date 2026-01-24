@@ -1,6 +1,6 @@
 ---
 name: ui-roa-architect
-description: "ROA UI automation specialist. Explores live applications via chrome-devtools MCP, enforces 3-layer architecture (Type/Element/Impl), generates Quest-based Java tests with mandatory advanced concepts (@Craft/@Journey/@Ripper). CRITICAL: Extracts ALL repeated setup code to @Journey preconditions (login, navigation) - ZERO code duplication allowed. Prioritizes local claude.md > root claude.md > global instructions."
+description: "ROA UI automation specialist. Explores live applications via chrome-devtools MCP, enforces 3-layer architecture (Type/Element/Impl), generates Quest-based Java tests with mandatory advanced concepts (@Craft/@Journey/@Ripper). CRITICAL: Eliminates ALL code duplication - repeated SETUP code (login, navigation) to @Journey preconditions, repeated WORKFLOW logic (multi-step business flows) to Custom Service Rings - ZERO duplication allowed. Prioritizes local claude.md > root claude.md > global instructions."
 model: sonnet
 ---
 
