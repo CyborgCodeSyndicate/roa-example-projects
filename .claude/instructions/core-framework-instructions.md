@@ -128,6 +128,75 @@ void completeCheckoutFlow(Quest quest) {
 * Define custom rings in the base.Rings class
 * Extract common flows into custom ring methods for reusability
 
+### Creating Custom Service Rings
+**Custom Ring Pattern:**
+* Extend `FluentService<T>` where `T` is your ring class (enables fluent return)
+* Accept `SuperQuest` in constructor and store for ring access
+* Call `postQuestSetupInitialization()` in constructor for framework hooks
+* Return `this` from methods to maintain fluent chain
+* Access other rings via `quest.use(RING_CLASS)`
+
+**Custom Ring Template:**
+```java
+public class CustomService extends FluentService<CustomService> {
+    private final Quest quest;
+
+    public CustomService(SuperQuest quest) {
+        this.quest = quest;
+        postQuestSetupInitialization();  // Framework initialization hook
+    }
+
+    // Domain-specific flow
+    public CustomService createUserWorkflow(User user) {
+        // Use other rings
+        quest.use(RING_OF_API)
+                .request(AppEndpoints.CREATE_USER, user)
+                .drop();
+
+        // Custom logic
+        String userId = retrieve(StorageKeysApi.API, AppEndpoints.CREATE_USER, Response.class)
+                .jsonPath().getString("id");
+
+        // Store derived data
+        QuestHolder.get().getStorage().put(UserKeys.CREATED_USER_ID, userId);
+
+        return this;  // Fluent return
+    }
+
+    // Validation wrapper
+    public CustomService validateUserExists(String username) {
+        validate(() -> {
+            Response response = retrieve(StorageKeysApi.API, AppEndpoints.GET_USER, Response.class);
+            assertEquals(username, response.jsonPath().getString("username"));
+        });
+        return this;
+    }
+}
+```
+
+**Registering Custom Rings:**
+```java
+// In base/Rings.java
+public static final Class<CustomService> RING_OF_CUSTOM = CustomService.class;
+```
+
+**Using Custom Rings in Tests:**
+```java
+@Test
+void complexWorkflow(Quest quest, @Craft(model = DataCreator.Data.USER) User user) {
+    quest.use(RING_OF_CUSTOM)
+            .createUserWorkflow(user)
+            .validateUserExists(user.getUsername())
+            .complete();
+}
+```
+
+**Benefits:**
+* Encapsulates multi-step flows (login → navigate → verify)
+* Reusable across tests
+* Keeps test bodies high-level and readable
+* Testable in isolation
+
 ### Test Lifecycle Management
 **@Journey - Preconditions**
 * Use `@Journey` annotation strictly for precondition actions executed before test runtime
@@ -143,6 +212,69 @@ void completeCheckoutFlow(Quest quest) {
 * Add constants as strings in DataCleaner enum Data class for usage in `@Ripper` annotations
 * `@Ripper` executes after test completion (success or failure)
 * Ensures test data isolation and prevents database/state pollution
+
+### Late<T> - Deferred Data Creation
+**When to Use Late<T>:**
+* Model depends on data produced during test execution (API response, intercepted value, DB result)
+* Model requires values from earlier quest steps
+* Model depends on runtime-determined values unavailable at test start
+
+**Late<T> Lifecycle:**
+1. Framework injects `Late<T>` instance at test start (does not call DataCreator yet)
+2. Test executes quest steps that produce required data (API calls, DB queries, UI interactions)
+3. Required data gets stored in Storage (automatic by framework)
+4. Test calls `lateModel.create()` to trigger DataCreator invocation
+5. DataCreator reads from Storage via `QuestHolder.get().getStorage()` to build model
+
+**Example - API Response Dependency:**
+```java
+// DataCreator for late model
+public static User derivedUser() {
+    SuperQuest quest = QuestHolder.get();
+    Response baseResponse = quest.getStorage().sub(StorageKeysApi.API).get(CREATE_BASE_USER, Response.class);
+    String baseId = baseResponse.jsonPath().getString("id");
+    return User.builder().parentId(baseId).name("derived").build();
+}
+
+// Test using Late<T>
+@Test
+@Craft(model = DataCreator.Data.BASE_USER)
+void testLatePattern(Quest quest, @Craft(model = DataCreator.Data.DERIVED_USER) Late<User> derived) {
+    quest.use(RING_OF_API)
+            .request(CREATE_BASE_USER, baseUser)  // Creates base, stores response
+            .drop();
+
+    User derivedUser = derived.create();  // Now safe - base response exists in storage
+    quest.use(RING_OF_API).request(CREATE_DERIVED_USER, derivedUser).complete();
+}
+```
+
+**Late<T> with UI Interception:**
+```java
+// DataCreator reading intercepted response
+public static Order orderFromIntercept() {
+    SuperQuest quest = QuestHolder.get();
+    String price = DataExtractorFunctions.responseBodyExtraction(
+            RequestsInterceptor.INTERCEPT_PRICE.getEndpointSubString(),
+            "$.price",
+            "for(;;);"
+    ).apply(quest.getStorage());
+    return Order.builder().price(price).build();
+}
+
+// Test with @InterceptRequests + Late<T>
+@Test
+@InterceptRequests(requestUrlSubStrings = { RequestsInterceptor.Data.INTERCEPT_PRICE })
+void testInterceptedOrder(Quest quest, @Craft(model = DataCreator.Data.ORDER) Late<Order> lateOrder) {
+    quest.use(RING_OF_UI)
+            .button().click(ButtonFields.CALCULATE_PRICE)  // Triggers intercepted request
+            .drop();
+
+    Order order = lateOrder.create();  // Price extracted from intercepted response
+    quest.use(RING_OF_API).request(CREATE_ORDER, order).complete();
+}
+```
+**Rule:** Use eager `@Craft` when data is self-contained. Use `Late<@Craft>` when `DataCreator` needs Storage access.
 
 ### Advanced Features
 **Late Initialization**
@@ -178,6 +310,56 @@ User user = retrieve(PRE_ARGUMENTS, DataCreator.USER, User.class);
 ```java
 // Retrieve database query results
 QueryResponse results = retrieve(StorageKeysDb.DB, QUERY_NAME, QueryResponse.class);
+```
+
+### Storage Hierarchy
+**Root vs Sub-Storage**
+* Root storage: `quest.getStorage()` - shared cross-module data (PRE_ARGUMENTS, ARGUMENTS, STATIC_DATA)
+* Sub-storage: `quest.getStorage().sub(MODULE_KEY)` - module-isolated data (API responses, UI elements, DB results)
+* Each adapter uses its own sub-storage namespace to prevent key collisions
+
+**Storage Organization:**
+| Storage Namespace | Key | Purpose | Access Pattern |
+|-------------------|-----|---------|----------------|
+| Root | `PRE_ARGUMENTS` | Journey outputs | `retrieve(PRE_ARGUMENTS, journeyKey, Class)` |
+| Root | `ARGUMENTS` | @Craft parameters | Automatic by framework |
+| `StorageKeysApi.API` | Endpoint enums | API responses | `retrieve(StorageKeysApi.API, ENDPOINT, Response.class)` |
+| `StorageKeysUi.UI` | Element enums | UI component values | `retrieve(elementEnum, Class)` via DefaultStorage |
+| `StorageKeysDb.DB` | Query enums | Query results | `retrieve(StorageKeysDb.DB, QUERY, QueryResponse.class)` |
+
+**Why Sub-Storage Matters:**
+* Prevents key collision when different modules use same enum names
+* Enables parallel test execution with isolated per-thread storage
+* Framework automatically routes data to correct sub-storage based on ring context
+
+
+### Accessing Quest from Utility Classes
+**QuestHolder Pattern**
+* Use `QuestHolder.get()` to access the current Quest from anywhere (DataCreator, DataCleaner, Journey implementations)
+* Returns `SuperQuest` instance with full access to Storage, rings, and Quest API
+* Thread-safe - each test thread has its own Quest instance
+* Enables quest-aware utilities without passing Quest as parameters
+
+**Usage in DataCreator:**
+```java
+public final class DataCreatorFunctions {
+    public static CreateUserDto dynamicUser() {
+        SuperQuest quest = QuestHolder.get();
+        String baseValue = quest.getStorage().get(UserKeys.BASE_NAME, String.class);
+        return CreateUserDto.builder().name(baseValue + "_generated").build();
+    }
+}
+```
+**Usage in Journey:**
+```java
+public class Preconditions implements PreQuestJourney<Seller> {
+    @Override
+    public Seller journey() {
+        SuperQuest quest = QuestHolder.get();
+        quest.use(RING_OF_API).request(CREATE_USER);
+        return quest.getStorage().get(StorageKeysApi.API, CREATE_USER, Seller.class);
+    }
+}
 ```
 
 ### Assertion Framework

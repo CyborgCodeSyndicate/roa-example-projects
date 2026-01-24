@@ -686,6 +686,18 @@ import io.cyborgcode.roa.ui.validator.UiAlertAssertionTypes;   // Doesn't exist
 .button().validateIsVisible(ButtonFields.ELEMENT)
 ```
 
+### CRITICAL: UI Validation Pattern
+**UI components DO NOT use `Assertion.builder()`.**  
+Use component-specific validation methods instead:
+
+| Component | Hard Validation | Soft Validation |
+|-----------|----------------|-----------------|
+| Button | `.button().validateIsVisible(elem)` | `.button().validateIsVisible(elem, true)` |
+| Input | `.input().validateValue(elem, expected)` | `.input().validateValue(elem, expected, true)` |
+| Alert | `.alert().validateValue(elem, expected)` | `.alert().validateValue(elem, expected, true)` |
+| Select | `.select().validateSelectedOption(elem, expected)` | `.select().validateSelectedOption(elem, expected, true)` |
+
+**Exception:** Tables use `Assertion.builder()` with `TABLE_VALUES`/`ROW_VALUES` targets.
 ---
 
 ## Table Operations
