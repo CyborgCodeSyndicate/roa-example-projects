@@ -334,21 +334,30 @@ void registration(Quest quest) {
 
 **For EVERY test class you generate, ask IN THIS ORDER:**
 
-**STEP 1: Repeated Code Analysis (CRITICAL)**
+**STEP 1: Repeated Setup Code Analysis (CRITICAL)**
 1. ✅ Do 2+ test methods have identical setup steps? (If YES → MANDATORY @Journey extraction)
 2. ✅ Is login logic repeated in test methods? (If YES → Extract to `LOGIN_*` precondition)
 3. ✅ Is navigation repeated in test methods? (If YES → Extract to `NAVIGATE_TO_*` precondition)
 4. ✅ Are setup steps embedded in test body? (If YES → Extract to @Journey)
 
-**STEP 2: Advanced Concepts (Per Test Method)**
-5. ✅ Does it use @Craft for test data? (If NO → Add it)
-6. ✅ Does it use @Journey for preconditions? (If NO → Check Step 1 again)
-7. ✅ Does it use @Ripper for cleanup? (If NO → Check if data is created/modified)
-8. ✅ Is test data hardcoded? (If YES → Replace with @Craft)
+**STEP 2: Repeated Workflow Analysis (CRITICAL - NEW)**
+5. ✅ Do 2+ test methods have identical UI interaction sequences? (If YES → MANDATORY Custom Service extraction)
+6. ✅ Is the same business flow repeated with different data? (If YES → Extract to Custom Service method)
+7. ✅ Does any workflow exceed 5+ UI interactions? (If YES → Consider Custom Service extraction)
+8. ✅ Are test methods excessively long due to workflow duplication? (If YES → Extract to Custom Service)
 
-**CRITICAL**: If Step 1 finds duplication, STOP and extract to @Journey BEFORE continuing to Step 2.
+**STEP 3: Advanced Concepts (Per Test Method)**
+9. ✅ Does it use @Craft for test data? (If NO → Add it)
+10. ✅ Does it use @Journey for preconditions? (If NO → Check Step 1 again)
+11. ✅ Does it use @Ripper for cleanup? (If NO → Check if data is created/modified)
+12. ✅ Is test data hardcoded? (If YES → Replace with @Craft)
 
-**Default Assumption: USE advanced concepts unless proven unnecessary.**
+**CRITICAL EXECUTION ORDER**:
+1. If Step 1 finds duplication → STOP and extract to @Journey FIRST
+2. If Step 2 finds duplication → STOP and extract to Custom Service SECOND
+3. Only then proceed to Step 3 for remaining annotations
+
+**Default Assumption: USE advanced concepts AND extract to services unless proven unnecessary.**
 
 ### Step 4: The Exploration Protocol (Validate -> Automate)
 
@@ -381,26 +390,164 @@ void registration(Quest quest) {
 
 **Missing any layer causes runtime failure.**
 
-### Step 6: Service Layering
+### Step 6: Repeated Workflow Detection (MANDATORY - Extract to Custom Services)
 
-**Rule**: If a test method exceeds **3 UI interactions**, extract a Custom Service Ring method.
-**Goal**: Keep tests readable and focused on business logic, not implementation details.
+**CRITICAL DISTINCTION - Two Types of Duplication:**
 
-**Example (CORRECT - using Custom Service):**
+| Duplication Type | Extract To | Purpose | Example |
+|------------------|------------|---------|---------|
+| **Setup/Preconditions** | `@Journey` | Executed BEFORE test starts | Login, navigation, initial data setup |
+| **Test Workflows** | **Custom Service Ring** | The ACTUAL test logic | Purchase flow, validation patterns, multi-step business operations |
+
+**MANDATORY WORKFLOW ANALYSIS**: Before generating ANY test class, analyze for repeated **test logic**:
+
+```
+Are these workflow steps repeated across multiple test methods?
+├─ Same sequence of UI interactions (select → input → click → validate)?
+├─ Same business flow with different data (purchase CAD, purchase AUD, purchase EUR)?
+├─ Same validation pattern (calculate → verify result → check success message)?
+│
+└─ IF YES → MANDATORY: Extract to Custom Service Ring
+    ├─ Create custom service class extending UiServiceFluent
+    ├─ Add to Rings enum with Data constant
+    ├─ Create reusable methods for workflows
+    └─ Replace duplicated workflow in ALL tests with service calls
+```
+
+**Example (WRONG - Workflow repeated 4 times):**
 ```java
+// Test 1 - Purchase CAD
 @Test
-@Journey(Preconditions.Data.LOGIN_AS_ADMIN)
-void purchaseCurrency_validAmount_showsConfirmation(
-    Quest quest,
-    @Craft(model = DataCreator.Data.PURCHASE_REQUEST) PurchaseRequest request
-) {
-    quest
-        .use(RING_OF_CUSTOM)
-        .purchaseCurrency(request)  // Custom service method encapsulates complex flow
-        .validatePurchaseConfirmation(request.getAmount())
+@Journey(LOGIN_AND_NAVIGATE_TO_CURRENCY)  // ✅ Setup extracted
+void purchaseCAD(Quest quest, @Craft(...) data) {
+    quest.use(RING_OF_UI)
+        .select().select(SelectFields.CURRENCY, "CAD")      // ❌ Repeated workflow
+        .input().insert(InputFields.AMOUNT, "1000")          // ❌ Repeated workflow
+        .radio().select(RadioFields.USD_RADIO)               // ❌ Repeated workflow
+        .button().click(ButtonFields.CALCULATE)              // ❌ Repeated workflow
+        .button().click(ButtonFields.PURCHASE)               // ❌ Repeated workflow
+        .alert().validateValue(AlertFields.SUCCESS, "...")   // ❌ Repeated workflow
         .complete();
 }
+
+// Test 2 - Purchase AUD (SAME WORKFLOW, different currency)
+@Test
+@Journey(LOGIN_AND_NAVIGATE_TO_CURRENCY)
+void purchaseAUD(Quest quest, @Craft(...) data) {
+    quest.use(RING_OF_UI)
+        .select().select(SelectFields.CURRENCY, "AUD")      // ❌ DUPLICATED
+        .input().insert(InputFields.AMOUNT, "500")           // ❌ DUPLICATED
+        .radio().select(RadioFields.USD_RADIO)               // ❌ DUPLICATED
+        .button().click(ButtonFields.CALCULATE)              // ❌ DUPLICATED
+        .button().click(ButtonFields.PURCHASE)               // ❌ DUPLICATED
+        .alert().validateValue(AlertFields.SUCCESS, "...")   // ❌ DUPLICATED
+        .complete();
+}
+
+// Tests 3 & 4 repeat the same 6-step workflow again...
 ```
+
+**Example (CORRECT - Workflow extracted to Custom Service):**
+```java
+// 1. Custom Service Ring (base/Rings.java)
+public enum Rings implements Ring {
+    RING_OF_CURRENCY_PURCHASE(CurrencyPurchaseService.class);
+    // ... constructor and fields
+}
+
+// 2. Custom Service Implementation (custom/CurrencyPurchaseService.java)
+public class CurrencyPurchaseService extends UiServiceFluent {
+
+    public CurrencyPurchaseService(Quest quest) {
+        super(quest);
+    }
+
+    public CurrencyPurchaseService purchaseCurrencyWithUSD(
+        String currency,
+        String amount,
+        String expectedMessage
+    ) {
+        getSelectField().select(SelectFields.CURRENCY, currency);
+        getInputField().insert(InputFields.AMOUNT, amount);
+        getRadioField().select(RadioFields.USD_RADIO);
+        getButtonField().click(ButtonFields.CALCULATE);
+        getButtonField().click(ButtonFields.PURCHASE);
+        getAlertField().validateValue(AlertFields.SUCCESS, expectedMessage);
+        return this;
+    }
+}
+
+// 3. Tests use Custom Service (CLEAN - No duplication)
+@Test
+@Journey(LOGIN_AND_NAVIGATE_TO_CURRENCY)
+void purchaseCAD_withUSD_success(Quest quest, @Craft(...) data) {
+    quest.use(RING_OF_CURRENCY_PURCHASE)
+        .purchaseCurrencyWithUSD("CAD", "1000", "Purchase Successful")
+        .complete();  // ← 3 lines vs 8 lines (62% reduction)
+}
+
+@Test
+@Journey(LOGIN_AND_NAVIGATE_TO_CURRENCY)
+void purchaseAUD_withUSD_success(Quest quest, @Craft(...) data) {
+    quest.use(RING_OF_CURRENCY_PURCHASE)
+        .purchaseCurrencyWithUSD("AUD", "500", "Purchase Successful")
+        .complete();  // ← Same clean pattern
+}
+
+@Test
+@Journey(LOGIN_AND_NAVIGATE_TO_CURRENCY)
+void purchaseDKK_withUSD_success(Quest quest, @Craft(...) data) {
+    quest.use(RING_OF_CURRENCY_PURCHASE)
+        .purchaseCurrencyWithUSD("DKK", "2000", "Purchase Successful")
+        .complete();  // ← Same clean pattern
+}
+
+@Test
+@Journey(LOGIN_AND_NAVIGATE_TO_CURRENCY)
+void purchaseEUR_withUSD_success(Quest quest, @Craft(...) data) {
+    quest.use(RING_OF_CURRENCY_PURCHASE)
+        .purchaseCurrencyWithUSD("EUR", "750", "Purchase Successful")
+        .complete();  // ← Same clean pattern
+}
+```
+
+**BENEFITS:**
+- ✅ 32 lines → 12 lines total (62% reduction)
+- ✅ Change purchase flow once, affects all tests
+- ✅ Test intent crystal clear (what currency, not how to purchase)
+- ✅ Business logic reusable across test classes
+- ✅ Easier to maintain and extend
+
+#### **Custom Service Ring Decision Tree**
+
+```
+Analyze test class workflows:
+├─ Do 2+ tests repeat the same UI interaction sequence?
+├─ Do tests have identical flow but different data?
+├─ Does workflow exceed 5+ UI interactions?
+│
+└─ IF ANY YES → Create Custom Service Ring
+    ├─ Step 1: Create service class extending UiServiceFluent
+    ├─ Step 2: Add to Rings enum (RING_OF_[BUSINESS_DOMAIN])
+    ├─ Step 3: Extract common workflow to service method
+    ├─ Step 4: Make method parameters for varying data
+    ├─ Step 5: Replace duplicated code in ALL tests
+    └─ Step 6: Verify tests are concise and duplication is eliminated
+```
+
+#### **When to Create Custom Services (Detection Patterns)**
+
+| Pattern Detected | Create Custom Service For | Example Service Method |
+|------------------|---------------------------|------------------------|
+| Same workflow, different currencies/products | Purchase/selection flow | `purchaseItem(item, quantity)` |
+| Repeated form submission pattern | Form filling | `submitForm(formData)` |
+| Multi-step wizard navigation | Wizard completion | `completeWizard(stepData)` |
+| Search → filter → validate pattern | Search operations | `searchAndValidate(criteria, expected)` |
+| Create → verify → delete pattern | CRUD operations | `createAndVerify(entity)` |
+
+**MANDATORY RULE**: If ANY workflow appears in 2+ test methods, it MUST be extracted to a Custom Service Ring method.
+
+**Goal**: Keep test methods concise and focused. After extracting repeated workflows, tests should typically be **10-15 lines** (not counting method signature and closing brace). The exact line count matters less than eliminating duplication.
 
 ## Output Format
 
@@ -449,9 +596,12 @@ class SpecificFlowTest extends BaseQuest {
 
 **See `.claude/rules/rules.md` for complete list. Key violations:**
 
-❌ **Never repeat setup code** - If ANY code appears in 2+ tests, extract to @Journey (HIGHEST PRIORITY)
+❌ **Never repeat setup code** - If ANY setup code appears in 2+ tests, extract to @Journey (HIGHEST PRIORITY)
+❌ **Never repeat workflow code** - If ANY workflow appears in 2+ tests, extract to Custom Service Ring (CRITICAL - NEW)
 ❌ **Never embed login in tests** - Login MUST be @Journey precondition, not in test body
 ❌ **Never duplicate navigation** - Navigation flows MUST be @Journey precondition
+❌ **Never duplicate business flows** - Repeated workflows MUST be Custom Service Ring methods
+❌ **Never write excessively long tests** - Extract setup to @Journey and repeated workflows to Custom Service
 ❌ **Never guess selectors** - Always verify via chrome-devtools MCP live DOM inspection
 ❌ **Never use WebDriver directly** - No `quest.getDriver()` in test classes
 ❌ **Never forget `.complete()`** - Every Quest chain MUST end with it
@@ -466,18 +616,20 @@ class SpecificFlowTest extends BaseQuest {
 
 Before outputting code, verify ALL criteria are met:
 
-✅ **No Repeated Code**: ZERO setup code duplication across test methods (use @Journey)
+✅ **No Repeated Setup Code**: ZERO setup code duplication across test methods (use @Journey)
+✅ **No Repeated Workflow Code**: ZERO workflow duplication across test methods (use Custom Service Ring)
 ✅ **Precondition Extraction**: Login/navigation flows extracted to PreconditionFunctions + @Journey
+✅ **Workflow Extraction**: Repeated business flows extracted to Custom Service Ring methods
 ✅ **Hierarchy Respect**: Correctly prioritized Local `CLAUDE.md` > Root `CLAUDE.md` > Global instructions
 ✅ **Example Consistency**: Code structure matches examples in applicable `CLAUDE.md` file
 ✅ **3-Layer Compliance**: New components have Type, Element, and Impl files
 ✅ **Advanced Concepts Applied**: Uses @Craft, @Journey, @Ripper where applicable (DEFAULT: yes)
-✅ **Service Layering**: Complex flows extracted to Custom Service Ring
+✅ **Service Layering**: Complex/repeated flows extracted to Custom Service Ring
 ✅ **Valid Locators**: All selectors verified via live DOM (MCP)
 ✅ **Compilation Safety**: Generated code successfully passes 'mvn test-compile' without errors
 ✅ **No Hardcoded Data**: All test data via @Craft or Data.testData()
 ✅ **Data Cleanup**: Created data cleaned via @Ripper
-✅ **Test Readability**: Each test method ≤ 15 lines (setup extracted to @Journey)
+✅ **Test Readability**: Tests are concise and focused (setup extracted to @Journey, repeated workflows to Custom Service)
 
 ## Self-Correction Protocol
 
@@ -493,9 +645,39 @@ Before outputting code, verify ALL criteria are met:
 4. **Register**: Add to Preconditions enum with Data constant
 5. **Apply**: Add @Journey annotation to ALL affected tests
 6. **Remove**: Delete duplicated code from test method bodies
-7. **Verify**: Each test method now ≤ 15 lines, starts at actual test scenario
+7. **Verify**: Each test method now starts at actual test scenario
 
-### **Anti-Pattern 2: Missing Advanced Concepts**
+### **Anti-Pattern 2: Repeated Workflow Code (NEWLY ENFORCED - CRITICAL)**
+```
+❌ Symptom: Same UI interaction sequence in multiple test methods (select → input → click → validate)
+```
+1. **STOP** - Do not output the code
+2. **Identify**: Which workflow steps are repeated across tests?
+3. **Create**: Custom Service class extending UiServiceFluent
+4. **Register**: Add to Rings enum (e.g., RING_OF_CURRENCY_PURCHASE)
+5. **Extract**: Move repeated workflow to service method with parameters for varying data
+6. **Apply**: Replace duplicated code in ALL tests with `.use(RING_OF_CUSTOM).serviceMethod(data).complete()`
+7. **Verify**: Tests are now concise, readable, and duplication is eliminated
+
+**Example Fix:**
+```java
+// ❌ BEFORE (8 lines per test × 4 tests = 32 lines)
+quest.use(RING_OF_UI)
+    .select().select(SelectFields.CURRENCY, "CAD")
+    .input().insert(InputFields.AMOUNT, "1000")
+    .radio().select(RadioFields.USD)
+    .button().click(ButtonFields.CALCULATE)
+    .button().click(ButtonFields.PURCHASE)
+    .alert().validateValue(AlertFields.SUCCESS, "...")
+    .complete();
+
+// ✅ AFTER (3 lines per test × 4 tests = 12 lines)
+quest.use(RING_OF_CURRENCY_PURCHASE)
+    .purchaseCurrencyWithUSD("CAD", "1000", "Purchase Successful")
+    .complete();
+```
+
+### **Anti-Pattern 3: Missing Advanced Concepts**
 ```
 ❌ Symptom: No @Craft, @Journey, or @Ripper annotations
 ```
@@ -506,7 +688,7 @@ Before outputting code, verify ALL criteria are met:
 5. **Verify**: Check Success Criteria again
 6. **Output**: Only output code that meets ALL criteria
 
-### **Anti-Pattern 3: Hardcoded Test Data**
+### **Anti-Pattern 4: Hardcoded Test Data**
 ```
 ❌ Symptom: Strings/numbers directly in test methods
 ```
@@ -516,6 +698,9 @@ Before outputting code, verify ALL criteria are met:
 4. **Apply**: Use @Craft annotation in test method parameter
 5. **Replace**: Use injected data object instead of hardcoded values
 
-**CRITICAL**: Check for Anti-Pattern 1 (Repeated Code) FIRST, as it's the most common violation.
+**CRITICAL EXECUTION ORDER**:
+1. Check for Anti-Pattern 1 (Repeated Setup) FIRST → Extract to @Journey
+2. Check for Anti-Pattern 2 (Repeated Workflow) SECOND → Extract to Custom Service
+3. Then check for Anti-Pattern 3 & 4
 
-**Remember**: Your goal is to generate PRODUCTION-QUALITY tests using the FULL power of the ROA framework, not basic Selenium tests.
+**Remember**: Your goal is to generate PRODUCTION-QUALITY tests using the FULL power of the ROA framework, not basic Selenium tests. Tests should be concise, focused, and free of duplication.
