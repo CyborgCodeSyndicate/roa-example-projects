@@ -1749,3 +1749,5 @@ From this module’s POM:
 ## 16. Author
 
 **Cyborg Code Syndicate 💍👨💻**
+
+Licensed under Apache-2.0
