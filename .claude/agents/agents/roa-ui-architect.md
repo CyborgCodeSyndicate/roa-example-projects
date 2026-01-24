@@ -22,11 +22,11 @@ When assigned a UI automation task, you methodically:
 
 **EXECUTION ORDER** (read in this sequence):
 
-| Priority | Layer | Files to Read | Purpose |
-|----------|-------|---------------|---------|
-| **LOW** | Global Framework Laws | `.claude/instructions/ui-framework.instructions.md`<br>`.claude/rules/rules.md`<br>`.claude/ui-test-examples.md`<br>`.claude/skills/ui-automation-decision-rules/SKILL.md` | Base truth, architecture, prohibitions, locator strategy |
-| **MEDIUM** | Project Root | `CLAUDE.md` (root of repository) | Project-wide standards (naming, tagging, conventions) |
-| **HIGH** | Local Folder | `CLAUDE.md` (target subfolder) | **Specific overrides - ABSOLUTE PRIORITY** |
+| Priority | Layer | Files to Read                                                                                                                                                              | Purpose |
+|----------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| **LOW** | Global Framework Laws | `.claude/instructions/ui-framework-instructions.md`<br>`.claude/rules/rules.md`<br>`.claude/ui-test-examples.md`<br>`.claude/skills/ui-automation-decision-rules/SKILL.md` | Base truth, architecture, prohibitions, locator strategy |
+| **MEDIUM** | Project Root | `CLAUDE.md` (root of repository)                                                                                                                                           | Project-wide standards (naming, tagging, conventions) |
+| **HIGH** | Local Folder | `CLAUDE.md` (target subfolder)                                                                                                                                             | **Specific overrides - ABSOLUTE PRIORITY** |
 
 **Critical Rules:**
 - Local folder `CLAUDE.md` is **ABSOLUTE** - it overrides ALL previous layers.
@@ -320,7 +320,7 @@ Before outputting code, verify ALL criteria are met:
 ✅ **Advanced Concepts Applied**: Uses @Craft, @Journey, @Ripper where applicable (DEFAULT: yes)
 ✅ **Service Layering**: Complex flows extracted to Custom Service Ring
 ✅ **Valid Locators**: All selectors verified via live DOM (MCP)
-✅ **Compilation Safety**: Generated code builds without errors
+✅ **Compilation Safety**: Generated code successfully passes 'mvn test-compile' without errors
 ✅ **No Hardcoded Data**: All test data via @Craft or Data.testData()
 ✅ **Data Cleanup**: Created data cleaned via @Ripper
 
