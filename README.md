@@ -431,7 +431,12 @@ For each interaction:
 
 ## 7. Getting Started
 
-This section focuses on setting up the project for any app under test. Choose the adapters (UI, API, DB) you need — you can enable just one or all of them.
+This section shows how to set up a new test automation project using the ROA framework. You have two options:
+
+- **Option A**: Create a project from scratch (manual setup)
+- **Option B**: Generate a project using the ROA Archetype (recommended for faster setup)
+
+---
 
 ### 7.1 Prerequisites
 
@@ -440,7 +445,42 @@ This section focuses on setting up the project for any app under test. Choose th
 - Chrome/ChromeDriver if using UI interception (for UI flows)
 - Application(s) under test reachable from your environment properties
 
-### 7.2 Add dependencies (to your module)
+---
+
+### 7.2 Project Creation
+
+#### Option A: Manual Setup
+
+Follow steps [7.3 Add Dependencies](#73-add-dependencies-to-your-module) and [7.4 Configure Environment](#74-configure-environment) to manually create and configure your project, then proceed to [7.5 Enable Adapters](#75-enable-adapters-on-tests).
+
+#### Option B: Using ROA Archetype
+
+Generate a ready-to-use project with pre-configured dependencies, property files, and example classes.
+
+**Quick Start:**
+1. Follow the [Archetype Setup](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#archetype-setup) instructions
+2. Create your project via [IntelliJ](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#-instructions-how-to-create-a-new-project-from-archetype-via-intellij) or [Command Line](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#instructions-on-how-to-create-project-from-archetype-via-command-line)
+
+**Understanding what gets generated:**
+- Review the [Generation Matrix](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#generation-matrix) for all available parameters
+- See [What Gets Generated (Based on Your Configuration)](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#what-gets-generated-based-on-your-configuration) to understand which files are created based on your selections:
+    - [Module Selection](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#module-selection-modules) - Choose API, UI, DB or combinations
+    - [Implementation Style](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#implementation-style-implementationstyle) - BASIC, ADVANCED, or AI
+    - [UI Components](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#ui-components-uicomponents) - Optional component selection
+    - [Database Type](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#database-type-dbtype) - Pre-configure your DB
+
+**After generation:**
+- Review the [Generated Files & Customization Guide](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#generated-files--customization-guide) to understand what each file does
+- Follow the [Post-Generation Checklist](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#post-generation-checklist)
+- Review the [Example Tests](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#example-tests) (if using BASIC or ADVANCED style)
+
+**If using the archetype, skip steps 7.3 and 7.4 and go directly to [7.5 Enable Adapters](#75-enable-adapters-on-tests)**
+
+---
+
+### 7.3 Add Dependencies (to your module)
+
+> **Skip this step if using archetype** - Dependencies are automatically added based on your module selection.
 
 Include the adapters you need:
 
@@ -461,17 +501,21 @@ Include the adapters you need:
 
 **For a detailed explanation of each adapter (dependency) visit the relevant section in the ROA Libraries documentation: [ROA Libraries](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/README.md#modules-overview)**
 
-### 7.3 Configure environment
+---
+
+### 7.4 Configure Environment
+
+> **Skip this step if using archetype** - Property files are automatically generated for your specified environments. See [Environment Configuration](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#environment-configuration) in the archetype guide.
 
 Adapters use Owner configuration. A typical setup defines defaults via Maven profiles and lets you override via system properties.
 
 - Profiles: `dev`, `staging`, `prod`
 - Common properties:
-  - UI: `ui.config.file=config-<env>`
-  - API: `api.config.file=config-<env>`
-  - DB: `db.config.file=config-<env>`
-  - Framework: `framework.config.file=config-<env>`
-  - Test data: `test.data.file=test_data-<env>`
+    - UI: `ui.config.file=config-<env>`
+    - API: `api.config.file=config-<env>`
+    - DB: `db.config.file=config-<env>`
+    - Framework: `framework.config.file=config-<env>`
+    - Test data: `test.data.file=test_data-<env>`
 - Defaults file per module: `src/main/resources/system.properties`
 
 Naming convention for files in `src/main/resources`:
@@ -480,9 +524,9 @@ Naming convention for files in `src/main/resources`:
 
 Precedence of effective config values:
 
-1. `-D` system properties  
-2. Maven profile defaults  
-3. `system.properties`  
+1. `-D` system properties
+2. Maven profile defaults
+3. `system.properties`
 4. Values inside the referenced property files
 
 Examples (multi-module builds can add `-pl <module>`):
@@ -534,7 +578,11 @@ db.default.username=app
 db.default.password=secret
 ```
 
-### 7.4 Enable adapters on tests
+---
+
+### 7.5 Enable Adapters on Tests
+
+> **If using archetype:** You still need to annotate your test classes with the appropriate adapter annotations based on which modules you're testing.
 
 Annotate your test class and extend a Quest base class:
 
@@ -552,7 +600,13 @@ This initializes UI, API and DB rings. Add DB hooks as needed:
 class MyDbTests extends BaseQuest { }
 ```
 
-### 7.5 Writing Simple UI Component Tests
+---
+
+### 7.6 Writing Simple UI Component Tests
+
+> **If using archetype (BASIC/ADVANCED style):** Review the generated `GettingStartedUiTest.java` for a complete working example. See [Example Tests - UI Tests](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#ui-tests-gettingstarteduitestjava) in the archetype guide.
+
+> **If using archetype (AI style):** No example tests are generated. Use this section as your implementation guide.
 
 The `GettingStartedTests` class demonstrates fundamental UI component interactions and serves as your starting point for writing tests. This section walks through a complete example that covers the most common UI operations you'll use in your tests.
 
@@ -609,6 +663,12 @@ driver.findElement(By.id("user_login")).sendKeys("username");
 .input().insert(InputFields.USERNAME_FIELD, "username")
 ```
 
+> **If using archetype:**
+> - Element enum files (InputFields, ButtonFields, etc.) are generated based on your `-DuiComponents` parameter
+> - See [UI Components - Component Generation Matrix](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#component-generation-matrix) to understand which classes were created
+> - For BASIC/ADVANCED: Replace example locators with your application's selectors
+> - For AI: Implement the empty structures based on your AUT
+
 #### **Benefits of Element Enums:**
 - **Compile-time safety**: Typos in element names cause build failures, not runtime errors
 - **IDE support**: Auto-completion and refactoring work seamlessly
@@ -639,7 +699,13 @@ public static final String SUCCESSFUL_TRANSFER_MESSAGE = "You successfully submi
 6. **Use constants** (reference `Constants` class for test data and expected values)
 7. **End with `.complete()`** (always finalize your test execution)
 
-### 7.6 Writing Simple API Tests
+---
+
+### 7.7 Writing Simple API Tests
+
+> **If using archetype (BASIC/ADVANCED style):** Review the generated `GettingStartedApiTest.java` for a complete working example. See [Example Tests - API Tests](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#api-tests-gettingstartedapitestjava) in the archetype guide.
+
+> **If using archetype (AI style):** No example tests are generated. Use this section as your implementation guide.
 
 The `GettingStartedTest` class demonstrates fundamental API interactions and serves as your starting point for writing API tests.
 
@@ -666,6 +732,11 @@ void showsBasicGetWithQueryParamAndMinimalAssertions(Quest quest) {
         .complete();
 }
 ```
+
+> **If using archetype:**
+> - `ExampleEndpoints.java`, `ExampleRequestDto.java`, `ExampleResponseDto.java`, and `ExampleAuthenticationClient.java` are generated
+> - See [API Components](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#api-when-api-module-selected) in the archetype guide for details on each file
+> - Replace example implementations with your real API endpoints and models
 
 **Why this matters:**
 - Uses `quest.use(RING_OF_API)` and a minimal `requestAndValidate(...)` call.
