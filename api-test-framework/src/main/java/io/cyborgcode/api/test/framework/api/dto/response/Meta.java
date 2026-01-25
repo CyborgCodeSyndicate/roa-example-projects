@@ -15,15 +15,15 @@ public class Meta {
 
    @JsonProperty("powered_by")
    private String poweredBy;
-   @JsonProperty("upgrade_url")
-   private String upgradeUrl;
    @JsonProperty("docs_url")
    private String docsUrl;
-   @JsonProperty("template_gallery")
-   private String templateGallery;
+   @JsonProperty("upgrade_url")
+   private String upgradeUrl;
+   @JsonProperty("example_url")
+   private String exampleUrl;
+   private String variant;
    private String message;
-   private List<MetaFeatures> features;
-   @JsonProperty("upgrade_cta")
-   private String upgradeCta;
+   private Cta cta;
+   private String context;
 
 }
