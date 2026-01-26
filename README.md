@@ -2,8 +2,9 @@
 
 End-to-end UI + API + DB test automation examples on top of ROA (Ring of Automation).
 
-> Quick jump: if you are already familiar with ROA and just want to run the sample tests, go to:
-> [Writing Simple UI Component Tests](#75-writing-simple-ui-component-tests) or [Writing Simple API Tests](#76-writing-simple-api-tests).
+> 🎯 **New to ROA?** Start with the [Getting Started](#7-getting-started) section for a step-by-step guide to create your first project and write your first tests.
+> 
+> 🎬 **Video tutorials coming soon!** Watch our [video series](#) for visual walkthroughs of getting started, writing tests, and exploring all examples in this guide.
 
 ---
 
@@ -27,22 +28,53 @@ End-to-end UI + API + DB test automation examples on top of ROA (Ring of Automat
    - [Bootstrap & Runtime Behavior](#63-bootstrap--runtime-behavior)  
 7. [Getting Started](#7-getting-started)
     - [Prerequisites](#71-prerequisites)
-    - [Add dependencies (to your module)](#72-add-dependencies-to-your-module)
-    - [Configure environment](#73-configure-environment)
-    - [Enable adapters on tests](#74-enable-adapters-on-tests)
-    - [Writing Simple UI Component Tests](#75-writing-simple-ui-component-tests)
-    - [Writing Simple API Tests](#76-writing-simple-api-tests)
-8. [Writing Tests (feature-by-feature)](#8-writing-tests-feature-by-feature)  
+    - [Project Creation](#72-project-creation)
+        - [Manual Setup](#721-manual-setup)
+        - [Quick Start with ROA Archetype](#722-quick-start-with-roa-archetype)
+    - [Add dependencies (to your module)](#73-add-dependencies)
+    - [Configure environment](#74-configure-environment)
+    - [Create the Rings Registry](#75-create-the-rings-registry)
+    - [Enable adapters on tests](#76-enable-adapters-on-tests)
+    - [Writing Your First UI Test](#77-writing-your-first-ui-test)
+    - [Writing Your First API Test](#78-writing-your-first-api-test)
+8. [Writing Tests (feature-by-feature)](#8-writing-tests-feature-by-feature)
+    - [Step 1 – Initial UI and API tests](#81-step-1--initial-ui-and-api-tests)
+    - [Step 2 – Move from script to domain flows (CustomService)](#82-step-2--move-from-script-to-domain-flows-customservice)
+    - [Step 3 – Centralize data with DataCreator and Craft](#83-step-3--centralize-data-with-datacreator-and-craft)
+    - [Step 4 – Journeys as reusable preconditions](#84-step-4--journeys-as-reusable-preconditions)
+    - [Step 5 – Authentication helpers (UI and API)](#85-step-5--authentication-helpers-ui-and-api)
+    - [Step 6 – Intercept UI traffic & extract data](#86-step-6--intercept-ui-traffic--extract-data)
+    - [Step 7 – DB validations](#87-step-7--db-validations)
+    - [Step 8 – Cleanup with DataCleaner and Ripper](#88-step-8--cleanup-with-datacleaner-and-ripper)
 9. [Storage Integration](#9-storage-integration)
     - [Scope & thread-local design](#91-scope--thread-local-design)
     - [Namespaces & what goes where](#92-namespaces--what-goes-where)
     - [Write patterns](#93-write-patterns)
     - [Read patterns](#94-read-patterns)
     - [Best practices](#95-best-practices)  
-10. [UiElement Pattern & Component Services](#10-uielement-pattern--component-services)  
-11. [Table Testing Guide](#11-table-testing-guide)  
-12. [Advanced Examples](#12-advanced-examples)  
-13. [Adapter Configuration & Reporting](#13-adapter-configuration--reporting)  
+10. [UiElement Pattern & Component Services](#10-uielement-pattern--component-services)
+    - [UiElement enums](#101-uielement-enums)
+    - [Mapping domain models to UI with @InsertionElement](#102-mapping-domain-models-to-ui-with-insertionelement)
+    - [Component services via AppUiService](#103-component-services-via-appuiservice)
+11. [Table Testing Guide](#11-table-testing-guide)
+    - [Table Testing Overview](#111-table-testing-overview)
+    - [Complete Table Reading and Validation](#112-complete-table-reading-and-validation)
+    - [Table Assertion Types](#113-table-assertion-types)
+    - [Selective Column Reading](#114-selective-column-reading)
+    - [Row Range Reading](#115-row-range-reading)
+    - [Combined: Specific Columns with Row Range](#116-combined-specific-columns-with-row-range)
+    - [Search-Based Row Reading](#117-search-based-row-reading)
+    - [Data Retrieval Patterns](#118-data-retrieval-patterns)
+    - [Table Testing Best Practices](#119-table-testing-best-practices)
+    - [Common Table Testing Scenarios](#1110-common-table-testing-scenarios)
+12. [Advanced Examples](#12-advanced-examples)
+    - [Static test data preload](#121-static-test-data-preload)
+    - [Late data creation based on intercepted responses](#122-late-data-creation-based-on-intercepted-responses)
+    - [Validating tables with typed rows](#123-validating-tables-with-typed-rows)
+    - [Full E2E: UI + API + DB + cleanup](#124-full-e2e-ui--api--db--cleanup)
+13. [Adapter Configuration & Reporting](#13-adapter-configuration--reporting)
+    - [Adapter configuration](#131-adapter-configuration)
+    - [Allure reporting](#132-allure-reporting)  
 14. [Troubleshooting](#14-troubleshooting)  
 15. [Dependencies](#15-dependencies)  
 16. [Author](#16-author)
@@ -145,11 +177,11 @@ Example switching:
 
 ```java
 quest
-   .use(RING_OF_UI)
+   .use(Rings.RING_OF_UI)
    .input().insert(InputFields.ORDER_NUMBER, ID_VALUE)
    .button().click(ButtonFields.FIND_ORDER)
    .drop()
-   .use(RING_OF_API)
+   .use(Rings.RING_OF_API)
    .requestAndValidate(AppEndpoints.SOME_ENDPOINT, /* assertions */)
    .complete();
 ```
@@ -431,141 +463,263 @@ For each interaction:
 
 ## 7. Getting Started
 
-This section shows how to set up a new test automation project using the ROA framework. You have two options:
-
-- **Option A**: Create a project from scratch (manual setup)
-- **Option B**: Generate a project using the ROA Archetype (recommended for faster setup)
+**Ready to write your first test?** This guide takes you from zero to a running test in minutes. By the end, you'll understand how to create a project, configure it, and write your first fluent UI and API tests.
 
 ---
 
 ### 7.1 Prerequisites
 
-- Java (as defined by the parent POM/toolchain)
-- Maven
-- Chrome/ChromeDriver if using UI interception (for UI flows)
-- Application(s) under test reachable from your environment properties
+Before you begin, ensure you have the following installed and configured:
+
+| Requirement                    | Details                                                                    |
+|--------------------------------|----------------------------------------------------------------------------|
+| **Java 17+**                   | ROA requires Java 17 or higher (managed via `roa-parent` toolchain)        |
+| **Maven 3.6+**                 | For dependency management and test execution                               |
+| **Chrome,Edge Browser/Driver** | Required for UI tests; ChromeDriver / EdgeDriver are managed automatically |
+| **IDE**                        | IntelliJ IDEA recommended for best experience with Lombok and fluent APIs  |
+| **Allure CLI (Optional)**      | For viewing test reports; Generates interactive HTML reports               |
+
+> **Note:** JUnit 5 and Spring Boot are **included automatically** via the `roa-parent` POM—you don't need to add them separately.
 
 ---
 
 ### 7.2 Project Creation
 
-#### Option A: Manual Setup
+**Two paths to get started:**
 
-Follow steps [7.3 Add Dependencies](#73-add-dependencies-to-your-module) and [7.4 Configure Environment](#74-configure-environment) to manually create and configure your project, then proceed to [7.5 Enable Adapters](#75-enable-adapters-on-tests).
+>⚙️ **Manual Setup**: Build from scratch for full control over your project structure
+>
+>🚀 **Quick Start (Recommended)**: [Use the ROA Archetype](#722-quick-start-with-roa-archetype) to generate a complete, runnable project with example tests  
 
-#### Option B: Using ROA Archetype
-
-Generate a ready-to-use project with pre-configured dependencies, property files, and example classes.
-
-**Quick Start:**
-1. Follow the [Archetype Setup](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#archetype-setup) instructions
-2. Create your project via [IntelliJ](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#-instructions-how-to-create-a-new-project-from-archetype-via-intellij) or [Command Line](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#instructions-on-how-to-create-project-from-archetype-via-command-line)
-
-**Understanding what gets generated:**
-- Review the [Generation Matrix](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#generation-matrix) for all available parameters
-- See [What Gets Generated (Based on Your Configuration)](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#what-gets-generated-based-on-your-configuration) to understand which files are created based on your selections:
-    - [Module Selection](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#module-selection-modules) - Choose API, UI, DB or combinations
-    - [Implementation Style](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#implementation-style-implementationstyle) - BASIC, ADVANCED, or AI
-    - [UI Components](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#ui-components-uicomponents) - Optional component selection
-    - [Database Type](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#database-type-dbtype) - Pre-configure your DB
-
-**After generation:**
-- Review the [Generated Files & Customization Guide](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#generated-files--customization-guide) to understand what each file does
-- Follow the [Post-Generation Checklist](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#post-generation-checklist)
-- Review the [Example Tests](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#example-tests) (if using BASIC or ADVANCED style)
-
-**If using the archetype, skip steps 7.3 and 7.4 and go directly to [7.5 Enable Adapters](#75-enable-adapters-on-tests)**
 
 ---
 
-### 7.3 Add Dependencies (to your module)
+#### 7.2.1 Manual Setup
 
-> **Skip this step if using archetype** - Dependencies are automatically added based on your module selection.
+**⏱️ Time: ~15 minutes** | **💡 Best for: Integrating into existing projects or custom requirements**
 
-Include the adapters you need:
+##### Project structure
 
-```xml
-<dependency>
-  <groupId>io.cyborgcode.roa</groupId>
-  <artifactId>ui-interactor-test-framework-adapter</artifactId>
-</dependency>
-<dependency>
-  <groupId>io.cyborgcode.roa</groupId>
-  <artifactId>api-interactor-test-framework-adapter</artifactId>
-</dependency>
-<dependency>
-  <groupId>io.cyborgcode.roa</groupId>
-  <artifactId>db-interactor-test-framework-adapter</artifactId>
-</dependency>
+Recommended Maven project structure:
+```
+your-test-project/
+├── pom.xml
+└── src/
+    ├── main/
+    │   ├── java/
+    │   │   └── com/yourcompany/testframework/
+    │   │       ├── base/
+    │   │       │   └── Rings.java           # Ring registry
+    │   │       ├── ui/                      # UI-specific code
+    │   │       ├── api/                     # API-specific code
+    │   │       └── db/                      # DB-specific code
+    │   └── resources/
+    │       ├── system.properties            # Default properties  
+    │       ├── config-<env>.properties      # Environment configs
+    │       └── test_data-<env>.properties   # Test Data properties
+    └── test/
+        └── java/
+            └── com/yourcompany/tests/
+                └── GettingStartedTest.java  # Your first test
 ```
 
-**For a detailed explanation of each adapter (dependency) visit the relevant section in the ROA Libraries documentation: [ROA Libraries](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/README.md#modules-overview)**
+Follow these subsections to build your project:
+- [7.3 Add Dependencies](#73-add-dependencies)
+- [7.4 Configure Environment](#74-configure-environment)  
+- [7.5 Create the Rings Registry](#75-create-the-rings-registry)
+- [7.7 Writing Your First UI Test](#77-writing-your-first-ui-test)
+- [7.8 Writing Your First API Test](#78-writing-your-first-api-test)
+
+---
+
+#### 7.2.2 Quick Start with ROA Archetype
+
+**⏱️ Time: ~5 minutes** | **💡 Best for: First-time users and quick prototypes**
+
+> 🎬 Watch video [Setup project with ROA Archetype]() - coming soon!
+
+The archetype generates everything you need: dependencies, configuration files, base classes, and working example tests.
+
+#### Step 1: Run the archetype
+
+**Via IntelliJ IDEA:**
+1. Follow [Archetype Setup](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#archetype-setup) to install the archetype
+2. Create project via [IntelliJ Instructions](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#-instructions-how-to-create-a-new-project-from-archetype-via-intellij)
+
+**Via Command Line:**
+```bash
+mvn archetype:generate \
+  -DarchetypeGroupId=io.cyborgcode.roa \
+  -DarchetypeArtifactId=roa-archetype \
+  -DarchetypeVersion=LATEST_VERSION
+```
+
+📚 See [Command Line Instructions](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#instructions-on-how-to-create-project-from-archetype-via-command-line) for complete details.
+
+#### Step 2: Choose your modules
+
+During generation, select which testing capabilities you need:
+
+| Module         | When to use |
+|----------------|-------------|
+| **API**        | Testing REST APIs, microservices, backend services |
+| **UI**         | Testing web applications, browser automation |
+| **DB**         | Database validation, data integrity checks |
+| **API,UI,DB**  | Complete testing suite (API + UI + DB) |
+
+#### Step 3: Select implementation style
+
+- **BASIC**: Minimal working examples (recommended for learning)
+- **ADVANCED**: Complete examples with all framework features
+- **AI**: Empty templates for AI-assisted development
+
+📚 See the [Generation Matrix](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#generation-matrix) for all configuration options.
+
+#### Step 4: Review generated project
+
+- 📚 Review [Generated Files & Customization Guide](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#generated-files--customization-guide)
+- 📚 Explore [Example Tests](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#example-tests)
+
+
+#### Step 5: Run your first test!
+
+✅ **Success!** You now have a working test framework. Jump to [7.7 Writing Your First UI Test](#77-writing-your-first-ui-test) or [7.8 Writing Your First API Test](#78-writing-your-first-api-test) to write and run your first test.
+
+---
+
+### 7.3 Add Dependencies
+
+> 💡 **Using archetype?** Skip this - dependencies are auto-configured based on your module selection.
+
+> 🎬 Watch video [Getting Started with ROA]() - coming soon!
+> 
+#### Step 1: Add `roa-parent` as your parent POM
+
+```xml
+<parent>
+   <groupId>io.cyborgcode.roa</groupId>
+   <artifactId>roa-parent</artifactId>
+   <version>${LATEST_VERSION}</version>
+</parent>
+```
+
+**Why roa-parent?**
+- ✅ All ROA library versions managed automatically - no version conflicts
+- ✅ Pre-configured Maven plugins (compiler, surefire, test-allocator)
+- ✅ Optimized test execution settings (parallel execution, Allure reporting)
+- ✅ Single place to update framework versions
+
+📚 See [ROA Parent Documentation](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-parent/README.md) for details.
+
+#### Step 2: Add `adapter` dependencies
+
+Include **only the `adapters` you need**. No version tags required - `roa-parent` manages versions.
+
+```xml
+<dependencies>
+    <!-- For API testing -->
+    <dependency>
+        <groupId>io.cyborgcode.roa</groupId>
+        <artifactId>api-interactor-test-framework-adapter</artifactId>
+    </dependency>
+    
+    <!-- For UI testing -->
+    <dependency>
+        <groupId>io.cyborgcode.roa</groupId>
+        <artifactId>ui-interactor-test-framework-adapter</artifactId>
+    </dependency>
+    
+    <!-- For database testing -->
+    <dependency>
+        <groupId>io.cyborgcode.roa</groupId>
+        <artifactId>db-interactor-test-framework-adapter</artifactId>
+    </dependency>
+</dependencies>
+```
+
+#### Step 3: Add `properties`
+
+Include `properties` to your `pom.xml`
+
+- The `{env}` placeholder should be replaced with your target environment (e.g., config-dev, config-staging, config-prod).
+- These properties are typically set in `system.properties` or overridden via Maven `profiles` or `-D` flags.
+- At runtime, the framework reads these property values and loads the corresponding `.properties` files from the classpath.
+```xml
+<properties>
+    <ui.config.file>config-{env}</ui.config.file>
+    <api.config.file>config-{env}</api.config.file>
+    <db.config.file>config-{env}</db.config.file>
+    <test.data.file>test_data-{env}</test.data.file>
+    <framework.config.file>config-{env}</framework.config.file>
+    <logFileName>logs/example.log</logFileName>
+    <extended.logging>false</extended.logging>
+</properties>
+```
+📚 **Learn more:** [ROA Libraries - Modules Overview](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/README.md#modules-overview) explains each adapter's capabilities.
 
 ---
 
 ### 7.4 Configure Environment
 
-> **Skip this step if using archetype** - Property files are automatically generated for your specified environments. See [Environment Configuration](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#environment-configuration) in the archetype guide.
+> 💡 **Using archetype?** Skip this - property files are auto-generated. See [Environment Configuration](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#environment-configuration).
 
-Adapters use Owner configuration. A typical setup defines defaults via Maven profiles and lets you override via system properties.
+> 🎬 Watch video [Handle Configuration]() - coming soon!
 
-- Profiles: `dev`, `staging`, `prod`
-- Common properties:
-    - UI: `ui.config.file=config-<env>`
-    - API: `api.config.file=config-<env>`
-    - DB: `db.config.file=config-<env>`
-    - Framework: `framework.config.file=config-<env>`
-    - Test data: `test.data.file=test_data-<env>`
-- Defaults file per module: `src/main/resources/system.properties`
+ROA uses a **layered configuration system** that keeps your test code environment-agnostic. Write once, run anywhere—just switch profiles to target different environments.
 
-Naming convention for files in `src/main/resources`:
+#### File Structure
 
-- `config-<env>.properties` and `test_data-<env>.properties`
+Place your configuration files in `src/main/resources/`:
 
-Precedence of effective config values:
-
-1. `-D` system properties
-2. Maven profile defaults
-3. `system.properties`
-4. Values inside the referenced property files
-
-Examples (multi-module builds can add `-pl <module>`):
-
-```bash
-# Run tests with staging profile for a module
-mvn -q -pl <your-module> -Pstaging test
-
-# Run with dev profile
-mvn -q -pl <your-module> -Pdev test
-
-# Run a single test and override only test data to dev
-mvn -q -pl <your-module> -Pprod \
- -Dtest=YourTestClass#yourTestMethod \
- -Dtest.data.file=test_data-dev test
+```
+src/main/resources/
+├── system.properties           # Default config file references
+├── config-{env}.properties     # Environment configs
+└── test_data-{env}.properties  # Test data properties
 ```
 
-Example API config (config-<env>.properties):
+**Framework default properties** (`system.properties`)
 
+```properties
+project.packages=io.yourcompany.test.framework
+ui.config.file=config-{env}
+api.config.file=config-{env}
+db.config.file=config-{env}
+framework.config.file=config-{env}
+test.data.file=test_data-{env}
+logFileName=logs/roa-tests.log
+extended.logging=false
+```
+
+| Property | Purpose | Example Value |
+|----------|---------|---------------|
+| `ui.config.file` | UI adapter configuration | `config-{env}` |
+| `api.config.file` | API adapter configuration | `config-{env}` |
+| `db.config.file` | Database adapter configuration | `config-{env}` |
+| `test.data.file` | Environment-specific test data | `test_data-{env}` |
+
+#### Example Configurations
+
+**API Configuration** (`config-{env}.properties`)
 ```properties
 api.base.url=https://your-api.example.com
 api.restassured.logging.enabled=true
 api.restassured.logging.level=ALL
-shorten.body=800
 ```
+📚 Explore more details: [API Configuration Setup](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/api-interactor/README.md#step-2-configure-apiconfig)
 
-Example UI config (config-<env>.properties):
-
+**UI Configuration** (`config-{env}.properties`)
 ```properties
 ui.base.url=https://your-ui.example.com/
 browser.type=CHROME
 headless=false
-wait.duration.in.seconds=10
-use.shadow.root=true
+wait.duration.in.seconds=5
+use.shadow.root=false
 screenshot.on.passed.test=true
 ```
+📚 Explore more details: [UI Configuration Setup](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/ui-interactor/README.md#configuration-setup)
 
-Example DB config (config-<env>.properties):
-
+**Database Configuration** (`config-{env}.properties`)
 ```properties
 db.default.type=H2
 db.full.connection.string=jdbc:h2:mem:AppDb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false
@@ -578,67 +732,209 @@ db.default.username=app
 db.default.password=secret
 ```
 
----
+📚 Explore more details: [DB Configuration Setup](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/db-interactor/README.md#step-2-database-configuration)
 
-### 7.5 Enable Adapters on Tests
+#### Multi-environment setup (optional)
 
-> **If using archetype:** You still need to annotate your test classes with the appropriate adapter annotations based on which modules you're testing.
+1. For different environments, create `config-dev.properties`, `config-staging.properties`, `config-prod.properties` etc., and select at runtime
 
-Annotate your test class and extend a Quest base class:
+2. Define `Maven profiles` in `pom.xml` to set active environment
 
-```java
-@UI
-@API
-@DB
-class MyTests extends BaseQuest { }
+```xml
+<profiles>
+    <profile>
+        <id>dev</id>
+        <activation><activeByDefault>true</activeByDefault></activation>
+        <properties>
+            <ui.config.file>config-dev</ui.config.file>
+            <api.config.file>config-dev</api.config.file>
+            <db.config.file>config-dev</db.config.file>
+        </properties>
+    </profile>
+    <profile>
+        <id>staging</id>
+        <properties>
+            <ui.config.file>config-staging</ui.config.file>
+            <api.config.file>config-staging</api.config.file>
+            <db.config.file>config-staging</db.config.file>
+        </properties>
+    </profile>
+</profiles>
 ```
 
-This initializes UI, API and DB rings. Add DB hooks as needed:
-
-```java
-@DbHook(when = BEFORE, type = DbHookFlows.Data.INITIALIZE_H2)
-class MyDbTests extends BaseQuest { }
-```
-
 ---
 
-### 7.6 Writing Simple UI Component Tests
+### 7.5 Create the Rings Registry
 
-> **If using archetype (BASIC/ADVANCED style):** Review the generated `GettingStartedUiTest.java` for a complete working example. See [Example Tests - UI Tests](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#ui-tests-gettingstarteduitestjava) in the archetype guide.
+> 💡 **Using archetype?** `Rings.java` is auto-generated with the correct rings for your selected modules.
 
-> **If using archetype (AI style):** No example tests are generated. Use this section as your implementation guide.
+#### What are Rings?
 
-The `GettingStartedTests` class demonstrates fundamental UI component interactions and serves as your starting point for writing tests. This section walks through a complete example that covers the most common UI operations you'll use in your tests.
+The `Rings` class is a central registry that maps logical ring identifiers to their concrete service implementations. This is **required** for the framework to route `quest.use(Rings.RING_OF_*)` calls to the correct fluent service.
 
-#### Every UI test in this framework follows a consistent pattern:
 
-1. **Test Setup**: Use `@Test()` annotation and inject `Quest quest` parameter
-2. **Ring Activation**: Call `.use(RING_OF_UI)` to access UI component services
-3. **Component Interactions**: Chain fluent method calls for UI operations
-4. **Release Active Ring**: Optionally call `.drop()` to release the current ring/service context
-5. **Test Completion**: End with `.complete()`
+**Location:** Create this class in your project's base package (e.g., `src/main/java/{your.package}/base/Rings.java`).
+
+**Purpose:**
+- Acts as a type-safe mapping between ring constants and service classes
+- Enables `quest.use(Rings.RING_OF_API)` to resolve to your API service implementation
+- Centralizes ring definitions for easy maintenance and discoverability
+
+**Complete example with all typical rings:**
 
 ```java
-@Test()
-void components_browserButtonInputLinkSelectAlert(Quest quest) {
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class Rings {
+
+   // Core adapter rings - map to framework-provided services
+   // We name these services as Rings, you can put any name you want
+   public static final Class<AppUiService> RING_OF_UI = AppUiService.class;
+   public static final Class<RestServiceFluent> RING_OF_API = RestServiceFluent.class;
+   public static final Class<DbServiceFluent> RING_OF_DB = DbServiceFluent.class;
+   
+   // Custom domain rings - map to your own service implementations
+   public static final Class<CustomService> RING_OF_CUSTOM = CustomService.class;
+
+}
+```
+
+**Usage in tests:**
+
+```java
+@Test
+void exampleUsingRings(Quest quest) {
   quest
-        .use(RING_OF_UI)
-        .browser().navigate(getUiConfig().baseUrl())
-        .button().click(ButtonFields.SIGN_IN_BUTTON)
-        .input().insert(InputFields.USERNAME_FIELD, "username")
-        .input().insert(InputFields.PASSWORD_FIELD, "password")
-        .button().click(ButtonFields.SIGN_IN_FORM_BUTTON)
-        .browser().back()
-        .link().click(LinkFields.TRANSFER_FUNDS_LINK)
-        .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, LOAN_ACCOUNT)
-        .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, CREDIT_CARD_ACCOUNT)
-        .input().insert(InputFields.AMOUNT_FIELD, "100")
-        .input().insert(InputFields.TF_DESCRIPTION_FIELD, TRANSFER_LOAN_TO_CREDIT_CARD)
-        .button().click(ButtonFields.SUBMIT_BUTTON)
-        .button().click(ButtonFields.SUBMIT_BUTTON)
-        .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, SUCCESSFUL_TRANSFER_MESSAGE)
-        .drop()
-        .complete();
+    .use(Rings.RING_OF_UI)      // Resolves to AppUiService via Rings.RING_OF_UI
+    .browser().navigate("https://example.com")
+    .drop()
+    .use(Rings.RING_OF_API)     // Resolves to RestServiceFluent via Rings.RING_OF_API
+    .request(Endpoints.GET_ENDPOINT)
+    .drop()
+    .use(Rings.RING_OF_CUSTOM)  // Resolves to CustomService via Rings.RING_OF_CUSTOM
+    .performDomainAction()
+    .complete();
+}
+```
+
+**Key points:**
+- ✅ Include only the rings you actually use (e.g., API-only projects don't need `RING_OF_UI`)
+- ✅ Custom rings (like `CustomService`) extend base fluent chains and add domain-specific methods
+- ✅ The `@UtilityClass` annotation from Lombok ensures this class cannot be instantiated
+- ✅ Service classes referenced here must be implemented in your project (see sections on `AppUiService` and `CustomService`)
+
+---
+
+### 7.6 Enable Adapters on Tests
+
+> 💡 **Using archetype?** Test base classes are generated, but you still need to annotate each test class.
+
+**Use adapter annotations to tell the framework which capabilities your test needs:**
+
+```java
+import io.cyborgcode.roa.test.framework.base.BaseQuest;
+import io.cyborgcode.roa.api.interactor.test.framework.adapter.annotation.API;
+import io.cyborgcode.roa.ui.interactor.test.framework.adapter.annotation.UI;
+import io.cyborgcode.roa.db.interactor.test.framework.adapter.annotation.DB;
+
+@API  // Enables API testing
+@UI   // Enables UI testing  
+@DB   // Enables database testing
+class MyFirstTest extends BaseQuest {
+    
+    @Test
+    void myTest(Quest quest) {
+        // Now you can use all three rings
+        quest.use(Rings.RING_OF_API)...
+        quest.use(Rings.RING_OF_UI)...
+        quest.use(Rings.RING_OF_DB)...
+    }
+}
+```
+
+**Only annotate what you need:**
+
+```java
+@API  // API-only test
+class ApiOnlyTest extends BaseQuest { }
+
+@UI   // UI-only test
+class UiOnlyTest extends BaseQuest { }
+```
+
+**Parallel vs Sequential execution:**
+
+```java
+// Each test method runs in parallel (default)
+class ParallelTests extends BaseQuest { }
+
+// Tests run sequentially with shared Quest context
+class SequentialTests extends BaseQuestSequential { }
+```
+
+---
+
+### 7.7 Writing Your First UI Test
+
+>💡 **Using archetype (BASIC/ADVANCED style)?** Review generated `GettingStartedUiTest.java`. See [UI Test Example](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#ui-tests-gettingstarteduitestjava).
+
+>💡 **If using archetype (AI style):** No example tests are generated. Use this section as your implementation guide.
+
+> 🎬 Watch video [Create First UI Test]() - coming soon!
+>
+This section walks through a complete example that covers the most common UI operations you'll use in your tests.
+Let's write a test that logs into a web app, navigates to a page, and verifies content. This example shows the core UI testing pattern you'll use everywhere.
+
+
+**Test prerequisites:**
+
+- 📖 [**AppUiService**](#step-1-create-appuiservice) - The main service facade that exposes UI component services (e.g., `browser()`, `button()`, `input()`) for use in tests
+- 📖 [**Component Type**](#1-component-type-defines-the-category) - Defines *what kind* of UI element (e.g., Bootstrap button, Material Design input)
+- 📖 [**Component Implementation**](#2-component-implementation-key-methods-only) - Defines *how* to interact with that element type (click behavior, validation logic)
+- 📖 [**Element Enum**](#3-element-enum-maps-names-to-locators) - Maps readable element names to actual locators and assigns them a component type
+
+📖 Read: [Define UI Components](#step-2-define-ui-components)
+
+**The anatomy of a UI test:**
+
+1. **Annotate** with `@UI` to enable UI capabilities  
+2. **Inject** `Quest quest` parameter - See 📖 [2.1 Quest section](#21-quest)
+3. **Activate** the UI ring with `.use(Rings.RING_OF_UI)`  
+4. **Chain** component interactions (`navigate()`, `insert()`, `click()`)  
+5. **Release Active Ring**: Optionally call `.drop()` to release the current ring/service context
+6. **Complete** with `.complete()` to finalize
+
+**Complete working example:**
+
+```java
+import io.cyborgcode.roa.ui.interactor.test.framework.adapter.annotation.UI;
+import io.cyborgcode.roa.test.framework.base.BaseQuest;
+import io.cyborgcode.roa.test.framework.quest.Quest;
+import org.junit.jupiter.api.Test;
+
+@UI
+class GettingStartedTest extends BaseQuest {
+    
+    @Test
+    void myFirstUiTest(Quest quest) {
+       quest
+             .use(Rings.RING_OF_UI)
+             .browser().navigate("http://zero.webappsecurity.com/")
+             .button().click(ButtonFields.SIGN_IN_BUTTON)
+             .input().insert(InputFields.USERNAME_FIELD, "username")
+             .input().insert(InputFields.PASSWORD_FIELD, "password")
+             .button().click(ButtonFields.SIGN_IN_FORM_BUTTON)
+             .browser().back()
+             .link().click(LinkFields.TRANSFER_FUNDS_LINK)
+             .select().selectOption(SelectFields.TF_FROM_ACCOUNT_DDL, "Loan")
+             .select().selectOption(SelectFields.TF_TO_ACCOUNT_DDL, "Credit Card")
+             .input().insert(InputFields.AMOUNT_FIELD, "100")
+             .button().click(ButtonFields.SUBMIT_BUTTON)
+             .alert().validateValue(AlertFields.SUBMITTED_TRANSACTION, "Successfully submitted transaction")
+             .drop()
+             .complete();
+    }
 }
 ```
 
@@ -653,103 +949,389 @@ void components_browserButtonInputLinkSelectAlert(Quest quest) {
 | `select()` | Dropdown selections | `selectOption()`, `getSelectedOptions()` | Choose from dropdowns, verify selections |
 | `alert()` | Message validation | `validateValue()`, `validateIsVisible()` | Verify success/error messages |
 
-#### Instead of using raw CSS selectors or XPath expressions, the framework uses enum-based element definitions:
+#### Step 1: Create AppUiService
+
+Create `AppUiService` as the main facade that exposes component services for your tests:
+
 
 ```java
-// Instead of this (brittle):
-driver.findElement(By.id("user_login")).sendKeys("username");
+import io.cyborgcode.roa.framework.quest.SuperQuest;
+import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
+import io.cyborgcode.roa.ui.service.fluent.ButtonServiceFluent;
+import io.cyborgcode.roa.ui.service.fluent.NavigationServiceFluent;
+import io.cyborgcode.roa.ui.service.fluent.UiServiceFluent;
 
-// Use this (maintainable):
-.input().insert(InputFields.USERNAME_FIELD, "username")
+public class AppUiService extends UiServiceFluent<AppUiService> {
+
+  public AppUiService(SmartWebDriver driver, SuperQuest quest) {
+    super(driver);
+    this.quest = quest;
+    postQuestSetupInitialization();
+  }
+
+  public NavigationServiceFluent<AppUiService> browser() {
+    return getNavigation();
+  }
+
+  public ButtonServiceFluent<AppUiService> button() {
+    return getButtonField();
+  }
+}
 ```
+#### Step 2: Define UI Components
 
-> **If using archetype:**
-> - Element enum files (InputFields, ButtonFields, etc.) are generated based on your `-DuiComponents` parameter
-> - See [UI Components - Component Generation Matrix](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#component-generation-matrix) to understand which classes were created
-> - For BASIC/ADVANCED: Replace example locators with your application's selectors
-> - For AI: Implement the empty structures based on your AUT
+To make element enums work, you need three pieces that work together:
 
-#### **Benefits of Element Enums:**
-- **Compile-time safety**: Typos in element names cause build failures, not runtime errors
-- **IDE support**: Auto-completion and refactoring work seamlessly
-- **Centralized maintenance**: Change a locator once in the enum, update all tests
-- **Built-in synchronization**: Enums can include wait strategies for dynamic elements
+| Component | Purpose | Example |
+|-----------|---------|---------|
+| **Component Type** | Defines *what kind* of UI element | `ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE` |
+| **Component Implementation** | Defines *how* to interact with that type | `ButtonBootstrapImpl` |
+| **Element Enum** | Maps element names to locators and types | `ButtonFields.SIGN_IN_BUTTON` |
 
-#### The `Constants` class centralizes test data and expected values:
+> **Deep Dive:** For complete implementation details, see 📖 [Section 10: UiElement Pattern & Component Services](#10-uielement-pattern--component-services).
 
-```java
-// From Constants.java
-public static final String LOAN_ACCOUNT = "Loan";
-public static final String SUCCESSFUL_TRANSFER_MESSAGE = "You successfully submitted your transaction.";
-```
+Below are minimal examples to understand the pattern:
 
-**Why use Constants:**
-- **Single source of truth**: Change expected text in one place
-- **Readable tests**: `SUCCESSFUL_TRANSFER_MESSAGE` is clearer than a raw string
-- **Refactoring support**: IDE can find all usages of a constant
-- **Consistency**: Same values used across multiple tests
+##### 1. Component Type (defines the category)
 
-#### Getting Started Checklist
-
-1. **Extend `BaseQuest`** (per-method Quest; parallel at test method level) or **`BaseQuestSequential`** (class-level Quest; sequential across the class)
-2. **Annotate the class with `@UI`** (enables UI testing capabilities at the class level)
-3. **Inject `Quest quest`** as a parameter to your test method
-4. **Start with `.use(RING_OF_UI)`** to activate the UI component services
-5. **Use element enums** (reference `ButtonFields`, `InputFields`, etc. instead of raw locators)
-6. **Use constants** (reference `Constants` class for test data and expected values)
-7. **End with `.complete()`** (always finalize your test execution)
-
----
-
-### 7.7 Writing Simple API Tests
-
-> **If using archetype (BASIC/ADVANCED style):** Review the generated `GettingStartedApiTest.java` for a complete working example. See [Example Tests - API Tests](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#api-tests-gettingstartedapitestjava) in the archetype guide.
-
-> **If using archetype (AI style):** No example tests are generated. Use this section as your implementation guide.
-
-The `GettingStartedTest` class demonstrates fundamental API interactions and serves as your starting point for writing API tests.
-
-#### Every API test in this framework follows a consistent pattern:
-
-1. **Test Setup**: Use `@Test` and inject `Quest quest` parameter
-2. **Ring Activation**: Call `.use(RING_OF_API)` to access the REST fluent DSL
-3. **Request and Assertions**: Use `.requestAndValidate(endpoint[, body], assertions...)`
-4. **Release Active Ring**: Optionally call `.drop()` if switching to another ring
-5. **Test Completion**: End with `.complete()`
+**Location:** Create component types in `ui/types`. Example: `src/main/java/.../ui/types/ButtonFieldTypes.java`
 
 ```java
-@Test
-@Regression
-@Description("Shows GET with a query parameter via quest.use(RING_OF_API) + requestAndValidate; minimal status/header checks.")
-void showsBasicGetWithQueryParamAndMinimalAssertions(Quest quest) {
-  quest
-        .use(RING_OF_API)
-        .requestAndValidate(
-              GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
-              Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
-              Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build()
-        )
-        .complete();
+import io.cyborgcode.roa.ui.components.button.ButtonComponentType;
+
+public enum ButtonFieldTypes implements ButtonComponentType {
+
+   BOOTSTRAP_BUTTON_TYPE, // Bootstrap-styled buttons
+   MD_BUTTON_TYPE;        // Material Design buttons
+   
+   @Override
+   public Enum getType() {
+      return this;
+   }
 }
 ```
 
-> **If using archetype:**
-> - `ExampleEndpoints.java`, `ExampleRequestDto.java`, `ExampleResponseDto.java`, and `ExampleAuthenticationClient.java` are generated
-> - See [API Components](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#api-when-api-module-selected) in the archetype guide for details on each file
-> - Replace example implementations with your real API endpoints and models
+##### 2. Component Implementation (key methods only)
 
-**Why this matters:**
-- Uses `quest.use(RING_OF_API)` and a minimal `requestAndValidate(...)` call.
-- Demonstrates query parameters and simple status/header assertions.
-- Builds toward richer flows with DTO bodies and JSONPath body assertions.
+**Location:** Create component implementations in `ui/components`. Example: `src/main/java/.../ui/components/button/ButtonBootstrapImpl.java`
 
-**API Checklist:**
-- **Extend `BaseQuest`** (per-method Quest; parallel at test method level) or **`BaseQuestSequential`** (class-level Quest; sequential across the class)
-- **Annotate the class with `@API`** (enables the API ring and the REST client fluent DSL)
-- **Inject `Quest quest`** as a parameter
-- **Use `.use(RING_OF_API)`** to activate the API ring
-- **Use `.requestAndValidate(...)`** with assertions on `STATUS`, `HEADER`, `BODY`
-- **End with `.complete()`** (always finalize your test execution)
+```java
+import io.cyborgcode.roa.ui.annotations.ImplementationOfType;
+import io.cyborgcode.roa.ui.components.base.BaseComponent;
+import io.cyborgcode.roa.ui.components.button.Button;
+import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
+import io.cyborgcode.roa.ui.selenium.smart.SmartWebElement;
+
+@ImplementationOfType("BOOTSTRAP_BUTTON_TYPE")
+public class ButtonBootstrapImpl extends BaseComponent implements Button {
+
+   public ButtonBootstrapImpl(SmartWebDriver driver) {
+      super(driver);
+   }
+
+   @Override
+   public void click(final By buttonLocator) {
+      driver.findSmartElement(buttonLocator).click();
+   }
+
+   @Override
+   public boolean isEnabled(final By buttonLocator) {
+      return !driver.findSmartElement(buttonLocator).getDomAttribute("class").contains("disabled");
+   }
+   
+   // Additional overloads for container-based and text-based lookups...
+}
+```
+
+##### 3. Element Enum (maps names to locators)
+
+**Location:** Create element enums in `ui/elements`. Example: `src/main/java/.../ui/elements/ButtonFields.java`
+
+```java
+import io.cyborgcode.roa.ui.components.base.ComponentType;
+import io.cyborgcode.roa.ui.components.button.ButtonComponentType;
+import io.cyborgcode.roa.ui.selenium.ButtonUiElement;
+import io.cyborgcode.ui.simple.test.framework.ui.types.ButtonFieldTypes;
+import org.openqa.selenium.By;
+
+public enum ButtonFields implements ButtonUiElement {
+
+  SIGN_IN_BUTTON(By.id("signin_button"), ButtonFieldTypes.BOOTSTRAP_BUTTON_TYPE);
+
+  private final By locator;
+  private final ButtonComponentType componentType;
+
+  ButtonFields(By locator, ButtonComponentType componentType) {
+    this.locator = locator;
+    this.componentType = componentType;
+  }
+
+  @Override
+  public By locator() {
+    return locator;
+  }
+
+  @Override
+  public <T extends ComponentType> T componentType() {
+    return (T) componentType;
+  }
+
+  @Override
+  public Enum<?> enumImpl() {
+    return this;
+  }
+}
+```
+
+> 💡 **Using archetype?** Element enums are auto-generated based on `-DuiComponents`. See [Component Generation Matrix](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#component-generation-matrix).
+
+#### Instead of using raw CSS selectors or XPath expressions, the framework uses enum-based element definitions:
+
+**Don't use brittle selectors:**
+```java
+// ❌ Fragile - breaks when HTML changes
+driver.findElement(By.cssSelector("#login-btn")).click();
+```
+
+**Use maintainable enums:**
+```java
+// ✅ Robust - change selector in one place
+.button().click(ButtonFields.LOGIN)
+```
+#### Benefits of Element Enums:
+- ✅ **Compile-time safety**: Typos in element names cause build failures, not runtime errors
+- ✅ **IDE support**: Auto-completion and refactoring work seamlessly
+- ✅ **Centralized maintenance**: Change a locator once in the enum, update all tests
+- ✅ **Built-in synchronization**: Enums can include wait strategies for dynamic elements
+- ✅ **AI-friendly**: With Enum pattern, AI follows stricter rules and preforms better in auto generation
+
+
+#### Quick checklist
+
+- [ ] Tes class extends `BaseQuest` (per-method Quest; parallel at test method level) or **`BaseQuestSequential`** (class-level Quest; sequential across the class)
+- [ ] Annotate the class with `@UI` (enables UI testing capabilities at the class level)
+- [ ] Inject `Quest quest` as a parameter to your test method
+- [ ] Test start with `.use(Rings.RING_OF_UI)` to activate the UI component services
+- [ ] Use element enums (reference `ButtonFields`, `InputFields`, etc. instead of raw locators)
+- [ ] Test ends with `.complete()` (always finalize your test execution)
+- [ ] Click `▶️ IDE play button` to run tests on method, class or package level
+
+---
+
+### 7.8 Writing Your First API Test
+
+> 💡 **Using archetype (BASIC/ADVANCED)?** Review generated `GettingStartedApiTest.java`. See [API Test Example](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#api-tests-gettingstartedapitestjava).
+
+>💡 **If using archetype (AI style):** No example tests are generated. Use this section as your implementation guide.
+
+> 🎬 Watch video [Create First API Test]() - coming soon!
+ 
+This section walks through a complete example that covers the most common API operations you'll use in your tests.
+Let's test a REST API by sending a GET request and validating the response. This shows the core API testing pattern.
+
+**Test prerequisites:**
+
+- 📖 [**Endpoints**](#define-endpoints) - Typed endpoint definitions that centralize API route configuration (method, URL, headers)
+
+**The anatomy of an API test:**
+
+1. **Annotate** with `@API` to enable API capabilities  
+2. **Inject** `Quest quest` parameter - See 📖 [2.1 Quest section](#21-quest) 
+3. **Activate** the API ring with `.use(Rings.RING_OF_API)`  
+4. **Request and Assertions**: Use `.requestAndValidate(endpoint[, body], assertions...)`
+5. **Release Active Ring**: Optionally call `.drop()` to release the current ring/service context
+6. **Complete** with `.complete()` to finalize
+
+**Complete working example:**
+
+```java
+import io.cyborgcode.roa.api.interactor.test.framework.adapter.annotation.API;
+import io.cyborgcode.roa.assertions.model.Assertion;
+import io.cyborgcode.roa.test.framework.base.BaseQuest;
+import io.cyborgcode.roa.test.framework.quest.Quest;
+import org.junit.jupiter.api.Test;
+
+import static io.cyborgcode.roa.assertions.enums.AssertionTarget.*;
+import static io.cyborgcode.roa.assertions.enums.AssertionType.*;
+import static org.apache.http.HttpStatus.SC_OK;
+
+@API
+class GettingStartedTest extends BaseQuest {
+    
+    @Test
+    void myFirstApiTest(Quest quest) {
+        quest
+              .use(Rings.RING_OF_API)
+              .requestAndValidate(
+                    Endpoints.GET_ALL_USERS.withQueryParam("id", 1),
+                    Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
+                    Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(ContentType.JSON.toString()).build()
+              )
+              .complete();
+    }
+}
+```
+
+**What's happening here?**
+- **Endpoints** - Typed endpoint definitions (created once, reused everywhere)
+- **Query parameters** - `.withQueryParam("key", value)`
+- **Request body** - POJOs automatically serialized to JSON
+- **Assertions** - Validate status, headers, and body with JSONPath
+- **Type safety** - Compile errors catch mistakes early
+
+#### Define Endpoints
+
+Endpoints are defined as enums implementing the `Endpoint` interface. This provides type-safe, centralized API route definitions similar to how element enums work for UI.
+
+> **Deep Dive:** For complete endpoint patterns including path parameters, headers, and request bodies, see the API examples in 📖 [Section 8: Writing Tests](#8-writing-tests-feature-by-feature).
+
+**Basic Endpoint Definition:** (`src/main/java/.../api/Endpoints.java`):
+
+```java
+import io.cyborgcode.roa.api.core.Endpoint;
+import io.restassured.http.Method;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+
+public enum Endpoints implements Endpoint<Endpoints> {
+
+   GET_ALL_USERS(Method.GET, "/users");
+
+   private final Method method;
+   private final String url;
+
+   Endpoints(Method method, String url) {
+      this.method = method;
+      this.url = url;
+   }
+
+   @Override
+   public Method method() {
+      return method;
+   }
+
+   @Override
+   public String url() {
+      return url;
+   }
+
+   @Override
+   public Endpoints enumImpl() {
+      return this;
+   }
+}
+```
+
+> 💡 **Using archetype?** `ExampleEndpoints.java` and DTOs are auto-generated. See [API Components](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#api-when-api-module-selected).
+
+#### Assertion types reference
+
+Validation mechanism for status codes, headers, and response body using JSONPath
+
+| Target | What to validate | Example |
+|--------|------------------|----------|
+| `STATUS` | HTTP status code | `200`, `201`, `404` |
+| `HEADER` | Response headers | `Content-Type`, `Authorization` |
+| `BODY` | Response body via JSONPath | `$.data.id`, `$.users[0].name` |
+
+| Assertion Type | Purpose | Example |
+|----------------|---------|----------|
+| `IS` | Exact match | `.expected(200)` |
+| `CONTAINS` | Partial match | `.expected("application/json")` |
+| `CONTAINS_ALL` | Multiple values present | `.expected(List.of("val1", "val2"))` |
+| `IS_NOT_NULL` | Value exists | `.expected(true)` |
+
+#### Quick checklist
+
+- [ ] Test class extends `BaseQuest` (per-method Quest; parallel at test method level) or `BaseQuestSequential` (class-level Quest; sequential across the class)
+- [ ] Annotate the class with `@API` (enables the API ring and the REST client fluent DSL)
+- [ ] Inject `Quest quest` as a parameter to your test method
+- [ ] Test starts with `.use(Rings.RING_OF_API)` to activate the API ring
+- [ ] Using endpoint constants (not raw URLs)
+- [ ] Assertions validate status, headers, or body
+- [ ] Test ends with `.complete()`
+- [ ] Click `▶️ IDE play button` to run tests on method, class or package level
+
+---
+
+### 🎉 You're Ready!
+
+**Congratulations!** You now have a working ROA test framework. Here's what you've accomplished:
+
+✅ **Project setup** - Dependencies, configuration, and rings registry in place  
+✅ **Core concepts** - Understanding Quest, Rings, and fluent chains  
+✅ **First tests** - UI and/or API tests running successfully  
+✅ **Best practices** - Using enums for elements, typed endpoints, and assertions
+
+**Run your tests:**
+
+| Method | When to use | Profile behavior |
+|--------|-------------|------------------|
+| **▶️ IDE Play Button** | Quick test execution during development | Uses `system.properties` + environment config files (no profile activated) |
+| **Maven Command** | CI/CD pipelines, full test suites, environment switching | Easily activate profiles with `-P` flag (e.g., `-Pstaging`, `-Pprod`) |
+
+> 🎬 Watch video [Run Tests]() - coming soon!
+> 
+```bash
+# Run all tests
+mvn clean test
+
+# Run specific test class
+mvn test -Dtest=GettingStartedTest
+
+# Run against specific environment (activates profile)
+mvn test -Pstaging
+
+# Run with JUnit tags
+mvn test -Dinclude.tags=Regression
+mvn test -Dexclude.tags=Flaky
+```
+
+**View test reports:**
+
+ROA automatically generates rich Allure reports during test execution with:
+- **Detailed step-by-step execution logs** for UI, API, and DB operations
+- **Request/response attachments** for API calls (headers, body, status, duration)
+- **Screenshots** on test pass/fail (configurable)
+- **SQL execution snapshots** for database operations
+- **Test execution timelines** and historical trends
+
+```bash
+# Generate and open interactive HTML report in browser
+allure serve allure-results
+```
+
+**Report location:** Test results are automatically written to `target/allure-results/`.
+
+> **Note:** Allure CLI installation: [Download Allure](https://docs.qameta.io/allure/#_installing_a_commandline)
+
+---
+
+### 🚀 What's Next?
+
+**Level 1: Customize for your application**
+- Add your application's UI elements to enum files (`ButtonFields`, `InputFields`, etc.)
+- Define your API endpoints in `Endpoints.java`
+- Create request/response DTOs for your APIs
+- Update configuration files with your environment URLs
+
+**Level 2: Advanced patterns** (📖 See [Section 8](#8-writing-tests-feature-by-feature))
+- **CustomService** - Encapsulate domain logic into reusable business methods
+- **DataCreator & @Craft** - Generate test data dynamically with factories
+- **Journeys & @Journey** - Create reusable preconditions (login, setup data)
+- **Authentication** - Use `@AuthenticateViaUi` and `@AuthenticateViaApi` for session management
+- **Data cleanup** - Implement `@Ripper` for automatic test data teardown
+
+**Level 3: Master the framework**
+- 📖 [Storage Integration](#9-storage-integration) - Share data across rings and test phases
+- 📖 [Table Testing](#11-table-testing-guide) - Read and validate complex table data
+- 📖 [UI Element Patterns](#10-uielement-pattern--component-services) - Map domain models to UI with `@InsertionElement`
+- 📖 [Advanced Examples](#12-advanced-examples) - Full E2E scenarios combining UI, API, and DB
+
+**Need help?**
+- 📖 Explore the example projects in this repository for real working code
+- 📚 Read the [ROA Libraries Documentation](https://github.com/CyborgCodeSyndicate/roa-libraries) for deep dives
+- 🔍 Search this README for specific topics (authentication, tables, storage, etc.)
 
 ---
 
@@ -757,13 +1339,13 @@ void showsBasicGetWithQueryParamAndMinimalAssertions(Quest quest) {
 
 We follow the UI and API oriented progression.
 
-### 8.1 Step 1 – First UI and API tests
+### 8.1 Step 1 – Initial UI and API tests
 
 ```java
 @Test
 void manualLoginAndCreateOrder(Quest quest) {
   quest
-      .use(RING_OF_UI)
+      .use(Rings.RING_OF_UI)
       .browser().navigate(getUiConfig().baseUrl())
       .input().insert(InputFields.USERNAME_FIELD, "admin@example.com")
       .input().insert(InputFields.PASSWORD_FIELD, "admin")
@@ -785,7 +1367,7 @@ void manualLoginAndCreateOrder(Quest quest) {
 
 **What this shows and why it matters:**
 
-- You start a UI chain with `quest.use(RING_OF_UI)`, then perform readable, typed actions: navigate, type in inputs, click buttons, select dropdown options, read a table, and validate.
+- You start a UI chain with `quest.use(Rings.RING_OF_UI)`, then perform readable, typed actions: navigate, type in inputs, click buttons, select dropdown options, read a table, and validate.
 - All locators are centralized in enum registries like `InputFields`, `SelectFields`, and `ButtonFields`. This keeps tests stable when selectors change and documents the UI map in one place.
 - Each interaction automatically applies element-specific waits via the enum’s `before/after` hooks, so you don’t litter tests with WebDriver boilerplate.
 - Validations are gathered as soft assertions in the chain and executed on `.complete()`, making failures more informative.
@@ -796,7 +1378,7 @@ void manualLoginAndCreateOrder(Quest quest) {
 @Test
 void createOrderUsingTestDataProperties(Quest quest) {
   quest
-      .use(RING_OF_UI)
+      .use(Rings.RING_OF_UI)
       .browser().navigate(getUiConfig().baseUrl())
       .input().insert(InputFields.USERNAME_FIELD, Data.testData().sellerEmail())
       .input().insert(InputFields.PASSWORD_FIELD, Data.testData().sellerPassword())
@@ -822,7 +1404,7 @@ void createOrderUsingTestDataProperties(Quest quest) {
 
 ```java
 quest
-      .use(RING_OF_API)
+      .use(Rings.RING_OF_API)
       .requestAndValidate(
         AppEndpoints.GET_ALL_USERS,
         Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build())
@@ -830,7 +1412,7 @@ quest
 ```
 **What this shows (basic scenario):**
 
-- quest.use(RING_OF_API) activates the REST fluent DSL for making HTTP calls.
+- quest.use(Rings.RING_OF_API) activates the REST fluent DSL for making HTTP calls.
 - requestAndValidate(AppEndpoints.GET_ALL_USERS, ...) sends a typed GET request to the endpoint.
 - The assertion verifies STATUS == 200 — a quick smoke/heartbeat check that the API is reachable.
 - .complete() finalizes the chain and flushes any pending soft assertions.
@@ -841,11 +1423,13 @@ quest
 
 Rather than keep login, order creation and validation logic in every test, we move it into CustomService and expose domain methods:
 
+#### UI example via CustomService:
+
 ```java
 @Test
 void wrapLoginAndCreateOrderWithCustomService(Quest quest) {
   quest
-    .use(RING_OF_CUSTOM)
+    .use(Rings.RING_OF_CUSTOM)
     .login(seller)
     .createOrder(order)
     .validateOrder(order)
@@ -865,7 +1449,7 @@ Under the hood, `CustomService` turns low‑level UI steps into business‑level
 
 ```java
 quest
-     .use(RING_OF_CUSTOM)
+     .use(Rings.RING_OF_CUSTOM)
      .loginUserAndAddSpecificHeader(login)
      .requestAndValidateGetAllUsers()
      .complete();
@@ -884,7 +1468,7 @@ void createOrderUsingCraftAndCustomService(
   @Craft(model = DataCreator.Data.ORDER) Order order) {
 
   quest
-      .use(RING_OF_CUSTOM)
+      .use(Rings.RING_OF_CUSTOM)
       .login(seller)
       .createOrder(order)
       .validateOrder(order)
@@ -916,6 +1500,8 @@ public static Order createSpecialOrder() {
 
 Journeys encapsulate reusable flows that should run **before** the test body, such as default login or preparing orders.
 
+#### UI Journey example:
+
 ```java
 @Test
 @Journey(value = Preconditions.Data.LOGIN_DEFAULT_PRECONDITION)
@@ -924,7 +1510,7 @@ void preconditionNoData(
   @Craft(model = DataCreator.Data.ORDER) Order order) {
 
   quest
-      .use(RING_OF_CUSTOM)
+      .use(Rings.RING_OF_CUSTOM)
       .createOrder(order)
       .validateOrder(order)
       .complete();
@@ -946,20 +1532,20 @@ Journeys can also take data and be ordered:
 void preconditionsWithDataOrdered(Quest quest) {
 
   quest
-      .use(RING_OF_CUSTOM)
+      .use(Rings.RING_OF_CUSTOM)
       .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class))
       .complete();
 }
 ```
 
-API journey example:
+#### API Journey example:
 
 ```java
 @Journey(value = Preconditions.Data.CREATE_NEW_USER,
          journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)}, order = 1)
 @Test
 void apiPreconditionCreatesUser(Quest quest) {
-  quest.use(RING_OF_API)
+  quest.use(Rings.RING_OF_API)
        .validate(() -> {
          CreatedUserDto dto = retrieve(StorageKeysApi.API, AppEndpoints.POST_CREATE_USER, Response.class)
              .getBody().as(CreatedUserDto.class);
@@ -981,16 +1567,18 @@ SPECIAL_LOGIN_PRECONDITION((SuperQuest quest, Object[] objects) -> loginUser(que
 // PreconditionFunctions.java
 public static void loginUser(SuperQuest quest, Seller seller) {
    quest
-       .use(RING_OF_CUSTOM)
+       .use(Rings.RING_OF_CUSTOM)
        .login(seller);
 }
 ```
-**For a more detailed explanation of `Journeys``, visit the relevant section in the ROA Libraries documentation: [PreQuest, Journey & JourneyData System](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/test-framework/README.md#prequest-journey--journeydata-system)**
+**For a more detailed explanation of `Journeys`, visit the relevant section in the ROA Libraries documentation: [PreQuest, Journey & JourneyData System](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/test-framework/README.md#prequest-journey--journeydata-system)**
 
 ---
 
 ### 8.5 Step 5 – Authentication helpers (UI and API)
 Move login out of tests completely and treat it as a reusable “meta journey”.
+
+#### UI Authentication example:
 
 ```java
 @Test
@@ -1000,7 +1588,7 @@ void authNoCache(
   @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
 
   quest
-      .use(RING_OF_CUSTOM)
+      .use(Rings.RING_OF_CUSTOM)
       .createOrder(order)
       .validateOrder(order)
       .complete();
@@ -1020,20 +1608,20 @@ void authWithCache(
   @Craft(model = DataCreator.Data.ORDER) Order order) {
 
   quest
-      .use(RING_OF_CUSTOM)
+      .use(Rings.RING_OF_CUSTOM)
       .createOrder(order)
       .validateOrder(order)
       .complete();
 }
 ```
 
-#### API authenticate example:
+#### API Authentication example:
 
 ```java
 @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
 @Test
 void usesApiAuth(Quest quest) {
-  quest.use(RING_OF_API)
+  quest.use(Rings.RING_OF_API)
        .requestAndValidate(AppEndpoints.POST_CREATE_USER, leaderUser,
             Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build())
        .complete();
@@ -1041,7 +1629,6 @@ void usesApiAuth(Quest quest) {
 ```
 
 This allows a suite to avoid repeated login for the same user, dramatically speeding up tests.
-API authentication:
 
 ---
 
@@ -1057,10 +1644,10 @@ void extractFromTraffic(
             @Craft(model = DataCreator.Data.SELLER) Seller seller) {
 
    quest
-         .use(RING_OF_CUSTOM)
+         .use(Rings.RING_OF_CUSTOM)
          .login(seller)
          .drop()
-         .use(RING_OF_UI)
+         .use(Rings.RING_OF_UI)
          .validate(() -> Assertions.assertEquals(
                List.of("$197.54"),
                retrieve(
@@ -1082,7 +1669,7 @@ Key points:
 
 ---
 
-### 8.7 Step 7 – DB validations with RING_OF_DB
+### 8.7 Step 7 – DB validations
 
 Use the DB ring to execute parameterized queries (from `AppQueries`) and validate results with JSONPath‑based assertions. When a query runs, its last `QueryResponse` is stashed in the DB namespace of storage, keyed by the query enum. You can then compose assertions that target specific fields via `DbResponsesJsonPaths`, choose soft or hard checks, and keep DB verification in the same fluent chain. This makes it easy to confirm that UI/API actions truly persisted to the database.
 
@@ -1096,10 +1683,10 @@ void validateStoredOrderInDb(
   @Craft(model = DataCreator.Data.VALID_ORDER) Order order) {
 
   quest
-      .use(RING_OF_CUSTOM)
+      .use(Rings.RING_OF_CUSTOM)
       .validateOrder(order)
       .drop()
-      .use(RING_OF_DB)
+      .use(Rings.RING_OF_DB)
       .query(AppQueries.QUERY_ORDER.withParam("id", 1))
       .validate(
           retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class),
@@ -1127,7 +1714,7 @@ Ensure created orders are cleaned up after tests finish:
          journeyData = {@JourneyData(DataCreator.Data.ORDER)})
 @Ripper(targets = {DataCleaner.Data.DELETE_CREATED_ORDERS})
 void cleanupCreatedOrders(Quest quest) {
-  quest.use(RING_OF_CUSTOM)
+  quest.use(Rings.RING_OF_CUSTOM)
       .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class))
       .complete();
 }
@@ -1244,7 +1831,7 @@ public enum ButtonFields implements ButtonUiElement {
 }
 
 // Usage
-quest.use(RING_OF_UI)
+quest.use(Rings.RING_OF_UI)
     .button().click(ButtonFields.SIGN_IN_BUTTON);
 ```
 
@@ -1277,7 +1864,7 @@ public class Order {
 Then use:
 
 ```java
-quest.use(RING_OF_UI)
+quest.use(Rings.RING_OF_UI)
     .insertion().insertData(order);
 ```
 Full flow example using **insertion**:
@@ -1289,7 +1876,7 @@ void createOrderUsingCraftAndInsertionFeatures(Quest quest,
      @Craft(model = DataCreator.Data.ORDER) Order order) {
 
   quest
-      .use(RING_OF_UI)
+      .use(Rings.RING_OF_UI)
       .browser().navigate(getUiConfig().baseUrl())
       .insertion().insertData(seller) // insertion: maps model fields to corresponding UI controls in one operation
       .button().click(ButtonFields.SIGN_IN_BUTTON)
@@ -1348,7 +1935,7 @@ The most comprehensive example shows reading an entire table and applying multip
 @Regression
 void readEntireTable_validateWithAssertionTypes(Quest quest) {
   quest
-        .use(RING_OF_UI)
+        .use(Rings.RING_OF_UI)
         // table(): entry point for table component interactions (read/validate/click)
         // readTable(table): reads the entire table into the framework's storage for later assertions
         .table().readTable(Tables.FILTERED_TRANSACTIONS)
@@ -1414,7 +2001,7 @@ Read only the columns you need for more efficient testing:
 @Regression
 void readTableWithSpecifiedColumns_validateCell(Quest quest) {
   quest
-        .use(RING_OF_UI)
+        .use(Rings.RING_OF_UI)
         .button().click(ButtonFields.FIND_SUBMIT_BUTTON)
         // readTable(table, columns...): reads specific columns from the table into the framework's storage
         .table().readTable(Tables.FILTERED_TRANSACTIONS, 
@@ -1447,7 +2034,7 @@ Read specific subsets of table rows by index range:
 @Regression
 void readTableWithRowRange_validateCell(Quest quest) {
   quest
-        .use(RING_OF_UI)
+        .use(Rings.RING_OF_UI)
         .link().click(LinkFields.MY_MONEY_MAP_LINK)
         // readTable(table, start, end): reads a subset of rows (inclusive indices)
         .table().readTable(Tables.OUTFLOW, 3, 5)
@@ -1477,7 +2064,7 @@ The most targeted approach combines row range with column selection:
 @Regression
 void readTableSpecificColumnsWithRowRange_validateCell(Quest quest) {
   quest
-        .use(RING_OF_UI)
+        .use(Rings.RING_OF_UI)
         .link().click(LinkFields.MY_MONEY_MAP_LINK)
         // readTable(table, start, end, columns...): subset of rows with specific mapped columns
         .table().readTable(Tables.OUTFLOW, 3, 5, 
@@ -1505,7 +2092,7 @@ Find and read rows based on content criteria:
 @Regression
 void readTableRowBySearchCriteria_validateCell(Quest quest) {
   quest
-        .use(RING_OF_UI)
+        .use(Rings.RING_OF_UI)
         .link().click(LinkFields.MY_MONEY_MAP_LINK)
         // readRow(table, criteria): reads a row matching the provided search values
         .table().readRow(Tables.OUTFLOW, List.of(RETAIL))
@@ -1594,7 +2181,7 @@ Use `@StaticTestData` to load shared constants for the whole test class:
 void usesStaticData(Quest quest) {
 
   quest
-      .use(RING_OF_CUSTOM)
+      .use(Rings.RING_OF_CUSTOM)
       .validateOrder(retrieve(staticTestData(StaticData.ORDER), Order.class))
       .complete();
 }
@@ -1620,7 +2207,7 @@ void lateData(
   @Craft(model = DataCreator.Data.LATE_ORDER) Late<Order> lateOrder) {
 
   quest
-      .use(RING_OF_CUSTOM)
+      .use(Rings.RING_OF_CUSTOM)
       .loginUsingInsertion(seller)
       .createOrder(order).validateOrder(order)
       .createOrder(lateOrder.create()).validateOrder(lateOrder.create())
@@ -1638,7 +2225,7 @@ Map a table to a typed row class, then use fluent table operations and storage:
 
 ```java
 quest
-    .use(RING_OF_UI)
+    .use(Rings.RING_OF_UI)
     .input().insert(InputFields.SEARCH_BAR_FIELD, "John Terry")
     .table().readTable(Tables.ORDERS)
     .table().validate(
@@ -1656,10 +2243,10 @@ Access the typed rows:
 
 ```java
 quest
-    .use(RING_OF_UI)
+    .use(Rings.RING_OF_UI)
     .table().readTable(Tables.ORDERS)
     .drop()
-    .use(RING_OF_UI)
+    .use(Rings.RING_OF_UI)
     .validate(() -> {
          List<TableEntry> rows =
          (List<TableEntry>) DefaultStorage.retrieve(Tables.ORDERS, List.class);
@@ -1671,7 +2258,7 @@ quest
 If your adapter version supports `readRow`:
 
 ```java
-TableEntry first = quest.use(RING_OF_UI).table().readRow(Tables.ORDERS, 0);
+TableEntry first = quest.use(Rings.RING_OF_UI).table().readRow(Tables.ORDERS, 0);
 ```
 
 ---
@@ -1699,13 +2286,13 @@ void fullE2E(
 
   quest
       // Create via UI (Custom ring wraps UI flows)
-      .use(RING_OF_CUSTOM)
+      .use(Rings.RING_OF_CUSTOM)
       .createOrder(order)
       .validateOrder(order)
       .drop()
 
       // Reuse session cookie for API validation
-      .use(RING_OF_API)
+      .use(Rings.RING_OF_API)
       .requestAndValidate(
         AppEndpoints.ENDPOINT_BAKERY.withHeader("Cookie", CustomService.getJsessionCookie()),
         Assertion.builder()
@@ -1716,7 +2303,7 @@ void fullE2E(
       .drop()
 
       // Validate persisted state in DB
-      .use(RING_OF_DB)
+      .use(Rings.RING_OF_DB)
       .query(AppQueries.QUERY_ORDER.withParam("id", 1))
       .validate(
         retrieve(StorageKeysDb.DB, AppQueries.QUERY_ORDER, QueryResponse.class),
