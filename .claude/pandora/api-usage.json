@@ -1,0 +1,1400 @@
+{
+  "items": [
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.JourneyData",
+      "summary": "Used inside @Journey(journeyData=...) to declare which test data model(s) should be prepared and passed as arguments to the journey before the test body runs.",
+      "usages": [
+        {
+          "code": "@Journey(\n  value = Preconditions.Data.CREATE_NEW_USER,\n  journeyData = { @JourneyData(DataCreator.Data.USER_LEADER) },\n  order = 1\n)\n@Journey(\n  value = Preconditions.Data.CREATE_NEW_USER,\n  journeyData = { @JourneyData(DataCreator.Data.USER_INTERMEDIATE) },\n  order = 2\n)",
+          "description": "Default (eager) journey data: the framework resolves the DataForge model referenced by JourneyData.value and passes the created object(s) into the journey flow as arguments. You can use a single @Journey or multiple @Journey annotations depending on the scenario.",
+          "level": "CORE",
+          "contextHint": "Use only inside @Journey(journeyData = {...}) on a @Test method. Include journeyData only when the journey requires input models; omit it when the journey takes no inputs. The value must reference a project-defined DataForge key (e.g., DataCreator.Data.*)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.parameters.Late",
+      "summary": "Deferred value wrapper used to delay creating a crafted test-data object until you explicitly call create().",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "@Test\nvoid example(\n    Quest quest,\n    @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserDto> juniorUser\n) {\n  CreateUserDto dto = juniorUser.create();\n}",
+          "description": "Use Late<T> when you want the crafted model to be created on demand. Call create() at the moment you need the real object.",
+          "level": "CORE",
+          "contextHint": "Typically used as a @Test parameter together with @Craft(model = ...). create() materializes the actual DTO/object."
+        },
+        {
+          "code": "@Test\nvoid example(\n    Quest quest,\n    @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser,\n    @Craft(model = DataCreator.Data.USER_SENIOR) Late<CreateUserDto> seniorUser\n) {\n  CreateUserDto eager = leaderUser;\n  CreateUserDto lazy = seniorUser.create();\n}",
+          "description": "Mix eager and lazy crafted models: eager @Craft parameters are created before the test body; Late<@Craft> parameters are created only when create() is called.",
+          "level": "ADVANCED",
+          "contextHint": "Use when you need both immediate and deferred models in the same test or when you want to control creation timing."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.parameters.PreQuestJourney",
+      "summary": "Project-side contract for reusable preconditions (journeys). Extend existing Preconditions/PreconditionFunctions, then trigger the precondition from tests via @Journey(value = Preconditions.Data.<KEY>, ...).",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "public static void newPrecondition(SuperQuest quest, Object... args) {\n}",
+          "description": "Step 1/3: Add a new precondition function (the executable setup logic that runs before the test body).",
+          "level": "CORE",
+          "contextHint": "Project-side change. PreconditionFunctions already exists (archetype). Keep the signature (SuperQuest, Object... args). args[] is populated from @JourneyData(...) if you pass journeyData in @Journey."
+        },
+        {
+          "code": "NEW_PRECONDITION(PreconditionFunctions::newPrecondition);\n\npublic static final String NEW_PRECONDITION = \"NEW_PRECONDITION\";",
+          "description": "Step 2/3: In Preconditions, add the new enum constant, and in Preconditions.Data add the matching string key.",
+          "level": "CORE",
+          "contextHint": "Project-side change. Preconditions already exists (archetype). Place NEW_PRECONDITION(...) alongside other enum constants (e.g., CREATE_NEW_USER(...)). Place the string constant inside the nested Preconditions.Data class. Tests reference Preconditions.Data.<KEY> in @Journey."
+        },
+        {
+          "code": "@Test\n@Journey(\n  value = Preconditions.Data.NEW_PRECONDITION,\n  order = 1\n)\nvoid test(Quest quest) {\n}",
+          "description": "Step 3/3: Use the precondition in a test by referencing the Preconditions.Data key in @Journey(value = ...).",
+          "level": "CORE",
+          "contextHint": "Test-side usage. Use journeyData = {@JourneyData(...)} only when the precondition function needs input models; otherwise omit journeyData."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.validator.core.Assertion",
+      "summary": "Single validation rule built via builder(). Used as varargs inside RestServiceFluent.requestAndValidate(...) and validateResponse(...). Prefer soft(true) to report all failures in one run.",
+      "returnType": "io.cyborgcode.roa.validator.core.Assertion",
+      "usages": [
+        {
+          "code": "Assertion.builder().target(STATUS).type(IS).expected(SC_OK).soft(true).build(),\nAssertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).soft(true).build(),\nAssertion.builder().target(BODY).key(ApiResponsesJsonPaths.TOTAL_PAGES.getJsonPath()).type(GREATER_THAN).expected(1).soft(true).build()",
+          "description": "Core pattern: inline STATUS/HEADER/BODY assertions as varargs. STATUS usually has no key. HEADER key is the header name. BODY key is a JSONPath (prefer using a JSONPath registry). Prefer soft(true) so multiple failures are reported together.",
+          "level": "CORE",
+          "contextHint": "Pass these assertions as additional varargs parameters to RestServiceFluent.requestAndValidate(endpoint[, body], Assertion...) or validateResponse(response, Assertion...). Prefer expected values from TestConstants and JSONPaths from ApiResponsesJsonPaths; if a needed constant/path is missing, add it to the project registry and then reference it."
+        },
+        {
+          "code": "Assertion.builder().target(BODY).key(ApiResponsesJsonPaths.TOTAL.getJsonPath()).type(BETWEEN).expected(TestConstants.Pagination.TOTAL_USERS_IN_PAGE_RANGE).soft(true).build(),\nAssertion.builder().target(BODY).key(ApiResponsesJsonPaths.DATA.getJsonPath()).type(CONTAINS_ALL).expected(TestConstants.PageTwo.PAGE_TWO_EXPECTED_USERS).soft(true).build(),\nAssertion.builder().target(BODY).key(ApiResponsesJsonPaths.SUPPORT_URL.getJsonPath()).type(MATCHES_REGEX).expected(TestConstants.Support.SUPPORT_URL_REGEX).soft(true).build()",
+          "description": "Advanced pattern: inline richer assertion types that require structured expected values (BETWEEN expects a range/list; CONTAINS_ALL expects a collection; MATCHES_REGEX expects a regex string). Prefer soft(true) for full failure visibility.",
+          "level": "ADVANCED",
+          "contextHint": "Use for richer validations beyond simple IS/CONTAINS checks. Keep expected values centralized in TestConstants and JSONPaths centralized in ApiResponsesJsonPaths for maintainability."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuestSequential",
+      "summary": "Base test class for sequential execution (PER_CLASS). Extend it when test methods must run one-by-one and/or share state across methods.",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "@API\nclass ExampleTest extends BaseQuestSequential {\n}",
+          "description": "Extend BaseQuestSequential to execute tests sequentially within one class instance (PER_CLASS lifecycle).",
+          "level": "CORE",
+          "contextHint": "Use when test methods must not run in parallel or when you intentionally share class state between tests."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuestSequential.beforeAll(io.cyborgcode.roa.framework.base.Services)",
+      "summary": "Optional hook for one-time setup executed once before any @Test methods in a BaseQuestSequential class.",
+      "returnType": "void",
+      "usages": [
+        {
+          "code": "@Override\nprotected void beforeAll(Services services) {\n}",
+          "description": "Override to perform one-time setup for the whole test class.",
+          "level": "CORE",
+          "contextHint": "Only applicable in classes extending BaseQuestSequential. Called automatically once before the first test method runs."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuestSequential.afterAll(io.cyborgcode.roa.framework.base.Services)",
+      "summary": "Optional hook for one-time cleanup executed once after all @Test methods in a BaseQuestSequential class have finished.",
+      "returnType": "void",
+      "usages": [
+        {
+          "code": "@Override\nprotected void afterAll(Services services) {\n}",
+          "description": "Override to perform one-time cleanup for the whole test class.",
+          "level": "CORE",
+          "contextHint": "Only applicable in classes extending BaseQuestSequential. Called automatically once after the last test method finishes."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.authentication.Credentials",
+      "summary": "Project-side contract for API credentials (username/password). Create an implementation and reference it from @AuthenticateViaApi(credentials = ...).",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "public class AdminAuth implements Credentials {\n\n  @Override\n  public String username() {\n    return Data.testData().username();\n  }\n\n  @Override\n  public String password() {\n    return Data.testData().password();\n  }\n}",
+          "description": "Create a Credentials implementation that returns username/password from externalized test data/config (preferred).",
+          "level": "CORE",
+          "contextHint": "Project-side change. This class is used by @AuthenticateViaApi(credentials = AdminAuth.class, type = <AuthClient>.class, ...). Avoid hardcoding secrets; prefer Data.testData()/Owner config/CI secrets."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.annotations.ApiHook",
+      "summary": "Class-level API hook executed once BEFORE or AFTER all tests in a class. Extend existing ApiHookFunctions/ApiHookFlows, then reference the hook from tests via @ApiHook(type = ApiHookFlows.Data.<KEY>, ...).",
+      "returnType": "annotation",
+      "usages": [
+        {
+          "code": "public static void newApiHook(RestService service, Map<Object, Object> storage, String[] arguments) {\n}",
+          "description": "Step 1/3: Add a new hook function (the executable logic that runs once before or after all tests in the class).",
+          "level": "CORE",
+          "contextHint": "Project-side change. ApiHookFunctions already exists (archetype). Keep the signature (RestService, Map<Object,Object>, String[]). Use RestService (not RestServiceFluent). arguments comes from @ApiHook(arguments = ...)."
+        },
+        {
+          "code": "NEW_HOOK(ApiHookFunctions::newApiHook);\n\npublic static final String NEW_HOOK = \"NEW_HOOK\";",
+          "description": "Step 2/3: In ApiHookFlows, add the new enum constant, and in ApiHookFlows.Data add the matching string key.",
+          "level": "CORE",
+          "contextHint": "Project-side change. ApiHookFlows already exists (archetype). Place NEW_HOOK(...) alongside other enum constants (e.g., PING_REQRES(...)). Place the string constant inside the nested ApiHookFlows.Data class. Tests reference ApiHookFlows.Data.<KEY> in @ApiHook(type = ...)."
+        },
+        {
+          "code": "@API\n@ApiHook(when = HookExecution.BEFORE, type = ApiHookFlows.Data.NEW_HOOK)\nclass ApiHooksExampleTest extends BaseQuest {\n}",
+          "description": "Step 3/3: Use the hook on a test class by referencing the ApiHookFlows.Data key in @ApiHook(type = ...).",
+          "level": "CORE",
+          "contextHint": "Test-side usage. Use HookExecution.BEFORE for one-time setup and HookExecution.AFTER for one-time cleanup. Multiple @ApiHook annotations are allowed on the same class."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest",
+      "summary": "Base test class for RoA-style tests. Extend it for the default (parallel-friendly) test execution model and to use built-in storage retrieval helpers.",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "@API\nclass AdvancedExamplesTest extends BaseQuest {\n}",
+          "description": "Extend BaseQuest for the default test execution model. Tests inject Quest as a method parameter and can run in parallel (PER_METHOD lifecycle).",
+          "level": "CORE",
+          "contextHint": "Use BaseQuest for normal test classes. Use BaseQuestSequential only when tests must run sequentially and/or share state across methods."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest.retrieve(java.lang.Enum, java.lang.Enum, java.lang.Class)",
+      "summary": "Retrieve an object from a sub-storage namespace (e.g., API) using a subKey (namespace) and an entry key (e.g., endpoint enum).",
+      "returnType": "T",
+      "usages": [
+        {
+          "code": "retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)",
+          "description": "Retrieve the stored Response for a previously executed endpoint call from the API storage namespace.",
+          "level": "CORE",
+          "contextHint": "Use after calling RestServiceFluent.request(...) or requestAndValidate(...), which store the latest Response under StorageKeysApi.API keyed by endpoint.enumImpl()."
+        },
+        {
+          "code": "retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)\n    .getBody().as(GetUsersDto.class)\n    .getData().get(0).getId()",
+          "description": "Retrieve a stored Response, map it to a DTO, and extract a value to use as input for a later request (e.g., chaining a path parameter).",
+          "level": "ADVANCED",
+          "contextHint": "Use to chain requests by reusing data from a previous response. Prefer DTO mapping (Response.getBody().as(...)) and JSONPath registries when appropriate."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest.retrieve(io.cyborgcode.roa.framework.storage.DataExtractor, java.lang.Class)",
+      "summary": "Retrieve a typed value using a DataExtractor (recommended when reading from framework-managed storage patterns like static test data or API response extraction).",
+      "returnType": "T",
+      "usages": [
+        {
+          "code": "String username = retrieve(staticTestData(StaticData.USERNAME), String.class);",
+          "description": "Retrieve a value from static test data using a DataExtractor and cast it to the desired type.",
+          "level": "CORE",
+          "contextHint": "Typically used together with @StaticTestData(StaticData.class), which loads a static data map into storage. staticTestData(...) refers to DataExtractorsTest.staticTestData(...)."
+        },
+        {
+          "code": "String token = retrieve(responseBodyExtraction(POST_LOGIN_USER, TOKEN.getJsonPath()), String.class);",
+          "description": "Extract a JSON field from the last stored API response for an endpoint (e.g., extract token after login).",
+          "level": "CORE",
+          "contextHint": "Use after calling RestServiceFluent.request(...) or requestAndValidate(...) for the same endpoint so the Response is stored under StorageKeysApi.API. responseBodyExtraction(...) refers to DataExtractorsApi.responseBodyExtraction(...)."
+        },
+        {
+          "code": "Integer status = retrieve(statusExtraction(GET_ALL_USERS), Integer.class);",
+          "description": "Extract the HTTP status code from the last stored API response for an endpoint.",
+          "level": "CORE",
+          "contextHint": "Use after calling RestServiceFluent.request(...) or requestAndValidate(...) for the same endpoint so the Response is stored under StorageKeysApi.API. statusExtraction(...) refers to DataExtractorsApi.statusExtraction(...)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest.retrieve(io.cyborgcode.roa.framework.storage.DataExtractor, int, java.lang.Class)",
+      "summary": "Retrieve an indexed value using a DataExtractor when multiple values were stored under the same key (index is 1-based from the end: 1 = latest, 2 = previous).",
+      "returnType": "T",
+      "usages": [
+        {
+          "code": "String latestName = retrieve(responseBodyExtraction(POST_CREATE_USER, CREATE_USER_NAME_RESPONSE.getJsonPath()), 1, String.class);\nString previousName = retrieve(responseBodyExtraction(POST_CREATE_USER, CREATE_USER_NAME_RESPONSE.getJsonPath()), 2, String.class);",
+          "description": "Retrieve the latest and previous extracted values for the same endpoint after calling it multiple times.",
+          "level": "CORE",
+          "contextHint": "Use after calling the same endpoint more than once so multiple Responses are stored under the same endpoint key. Index is 1-based from the end: 1 = latest stored value, 2 = previous stored value."
+        },
+        {
+          "code": "String latestName = retrieve(responseBodyExtraction(POST_CREATE_USER, CREATE_USER_NAME_RESPONSE.getJsonPath()), 1, String.class);\nString latestJob = retrieve(responseBodyExtraction(POST_CREATE_USER, CREATE_USER_JOB_RESPONSE.getJsonPath()), 1, String.class);\nString previousName = retrieve(responseBodyExtraction(POST_CREATE_USER, CREATE_USER_NAME_RESPONSE.getJsonPath()), 2, String.class);\nString previousJob = retrieve(responseBodyExtraction(POST_CREATE_USER, CREATE_USER_JOB_RESPONSE.getJsonPath()), 2, String.class);",
+          "description": "Retrieve multiple fields from the latest and previous responses for the same endpoint (e.g., name/job from two create calls).",
+          "level": "CORE",
+          "contextHint": "Use when you need to compare results from repeated calls. Requires that POST_CREATE_USER was called at least twice in the same test flow."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest.hookData(java.lang.Object, java.lang.Class)",
+      "summary": "Retrieve data produced by class-level hooks (e.g., @ApiHook) from the hook-scoped storage map using a key object (often an enum).",
+      "returnType": "T",
+      "usages": [
+        {
+          "code": "Integer status = hookData(ApiHookKeys.PING_STATUS, Integer.class);",
+          "description": "Read a value written by an @ApiHook flow into the hook storage map and use it in the test.",
+          "level": "CORE",
+          "contextHint": "Hook-side requirement: the hook function must store a value using the same key object (commonly an enum like ApiHookKeys) via storage.put(key, value). hookData(...) reads that hook-scoped value in a typed way."
+        },
+        {
+          "code": "String token = hookData(ApiHookKeys.AUTH_TOKEN, String.class);\nCreateUserDto user = hookData(ApiHookKeys.CREATED_USER, CreateUserDto.class);",
+          "description": "Retrieve multiple hook-produced values (e.g., token, created objects) that were stored during BEFORE hooks and reuse them in tests.",
+          "level": "ADVANCED",
+          "contextHint": "Use when hooks prepare reusable artifacts for the entire test class. Prefer hookData(...) for hook outputs instead of retrieve(...), since hooks use a dedicated hook-scoped storage map."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.authentication.AuthenticationClient",
+      "summary": "Contract for API authentication clients. BaseAuthenticationClient implements AuthenticationClient; in projects, extend BaseAuthenticationClient and override authenticateImpl(...), then reference it from @AuthenticateViaApi(type = ...).",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "public class AppAuth extends BaseAuthenticationClient {\n\n  @Override\n  protected Header authenticateImpl(RestService restService, String username, String password) {\n    String token = restService\n        .request(POST_LOGIN_USER, new LoginDto(username, password))\n        .getBody()\n        .jsonPath()\n        .getString(TOKEN.getJsonPath());\n\n    return new Header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token);\n  }\n}",
+          "description": "Project-side: create a concrete authentication client by extending BaseAuthenticationClient and implementing authenticateImpl(...) to perform login and return an auth Header.",
+          "level": "CORE",
+          "contextHint": "Project-side change. Prefer extending BaseAuthenticationClient (not implementing AuthenticationClient directly)."
+        },
+        {
+          "code": "@AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)",
+          "description": "Test-side: reference your authentication client class in @AuthenticateViaApi so the framework performs login before the test body.",
+          "level": "CORE",
+          "contextHint": "This usage is documented in detail under AuthenticateViaApi. The Credentials class supplies username/password; the auth client supplies the Header."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.authentication.AuthenticationKey",
+      "summary": "Opaque key representing an authenticated session. Used internally by BaseAuthenticationClient to cache and look up authentication headers per (username, password, auth client type).",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "@AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)",
+          "description": "AuthenticationKey is managed internally during authentication and caching. Tests typically do not create or handle it directly.",
+          "level": "CORE",
+          "contextHint": "Do not instantiate AuthenticationKey manually. It is produced/used by BaseAuthenticationClient.authenticate(...) and used by getAuthentication(key) to reuse cached headers."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.parameters.DataForge",
+      "summary": "Project-side contract for reusable test-data models used by @Craft and @JourneyData. Extend existing DataCreator/DataCreatorFunctions, then reference the model key from annotations.",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "public static CreateUserDto newUserModel() {\n  return CreateUserDto.builder()\n        .name(\"Some Name\")\n        .job(\"Some Job\")\n        .build();\n}",
+          "description": "Step 1/2: Add a new data factory method that builds the desired model/DTO.",
+          "level": "CORE",
+          "contextHint": "Project-side change. DataCreatorFunctions already exists (archetype). Prefer using existing constants/test-data utilities instead of hardcoding values."
+        },
+        {
+          "code": "NEW_USER_MODEL(DataCreatorFunctions::newUserModel);\n\npublic static final String NEW_USER_MODEL = \"NEW_USER_MODEL\";",
+          "description": "Step 2/2: Register the new data model by adding an enum constant in DataCreator and a matching string key in DataCreator.Data.",
+          "level": "CORE",
+          "contextHint": "Project-side change. DataCreator already exists (archetype) and implements DataForge. Annotations reference the DataCreator.Data key."
+        },
+        {
+          "code": "@Test\nvoid test(Quest quest,\n          @Craft(model = DataCreator.Data.NEW_USER_MODEL) CreateUserDto user) {\n}",
+          "description": "Use the model key in @Craft to inject a ready instance as a test parameter.",
+          "level": "CORE",
+          "contextHint": "Test-side usage. If you need deferred creation, inject Late<CreateUserDto> with the same @Craft model (documented under Late)."
+        },
+        {
+          "code": "@Test\n@Journey(\n  value = Preconditions.Data.CREATE_NEW_USER,\n  journeyData = { @JourneyData(DataCreator.Data.NEW_USER_MODEL) },\n  order = 1\n)\nvoid test(Quest quest) {\n}",
+          "description": "Use the same model key in @JourneyData when a precondition needs input models before the test body runs.",
+          "level": "CORE",
+          "contextHint": "Test-side usage. @JourneyData references the same DataCreator.Data keys as @Craft. The journey implementation receives the resolved objects via its Object[] args."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.retry.RetryConditionImpl",
+      "summary": "Concrete RetryCondition implementation. Create it by providing a function (produces value) and a predicate (success condition). Used with RestServiceFluent.retryUntil(...).",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "RetryCondition<Boolean> condition = new RetryConditionImpl<>(\n  service -> {\n    int attempt = probeCounter.incrementAndGet();\n    return attempt >= 3;\n  },\n  result -> result\n);",
+          "description": "Create a simple retry condition that becomes true after a number of attempts.",
+          "level": "CORE",
+          "contextHint": "Use as input to RestServiceFluent.retryUntil(condition, maxWait, retryInterval). The function is called repeatedly until the predicate returns true or timeout occurs."
+        },
+        {
+          "code": "quest.use(RING_OF_API)\n    .retryUntil(condition, Duration.ofSeconds(10), Duration.ofSeconds(1))\n    .requestAndValidate(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n        Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build())\n    .complete();",
+          "description": "Use the created RetryConditionImpl with RestServiceFluent.retryUntil(...) and continue the fluent chain after it succeeds.",
+          "level": "CORE",
+          "contextHint": "retryUntil(...) runs before the next chain steps. Keep the condition focused; after it passes, proceed with normal requests/validations."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.retry.RetryCondition",
+      "summary": "Retry condition abstraction: a function that produces a value and a predicate that decides success. Typically created using RetryConditionImpl and passed to RestServiceFluent.retryUntil(...).",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "RetryCondition<Boolean> condition = new RetryConditionImpl<>(\n  service -> probeCounter.incrementAndGet() >= 3,\n  result -> result\n);",
+          "description": "Define a RetryCondition by pairing a value-producing function with a success predicate (most commonly via RetryConditionImpl).",
+          "level": "CORE",
+          "contextHint": "The retry mechanism repeatedly calls condition.function() and checks condition.condition() until it passes or times out."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.Quest",
+      "summary": "Per-test execution context injected into @Test methods. Use it to activate rings via use(...), build fluent chains, and finish the test with complete().",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "@Test\nvoid test(Quest quest) {\n  quest.use(RING_OF_API)\n      .requestAndValidate(\n          GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n          Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n      )\n      .complete();\n}",
+          "description": "Use Quest as a test method parameter. Start a flow by activating a ring with use(...), then always call complete() at the end.",
+          "level": "CORE",
+          "contextHint": "Quest is injected by the framework (do not instantiate it). use(RING_OF_API) returns the fluent service for that ring. complete() finalizes the run and asserts collected soft assertions."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.Quest.use(java.lang.Class)",
+      "summary": "Activate a ring (fluent service) for the current test and continue chaining API/UI/DB/custom actions.",
+      "returnType": "T",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_API)",
+          "description": "Activate the API ring (RestServiceFluent) for the current quest.",
+          "level": "CORE",
+          "contextHint": "Use at the start of a chain or after drop() when switching rings. Prefer using project ring constants from Rings (e.g., Rings.RING_OF_API) instead of raw RestServiceFluent.class."
+        },
+        {
+          "code": "quest.use(RING_OF_CUSTOM).loginUserAndAddSpecificHeader(loginAdminUser).drop().use(RING_OF_API)",
+          "description": "Switch rings mid-flow: use a custom ring for reusable logic, then drop back to Quest and activate another ring.",
+          "level": "ADVANCED",
+          "contextHint": "Use drop() on the current ring to return to Quest, then call use(...) to activate the next ring. Ring constants (RING_OF_CUSTOM/RING_OF_API) are typically defined in the project Rings class."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.Quest.complete()",
+      "summary": "Finish the quest: clears thread-local context and asserts all collected soft assertions. Always call at the end of a test flow.",
+      "returnType": "void",
+      "usages": [
+        {
+          "code": ".complete();",
+          "description": "Finalize the fluent chain and fail the test if any collected soft assertions failed.",
+          "level": "CORE",
+          "contextHint": "Call once at the end of the test chain. complete() is what actually flushes soft assertions; without it soft failures may not be reported."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.retry.RetryConditionApi.statusEquals(io.cyborgcode.roa.api.core.Endpoint, int)",
+      "summary": "Build a RetryCondition that repeatedly calls an endpoint (no body) until the HTTP status code equals the expected value.",
+      "returnType": "io.cyborgcode.roa.framework.retry.RetryCondition",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_API)\n    .retryUntil(\n        statusEquals(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO), SC_OK),\n        Duration.ofSeconds(10),\n        Duration.ofSeconds(1)\n    )",
+          "description": "Poll an endpoint until it returns the expected status code, then continue the fluent chain.",
+          "level": "CORE",
+          "contextHint": "Use for eventual consistency/async readiness. This condition performs a fresh request on every retry attempt (it does not use stored responses)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.retry.RetryConditionApi.statusEquals(io.cyborgcode.roa.api.core.Endpoint, java.lang.Object, int)",
+      "summary": "Build a RetryCondition that repeatedly calls an endpoint with a request body until the HTTP status code equals the expected value.",
+      "returnType": "io.cyborgcode.roa.framework.retry.RetryCondition",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_API)\n    .retryUntil(\n        statusEquals(POST_LOGIN_USER, loginRequest, SC_OK),\n        Duration.ofSeconds(10),\n        Duration.ofSeconds(1)\n    )",
+          "description": "Poll an endpoint that requires a request body until it returns the expected status code.",
+          "level": "CORE",
+          "contextHint": "Use when polling endpoints require a payload (POST/PUT-style checks). This condition performs a fresh request on every retry attempt."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.retry.RetryConditionApi.responseFieldEqualsTo(io.cyborgcode.roa.api.core.Endpoint, java.lang.String, java.lang.Object)",
+      "summary": "Build a RetryCondition that repeatedly calls an endpoint (no body) until a JSONPath field in the response body equals the expected value.",
+      "returnType": "io.cyborgcode.roa.framework.retry.RetryCondition",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_API)\n    .retryUntil(\n        responseFieldEqualsTo(GET_USER.withPathParam(ID_PARAM, ID_THREE), SINGLE_USER_EMAIL_EXPLICIT.getJsonPath(), USER_THREE_EMAIL),\n        Duration.ofSeconds(10),\n        Duration.ofSeconds(1)\n    )",
+          "description": "Poll an endpoint until a specific response field reaches the expected value.",
+          "level": "CORE",
+          "contextHint": "Prefer using JSONPath constants/registries (e.g., ApiResponsesJsonPaths.*) instead of raw strings. This condition performs a fresh request on every retry attempt."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.retry.RetryConditionApi.responseFieldEqualsTo(io.cyborgcode.roa.api.core.Endpoint, java.lang.Object, java.lang.String, java.lang.Object)",
+      "summary": "Build a RetryCondition that repeatedly calls an endpoint with a request body until a JSONPath field in the response body equals the expected value.",
+      "returnType": "io.cyborgcode.roa.framework.retry.RetryCondition",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_API)\n    .retryUntil(\n        responseFieldEqualsTo(POST_LOGIN_USER, loginRequest, TOKEN.getJsonPath(), expectedToken),\n        Duration.ofSeconds(10),\n        Duration.ofSeconds(1)\n    )",
+          "description": "Poll an endpoint that requires a request body until a specific response field reaches the expected value.",
+          "level": "CORE",
+          "contextHint": "Use when polling endpoints require a payload and you need to wait for a specific response field. Prefer JSONPath constants/registries instead of raw strings. This condition performs a fresh request on every retry attempt."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.retry.RetryConditionApi.responseFieldNonNull(io.cyborgcode.roa.api.core.Endpoint, java.lang.String)",
+      "summary": "Build a RetryCondition that repeatedly calls an endpoint (no body) until a JSONPath field in the response body becomes non-null.",
+      "returnType": "io.cyborgcode.roa.framework.retry.RetryCondition",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_API)\n    .retryUntil(\n        responseFieldNonNull(GET_USER.withPathParam(ID_PARAM, ID_THREE), SINGLE_USER_EMAIL_EXPLICIT.getJsonPath()),\n        Duration.ofSeconds(10),\n        Duration.ofSeconds(1)\n    )",
+          "description": "Poll an endpoint until a specific response field is available (non-null), then continue the fluent chain.",
+          "level": "CORE",
+          "contextHint": "Use when the exact value may vary or you only need the field to exist. Prefer JSONPath constants/registries instead of raw strings. This condition performs a fresh request on every retry attempt."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.retry.RetryConditionApi.responseFieldNonNull(io.cyborgcode.roa.api.core.Endpoint, java.lang.Object, java.lang.String)",
+      "summary": "Build a RetryCondition that repeatedly calls an endpoint with a request body until a JSONPath field in the response body becomes non-null.",
+      "returnType": "io.cyborgcode.roa.framework.retry.RetryCondition",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_API)\n    .retryUntil(\n        responseFieldNonNull(POST_LOGIN_USER, loginRequest, TOKEN.getJsonPath()),\n        Duration.ofSeconds(10),\n        Duration.ofSeconds(1)\n    )",
+          "description": "Poll an endpoint that requires a request body until a specific response field becomes available (non-null).",
+          "level": "CORE",
+          "contextHint": "Use when polling endpoints require a payload and you only need the field to exist. Prefer JSONPath constants/registries instead of raw strings. This condition performs a fresh request on every retry attempt."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.validator.core.AssertionResult",
+      "summary": "Result of evaluating a single Assertion (passed/failed + expected/actual + soft flag). Produced by RestService.validate/requestAndValidate and by AssertionUtil; typically consumed internally by RestServiceFluent (which fails the test on hard failures and collects soft ones).",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "List<AssertionResult<Object>> results = restService.requestAndValidate(\n    GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n    Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n);\n\nboolean allPassed = results.stream().allMatch(AssertionResult::isPassed);\nassertTrue(allPassed, results.toString());",
+          "description": "Use when you call the low-level RestService directly (e.g., inside ApiHook flows) and you want to fail the run if any assertions failed.",
+          "level": "CORE",
+          "contextHint": "RestService does not throw on failed assertions; it returns AssertionResult entries. In normal tests, prefer RestServiceFluent.requestAndValidate(...) which processes these results automatically via the framework validation mechanism."
+        },
+        {
+          "code": "List<AssertionResult<Object>> failed = results.stream()\n    .filter(r -> !r.isPassed())\n    .toList();\n\nassertTrue(failed.isEmpty(), failed.toString());",
+          "description": "Collect and report only failed AssertionResult entries (each has a readable toString).",
+          "level": "ADVANCED",
+          "contextHint": "Useful for hooks/utilities where you want a clean failure message showing only what failed."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.Storage",
+      "summary": "Per-Quest (per-test) in-memory storage. Values are stored under enum keys, optionally grouped in sub-storages (namespaces like API/DB). Most tests should NOT access Storage directly—prefer BaseQuest.retrieve(...) and DataExtractorsApi helpers. Direct Storage access is mainly for project-side utilities (data creators, preconditions, hooks).",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "SuperQuest q = QuestHolder.get();\nq.getStorage().sub(StorageKeysApi.API).put(POST_LOGIN_USER, response);",
+          "description": "Project-side: store values explicitly (usually done inside rings already, e.g. RestServiceFluent stores Response under StorageKeysApi.API + endpoint.enumImpl()).",
+          "level": "CORE",
+          "contextHint": "Use in project utilities (e.g., DataCreatorFunctions / Preconditions / hooks). In tests, prefer BaseQuest.retrieve(...) instead of touching Storage directly."
+        },
+        {
+          "code": "SuperQuest q = QuestHolder.get();\nResponse lastLogin = q.getStorage().sub(StorageKeysApi.API).get(POST_LOGIN_USER, Response.class);",
+          "description": "Project-side: read the latest stored value for a key from a namespace sub-storage.",
+          "level": "CORE",
+          "contextHint": "Storage.get(key, Class) returns the latest value stored under that key. If nothing exists, it returns null."
+        },
+        {
+          "code": "SuperQuest q = QuestHolder.get();\nResponse latest = q.getStorage().sub(StorageKeysApi.API).getByIndex(POST_CREATE_USER, 1, Response.class);\nResponse previous = q.getStorage().sub(StorageKeysApi.API).getByIndex(POST_CREATE_USER, 2, Response.class);",
+          "description": "Read older entries when the same key was stored multiple times (1 = latest, 2 = previous, ...).",
+          "level": "ADVANCED",
+          "contextHint": "Index is 1-based from the end (1 = most recent). Prefer BaseQuest.retrieve(extractor, index, type) for API JSONPath extraction across multiple responses."
+        },
+        {
+          "code": "SuperQuest q = QuestHolder.get();\nMap<Object, Object> hooks = q.getStorage().get(StorageKeysTest.HOOKS, Map.class);\nObject value = hooks.get(MyHookKeys.PING_STATUS);",
+          "description": "Access hook-scoped data stored under StorageKeysTest.HOOKS (used by hookData(...) and Storage.getHookData(...)).",
+          "level": "ADVANCED",
+          "contextHint": "If you’re in a test class extending BaseQuest, prefer hookData(MyHookKeys.PING_STATUS, Type.class) instead of accessing StorageKeysTest.HOOKS directly."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Craft",
+      "summary": "Parameter annotation that injects a test-data model into a @Test method argument by resolving a project-defined DataForge key (e.g., DataCreator.Data.*).",
+      "returnType": "annotation",
+      "usages": [
+        {
+          "code": "@Test\nvoid creates_user_from_crafted_model(\n  Quest quest,\n  @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser\n) {\n  quest\n    .use(RING_OF_API)\n    .requestAndValidate(\n      POST_CREATE_USER,\n      leaderUser,\n      Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()\n    )\n    .complete();\n}",
+          "description": "Eager injection: the framework resolves the model key and creates the object before the test body runs, then injects it directly as the parameter.",
+          "level": "CORE",
+          "contextHint": "Use on @Test method parameters only. model must point to a project DataForge key (e.g., DataCreator.Data.USER_LEADER). Prefer this when the data can be created up-front."
+        },
+        {
+          "code": "@Test\nvoid creates_user_with_late_craft(\n  Quest quest,\n  @Craft(model = DataCreator.Data.USER_JUNIOR) Late<CreateUserDto> lateUser\n) {\n  quest\n    .use(RING_OF_API)\n    .requestAndValidate(\n      POST_CREATE_USER,\n      lateUser.create(),\n      Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()\n    )\n    .complete();\n}",
+          "description": "Lazy injection: inject Late<T> and call create() at the point in the flow where you need the object (useful when the model depends on runtime state or prior requests).",
+          "level": "CORE",
+          "contextHint": "Use when the crafted object depends on something that happens inside the test flow (e.g., storage values populated by earlier requests). The model key still comes from your project DataForge (DataCreator.Data.*)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.core.Endpoint",
+      "summary": "Project-side endpoint contract (usually enum-based) that defines method + relative URL once, then you parameterize it per call via withQueryParam/withPathParam/withHeader and pass it into the API ring (request / requestAndValidate).",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "NEW_ENDPOINT(Method.GET, \"/users/{id}/details\");",
+          "description": "Project-side: add a new endpoint constant to your existing endpoints enum (e.g., AppEndpoints).",
+          "level": "CORE",
+          "contextHint": "AppEndpoints already exists in the project archetype. Keep URLs relative (no base URL). Use placeholders like {id} for path params. Implementations must return method(), url(), and enumImpl()."
+        },
+        {
+          "code": "quest\n  .use(RING_OF_API)\n  .requestAndValidate(\n    GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n    Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n  )\n  .complete();",
+          "description": "Per-call query param: derive a parametrized endpoint (does not mutate the original enum constant) and pass it to request/requestAndValidate.",
+          "level": "CORE",
+          "contextHint": "Use withQueryParam when your endpoint supports query parameters. Prefer constants for query keys/values (e.g., PAGE_PARAM, PAGE_TWO)."
+        },
+        {
+          "code": "quest\n  .use(RING_OF_API)\n  .requestAndValidate(\n    GET_USER.withPathParam(ID_PARAM, ID_THREE),\n    Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n  )\n  .complete();",
+          "description": "Per-call path param: bind URL placeholders like {id} using withPathParam and call the endpoint.",
+          "level": "CORE",
+          "contextHint": "Your endpoint URL must contain the placeholder (e.g., \"/users/{id}\") for the path param to bind. Prefer constants for path keys/values (e.g., ID_PARAM, ID_THREE)."
+        },
+        {
+          "code": "quest\n  .use(RING_OF_API)\n  .requestAndValidate(\n    GET_USER.withPathParam(ID_PARAM, ID_THREE)\n      .withHeader(EXAMPLE_HEADER, \"some-value\"),\n    Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n  )\n  .complete();",
+          "description": "Per-call single header: add a header for this specific request without changing the original endpoint definition.",
+          "level": "ADVANCED",
+          "contextHint": "Use withHeader(key, value) for dynamic headers (e.g., token from a previous response, correlation ids). Keep common static headers in AppEndpoints.defaultConfiguration()."
+        },
+        {
+          "code": "quest\n  .use(RING_OF_API)\n  .request(\n    GET_ALL_USERS.withHeader(\"X-Flags\", java.util.List.of(\"A\", \"B\"))\n  )\n  .complete();",
+          "description": "Per-call multi-value header: attach a header that has multiple values (rare, but supported).",
+          "level": "ADVANCED",
+          "contextHint": "Prefer the single header overload unless you truly need multi-value headers. This returns a parametrized endpoint instance, just like other modifiers."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.PreQuest",
+      "summary": "Optional container for grouping multiple @Journey annotations on a single test method. Prefer repeating @Journey directly (multiple @Journey annotations) unless you specifically want the container style.",
+      "returnType": "annotation",
+      "usages": [
+        {
+          "code": "@Test\n@PreQuest({\n  @Journey(value = Preconditions.Data.CREATE_NEW_USER, order = 1),\n  @Journey(value = Preconditions.Data.LOGIN_AS_ADMIN, order = 2)\n})\nvoid test(Quest quest) {\n  quest.use(RING_OF_API).complete();\n}",
+          "description": "Legacy/container style: group multiple journeys into a single annotation. Ordering is still controlled by Journey.order().",
+          "level": "ADVANCED",
+          "contextHint": "Optional. In modern usage you can simply stack multiple @Journey annotations directly on the test method instead of using @PreQuest."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.DataExtractor",
+      "summary": "Contract for extracting typed values from quest Storage. In tests you usually DON'T implement it directly—use factory helpers (DataExtractorsApi / DataExtractorsTest). Implement it (via DataExtractorImpl) only when you need a custom extraction that doesn't exist yet.",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "String token = retrieve(\n  responseBodyExtraction(POST_LOGIN_USER, TOKEN.getJsonPath()),\n  String.class\n);",
+          "description": "Use an existing extractor factory (preferred). Here, DataExtractorsApi builds a DataExtractor that reads a JSON field from the stored API Response.",
+          "level": "CORE",
+          "contextHint": "Use after you made a request that stores a Response for the endpoint (e.g. quest.use(RING_OF_API).request(POST_LOGIN_USER,...)). Then retrieve(...) runs the extractor against StorageKeysApi.API."
+        },
+        {
+          "code": "String username = retrieve(\n  staticTestData(StaticData.USERNAME),\n  String.class\n);",
+          "description": "Use DataExtractorsTest.staticTestData(...) when you load a static data map into storage and want typed access via a DataExtractor.",
+          "level": "ADVANCED",
+          "contextHint": "Use together with @StaticTestData(...) (framework feature) so the STATIC_DATA map exists. This is mainly for global/static values that multiple tests reuse."
+        },
+        {
+          "code": "DataExtractor<String> firstUserEmail = new DataExtractorImpl<>(\n  StorageKeysApi.API,\n  GET_ALL_USERS,\n  raw -> ((Response) raw).getBody().jsonPath().getString(\"data[0].email\")\n);\n\nString email = retrieve(firstUserEmail, String.class);",
+          "description": "Create a custom extractor when no reusable extractor exists yet. Use DataExtractorImpl with a subKey (namespace) + key + extraction lambda.",
+          "level": "ADVANCED",
+          "contextHint": "Project-side helper pattern: wrap custom extractors in a utility class (e.g. DataExtractorsApiCustom) if you reuse them across tests. Prefer enum-based JsonPaths over hardcoded paths once stabilized."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.chain.FluentService",
+      "summary": "Base class for project-defined Rings (custom fluent services). Extend it to build reusable flows and to call other rings via quest.use(...).",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "@Ring(\"CUSTOM\")\npublic class CustomService extends FluentService implements ClassLevelHook {\n\n  public CustomService doSomething() {\n    quest.use(RING_OF_API)\n      .request(GET_ALL_USERS);\n    return this;\n  }\n}",
+          "description": "Create a project-side ring by extending FluentService. Ring methods should return the ring type to keep fluent chaining.",
+          "level": "CORE",
+          "contextHint": "Project-side change. Rings are Spring beans annotated with @Ring(...), and are activated from tests via quest.use(RING_OF_CUSTOM)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.chain.FluentService.drop()",
+      "summary": "Return from the current Ring back to Quest so you can switch rings or finish the flow.",
+      "returnType": "io.cyborgcode.roa.framework.quest.Quest",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_CUSTOM).doSomething().drop().use(RING_OF_API)",
+          "description": "Switch rings mid-flow: exit the current ring and activate another ring.",
+          "level": "CORE",
+          "contextHint": "Use when a custom ring does setup, and the next ring continues the flow."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.chain.FluentService.postQuestSetupInitialization()",
+      "summary": "Ring hook invoked after the framework attaches the active SuperQuest to the ring. Override it for ring-specific initialization.",
+      "returnType": "void",
+      "usages": [
+        {
+          "code": "@Ring(\"CUSTOM\")\npublic class CustomService extends FluentService implements ClassLevelHook {\n\n  @Override\n  protected void postQuestSetupInitialization() {\n    quest.getStorage().sub(MyStorageKeys.CUSTOM);\n  }\n}",
+          "description": "Override when the ring needs one-time initialization that depends on quest being available (storage namespaces, default state, etc.).",
+          "level": "ADVANCED",
+          "contextHint": "Project-side change. Do not call this manually; the framework invokes it after ring creation and quest wiring."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.chain.FluentService.validation(java.util.List)",
+      "summary": "Apply RoA’s standard assertion handling to AssertionResult items: each result is logged + attached to Allure; soft failures are collected; hard failures fail immediately.",
+      "returnType": "void",
+      "usages": [
+        {
+          "code": "validation(assertionResults);",
+          "description": "Use inside a custom Ring when you want RoA’s built-in reporting + soft/hard behavior for a list of AssertionResult values.",
+          "level": "ADVANCED",
+          "contextHint": "Ring-authoring only. To get assertionResults you typically need a RestService instance, e.g. `var assertionResults = restService.validate(response, assertions);` then pass that list into `validation(assertionResults)`. Test code usually doesn’t call validation(...) directly—prefer RestServiceFluent.requestAndValidate(...)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.chain.FluentService.retryUntil(io.cyborgcode.roa.framework.retry.RetryCondition,java.time.Duration,java.time.Duration,java.lang.Object)",
+      "summary": "Protected retry primitive used by rings. Wrap it in your ring when you want polling behavior in a custom service.",
+      "returnType": "io.cyborgcode.roa.framework.chain.FluentService",
+      "usages": [
+        {
+          "code": "public CustomService waitUntilReady(RetryCondition<Boolean> condition) {\n  retryUntil(condition, Duration.ofSeconds(10), Duration.ofSeconds(1), quest.use(RING_OF_API).getRestService());\n  return this;\n}",
+          "description": "Expose retry behavior from a custom ring by wrapping the protected retryUntil(...) method and passing the correct service object into the condition.",
+          "level": "ADVANCED",
+          "contextHint": "Project-side ring authoring. The 'service' parameter must match what condition.function() expects. In API flows this is typically the underlying RestService instance (RestServiceFluent passes restService)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.annotations.API",
+      "summary": "Class-level annotation that enables ROA API testing (wires API extensions/config). Required when a test class uses the API ring (RestServiceFluent) and other ROA API features (auth hooks, API hooks).",
+      "returnType": "annotation",
+      "usages": [
+        {
+          "code": "@API\nclass AdvancedExamplesTest extends BaseQuest {\n\n  @Test\n  void example(Quest quest) {\n    quest.use(RING_OF_API)\n      .request(GET_ALL_USERS)\n      .complete();\n  }\n}",
+          "description": "Mark the test class as an API test before using quest.use(RING_OF_API) and API-specific annotations/features.",
+          "level": "CORE",
+          "contextHint": "Use on the test class (TYPE). Without @API, API extensions/config may not be active. Combine with BaseQuest/BaseQuestSequential as needed."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.validator.core.AssertionType",
+      "summary": "Represents the comparison/operator used by an Assertion (IS, CONTAINS, BETWEEN, etc.). In practice you use the built-in enum AssertionTypes.* as the value for Assertion.builder().type(...).",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "Assertion.builder()\n  .target(STATUS)\n  .type(IS)\n  .expected(SC_OK)\n  .build()",
+          "description": "Use a built-in AssertionTypes constant (e.g., IS) to define how the actual value should be validated.",
+          "level": "CORE",
+          "contextHint": "Use inside Assertion.builder().type(...). Prefer built-in AssertionTypes.* unless you have registered custom types via the assertions registry."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.SuperQuest",
+      "summary": "Active execution context used by project-side helpers (data creators, preconditions, rippers). You can obtain it via QuestHolder.get() from anywhere during a running test thread, but tests should normally use the injected Quest parameter instead.",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\nStorage storage = quest.getStorage();\nCustomSoftAssertion soft = quest.getSoftAssertions();",
+          "description": "Get the active SuperQuest for the current test thread. Use this in project-side helper code where Quest is not passed in (e.g., static factories, utilities).",
+          "level": "CORE",
+          "contextHint": "Prefer Quest method parameter in test code. QuestHolder.get() is meant for project-side helpers that run during test execution (same thread)."
+        },
+        {
+          "code": "public static CreateUserDto juniorUser() {\n  SuperQuest quest = QuestHolder.get();\n  Response res = quest.getStorage().sub(StorageKeysApi.API).get(GET_ALL_USERS, Response.class);\n  UserData first = res.getBody().as(GetUsersDto.class).getData().get(0);\n  return CreateUserDto.builder().name(first.getFirstName() + \" suffix\").job(\"Junior \" + first.getLastName() + \" worker\").build();\n}",
+          "description": "DataCreatorFunctions pattern: build context-aware test data by reading Storage (and optionally triggering prerequisite calls via quest.use(...)).",
+          "level": "CORE",
+          "contextHint": "Project-side usage. Used by DataForge/DataCreator entries referenced by @Craft or @JourneyData. Avoid calling QuestHolder.get() in tests—keep it inside data creator utilities."
+        },
+        {
+          "code": "public static void createNewUser(SuperQuest quest, Object... args) {\n  CreateUserDto user = (CreateUserDto) args[0];\n  quest.use(RING_OF_API)\n      .requestAndValidate(POST_CREATE_USER, user, Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build());\n}",
+          "description": "PreconditionFunctions pattern: journeys receive SuperQuest directly (no QuestHolder needed) and run before the test body via @Journey.",
+          "level": "CORE",
+          "contextHint": "Project-side usage. Preconditions enum wires these functions (PreQuestJourney). Tests trigger them via @Journey(value = Preconditions.Data.<KEY>, journeyData = {...})."
+        },
+        {
+          "code": "public static void deleteAdminUser(SuperQuest quest) {\n  Response created = quest.getStorage().sub(StorageKeysApi.API).get(POST_CREATE_USER, Response.class);\n  String id = created.getBody().jsonPath().getString(\"id\");\n  quest.use(RING_OF_API)\n      .requestAndValidate(DELETE_USER.withPathParam(ID_PARAM, id), Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build());\n}",
+          "description": "DataCleanerFunctions pattern: rippers receive SuperQuest directly and perform cleanup after the test finishes.",
+          "level": "CORE",
+          "contextHint": "Project-side usage. DataCleaner enum wires these functions (DataRipper). Tests trigger them via @Ripper(targets = {DataCleaner.Data.<KEY>})."
+        },
+        {
+          "code": "quest.getOriginal()",
+          "description": "Access the underlying Quest instance if you need to return back to the raw Quest chain from within a ring/hook context.",
+          "level": "ADVANCED",
+          "contextHint": "Usually you don’t need this directly. Tests use Quest param; rings use drop(); helpers use SuperQuest for storage + ring access."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.StaticTestData",
+      "summary": "Attach a StaticDataProvider to a test (or class) so its staticTestData() map is loaded into the Quest storage before the test runs.",
+      "returnType": "annotation",
+      "usages": [
+        {
+          "code": "@Test\n@StaticTestData(StaticData.class)\nvoid test(Quest quest) {\n  var order = retrieve(staticTestData(StaticData.ORDER), Order.class);\n  quest.use(RING_OF_CUSTOM)\n      .validateOrder(order)\n      .complete();\n}",
+          "description": "Load project-defined static test data before the test runs, then retrieve values via DataExtractorsTest.staticTestData(...) + BaseQuest.retrieve(...).",
+          "level": "CORE",
+          "contextHint": "Project-side: StaticData is a class that implements StaticDataProvider and returns Map<String,Object>. Test-side: apply @StaticTestData on the test method (or class) before calling retrieve(staticTestData(...))."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.hooks.ApiHookFlow",
+      "summary": "Project-side contract for class-level API hooks used by @ApiHook. Implement as an enum where each constant exposes a TriConsumer(RestService, Map<Object,Object>, String[]) flow.",
+      "returnType": "interface",
+      "usages": [
+        {
+          "code": "public enum ApiHookFlows implements ApiHookFlow<ApiHookFlows> {\n\n  PING_REQRES((service, storage, args) -> {\n    service.requestAndValidate(\n      GET_ALL_USERS.withQueryParam(\"page\", 2),\n      Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n    );\n  });\n\n  private final TriConsumer<RestService, Map<Object, Object>, String[]> flow;\n\n  ApiHookFlows(TriConsumer<RestService, Map<Object, Object>, String[]> flow) {\n    this.flow = flow;\n  }\n\n  @Override\n  public TriConsumer<RestService, Map<Object, Object>, String[]> flow() {\n    return flow;\n  }\n\n  @Override\n  public ApiHookFlows enumImpl() {\n    return this;\n  }\n}\n",
+          "description": "Define an enum of hook flows. Each enum constant supplies the hook logic as a TriConsumer that can call RestService (API requests), optionally write values into the shared storage map, and read optional String[] arguments passed from @ApiHook(arguments=...).",
+          "level": "CORE",
+          "contextHint": "Project-side usage. Tests trigger the hook by annotating the test class with @ApiHook(type = \"PING_REQRES\", when = HookExecution.BEFORE/AFTER, ...). The framework discovers this enum by name via project.packages and executes flow().accept(restService, hooksMap, args)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.storage.DataExtractorsApi.responseBodyExtraction(java.lang.Enum, java.lang.String)",
+      "summary": "Factory for a DataExtractor that reads a JSON field from the stored API Response body (under StorageKeysApi.API) using a JSON path.",
+      "returnType": "io.cyborgcode.roa.framework.storage.DataExtractor",
+      "usages": [
+        {
+          "code": "quest\n  .use(RING_OF_API)\n  .request(POST_LOGIN_USER, loginRequest)\n  .validate(() -> {\n    String token = retrieve(\n      responseBodyExtraction(POST_LOGIN_USER, TOKEN.getJsonPath()),\n      String.class\n    );\n\n    assertNotNull(token);\n    assertFalse(token.isBlank());\n  })\n  .complete();",
+          "description": "Extract a typed value from the latest stored Response for a given endpoint by applying a JSON path (recommended: use your enum JsonPaths like TOKEN.getJsonPath()).",
+          "level": "CORE",
+          "contextHint": "Use after a request was executed and stored in API sub-storage (RestServiceFluent.request / requestAndValidate). The first argument must be the same endpoint key used to store the Response (typically the Endpoint enum constant)."
+        },
+        {
+          "code": "quest\n  .use(RING_OF_API)\n  .request(POST_CREATE_USER, user)\n  .request(POST_CREATE_USER, otherUser)\n  .validate(() -> {\n    String latestName = retrieve(\n      responseBodyExtraction(POST_CREATE_USER, CREATE_USER_NAME_RESPONSE.getJsonPath()),\n      1,\n      String.class\n    );\n\n    String previousName = retrieve(\n      responseBodyExtraction(POST_CREATE_USER, CREATE_USER_NAME_RESPONSE.getJsonPath()),\n      2,\n      String.class\n    );\n  })\n  .complete();",
+          "description": "Use with BaseQuest.retrieve(extractor, index, type) to extract values from multiple stored responses for the same endpoint (1 = latest, 2 = previous...).",
+          "level": "ADVANCED",
+          "contextHint": "The index is 1-based from the end (latest-first). This works because Storage keeps a LinkedList per key (endpoint.enumImpl())."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.storage.DataExtractorsApi.statusExtraction(java.lang.Enum)",
+      "summary": "Factory for a DataExtractor that reads the HTTP status code from the stored API Response (under StorageKeysApi.API).",
+      "returnType": "io.cyborgcode.roa.framework.storage.DataExtractor",
+      "usages": [
+        {
+          "code": "quest\n  .use(RING_OF_API)\n  .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))\n  .validate(() -> {\n    Integer status = retrieve(\n      statusExtraction(GET_ALL_USERS),\n      Integer.class\n    );\n\n    assertEquals(SC_OK, status);\n  })\n  .complete();",
+          "description": "Extract the HTTP status code from the latest stored Response for an endpoint and validate it with plain assertions (useful when you don’t want to build an Assertion rule).",
+          "level": "CORE",
+          "contextHint": "Use after request()/requestAndValidate() so the Response exists in StorageKeysApi.API under the endpoint enum key."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.authentication.BaseAuthenticationClient",
+      "summary": "Base class for project-defined authentication clients. Extend it and implement authenticateImpl(...) to perform the real login and return the auth Header. The base class handles caching via AuthenticationKey.",
+      "returnType": "abstract-class",
+      "usages": [
+        {
+          "code": "public class AppAuth extends BaseAuthenticationClient {\n\n  @Override\n  protected Header authenticateImpl(RestService restService, String username, String password) {\n    String token = restService\n      .request(POST_LOGIN_USER, new LoginDto(username, password))\n      .getBody()\n      .jsonPath()\n      .getString(TOKEN.getJsonPath());\n\n    return new Header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token);\n  }\n}",
+          "description": "Project-side: implement an authentication strategy by extending BaseAuthenticationClient and returning a Header that should be attached to subsequent requests (e.g., Authorization: Bearer <token>).",
+          "level": "CORE",
+          "contextHint": "Project-side change. BaseAuthenticationClient implements AuthenticationClient and provides caching. Tests typically reference this class via @AuthenticateViaApi(type = AppAuth.class)."
+        },
+        {
+          "code": "quest\n  .use(RING_OF_API)\n  .authenticate(Data.testData().username(), Data.testData().password(), AppAuth.class)\n  .requestAndValidate(\n    GET_ALL_USERS,\n    Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n  )\n  .complete();",
+          "description": "Test-side (manual): perform authentication directly in the fluent chain when you don’t want to use @AuthenticateViaApi for a specific test.",
+          "level": "ADVANCED",
+          "contextHint": "This uses RestServiceFluent.authenticate(...), which internally delegates to RestService.authenticate(...) and the BaseAuthenticationClient caching logic."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.authentication.BaseAuthenticationClient.authenticate(io.cyborgcode.roa.api.service.RestService, java.lang.String, java.lang.String, boolean)",
+      "summary": "Internal: authenticate using RestService + credentials and cache the produced auth Header under an AuthenticationKey.",
+      "returnType": "io.cyborgcode.roa.api.authentication.AuthenticationKey",
+      "usages": [
+        {
+          "code": "authenticationKey = baseAuthenticationClient.authenticate(restService, username, password, true);",
+          "description": "Framework-internal usage (or rare advanced project code). Prefer using quest.use(RING_OF_API).authenticate(...) or @AuthenticateViaApi instead of calling this directly.",
+          "level": "ADVANCED",
+          "contextHint": "This method is usually invoked by RestService.authenticate(...), not by tests."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.authentication.BaseAuthenticationClient.authenticateImpl(io.cyborgcode.roa.api.service.RestService, java.lang.String, java.lang.String)",
+      "summary": "Template method for project auth clients: implement the real login call and return the auth Header.",
+      "returnType": "io.restassured.http.Header",
+      "usages": [
+        {
+          "code": "protected Header authenticateImpl(RestService restService, String username, String password) {\n  String token = restService.request(POST_LOGIN_USER, new LoginDto(username, password))\n    .getBody()\n    .jsonPath()\n    .getString(TOKEN.getJsonPath());\n\n  return new Header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token);\n}",
+          "description": "Project-side implementation: do the login request and build the Header that should be applied to subsequent API calls.",
+          "level": "CORE",
+          "contextHint": "Implement inside a class that extends BaseAuthenticationClient (e.g., AppAuth). This is the only method you normally implement yourself."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.storage.StorageKeysApi",
+      "summary": "Enum of storage namespaces/keys for API-related data. Most commonly used for StorageKeysApi.API, the namespace where RestServiceFluent stores Response objects by endpoint key.",
+      "returnType": "enum",
+      "usages": [
+        {
+          "code": "retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)",
+          "description": "Read the latest stored Response for an endpoint from the API sub-storage (namespace).",
+          "level": "CORE",
+          "contextHint": "Use after calling quest.use(RING_OF_API).request(...) or requestAndValidate(...), which stores Response under StorageKeysApi.API with key = endpoint enum (e.g., GET_ALL_USERS)."
+        },
+        {
+          "code": "quest.getStorage().sub(StorageKeysApi.API).get(GET_ALL_USERS, Response.class)",
+          "description": "Project-side (SuperQuest) access pattern: read a stored Response directly from the quest storage API namespace.",
+          "level": "ADVANCED",
+          "contextHint": "Use mainly in project-side utilities (DataCreatorFunctions, Preconditions, DataCleaner). Test code should prefer BaseQuest.retrieve(StorageKeysApi.API, endpoint, Response.class)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.DataExtractorImpl",
+      "summary": "Concrete DataExtractor implementation used to build custom extractors (subKey + key + extraction lambda). In tests you usually prefer factory helpers (DataExtractorsApi / DataExtractorsTest). Use DataExtractorImpl only when you need a custom extraction that does not exist yet.",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "DataExtractor<String> firstUserEmail = new DataExtractorImpl<>(\n  StorageKeysApi.API,\n  GET_ALL_USERS,\n  raw -> ((Response) raw).getBody().jsonPath().getString(\"data[0].email\")\n);\n\nString email = retrieve(firstUserEmail, String.class);",
+          "description": "Create a custom extractor for an API Response stored under StorageKeysApi.API and then retrieve the extracted typed value via BaseQuest.retrieve(extractor, type).",
+          "level": "ADVANCED",
+          "contextHint": "Use when DataExtractorsApi.responseBodyExtraction(...) is not enough (e.g., complex extraction, filtering, multiple steps). Prefer moving stable JSON paths into ApiResponsesJsonPaths enum instead of hardcoding."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.Services",
+      "summary": "Framework-provided Spring service container exposed only to BaseQuestSequential.beforeAll/afterAll. Use it to fetch underlying Spring services from a Ring (e.g. RestService from RestServiceFluent) when you need low-level access in class-level setup/cleanup.",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "@Override\nprotected void beforeAll(Services services) {\n  RestService restService = services.service(RestServiceFluent.class, RestService.class);\n}",
+          "description": "In BaseQuestSequential hooks, fetch an underlying service (by type) from a Ring instance managed by Spring.",
+          "level": "ADVANCED",
+          "contextHint": "Only available inside BaseQuestSequential.beforeAll/afterAll. Prefer using quest.use(RING_OF_API) in test flows; use Services only when you explicitly need the underlying Spring bean (e.g., RestService) in class-level hooks."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.RestService",
+      "summary": "Internal API executor used by the framework (hooks, auth clients, internal services). In @Test code, prefer quest.use(RING_OF_API) (RestServiceFluent) instead of using RestService directly.",
+      "usages": [
+        {
+          "code": "public static void pingReqres(RestService service, Map<Object, Object> storage, String[] args) {\n  Response response = service.request(GET_ALL_USERS.withQueryParam(\"page\", 2));\n  storage.put(ApiHookKeys.PING_STATUS, response.getStatusCode());\n}",
+          "description": "Use RestService in ApiHookFunctions/ApiHookFlow implementations (class-level hooks) where you do not have a Quest chain and you need to execute raw API calls.",
+          "level": "CORE",
+          "contextHint": "Hook-side usage. @ApiHook is executed by ApiHookExtension, which constructs/provides a RestService instance. In normal tests, use quest.use(RING_OF_API) (RestServiceFluent) instead."
+        },
+        {
+          "code": "public class AppAuth extends BaseAuthenticationClient {\n  @Override\n  protected Header authenticateImpl(RestService restService, String username, String password) {\n    String token = restService\n      .request(POST_LOGIN_USER, new LoginDto(username, password))\n      .getBody()\n      .jsonPath()\n      .getString(TOKEN.getJsonPath());\n\n    return new Header(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token);\n  }\n}",
+          "description": "Use RestService inside authentication clients (BaseAuthenticationClient implementations) to perform the login call and build an auth header.",
+          "level": "CORE",
+          "contextHint": "Auth-client usage. RestService is passed into authenticateImpl(...) by the framework. Tests typically activate auth via @AuthenticateViaApi and continue using RestServiceFluent."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.RestService.request(io.cyborgcode.roa.api.core.Endpoint)",
+      "summary": "Execute an API request without a body and return the raw RestAssured Response.",
+      "returnType": "io.restassured.response.Response",
+      "usages": [
+        {
+          "code": "Response response = service.request(GET_ALL_USERS.withQueryParam(\"page\", 2));",
+          "description": "Use in hook/auth/internal code when you need the raw Response object (e.g., extract status/body manually, or store values into a hook storage map).",
+          "level": "CORE",
+          "contextHint": "Not typically used directly in @Test chains—prefer quest.use(RING_OF_API).request(...) which stores the Response in quest storage automatically."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.RestService.request(io.cyborgcode.roa.api.core.Endpoint, java.lang.Object)",
+      "summary": "Execute an API request with a body payload and return the raw RestAssured Response.",
+      "returnType": "io.restassured.response.Response",
+      "usages": [
+        {
+          "code": "Response response = restService.request(POST_LOGIN_USER, new LoginDto(username, password));",
+          "description": "Use in auth/hook/internal code when you need to send a body and then extract fields manually from the raw Response (e.g., token extraction inside an authentication client).",
+          "level": "CORE",
+          "contextHint": "Not typically used directly in @Test chains—prefer quest.use(RING_OF_API).request(endpoint, body) which stores the Response in quest storage for later retrieve(...)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.RestService.validate(io.restassured.response.Response, io.cyborgcode.roa.validator.core.Assertion[])",
+      "summary": "Validate a raw RestAssured Response using one or more Assertion rules and return the produced AssertionResult list.",
+      "returnType": "java.util.List<io.cyborgcode.roa.validator.core.AssertionResult<T>>",
+      "usages": [
+        {
+          "code": "List<AssertionResult<Object>> results = restService.validate(\n  response,\n  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n);",
+          "description": "Use in internal code (hooks, auth helpers, custom rings) when you already have a Response and want to validate it via the Assertion DSL and inspect/forward the produced AssertionResult list.",
+          "level": "CORE",
+          "contextHint": "Typically paired with FluentService.validation(results) inside a Ring to get RoA logging/Allure + soft/hard behavior. Tests usually don’t call RestService.validate(...) directly—prefer RestServiceFluent.requestAndValidate(...)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.RestService.requestAndValidate(io.cyborgcode.roa.api.core.Endpoint, io.cyborgcode.roa.validator.core.Assertion[])",
+      "summary": "Execute an API request (no body) via RestService and immediately validate the Response using the provided Assertion rules.",
+      "returnType": "java.util.List<io.cyborgcode.roa.validator.core.AssertionResult<T>>",
+      "usages": [
+        {
+          "code": "List<AssertionResult<Object>> results = restService.requestAndValidate(\n  GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n);",
+          "description": "Use in internal code (hooks, auth flows, custom utilities) when you want a one-liner to call an endpoint and get back the AssertionResult list for reporting or additional logic.",
+          "level": "CORE",
+          "contextHint": "This returns assertion results but does not auto-store the Response into quest storage (unlike RestServiceFluent.requestAndValidate(...)). For test flows prefer quest.use(RING_OF_API).requestAndValidate(...)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.RestService.requestAndValidate(io.cyborgcode.roa.api.core.Endpoint, java.lang.Object, io.cyborgcode.roa.validator.core.Assertion[])",
+      "summary": "Execute an API request with a body via RestService and immediately validate the Response using the provided Assertion rules.",
+      "returnType": "java.util.List<io.cyborgcode.roa.validator.core.AssertionResult<T>>",
+      "usages": [
+        {
+          "code": "List<AssertionResult<Object>> results = restService.requestAndValidate(\n  POST_CREATE_USER,\n  CreateUserDto.builder().name(USER_LEADER_NAME).job(USER_LEADER_JOB).build(),\n  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()\n);",
+          "description": "Use in internal code (hooks, auth flows, utilities) when you want to send a payload and obtain the AssertionResult list for reporting or additional logic.",
+          "level": "CORE",
+          "contextHint": "This returns assertion results but does not auto-store the Response into quest storage (unlike RestServiceFluent.requestAndValidate(...)). For test flows prefer quest.use(RING_OF_API).requestAndValidate(...)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.RestService.authenticate(java.lang.String, java.lang.String, java.lang.Class)",
+      "summary": "Authenticate the RestService using a project-defined BaseAuthenticationClient. The resulting auth Header is cached internally and automatically attached to subsequent RestService.request(...) calls.",
+      "returnType": "void",
+      "usages": [
+        {
+          "code": "restService.authenticate(\n  username,\n  password,\n  AppAuth.class\n);\n\nResponse response = restService.request(GET_ALL_USERS);",
+          "description": "Use in internal code (e.g., hooks/extensions or custom utilities) when you need RestService to attach an auth header automatically on subsequent requests.",
+          "level": "CORE",
+          "contextHint": "Prefer the higher-level @AuthenticateViaApi + RestServiceFluent for normal test flows. This method is most relevant when you already have a RestService instance (e.g., inside ApiHook flows or auth utilities). The AppAuth class must extend BaseAuthenticationClient and implement authenticateImpl(...) to return a Header."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.StorageKeysTest",
+      "summary": "Framework storage namespaces used during a test run. Use these keys when you need to read/write data in specific lifecycle areas (test arguments, preconditions, static data, hook data).",
+      "returnType": "enum",
+      "usages": [
+        {
+          "code": "CreateUserDto leaderFromArgs = quest.getStorage()\n  .sub(StorageKeysTest.ARGUMENTS)\n  .get(DataCreator.USER_LEADER, CreateUserDto.class);",
+          "description": "Read test-argument data (e.g., values produced/registered for the current test run). Commonly used by project-side data creators to build context-aware models.",
+          "level": "CORE",
+          "contextHint": "Use in project-side code (DataCreatorFunctions, utilities) when you want to reuse values already available for the test execution. ARGUMENTS usually corresponds to data available during the test body (e.g., data tied to injected @Craft parameters or other runtime arguments)."
+        },
+        {
+          "code": "CreateUserDto leaderFromPreArgs = quest.getStorage()\n  .sub(StorageKeysTest.PRE_ARGUMENTS)\n  .get(DataCreator.USER_LEADER, CreateUserDto.class);",
+          "description": "Read precondition argument data created during @Journey execution (pre-test setup). Useful when a data creator/precondition depends on what was prepared before the test body runs.",
+          "level": "CORE",
+          "contextHint": "Use when your setup flow (@Journey / Preconditions) stores inputs or produced models for later reuse. PRE_ARGUMENTS is typically populated by pre-test journeys."
+        },
+        {
+          "code": "Order order = retrieve(staticTestData(StaticData.ORDER), Order.class);",
+          "description": "Read static test data loaded via @StaticTestData into StorageKeysTest.STATIC_DATA (then extracted via DataExtractorsTest.staticTestData).",
+          "level": "CORE",
+          "contextHint": "STATIC_DATA is intended for small, reusable, preloaded values (credentials, common objects). Prefer using the DataExtractorsTest.staticTestData(...) helper + BaseQuest.retrieve(extractor, type) rather than touching the raw storage map directly."
+        },
+        {
+          "code": "Integer pingStatus = hookData(ApiHookKeys.PING_STATUS, Integer.class);",
+          "description": "Read hook-scoped values written by hooks (e.g., @ApiHook BEFORE/AFTER) into StorageKeysTest.HOOKS and exposed via BaseQuest.hookData(...).",
+          "level": "CORE",
+          "contextHint": "Use HOOKS when you need to pass data from class-level hooks into tests. Prefer BaseQuest.hookData(key, type) rather than accessing storage.getHookData(...) directly."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.hooks.HookExecution",
+      "summary": "Enum used by hook annotations (e.g., @ApiHook.when) to control whether a hook runs before all tests in a class or after all tests in a class.",
+      "returnType": "enum",
+      "usages": [
+        {
+          "code": "@API\n@ApiHook(when = HookExecution.BEFORE, type = ApiHookFlows.Data.PING_REQRES)\nclass ExampleTest extends BaseQuest {\n}",
+          "description": "Run the hook flow once before any @Test methods in the class (setup phase).",
+          "level": "CORE",
+          "contextHint": "Use BEFORE for environment pings, warm-ups, seeding shared state, or storing hook outputs for tests to read via hookData(...)."
+        },
+        {
+          "code": "@API\n@ApiHook(when = HookExecution.AFTER, type = ApiHookFlows.Data.DELETE_LEADER_USER)\nclass ExampleTest extends BaseQuest {\n}",
+          "description": "Run the hook flow once after all @Test methods in the class finish (teardown phase).",
+          "level": "CORE",
+          "contextHint": "Use AFTER for cleanup that should happen once per class (deleting shared test data, resetting env flags, etc.). If you need cleanup per test, use @Ripper instead."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.QuestHolder",
+      "summary": "Thread-local access to the active SuperQuest for the current test thread. Use it only in places where the Quest parameter is not available (e.g., DataCreatorFunctions, Preconditions, DataCleaner, custom rings).",
+      "returnType": "class",
+      "usages": [
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\nOrder order = quest.getStorage().sub(StorageKeysTest.PRE_ARGUMENTS).getByClass(ORDER, Order.class);",
+          "description": "Get the active SuperQuest and read data from storage when you're outside the test method (no Quest parameter available).",
+          "level": "CORE",
+          "contextHint": "Typical in project-side utilities (DataCreatorFunctions / PreconditionFunctions / DataCleanerFunctions / custom rings). Avoid using QuestHolder in test methods—prefer the injected Quest parameter."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.QuestHolder.get()",
+      "summary": "Return the SuperQuest bound to the current thread (or null if not initialized).",
+      "returnType": "io.cyborgcode.roa.framework.quest.SuperQuest",
+      "usages": [
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\nList<String> products = quest.getStorage().get(myExtractor, List.class);",
+          "description": "Access storage/artifacts from helper code that runs during a test thread but doesn’t receive Quest as a parameter.",
+          "level": "CORE",
+          "contextHint": "Use inside project-side factories/services (e.g., DataCreatorFunctions). If QuestHolder.get() is null, you're calling it outside the RoA-managed test execution."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.QuestHolder.clear()",
+      "summary": "Remove the SuperQuest from the current thread to avoid leaking test context between tests.",
+      "returnType": "void",
+      "usages": [
+        {
+          "code": "quest.complete();",
+          "description": "Normally you never call QuestHolder.clear() directly—Quest.complete() does it for you.",
+          "level": "CORE",
+          "contextHint": "Call complete() at the end of every test flow. Only clear() manually in very rare custom runner/extension scenarios."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.QuestHolder.set(io.cyborgcode.roa.framework.quest.SuperQuest)",
+      "summary": "Bind a SuperQuest to the current thread (framework/extension responsibility).",
+      "returnType": "void",
+      "usages": [
+        {
+          "code": "QuestHolder.set(superQuest);",
+          "description": "Framework/extension usage: binds the current SuperQuest during test startup so rings and helpers can access it via QuestHolder.get().",
+          "level": "ADVANCED",
+          "contextHint": "Do not call from normal test or project code. This is handled by the RoA engine (e.g., QuestFactory/Oracle/decorators) before the test body runs."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Journey",
+      "summary": "Test-side precondition annotation. Runs before the test body and executes a project-defined precondition (from Preconditions.Data.*). Optionally passes input models via @JourneyData(...). Can be repeated multiple times on the same test (ordered by order).",
+      "returnType": "annotation",
+      "usages": [
+        {
+          "code": "@Test\n@Journey(\n  value = Preconditions.Data.CREATE_NEW_USER,\n  journeyData = { @JourneyData(DataCreator.Data.USER_LEADER) },\n  order = 1\n)\nvoid test(Quest quest) {\n  quest.use(RING_OF_API)\n      .requestAndValidate(GET_ALL_USERS, Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build())\n      .complete();\n}",
+          "description": "Single journey: run one precondition before the test body. Use journeyData when the precondition function expects input model(s).",
+          "level": "CORE",
+          "contextHint": "value must be a string key from Preconditions.Data.*. journeyData values must reference project-defined DataForge keys (e.g., DataCreator.Data.*)."
+        },
+        {
+          "code": "@Test\n@Journey(\n  value = Preconditions.Data.CREATE_NEW_USER,\n  journeyData = { @JourneyData(DataCreator.Data.USER_LEADER) },\n  order = 1\n)\n@Journey(\n  value = Preconditions.Data.CREATE_NEW_USER,\n  journeyData = { @JourneyData(DataCreator.Data.USER_INTERMEDIATE) },\n  order = 2\n)\nvoid test(Quest quest) {\n  quest.use(RING_OF_API)\n      .validate(() -> {\n        CreatedUserDto created = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)\n            .getBody().as(CreatedUserDto.class);\n        assertEquals(USER_INTERMEDIATE_NAME, created.getName());\n      })\n      .complete();\n}",
+          "description": "Multiple journeys: stack @Journey annotations when you need multiple setup steps. order controls execution order (lower runs first).",
+          "level": "CORE",
+          "contextHint": "Multiple @Journey annotations are optional—use one or many depending on setup needs. Prefer explicit order values when more than one journey exists."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.log.LogApi",
+      "summary": "Framework-level API logger facade. Use it in project-side code (hooks, auth clients, custom rings, helpers) to log API flow steps, debugging details, and warnings/errors. Tests usually don’t need it.",
+      "usages": [
+        {
+          "code": "LogApi.info(\"Starting API smoke flow\");",
+          "description": "Log a simple informational message to mark a step in your API flow.",
+          "level": "CORE",
+          "contextHint": "Project-side usage. Keep logs readable; don’t log secrets (passwords/tokens)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.validator.core.AssertionTarget",
+      "summary": "Represents *where* an Assertion is applied (e.g., STATUS, BODY, HEADER). In API tests you use RestAssertionTarget.* as the value for Assertion.builder().target(...).",
+      "usages": [
+        {
+          "code": "Assertion.builder()\n  .target(BODY)\n  .key(TOKEN.getJsonPath())\n  .type(NOT_NULL)\n  .expected(true)\n  .build()",
+          "description": "Use a built-in assertion target (e.g., BODY) to specify which part of the response is validated.",
+          "level": "CORE",
+          "contextHint": "In API tests, targets come from RestAssertionTarget (STATUS / BODY / HEADER). Use key(...) for BODY (JSON path) and HEADER (header name); omit key(...) for STATUS."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Regression",
+      "summary": "Marks a test class or test method as part of the Regression suite (wraps JUnit @Tag(\"Regression\")).",
+      "usages": [
+        {
+          "code": "@Regression\nclass AdvancedExamplesTest extends BaseQuest {\n}",
+          "description": "Tag the whole test class as Regression (all tests inside inherit the tag).",
+          "level": "CORE",
+          "contextHint": "Use when the entire class belongs to the regression suite."
+        },
+        {
+          "code": "@Test\n@Regression\nvoid shouldValidateSomething(Quest quest) {\n}",
+          "description": "Tag a single test method as Regression.",
+          "level": "CORE",
+          "contextHint": "Use when only specific tests in the class belong to the regression suite."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.parameters.DataRipper",
+      "summary": "Project-side contract for post-test cleanup (teardown). Implement a project enum (e.g., DataCleaner) that maps cleanup targets to a Consumer<SuperQuest>, then trigger it from tests via @Ripper(targets = { DataCleaner.Data.<KEY> }).",
+      "usages": [
+        {
+          "code": "public enum DataCleaner implements DataRipper<DataCleaner> {\n\n  DELETE_ADMIN_USER(quest -> quest.use(RING_OF_API)\n      .requestAndValidate(\n          DELETE_USER.withPathParam(ID_PARAM, ID_THREE),\n          Assertion.builder().target(STATUS).type(IS).expected(SC_NO_CONTENT).build()\n      )),\n\n  ;\n\n  public static final class Data {\n    private Data() {}\n    public static final String DELETE_ADMIN_USER = \"DELETE_ADMIN_USER\";\n  }\n\n  private final Consumer<SuperQuest> cleanup;\n\n  DataCleaner(Consumer<SuperQuest> cleanup) {\n    this.cleanup = cleanup;\n  }\n\n  @Override\n  public Consumer<SuperQuest> eliminate() {\n    return cleanup;\n  }\n\n  @Override\n  public DataCleaner enumImpl() {\n    return this;\n  }\n}\n\n@Test\n@Ripper(targets = { DataCleaner.Data.DELETE_ADMIN_USER })\nvoid test(Quest quest) {\n  quest.use(RING_OF_API)\n      .request(GET_ALL_USERS)\n      .complete();\n}",
+          "description": "Define a project-side cleanup enum (DataRipper implementation) using a lambda Consumer<SuperQuest>, expose a string key in the nested Data class, then reference it from @Ripper on the test.",
+          "level": "CORE",
+          "contextHint": "Project-side: DataCleaner is created/maintained in the test project. Test-side: @Ripper runs after the test finishes. Use cleanup logic to remove data created by the test (users, orders, etc.)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.DataExtractorsTest",
+      "summary": "Static factory for DataExtractor instances that read values from the STATIC_DATA map in quest storage (typically loaded via @StaticTestData).",
+      "usages": [
+        {
+          "code": "@Test\n@StaticTestData(StaticData.class)\nvoid test(Quest quest) {\n  var order = retrieve(staticTestData(StaticData.ORDER), Order.class);\n  quest.use(RING_OF_CUSTOM)\n      .validateOrder(order)\n      .complete();\n}",
+          "description": "Load project static test data into storage via @StaticTestData, then extract a typed value by key using staticTestData(key) + retrieve(...).",
+          "level": "CORE",
+          "contextHint": "Used inside tests after @StaticTestData has executed (method-level or class-level). The extractor reads from StorageKeysTest.STATIC_DATA."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.DataExtractorsTest.staticTestData(java.lang.String)",
+      "summary": "Creates a DataExtractor that reads the STATIC_DATA storage map and returns the value for the provided string key.",
+      "usages": [
+        {
+          "code": "@Test\n@StaticTestData(StaticData.class)\nvoid test(Quest quest) {\n  var baseUrl = retrieve(staticTestData(StaticData.BASE_URL), String.class);\n  quest.use(RING_OF_API)\n      .requestAndValidate(Endpoints.Health.GET, Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build())\n      .drop();\n}",
+          "description": "Extract a single value from the static test data map by key and use it in the test flow.",
+          "level": "CORE",
+          "contextHint": "Pairs with @StaticTestData. Keys are usually constants from the project provider (e.g., StaticData.BASE_URL)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Ripper",
+      "summary": "Marks a test method for post-test cleanup by declaring one or more cleanup targets (usually enum constants from a project-side DataRipper registry such as DataCleaner).",
+      "usages": [
+        {
+          "code": "@Test\n@Journey(value = Preconditions.Data.ORDER_PRECONDITION, journeyData = { @JourneyData(DataCreator.Data.ORDER) })\n@Ripper(targets = { DataCleaner.Data.DELETE_CREATED_ORDERS })\nvoid ripperFeature(Quest quest) {\n  quest.use(RING_OF_CUSTOM)\n      .validateOrder(retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class))\n      .complete();\n}",
+          "description": "Select cleanup targets from the project cleanup registry so teardown runs automatically after the test, without adding teardown logic inside the test body.",
+          "level": "CORE",
+          "contextHint": "Test method-level only. Targets typically come from a project enum implementing DataRipper (e.g., DataCleaner.Data.*) and run post-test with the current SuperQuest context."
+        },
+        {
+          "code": "@Test\n@Ripper(targets = { DataCleaner.Data.DELETE_CREATED_ORDERS, DataCleaner.Data.DELETE_CREATED_USERS })\nvoid test(Quest quest) {\n  quest.use(RING_OF_CUSTOM)\n      .complete();\n}",
+          "description": "Declare multiple cleanup targets when a test creates more than one type of data that must be removed after execution.",
+          "level": "ADVANCED",
+          "contextHint": "Test method-level only. Use multiple targets to keep teardown declarative even for complex tests that create multiple entities."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.annotations.ApiHooks",
+      "summary": "Container annotation for repeatable @ApiHook on a test class. You normally omit using @ApiHooks directly and just place multiple @ApiHook annotations; Java wraps them into @ApiHooks implicitly.",
+      "usages": [
+        {
+          "code": "@API\n@ApiHook(when = HookExecution.BEFORE, type = ApiHookFlows.Data.PING_REQRES, order = 1)\n@ApiHook(when = HookExecution.AFTER, type = ApiHookFlows.Data.DELETE_LEADER_USER, order = 1)\nclass ApiHooksExampleTest extends BaseQuest {\n\n  @Test\n  void test(Quest quest) {\n    quest.use(RING_OF_API)\n        .requestAndValidate(\n            GET_ALL_USERS,\n            Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n        )\n        .complete();\n  }\n}",
+          "description": "Write multiple @ApiHook annotations directly on the class. @ApiHooks is the container that Java uses internally to hold them, so you typically omit it from your test code.",
+          "level": "CORE",
+          "contextHint": "Class-level only. @ApiHook is marked @Repeatable(ApiHooks.class), so multiple @ApiHook entries are compiled into an implicit @ApiHooks({ ... })."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent",
+      "summary": "Main ROA API ring used in tests via quest.use(RING_OF_API). It executes requests through RestService, stores each Response in quest storage under StorageKeysApi.API keyed by endpoint.enumImpl(), and supports fluent validation, authentication, and retry flows in a single chain.",
+      "usages": [
+        {
+          "code": "@API\nclass GettingStartedTest extends BaseQuest {\n\n   @Test\n   void shows_basic_get_with_query_param_and_minimal_assertions(Quest quest) {\n      quest\n            .use(RING_OF_API)\n            .requestAndValidate(\n                  GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),\n                  Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build()\n            )\n            .complete();\n   }\n}\n",
+          "description": "Core API flow: activate the API ring, call requestAndValidate(...) on an endpoint (optionally parameterized per call), validate via Assertion builder rules, and finalize the quest with complete().",
+          "level": "CORE",
+          "contextHint": "Test-side: use only through quest.use(RING_OF_API). Storage: each call stores the latest Response under StorageKeysApi.API with key = endpoint.enumImpl() so later steps can retrieve/extract response data."
+        },
+        {
+          "code": "@API\nclass AdvancedExamplesTest extends BaseQuest {\n\n   @Test\n   void shows_request_then_validate_with_plain_junit(Quest quest) {\n      quest\n            .use(RING_OF_API)\n            .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))\n            .validate(() -> {\n               GetUsersDto users = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)\n                     .getBody().as(GetUsersDto.class);\n               assertEquals(PAGE_TWO_DATA_SIZE, users.getData().size());\n            })\n            .complete();\n   }\n}\n",
+          "description": "Use request(...) when you want to store the Response first and then perform custom assertions in a validate(...) block (JUnit/AssertJ).",
+          "level": "CORE",
+          "contextHint": "Validation styles: requestAndValidate(...) uses the Assertion DSL; validate(...) is for custom logic. Both styles can be chained; complete() finalizes soft assertions."
+        },
+        {
+          "code": "@API\nclass RetryUntilExamplesTest extends BaseQuest {\n\n   @Test\n   void shows_retry_until_then_call_endpoint(Quest quest) {\n      RetryCondition<Boolean> condition = new RetryConditionImpl<>(\n            service -> true,\n            result -> result\n      );\n\n      quest\n            .use(RING_OF_API)\n            .retryUntil(condition, Duration.ofSeconds(10), Duration.ofSeconds(1))\n            .requestAndValidate(\n                  GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n            )\n            .complete();\n   }\n}\n",
+          "description": "Use retryUntil(...) to poll a condition (eventual consistency) and, once satisfied, continue the normal API chain with request/requestAndValidate.",
+          "level": "ADVANCED",
+          "contextHint": "retryUntil(...) uses the underlying RestService as the service input to the RetryCondition function. Prefer ready-made conditions from RetryConditionApi when available."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent",
+      "summary": "Fluent API service used in tests via quest.use(RING_OF_API). It provides a fluent chain for API flows and automatically stores each executed Response in quest storage under StorageKeysApi.API keyed by endpoint.enumImpl().",
+      "usages": [
+        {
+          "code": "@API\nclass GettingStartedTest extends BaseQuest {\n\n   @Test\n   void usesApiRingViaQuest(Quest quest) {\n      quest\n            .use(RING_OF_API)\n            .requestAndValidate(\n                  GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n            )\n            .complete();\n   }\n}\n",
+          "description": "Use RestServiceFluent only through quest.use(RING_OF_API) inside an @API test class. The fluent methods execute requests via RestService, validate via the assertions engine, and keep the latest Response available in storage for later steps.",
+          "level": "CORE",
+          "contextHint": "Test-side API entry point. Storage behavior: every request/requestAndValidate stores Response under StorageKeysApi.API with key = endpoint.enumImpl(), enabling later retrieve(StorageKeysApi.API, ENDPOINT, Response.class) or DataExtractorsApi extractors. Method-level details are documented on the individual RestServiceFluent.* items."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent.request(io.cyborgcode.roa.api.core.Endpoint)",
+      "summary": "Execute an API request (no body) and store the Response in quest storage under StorageKeysApi.API keyed by endpoint.enumImpl(), then continue the fluent chain.",
+      "usages": [
+        {
+          "code": "@Test\nvoid showsRequestThenValidateWithPlainJUnitAssertions(Quest quest) {\n   quest\n         .use(RING_OF_API)\n         .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))\n         .validate(() -> {\n            GetUsersDto users = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)\n                  .getBody().as(GetUsersDto.class);\n            assertEquals(PAGE_TWO_DATA_SIZE, users.getData().size());\n         })\n         .complete();\n}\n",
+          "description": "Use request(...) when you want to store the raw Response first and then do custom validations in a validate(...) block (JUnit/AssertJ), or reuse the stored response data in later steps.",
+          "level": "CORE",
+          "contextHint": "Storage: request(...) always stores the latest Response under StorageKeysApi.API with key = endpoint.enumImpl(). Retrieval typically uses retrieve(StorageKeysApi.API, ENDPOINT_ENUM, Response.class)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent.request(io.cyborgcode.roa.api.core.Endpoint, java.lang.Object)",
+      "summary": "Execute an API request with a body and store the Response in quest storage under StorageKeysApi.API keyed by endpoint.enumImpl(), then continue the fluent chain.",
+      "usages": [
+        {
+          "code": "@Test\nvoid storesLoginResponseForLaterExtraction(Quest quest) {\n   final String username = Data.testData().username();\n   final String password = Data.testData().password();\n\n   quest\n         .use(RING_OF_API)\n         .request(POST_LOGIN_USER, new LoginDto(username, password));\n\n   String token = retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)\n         .getBody().jsonPath().getString(TOKEN.getJsonPath());\n\n   assertNotNull(token);\n}\n",
+          "description": "Use request(endpoint, body) when you want the Response stored for later extraction (e.g., token from login) before deciding what to do next.",
+          "level": "CORE",
+          "contextHint": "Storage: the Response is stored under StorageKeysApi.API with key = endpoint.enumImpl(). Retrieval typically uses retrieve(StorageKeysApi.API, ENDPOINT_ENUM, Response.class)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent.validateResponse(io.restassured.response.Response, io.cyborgcode.roa.validator.core.Assertion[])",
+      "summary": "Validate an already obtained Response using Assertion rules and apply ROA’s standard validation handling (soft vs hard) within the fluent chain.",
+      "usages": [
+        {
+          "code": "@Test\nvoid validatesPreviouslyRetrievedResponse(Quest quest) {\n   quest\n         .use(RING_OF_API)\n         .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))\n         .validate(() -> {\n            Response response = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class);\n\n            quest\n                  .use(RING_OF_API)\n                  .validateResponse(\n                        response,\n                        Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),\n                        Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build()\n                  );\n         })\n         .complete();\n}\n",
+          "description": "Use validateResponse(...) when you already have a Response instance (e.g., retrieved from storage) and want to validate it with the Assertion DSL without re-sending the request.",
+          "level": "ADVANCED",
+          "contextHint": "Less common in normal tests because requestAndValidate(...) validates immediately. Useful when you intentionally separate request() from validation or reuse the same Response for multiple validation passes."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent.requestAndValidate(io.cyborgcode.roa.api.core.Endpoint, io.cyborgcode.roa.validator.core.Assertion[])",
+      "summary": "Send a request (no body), store the Response in quest storage under StorageKeysApi.API, validate it with Assertion rules, then continue the fluent chain.",
+      "usages": [
+        {
+          "code": "@Test\nvoid showsBasicGetWithQueryParamAndMinimalAssertions(Quest quest) {\n   quest\n         .use(RING_OF_API)\n         .requestAndValidate(\n               GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n               Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),\n               Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build()\n         )\n         .complete();\n}\n",
+          "description": "Default API test pattern for GET-like calls: execute and validate in one step using the Assertion DSL (status/header/body).",
+          "level": "CORE",
+          "contextHint": "Storage: the Response is stored under StorageKeysApi.API with key = endpoint.enumImpl(), so later steps can retrieve/extract it if needed. Use request(...) when you want to store first and validate later; use requestAndValidate(...) when you want immediate DSL validation."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent.requestAndValidate(io.cyborgcode.roa.api.core.Endpoint, java.lang.Object, io.cyborgcode.roa.validator.core.Assertion[])",
+      "summary": "Send a request with a body, store the Response in quest storage under StorageKeysApi.API, validate it with Assertion rules, then continue the fluent chain.",
+      "usages": [
+        {
+          "code": "@Test\nvoid showsPostWithDtoAndSimpleBodyAssertions(Quest quest) {\n   CreateUserDto createUserRequest = CreateUserDto.builder()\n         .name(USER_LEADER_NAME)\n         .job(USER_LEADER_JOB)\n         .build();\n\n   quest\n         .use(RING_OF_API)\n         .requestAndValidate(\n               POST_CREATE_USER,\n               createUserRequest,\n               Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),\n               Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath()).type(IS).expected(USER_LEADER_NAME).build()\n         )\n         .complete();\n}\n",
+          "description": "Send a request DTO as body and validate status/body fields using the Assertion DSL.",
+          "level": "CORE",
+          "contextHint": "Body is any serializable object (DTO/Map). Storage: Response is stored under StorageKeysApi.API keyed by endpoint.enumImpl()."
+        },
+        {
+          "code": "@Test\nvoid showsCraftModelAsRequestWithSoftAssertion(Quest quest,\n                                                 @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser) {\n   quest\n         .use(RING_OF_API)\n         .requestAndValidate(\n               POST_CREATE_USER,\n               leaderUser,\n               Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),\n               Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath()).type(IS).expected(USER_LEADER_NAME).soft(true).build()\n         )\n         .complete();\n}\n",
+          "description": "Preferred test style: generate the request body via @Craft and pass it directly into requestAndValidate(...).",
+          "level": "CORE",
+          "contextHint": "Use @Craft to avoid inline object construction and keep request models centralized in DataCreator. soft(true) keeps multiple failures visible until complete()."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent.authenticate(java.lang.String, java.lang.String, java.lang.Class)",
+      "summary": "Authenticate the API ring using username/password and a BaseAuthenticationClient implementation so subsequent requests in the same quest run include the auth header.",
+      "usages": [
+        {
+          "code": "@Test\nvoid authenticatesManuallyInsideFluentChain(Quest quest) {\n   quest\n         .use(RING_OF_API)\n         .authenticate(Data.testData().username(), Data.testData().password(), AppAuth.class)\n         .requestAndValidate(\n               GET_ALL_USERS,\n               Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n         )\n         .complete();\n}\n",
+          "description": "Manually authenticate inside a test chain when you explicitly want auth in the flow instead of using @AuthenticateViaApi.",
+          "level": "CORE",
+          "contextHint": "Preferred default is @AuthenticateViaApi on the test method. authenticate(...) is for explicit/manual flows; the auth strategy is defined by the BaseAuthenticationClient implementation (e.g., AppAuth)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent.validate(java.lang.Runnable)",
+      "summary": "Run custom validation logic (hard assertions) as part of the fluent chain, typically using plain JUnit assertions after previous API steps.",
+      "usages": [
+        {
+          "code": "@Test\nvoid showsRequestThenValidateWithPlainJUnitAssertions(Quest quest) {\n   quest\n         .use(RING_OF_API)\n         .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))\n         .validate(() -> {\n            GetUsersDto users = retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)\n                  .getBody().as(GetUsersDto.class);\n\n            assertEquals(PAGE_TWO_DATA_SIZE, users.getData().size(), USER_DATA_SIZE_INCORRECT);\n            assertEquals(USER_SEVENTH_FIRST_NAME_LENGTH,\n                  users.getData().get(0).getFirstName().length(),\n                  FIRST_NAME_LENGTH_INCORRECT);\n         })\n         .complete();\n}\n",
+          "description": "Use validate(() -> { ... }) when you want explicit hard assertions (JUnit) that run after previous steps and can freely read stored responses from storage.",
+          "level": "CORE",
+          "contextHint": "This is a hard validation block (fails immediately when an assertion fails). For grouped soft checks, use validate(Consumer<SoftAssertions>) and finish with complete()."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent.validate(java.util.function.Consumer)",
+      "summary": "Run grouped soft validations using AssertJ SoftAssertions as part of the fluent chain; failures are collected and reported at complete().",
+      "usages": [
+        {
+          "code": "@Test\nvoid showsSoftAssertionsAfterFindingUserByFirstNameFromStorage(Quest quest) {\n   quest\n         .use(RING_OF_API)\n         .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))\n         .request(\n               GET_USER.withPathParam(\n                     ID_PARAM,\n                     retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)\n                           .getBody()\n                           .as(GetUsersDto.class)\n                           .getData()\n                           .stream()\n                           .filter(user -> USER_NINE_FIRST_NAME.equals(user.getFirstName()))\n                           .map(UserData::getId)\n                           .findFirst()\n                           .orElseThrow(() -> new RuntimeException(userWithFirstNameNotFound(USER_NINE_FIRST_NAME)))\n               )\n         )\n         .validate(softAssertions -> {\n            UserDto user = retrieve(StorageKeysApi.API, GET_USER, Response.class)\n                  .getBody().as(UserDto.class);\n\n            softAssertions.assertThat(user.getData().getId()).isEqualTo(USER_NINE_ID);\n            softAssertions.assertThat(user.getData().getEmail()).isEqualTo(USER_NINE_EMAIL);\n            softAssertions.assertThat(user.getData().getFirstName()).isEqualTo(USER_NINE_FIRST_NAME);\n            softAssertions.assertThat(user.getData().getLastName()).isEqualTo(USER_NINE_LAST_NAME);\n         })\n         .complete();\n}\n",
+          "description": "Use validate(softAssertions -> { ... }) to group multiple checks and see all failures together. It’s ideal when validating multiple fields from a stored response/DTO.",
+          "level": "CORE",
+          "contextHint": "Soft assertion failures are collected during the chain and evaluated at complete(). If you want immediate failure on the first failing check, use validate(Runnable) instead."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.api.service.fluent.RestServiceFluent.retryUntil(io.cyborgcode.roa.framework.retry.RetryCondition, java.time.Duration, java.time.Duration)",
+      "summary": "Poll a retry condition (eventual consistency) until it succeeds or maxWait is reached, then continue the fluent API chain.",
+      "usages": [
+        {
+          "code": "@Test\nvoid showsRetryUntilPollingThenGetsUsers(Quest quest) {\n   AtomicInteger probeCounter = new AtomicInteger(0);\n\n   RetryCondition<Boolean> condition = new RetryConditionImpl<>(\n         service -> probeCounter.incrementAndGet() >= 3,\n         result -> result\n   );\n\n   quest\n         .use(RING_OF_API)\n         .retryUntil(condition, Duration.ofSeconds(10), Duration.ofSeconds(1))\n         .requestAndValidate(\n               GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),\n               Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()\n         )\n         .complete();\n}\n",
+          "description": "Use retryUntil(...) to wait for a condition to become true, then proceed with normal API steps. Useful for async jobs and eventual consistency.",
+          "level": "CORE",
+          "contextHint": "Prefer RetryConditionApi.* factories for API-specific polling (status / JSON field checks). Custom RetryConditionImpl is mainly for bespoke conditions or demos."
+        },
+        {
+          "code": "@Test\nvoid waitsUntilStatusIsOk(Quest quest) {\n   quest\n         .use(RING_OF_API)\n         .retryUntil(\n               statusEquals(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO), SC_OK),\n               Duration.ofSeconds(10),\n               Duration.ofSeconds(1)\n         )\n         .complete();\n}\n",
+          "description": "Preferred style: use ready-made API retry conditions (RetryConditionApi) instead of writing custom RetryConditionImpl logic.",
+          "level": "CORE",
+          "contextHint": "RetryConditionApi conditions execute fresh requests on each attempt and succeed when the status/field requirement is met."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.data.StaticDataProvider",
+      "summary": "Project-side contract for supplying static key-value test data that the framework loads into quest storage before the test runs. Used together with @StaticTestData(Provider.class).",
+      "usages": [
+        {
+          "code": "public class StaticData implements StaticDataProvider {\n\n   public static final String USERNAME = \"username\";\n   public static final String PASSWORD = \"password\";\n\n   @Override\n   public Map<String, Object> staticTestData() {\n      Map<String, Object> data = new HashMap<>();\n      data.put(USERNAME, Data.testData().username());\n      data.put(PASSWORD, Data.testData().password());\n      return data;\n   }\n}\n",
+          "description": "Implement StaticDataProvider in your test project to define a map of reusable values (credentials, common objects, prepared models) that can be preloaded before a test via @StaticTestData.",
+          "level": "CORE",
+          "contextHint": "Project-side provider class. The framework instantiates it and loads its staticTestData() map into storage when @StaticTestData(StaticData.class) is present. Tests typically read values via DataExtractorsTest.staticTestData(key) + retrieve(...)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Smoke",
+      "summary": "Marks a test class or test method as part of the Smoke suite (wraps JUnit @Tag(\"Smoke\")).",
+      "usages": [
+        {
+          "code": "@Smoke\nclass AdvancedExamplesTest extends BaseQuest {\n}",
+          "description": "Tag the whole test class as Smoke (all tests inside inherit the tag).",
+          "level": "CORE",
+          "contextHint": "Use when the entire class belongs to the smoke suite."
+        },
+        {
+          "code": "@Test\n@Smoke\nvoid shouldValidateSomething(Quest quest) {\n}",
+          "description": "Tag a single test method as Smoke.",
+          "level": "CORE",
+          "contextHint": "Use when only specific tests in the class belong to the smoke suite."
+        }
+      ]
+    }
+  ]
+}
