@@ -94,6 +94,83 @@ Pandora Response: "method(), url(), enumImpl(), defaultConfiguration()"
 - Use Pandora skill BEFORE generating code with unfamiliar classes
 - Trust Pandora skill output over general knowledge
 
+### 🔴 CRITICAL: Generating pandora.json If Missing
+
+**MANDATORY FIRST STEP: Check if pandora.json exists before proceeding.**
+
+```
+🔴 STEP 0.0: Verify Pandora Files Exist (ABSOLUTE FIRST STEP)
+
+1. Check if target/pandora/pandora.json exists
+2. Check if .claude/pandora/api-usage.json exists
+
+IF MISSING:
+  ↓
+  Invoke Pandora Skill to Generate Missing Files
+  ↓
+  Verify Files Generated Successfully
+  ↓
+  Proceed to Phase 0 (Project Structure Detection)
+
+IF EXISTS:
+  ↓
+  Proceed to Phase 0 (Project Structure Detection)
+```
+
+**How to Invoke Pandora Skill for File Generation:**
+
+```bash
+# Option 1: Using /pandora command
+/pandora
+
+# Option 2: Using Skill tool
+Skill(skill="pandora")
+```
+
+**What Happens When You Invoke Pandora Skill:**
+1. Pandora skill scans the project for ROA framework dependencies
+2. Generates `target/pandora/pandora.json` (framework ontology)
+3. Generates `.claude/pandora/api-usage.json` (execution patterns)
+4. Returns confirmation message with file locations
+
+**Example Invocation:**
+```
+User: "Generate API tests for this project"
+Assistant: [Checks if target/pandora/pandora.json exists]
+Assistant: [File not found - invokes Pandora skill]
+Pandora Skill: "Generated target/pandora/pandora.json and .claude/pandora/api-usage.json"
+Assistant: [Proceeds with Phase 0: Project Structure Detection]
+```
+
+**Error Handling:**
+- If Pandora skill fails to generate files, STOP and report error
+- Do NOT proceed without pandora files (causes hallucination and invalid code)
+- If project has no ROA dependencies, report that ROA framework is not configured
+
+**Validation After Generation:**
+```
+After Pandora skill completes:
+✅ Verify target/pandora/pandora.json exists and is not empty
+✅ Verify .claude/pandora/api-usage.json exists and is not empty
+✅ Read both files to load framework contracts and patterns
+✅ Proceed to Phase 0 (Project Structure Detection)
+```
+
+**Priority Order:**
+```
+STEP 0.0: Generate/verify pandora files (if missing)
+  ↓
+STEP 0.1: Detect base package from pom.xml
+  ↓
+STEP 0.2: Explore existing structure
+  ↓
+STEP 1: Read pandora files (framework contracts)
+  ↓
+STEP 2: Read business/API contracts
+  ↓
+Continue with remaining phases...
+```
+
 ### What Pandora Files Contain
 
 #### `target/pandora/pandora.json` (Framework Ontology)
@@ -143,8 +220,8 @@ Question: "How do I...?"
 **Correct (from pandora.json):**
 ```java
 // Late<T> interface
-Late<UserRequest> lateUser = ...;
-UserRequest user = lateUser.create();  // ✅ Correct method name
+Late<CreateUserDto> lateUser = ...;
+CreateUserDto user = lateUser.create();  // ✅ Correct method name
 
 // Assertion builder
 Assertion.builder()
@@ -160,7 +237,7 @@ public void journey(SuperQuest quest, Object... args) { }  // ✅ Correct signat
 **Incorrect (from assumptions):**
 ```java
 // ❌ Wrong - Late doesn't have get() method
-UserRequest user = lateUser.get();
+CreateUserDto user = lateUser.get();
 
 // ❌ Wrong - quest.getStorage() doesn't exist
 quest.getStorage().store("key", value);
@@ -228,24 +305,26 @@ import io.restassured.http.Method;                  // ✅ YES - RestAssured Met
 import io.restassured.http.ContentType;             // ✅ YES - For content type
 import io.restassured.specification.RequestSpecification;  // ✅ YES - For default config
 import io.cyborgcode.roa.api.core.Endpoint;         // ✅ YES - Endpoint interface
+import io.cyborgcode.roa.api.authentication.Credentials;  // ✅ YES - For credentials
+import io.cyborgcode.roa.api.authentication.BaseAuthenticationClient;  // ✅ YES - For auth client
 ```
 
 **Validation Rule:** Search `.claude/pandora/api-usage.json` for the exact import path BEFORE using ANY class.
 
 ### 2. Endpoint Enum Implementation (MANDATORY)
 
-**Endpoint interface requirements (from api-usage.json line 543):**
+**Endpoint interface requirements (from api-usage.json):**
 
 ```java
 // ✅ CORRECT - Follows api-usage.json pattern
-public enum UserEndpoints implements Endpoint<UserEndpoints> {
-    CREATE_USER(Method.POST, "/api/users"),      // ✅ io.restassured.http.Method
-    GET_USER(Method.GET, "/api/users/{id}");
+public enum AppEndpoints implements Endpoint<AppEndpoints> {
+    POST_CREATE_USER(Method.POST, "/users"),      // ✅ io.restassured.http.Method
+    GET_USER(Method.GET, "/users/{id}");
 
     private final Method method;                  // ✅ RestAssured Method
     private final String url;
 
-    UserEndpoints(Method method, String url) {
+    AppEndpoints(final Method method, final String url) {
         this.method = method;
         this.url = url;
     }
@@ -257,13 +336,14 @@ public enum UserEndpoints implements Endpoint<UserEndpoints> {
     public String url() { return url; }
 
     @Override
-    public Enum<?> enumImpl() { return this; }    // ✅ CRITICAL: Must implement this
+    public AppEndpoints enumImpl() { return this; }    // ✅ CRITICAL: Returns enum type
 
     @Override
-    public RequestSpecification defaultConfiguration(RequestSpecification spec) {
-        return spec
-            .contentType(ContentType.JSON)
-            .accept(ContentType.JSON);            // ✅ No baseUri here - handled by framework
+    public RequestSpecification defaultConfiguration() {
+        RequestSpecification spec = Endpoint.super.defaultConfiguration();
+        spec.contentType(ContentType.JSON);
+        spec.header("Accept", "application/json");
+        return spec;                              // ✅ No baseUri - handled by framework
     }
 }
 ```
@@ -313,105 +393,7 @@ public io.cyborgcode.roa.api.core.Method method() { ... }  // ❌ Wrong class!
 2. Check the "usages" section for the EXACT attribute names
 3. Use ONLY the documented attribute names
 
-### 4. DataCreator Enum Implementation (MANDATORY)
-
-**Correct pattern (from api-usage.json):**
-
-```java
-@UtilityClass
-public class DataCreator implements DataForge<DataCreator> {
-
-    public enum Data {
-        NEW_USER,
-        ADMIN_USER,
-        LEADER_USER;
-
-        @Override
-        public String toString() {
-            return name();
-        }
-    }
-
-    // ✅ CORRECT - Method uses @Craft annotation with model attribute
-    @Craft(model = Data.NEW_USER)
-    public static UserRequest newUser() {
-        return UserRequest.builder()
-            .username("user_" + UUID.randomUUID())
-            .build();
-    }
-}
-```
-
-**Wrong patterns to AVOID:**
-
-```java
-// ❌ WRONG - Using @Craft with "value" attribute
-@Craft(value = Data.NEW_USER)  // ❌ Wrong attribute name
-
-// ❌ WRONG - Not marking with @Craft at all
-public static UserRequest newUser() { ... }  // ❌ Missing @Craft annotation
-```
-
-### 5. DataCleaner Enum Implementation (MANDATORY)
-
-**Correct pattern (from api-usage.json):**
-
-```java
-@UtilityClass
-public class DataCleaner implements DataRipper<DataCleaner> {
-
-    public enum Data {
-        DELETE_TEST_USER,
-        CLEANUP_ALL_DATA;
-
-        @Override
-        public String toString() {
-            return name();
-        }
-    }
-
-    // ✅ CORRECT - Method uses @Ripper annotation with targets attribute (array)
-    @Ripper(targets = { Data.DELETE_TEST_USER })
-    public static void deleteTestUser(SuperQuest quest) {
-        // Cleanup logic
-    }
-}
-```
-
-**Wrong patterns to AVOID:**
-
-```java
-// ❌ WRONG - Using @Ripper with "value" attribute
-@Ripper(value = Data.DELETE_TEST_USER)  // ❌ Wrong attribute name
-
-// ❌ WRONG - Not using array for targets
-@Ripper(targets = Data.DELETE_TEST_USER)  // ❌ Must be array: { ... }
-```
-
-### 6. Custom Service Ring Implementation (MANDATORY)
-
-**Correct pattern (from api-usage.json line 618):**
-
-```java
-// ✅ CORRECT - Extending FluentService (validated in api-usage.json)
-@Ring("UserManagement")
-public class UserManagementApiService extends FluentService {
-
-    public UserManagementApiService(Quest quest) {
-        super(quest);
-    }
-
-    public UserManagementApiService createUser(UserRequest user) {
-        quest.use(RING_OF_API)
-            .request(UserEndpoints.CREATE_USER, user);
-        return this;
-    }
-}
-```
-
-**Note:** The exact package for `@Ring` annotation should be validated in api-usage.json before use.
-
-### 7. Pre-Generation Validation Workflow (EXECUTE BEFORE WRITING CODE)
+### 4. Pre-Generation Validation Workflow (EXECUTE BEFORE WRITING CODE)
 
 **Step 1: Validate Imports**
 ```
@@ -449,7 +431,7 @@ For each framework method call:
 4. Do NOT guess or assume method signatures
 ```
 
-### 8. Common Compilation Errors and Fixes
+### 5. Common Compilation Errors and Fixes
 
 | Error | Cause | Fix |
 |-------|-------|-----|
@@ -459,11 +441,19 @@ For each framework method call:
 | `annotation @Ripper is missing a default value for the element 'targets'` | Used `@Ripper(value = ...)` | Use `@Ripper(targets = { ... })` |
 | `Endpoint is not abstract and does not override abstract method enumImpl()` | Missing `enumImpl()` method | Add `public Enum<?> enumImpl() { return this; }` |
 
-### 9. Validation Checkpoint (BEFORE GENERATING CODE)
+### 6. Validation Checkpoint (BEFORE GENERATING CODE)
 
 **Answer these questions BEFORE writing ANY code:**
 
+**Pandora Files Verification:**
+- [ ] ✅ Have I checked if `target/pandora/pandora.json` exists?
+- [ ] ✅ Have I checked if `.claude/pandora/api-usage.json` exists?
+- [ ] ✅ If files missing, have I invoked Pandora skill: `Skill(skill="pandora")`?
+- [ ] ✅ Have I verified files were generated successfully?
+- [ ] ✅ Have I read `target/pandora/pandora.json` line by line?
 - [ ] ✅ Have I read `.claude/pandora/api-usage.json` line by line?
+
+**Code Validation:**
 - [ ] ✅ Have I validated ALL import statements against api-usage.json?
 - [ ] ✅ Have I validated ALL annotation attributes against api-usage.json?
 - [ ] ✅ Have I checked the EXACT method signatures in api-usage.json?
@@ -486,6 +476,7 @@ For each framework method call:
 
 | Priority | Layer | Files | Purpose |
 | --- | --- | --- | --- |
+| **🔴 STEP 0.0** | **Pandora Verification** | **`target/pandora/pandora.json`<br>`.claude/pandora/api-usage.json`** | **🔴 VERIFY EXISTS - If missing, invoke Pandora skill to generate** |
 | **🔴 PHASE 0** | **Project Structure** | **`pom.xml`** | **🔴 BASE PACKAGE DETECTION - Extract groupId for package path** |
 | **🔴 ABSOLUTE** | **Framework Ontology** | **`target/pandora/pandora.json`** | **🔴 PRIMARY SOURCE OF TRUTH - Framework contracts, interfaces, annotations** |
 | **🔴 ABSOLUTE** | **Usage Intelligence** | **`.claude/pandora/api-usage.json`** | **🔴 PRIMARY SOURCE OF TRUTH - Execution patterns, code examples** |
@@ -501,13 +492,14 @@ For each framework method call:
 | | | `.claude/skills/api-automation-decision-rules/SKILL.md` | API automation decision rules |
 
 **🔴 CRITICAL Priority Rule (MUST FOLLOW):**
-`pom.xml (PHASE 0 - FIRST) > pandora.json & api-usage.json (ABSOLUTE) > Local CLAUDE.md > App Knowledge > API Spec > Global instructions`
+`STEP 0.0 (Verify/Generate Pandora) > pom.xml (PHASE 0) > pandora.json & api-usage.json (ABSOLUTE) > Local CLAUDE.md > App Knowledge > API Spec > Global instructions`
 
 **⚠️ MANDATORY Execution Sequence:**
-1. **PHASE 0 (FIRST):** Read `pom.xml` → Detect BASE_PACKAGE_PATH from `<groupId>`
-2. **ABSOLUTE:** Read Pandora files → Framework contracts & execution patterns
-3. **HIGH:** Read business/API contracts → Understand what to build
-4. **MEDIUM/LOW:** Read framework instructions & coding standards
+1. **STEP 0.0 (ABSOLUTE FIRST):** Verify pandora files exist → If missing, invoke Pandora skill
+2. **PHASE 0 (SECOND):** Read `pom.xml` → Detect BASE_PACKAGE_PATH from `<groupId>`
+3. **ABSOLUTE:** Read Pandora files → Framework contracts & execution patterns
+4. **HIGH:** Read business/API contracts → Understand what to build
+5. **MEDIUM/LOW:** Read framework instructions & coding standards
 
 ### CLAUDE.md Hierarchy: Context-Specific Guidance
 
@@ -560,7 +552,7 @@ Example: When generating API endpoints:
 
 **Example Workflow:**
 ```
-Task: Generate new API endpoint UserEndpoints.java
+Task: Generate new API endpoint AppEndpoints.java
 
 Step 1: Read CLAUDE.md (root)
 → Learn: Endpoints go in src/main/java/{package}/api/endpoints/
@@ -569,11 +561,11 @@ Step 2: Read api/CLAUDE.md
 → Learn: API module uses Endpoint<T> interface, Method enums
 
 Step 3: Read api/endpoints/CLAUDE.md
-→ Learn: Endpoint naming (CREATE_USER, GET_USER, etc.)
+→ Learn: Endpoint naming (POST_CREATE_USER, GET_USER, etc.)
 → Learn: How to implement enumImpl() method
 → Learn: Example endpoint with defaultConfiguration()
 
-Step 4: Generate UserEndpoints.java
+Step 4: Generate AppEndpoints.java
 → Follow patterns from api/endpoints/CLAUDE.md
 → Use naming convention from subfolder CLAUDE.md
 → Result: Consistent with existing endpoints
@@ -585,6 +577,12 @@ Step 4: Generate UserEndpoints.java
 - **Subfolder has ABSOLUTE OVERRIDE** = Context-specific patterns trump generic guidance
 
 ### Execution Lifecycle
+
+**Phase 0: Pandora Verification (ABSOLUTE FIRST - NO CODE GENERATION UNTIL COMPLETE)**
+
+| Step | Action | File | Rule |
+|------|--------|------|------|
+| 0.0 | Verify pandora files exist | `target/pandora/pandora.json`<br>`.claude/pandora/api-usage.json` | If missing, invoke Pandora skill |
 
 **Phase 1: Knowledge Load (MANDATORY - NO CODE GENERATION UNTIL COMPLETE)**
 
@@ -645,7 +643,54 @@ Use scaffolding mode when:
 
 ### Scaffolding Workflow (Step-by-Step)
 
-#### Phase 0: Project Structure Detection (MANDATORY FIRST STEP)
+#### Step 0.0: Verify/Generate Pandora Files (ABSOLUTE FIRST STEP)
+
+**🔴 CRITICAL: Ensure pandora files exist BEFORE any other operation.**
+
+**Pandora File Verification Steps (EXECUTE FIRST):**
+
+```
+🔴 STEP 0.0.1: Check if target/pandora/pandora.json exists
+- Use Bash tool: ls target/pandora/pandora.json
+- If file not found → Proceed to Step 0.0.2
+- If file exists → Proceed to Phase 0
+
+🔴 STEP 0.0.2: Check if .claude/pandora/api-usage.json exists
+- Use Bash tool: ls .claude/pandora/api-usage.json
+- If file not found → Proceed to Step 0.0.3
+- If file exists → Proceed to Phase 0
+
+🔴 STEP 0.0.3: Invoke Pandora Skill to Generate Missing Files
+- Use Skill tool: Skill(skill="pandora")
+- Pandora skill will:
+  1. Scan project for ROA framework dependencies
+  2. Generate target/pandora/pandora.json
+  3. Generate .claude/pandora/api-usage.json
+  4. Return confirmation with file paths
+
+🔴 STEP 0.0.4: Verify Files Were Generated
+- Check target/pandora/pandora.json exists
+- Check .claude/pandora/api-usage.json exists
+- If files missing, report error and STOP
+- If files exist, proceed to Phase 0
+```
+
+**Error Handling:**
+```
+IF pandora skill fails:
+  ↓
+  Report: "Unable to generate pandora files. Ensure ROA framework dependencies are configured in pom.xml"
+  ↓
+  STOP - Do not proceed without pandora files
+
+IF project has no ROA dependencies:
+  ↓
+  Report: "This project does not have ROA framework configured"
+  ↓
+  STOP - Cannot generate ROA tests without framework
+```
+
+#### Phase 0: Project Structure Detection (MANDATORY SECOND STEP)
 
 **🔴 CRITICAL: Detect existing project structure BEFORE generating ANY code.**
 
@@ -688,10 +733,10 @@ Before proceeding to Phase 1:
 
 **Example Correct Structure:**
 ```
-✅ CORRECT: src/main/java/io/cyborgcode/roa/example/project/api/endpoints/UserEndpoints.java
+✅ CORRECT: src/main/java/io/cyborgcode/roa/example/project/api/endpoints/AppEndpoints.java
            package io.cyborgcode.roa.example.project.api.endpoints;
 
-❌ WRONG: src/main/java/api/endpoints/UserEndpoints.java
+❌ WRONG: src/main/java/api/endpoints/AppEndpoints.java
           package api.endpoints;  // Invalid - not following Java conventions
 ```
 
@@ -699,12 +744,19 @@ Before proceeding to Phase 1:
 
 **🔴 CRITICAL: Read ALL intelligence sources in EXACT ORDER below before generating ANY code.**
 
+**Prerequisites:**
+- ✅ Step 0.0 completed: Pandora files verified/generated
+- ✅ Phase 0 completed: Project structure detected
+- ✅ Ready to load framework contracts and patterns
+
 **Reading Order (MANDATORY):**
 
 ```
 🔴 STEP 1 (ABSOLUTE PRIORITY): Read Pandora Framework Contracts
 1. Read target/pandora/pandora.json (framework ontology, interfaces, annotations, contracts)
+   - REQUIRED: Must exist (generated in Step 0.0 if missing)
 2. Read .claude/pandora/api-usage.json (execution patterns, code examples, usage analytics)
+   - REQUIRED: Must exist (generated in Step 0.0 if missing)
 
 🔴 STEP 2 (HIGH PRIORITY): Read Business & API Contracts
 3. Read app-knowledge.yaml (business flows, scenarios, domain logic)
@@ -776,7 +828,8 @@ src/
 │   │           │   │   └── <Model>Response.java
 │   │           │   └── CLAUDE.md
 │   │           ├── authentication/
-│   │           │   ├── <Role>ApiCredentials.java     # Credentials classes
+│   │           │   ├── AdminAuth.java                 # Credentials implementation
+│   │           │   ├── AppAuth.java                   # Authentication client
 │   │           │   └── CLAUDE.md
 │   │           └── service/
 │   │               ├── <Business>ApiService.java     # Custom service rings
@@ -803,7 +856,7 @@ src/
 
 **Java Package Declarations (must match directory structure):**
 ```java
-// File: src/main/java/io/cyborgcode/roa/example/project/api/endpoints/UserEndpoints.java
+// File: src/main/java/io/cyborgcode/roa/example/project/api/endpoints/AppEndpoints.java
 package io.cyborgcode.roa.example.project.api.endpoints;  // ✅ Correct
 
 // File: src/main/java/io/cyborgcode/roa/example/project/common/base/Rings.java
@@ -849,7 +902,7 @@ Each subfolder MUST have a `CLAUDE.md` file with context-specific guidance:
     "/api/users": {
       "post": {
         "operationId": "createUser",
-        "requestBody": { "$ref": "#/components/schemas/UserRequest" }
+        "requestBody": { "$ref": "#/components/schemas/CreateUserDto" }
       }
     },
     "/api/users/{userId}": {
@@ -864,13 +917,42 @@ Each subfolder MUST have a `CLAUDE.md` file with context-specific guidance:
 
 **Generated Endpoint Enum:**
 ```java
-public enum UserEndpoints implements Endpoint<UserEndpoints> {
-    CREATE_USER(Method.POST, "/api/users"),
-    GET_USER(Method.GET, "/api/users/{userId}"),
-    UPDATE_USER(Method.PUT, "/api/users/{userId}"),
-    DELETE_USER(Method.DELETE, "/api/users/{userId}");
+public enum AppEndpoints implements Endpoint<AppEndpoints> {
+    POST_CREATE_USER(Method.POST, "/users"),
+    GET_USER(Method.GET, "/users/{id}"),
+    PUT_UPDATE_USER(Method.PUT, "/users/{id}"),
+    DELETE_USER(Method.DELETE, "/users/{id}");
 
-    // Standard implementation (see Endpoint Definition Pattern section)
+    private final Method method;
+    private final String url;
+
+    AppEndpoints(final Method method, final String url) {
+        this.method = method;
+        this.url = url;
+    }
+
+    @Override
+    public Method method() {
+        return method;
+    }
+
+    @Override
+    public String url() {
+        return url;
+    }
+
+    @Override
+    public AppEndpoints enumImpl() {
+        return this;
+    }
+
+    @Override
+    public RequestSpecification defaultConfiguration() {
+        RequestSpecification spec = Endpoint.super.defaultConfiguration();
+        spec.contentType(ContentType.JSON);
+        spec.header("X-API-Key", "your-api-key");
+        return spec;
+    }
 }
 ```
 
@@ -890,12 +972,11 @@ public enum UserEndpoints implements Endpoint<UserEndpoints> {
 {
   "components": {
     "schemas": {
-      "UserRequest": {
+      "CreateUserDto": {
         "type": "object",
         "properties": {
-          "username": {"type": "string"},
-          "email": {"type": "string"},
-          "age": {"type": "integer"}
+          "name": {"type": "string"},
+          "job": {"type": "string"}
         }
       }
     }
@@ -909,10 +990,9 @@ public enum UserEndpoints implements Endpoint<UserEndpoints> {
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequest {
-    private String username;
-    private String email;
-    private Integer age;
+public class CreateUserDto {
+    private String name;
+    private String job;
 }
 ```
 
@@ -939,36 +1019,37 @@ workflows:
 **Generated Custom Service Ring:**
 ```java
 @Ring("UserOnboarding")
-public class UserOnboardingApiService extends ApiServiceFluent {
+public class UserOnboardingApiService extends FluentService {
 
-    public UserOnboardingApiService(Quest quest) {
-        super(quest);
-    }
-
-    public UserOnboardingApiService registerAccount(UserRequest user) {
-        request(UserEndpoints.CREATE_USER, user);
+    public UserOnboardingApiService registerAccount(CreateUserDto user) {
+        quest.use(RING_OF_API)
+            .request(AppEndpoints.POST_REGISTER, user);
         return this;
     }
 
     public UserOnboardingApiService verifyEmail(String token) {
-        request(UserEndpoints.VERIFY_EMAIL, Map.of("token", token));
+        quest.use(RING_OF_API)
+            .request(AppEndpoints.POST_VERIFY_EMAIL.withQueryParam("token", token));
         return this;
     }
 
     public UserOnboardingApiService activateAccount() {
-        request(UserEndpoints.ACTIVATE_ACCOUNT);
+        quest.use(RING_OF_API)
+            .request(AppEndpoints.POST_ACTIVATE_ACCOUNT);
         return this;
     }
 
     public UserOnboardingApiService validateUserActive() {
-        validateResponse(
-            retrieveResponse(UserEndpoints.ACTIVATE_ACCOUNT),
-            Assertion.builder()
-                .target(BODY)
-                .type(IS)
-                .expected("$.status", "ACTIVE")
-                .build()
-        );
+        quest.use(RING_OF_API)
+            .requestAndValidate(
+                AppEndpoints.POST_ACTIVATE_ACCOUNT,
+                Assertion.builder()
+                    .target(BODY)
+                    .key("status")
+                    .type(IS)
+                    .expected("ACTIVE")
+                    .build()
+            );
         return this;
     }
 }
@@ -979,40 +1060,65 @@ public class UserOnboardingApiService extends ApiServiceFluent {
 **Create reusable preconditions from app-knowledge.yaml:**
 
 ```java
-@UtilityClass
-public class Preconditions {
+public enum Preconditions implements PreQuestJourney<Preconditions> {
 
-    public enum Data {
-        SYSTEM_READY,
-        CREATE_TEST_USER,
-        AUTHENTICATE_AS_ADMIN,
-        NAVIGATE_TO_USER_MANAGEMENT;
+    SYSTEM_READY(PreconditionFunctions::systemReady),
+    CREATE_TEST_USER(PreconditionFunctions::createTestUser),
+    AUTHENTICATE_AS_ADMIN(PreconditionFunctions::authenticateAsAdmin);
 
-        @Override
-        public String toString() {
-            return name();
-        }
+    public static final class Data {
+        private Data() {}
+
+        public static final String SYSTEM_READY = "SYSTEM_READY";
+        public static final String CREATE_TEST_USER = "CREATE_TEST_USER";
+        public static final String AUTHENTICATE_AS_ADMIN = "AUTHENTICATE_AS_ADMIN";
+    }
+
+    private final BiConsumer<SuperQuest, Object[]> function;
+
+    Preconditions(final BiConsumer<SuperQuest, Object[]> function) {
+        this.function = function;
+    }
+
+    @Override
+    public BiConsumer<SuperQuest, Object[]> journey() {
+        return function;
+    }
+
+    @Override
+    public Preconditions enumImpl() {
+        return this;
     }
 }
 ```
 
-**Journey Implementation:**
+**PreconditionFunctions.java (Journey Implementations):**
 ```java
-public class CreateTestUserJourney implements PreQuestJourney {
+public final class PreconditionFunctions {
 
-    @Override
-    public void run(Quest quest, Object... args) {
-        UserRequest testUser = args.length > 0 ? (UserRequest) args[0] : createDefaultUser();
+    private PreconditionFunctions() {}
+
+    public static void createTestUser(SuperQuest quest, Object... args) {
+        CreateUserDto testUser = args.length > 0
+            ? (CreateUserDto) args[0]
+            : createDefaultUser();
 
         quest.use(RING_OF_API)
-            .request(UserEndpoints.CREATE_USER, testUser)
+            .request(AppEndpoints.POST_CREATE_USER, testUser)
             .complete();
     }
 
-    private UserRequest createDefaultUser() {
-        return UserRequest.builder()
-            .username("testuser_" + System.currentTimeMillis())
-            .email("test@example.com")
+    public static void setupEnvironment(SuperQuest quest, Object... args) {
+        // Setup environment preconditions
+        quest.use(RING_OF_API)
+            .request(AppEndpoints.SETUP_ENVIRONMENT)
+            .complete();
+    }
+
+    private static CreateUserDto createDefaultUser() {
+        return CreateUserDto.builder()
+            .name("testuser_" + System.currentTimeMillis())
+            .job("Tester")
             .build();
     }
 }
@@ -1021,35 +1127,62 @@ public class CreateTestUserJourney implements PreQuestJourney {
 #### Phase 7: Generate DataCreator (Craft Models)
 
 ```java
-@UtilityClass
-public class DataCreator {
+public enum DataCreator implements DataForge<DataCreator> {
 
-    public enum Data {
-        NEW_USER,
-        ADMIN_USER,
-        USER_WITH_ROLES;
+    NEW_USER(DataCreatorFunctions::newUser),
+    ADMIN_USER(DataCreatorFunctions::adminUser),
+    USER_WITH_ROLES(DataCreatorFunctions::userWithRoles);
 
-        @Override
-        public String toString() {
-            return name();
-        }
+    public static final class Data {
+        private Data() {}
+
+        public static final String NEW_USER = "NEW_USER";
+        public static final String ADMIN_USER = "ADMIN_USER";
+        public static final String USER_WITH_ROLES = "USER_WITH_ROLES";
     }
 
-    @Craft(DataCreator.Data.NEW_USER)
-    public static UserRequest newUser() {
-        return UserRequest.builder()
-            .username("user_" + UUID.randomUUID().toString().substring(0, 8))
-            .email("user_" + System.currentTimeMillis() + "@test.com")
-            .age(25)
+    private final Late<Object> createDataFunction;
+
+    DataCreator(final Late<Object> createDataFunction) {
+        this.createDataFunction = createDataFunction;
+    }
+
+    @Override
+    public Late<Object> dataCreator() {
+        return createDataFunction;
+    }
+
+    @Override
+    public DataCreator enumImpl() {
+        return this;
+    }
+}
+```
+
+**DataCreatorFunctions.java (Factory Methods):**
+```java
+public final class DataCreatorFunctions {
+
+    private DataCreatorFunctions() {}
+
+    public static CreateUserDto newUser() {
+        return CreateUserDto.builder()
+            .name("user_" + UUID.randomUUID().toString().substring(0, 8))
+            .job("Engineer")
             .build();
     }
 
-    @Craft(DataCreator.Data.ADMIN_USER)
-    public static UserRequest adminUser() {
-        return UserRequest.builder()
-            .username("admin_" + UUID.randomUUID().toString().substring(0, 8))
-            .email("admin@test.com")
-            .role("ADMIN")
+    public static CreateUserDto adminUser() {
+        return CreateUserDto.builder()
+            .name("admin_" + UUID.randomUUID().toString().substring(0, 8))
+            .job("Administrator")
+            .build();
+    }
+
+    public static CreateUserDto userWithRoles() {
+        return CreateUserDto.builder()
+            .name("roleuser_" + System.currentTimeMillis())
+            .job("Manager")
             .build();
     }
 }
@@ -1058,27 +1191,92 @@ public class DataCreator {
 #### Phase 8: Generate DataCleaner (Ripper Targets)
 
 ```java
-@UtilityClass
-public class DataCleaner {
+public enum DataCleaner implements DataRipper<DataCleaner> {
 
-    public enum Data {
-        DELETE_TEST_USER,
-        CLEANUP_ALL_TEST_DATA;
+    DELETE_TEST_USER(DataCleanerFunctions::deleteTestUser),
+    CLEANUP_ALL_TEST_DATA(DataCleanerFunctions::cleanupAllData);
 
-        @Override
-        public String toString() {
-            return name();
-        }
+    public static final class Data {
+        private Data() {}
+
+        public static final String DELETE_TEST_USER = "DELETE_TEST_USER";
+        public static final String CLEANUP_ALL_TEST_DATA = "CLEANUP_ALL_TEST_DATA";
     }
 
-    @Ripper(DataCleaner.Data.DELETE_TEST_USER)
-    public static void deleteTestUser(Quest quest) {
+    private final Consumer<SuperQuest> cleanUpFunction;
+
+    DataCleaner(final Consumer<SuperQuest> cleanUpFunction) {
+        this.cleanUpFunction = cleanUpFunction;
+    }
+
+    @Override
+    public Consumer<SuperQuest> eliminate() {
+        return cleanUpFunction;
+    }
+
+    @Override
+    public DataCleaner enumImpl() {
+        return this;
+    }
+}
+```
+
+**DataCleanerFunctions.java (Cleanup Methods):**
+```java
+public final class DataCleanerFunctions {
+
+    private DataCleanerFunctions() {}
+
+    public static void deleteTestUser(SuperQuest quest) {
         // Extract userId from storage (saved during test execution)
-        String userId = quest.storage().retrieve("userId");
+        String userId = quest.getStorage()
+            .sub(StorageKeysApi.API)
+            .get("userId", String.class);
 
         quest.use(RING_OF_API)
-            .request(UserEndpoints.DELETE_USER, Map.of("userId", userId))
+            .request(AppEndpoints.DELETE_USER.withPathParam("id", userId))
             .complete();
+    }
+
+    public static void cleanupAllData(SuperQuest quest) {
+        // Cleanup logic for all test data
+        quest.use(RING_OF_API)
+            .request(AppEndpoints.DELETE_ALL_TEST_DATA)
+            .complete();
+    }
+}
+```
+
+#### Phase 8.5: Generate Authentication Classes
+
+**AdminAuth.java (Credentials):**
+```java
+public class AdminAuth implements Credentials {
+
+    @Override
+    public String username() {
+        return Data.testData().username();
+    }
+
+    @Override
+    public String password() {
+        return Data.testData().password();
+    }
+}
+```
+
+**AppAuth.java (Authentication Client):**
+```java
+public class AppAuth extends BaseAuthenticationClient {
+
+    @Override
+    protected Header authenticateImpl(final RestService restService, final String username, final String password) {
+        String token = restService
+            .request(AppEndpoints.POST_LOGIN_USER, new LoginDto(username, password))
+            .getBody()
+            .jsonPath()
+            .getString("token");
+        return new Header("Authorization", "Bearer " + token);
     }
 }
 ```
@@ -1094,6 +1292,23 @@ public class DataCleaner {
 - Service ring switching (RING_OF_API ↔ RING_OF_CUSTOM)
 - Complex data filtering with soft assertions
 - DO's and DON'Ts for all framework patterns
+
+**Pattern Selection Guide:**
+
+When choosing between request patterns, follow these guidelines:
+
+**Use `requestAndValidate()` when:**
+- Validations are simple and can be defined inline
+- You don't need to extract or store response data
+- Single-step request with immediate assertion
+- Example: Simple GET with status/body validation
+
+**Use `request() + validate()` when:**
+- You need to extract data from response for later use
+- Complex validations require JUnit assertions
+- Response data feeds into subsequent requests
+- Multi-step workflows with data dependencies
+- Example: Create user, extract ID, use in next request
 
 **Key Test Generation Patterns (from api-test-examples.md):**
 ```java
@@ -1113,7 +1328,41 @@ quest.use(RING_OF_API)
     })
     .complete();
 
-// Pattern 3: Full lifecycle with Auth + Journey + Ripper
+// Pattern 3: Storage retrieval (two-step pattern)
+// Step 1: Retrieve Response object from storage
+Response loginResponse = quest.getStorage()
+    .sub(StorageKeysApi.API)
+    .get(AppEndpoints.POST_LOGIN_USER, Response.class);
+
+// Step 2: Extract data from response
+String token = loginResponse.getBody()
+    .jsonPath()
+    .getString("token");
+
+// Pattern 4: Chained requests (response from step 1 feeds step 2)
+quest.use(RING_OF_API)
+    .request(AppEndpoints.POST_CREATE_USER, user)         // Step 1: Create user
+    .request(AppEndpoints.GET_USER.withPathParam("id",    // Step 2: Get created user
+        quest.getStorage()
+            .sub(StorageKeysApi.API)
+            .get(AppEndpoints.POST_CREATE_USER, Response.class)
+            .getBody().jsonPath().getString("id")))
+    .complete();
+
+// Pattern 5: Eager @Craft vs Lazy Late<@Craft>
+// Eager: Model instantiated immediately when test starts
+@Craft(model = DataCreator.Data.USER) CreateUserDto user
+
+// Lazy: Model instantiated only when create() is called
+@Craft(model = DataCreator.Data.USER) Late<CreateUserDto> lateUser
+
+// Usage in test:
+quest.use(RING_OF_API)
+    .requestAndValidate(POST_CREATE_USER, user)           // Eager - already created
+    .requestAndValidate(POST_CREATE_USER, lateUser.create())  // Lazy - created here
+    .complete();
+
+// Pattern 6: Full lifecycle with Auth + Journey + Ripper
 @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
 @Journey(value = Preconditions.Data.SETUP, journeyData = @JourneyData(DataCreator.Data.MODEL))
 @Ripper(targets = {DataCleaner.Data.CLEANUP})
@@ -1140,7 +1389,15 @@ public class Rings {
 
 **Before declaring framework complete, verify ALL items:**
 
-**🔴 Phase 0: Project Structure Detection (MANDATORY FIRST STEP)**
+**🔴 Step 0.0: Pandora Files Verification/Generation (ABSOLUTE FIRST STEP)**
+- [ ] ✅ Checked if `target/pandora/pandora.json` exists
+- [ ] ✅ Checked if `.claude/pandora/api-usage.json` exists
+- [ ] ✅ If missing, invoked Pandora skill: `Skill(skill="pandora")`
+- [ ] ✅ Verified both pandora files generated successfully
+- [ ] ✅ Verified files are not empty
+- [ ] ✅ ZERO code generation attempted before pandora files exist
+
+**🔴 Phase 0: Project Structure Detection (MANDATORY SECOND STEP)**
 - [ ] ✅ Read `pom.xml` and extracted `<groupId>` as BASE_PACKAGE_PATH
 - [ ] ✅ Explored existing `src/main/java/` structure
 - [ ] ✅ Detected existing package path (e.g., `io/cyborgcode/roa/example/project/`)
@@ -1291,25 +1548,30 @@ workflows:
 **Generated Custom Service Ring:**
 ```java
 @Ring("PurchaseFlow")
-public class PurchaseFlowApiService extends ApiServiceFluent {
+public class PurchaseFlowApiService extends FluentService {
 
-    public PurchaseFlowApiService(Quest quest) {
-        super(quest);
-    }
-
-    public PurchaseFlowApiService registerAndLoginUser(UserRequest user) {
+    public PurchaseFlowApiService registerAndLoginUser(CreateUserDto user) {
         // Registration
-        request(UserEndpoints.REGISTER, user);
-        String userId = extractFromResponse(UserEndpoints.REGISTER, "$.userId");
-        quest.storage().store("userId", userId);
+        quest.use(RING_OF_API)
+            .request(AppEndpoints.POST_REGISTER, user);
+
+        String userId = quest.getStorage()
+            .sub(StorageKeysApi.API)
+            .get(AppEndpoints.POST_REGISTER, Response.class)
+            .getBody()
+            .jsonPath()
+            .getString("userId");
 
         // Login
-        request(AuthEndpoints.LOGIN, Map.of(
-            "username", user.getUsername(),
-            "password", user.getPassword()
-        ));
-        String authToken = extractFromResponse(AuthEndpoints.LOGIN, "$.token");
-        quest.storage().store("authToken", authToken);
+        quest.use(RING_OF_API)
+            .request(AppEndpoints.POST_LOGIN_USER, new LoginDto(user.getEmail(), user.getPassword()));
+
+        String authToken = quest.getStorage()
+            .sub(StorageKeysApi.API)
+            .get(AppEndpoints.POST_LOGIN_USER, Response.class)
+            .getBody()
+            .jsonPath()
+            .getString("token");
 
         return this;
     }
@@ -1328,34 +1590,37 @@ public class PurchaseFlowApiService extends ApiServiceFluent {
     }
 
     public PurchaseFlowApiService checkout(PaymentRequest payment) {
-        request(OrderEndpoints.CHECKOUT, payment);
-        String orderId = extractFromResponse(OrderEndpoints.CHECKOUT, "$.orderId");
-        quest.storage().store("orderId", orderId);
+        quest.use(RING_OF_API)
+            .request(AppEndpoints.POST_CHECKOUT, payment);
         return this;
     }
 
     public PurchaseFlowApiService validateOrderCompleted() {
-        String orderId = quest.storage().retrieve("orderId");
+        String orderId = quest.getStorage()
+            .sub(StorageKeysApi.API)
+            .get(AppEndpoints.POST_CHECKOUT, Response.class)
+            .getBody()
+            .jsonPath()
+            .getString("orderId");
 
-        validateResponse(
-            retrieveResponse(OrderEndpoints.CHECKOUT),
-            Assertion.builder()
-                .target(BODY)
-                .type(IS)
-                .expected("$.status", "COMPLETED")
-                .build()
-        );
-
-        // Verify order exists in system
-        request(OrderEndpoints.GET_ORDER, Map.of("orderId", orderId));
-        validateResponse(
-            OrderEndpoints.GET_ORDER,
-            Assertion.builder()
-                .target(STATUS)
-                .type(IS)
-                .expected(SC_OK)
-                .build()
-        );
+        quest.use(RING_OF_API)
+            .requestAndValidate(
+                AppEndpoints.POST_CHECKOUT,
+                Assertion.builder()
+                    .target(BODY)
+                    .key("status")
+                    .type(IS)
+                    .expected("COMPLETED")
+                    .build()
+            )
+            .requestAndValidate(
+                AppEndpoints.GET_ORDER.withPathParam("orderId", orderId),
+                Assertion.builder()
+                    .target(STATUS)
+                    .type(IS)
+                    .expected(SC_OK)
+                    .build()
+            );
 
         return this;
     }
@@ -1371,10 +1636,10 @@ class PurchaseFlowApiTest extends BaseQuest {
     @Test
     @DisplayName("Complete purchase flow - all steps succeed")
     @Journey(Preconditions.Data.PRODUCTS_EXIST)
-    @Ripper(DataCleaner.Data.DELETE_TEST_ORDER_AND_USER)
+    @Ripper(targets = {DataCleaner.Data.DELETE_TEST_ORDER_AND_USER})
     void completePurchaseFlow_allSteps_success(
         Quest quest,
-        @Craft(model = DataCreator.Data.NEW_USER) UserRequest user,
+        @Craft(model = DataCreator.Data.NEW_USER) CreateUserDto user,
         @Craft(model = DataCreator.Data.PAYMENT_INFO) PaymentRequest payment
     ) {
         quest
@@ -1392,9 +1657,10 @@ class PurchaseFlowApiTest extends BaseQuest {
     @DisplayName("Purchase with invalid coupon - checkout fails")
     @Journey(Preconditions.Data.PRODUCTS_EXIST)
     @Journey(value = Preconditions.Data.USER_LOGGED_IN, order = 2)
+    @Ripper(targets = {DataCleaner.Data.CLEANUP_TEST_DATA})
     void purchaseWithInvalidCoupon_checkoutFails(
         Quest quest,
-        @Craft(model = DataCreator.Data.PAYMENT_INFO) PaymentRequest payment
+        @Craft(model = DataCreator.Data.PAYMENT_INFO) PaymentDto payment
     ) {
         quest
             .use(RING_OF_PURCHASE_FLOW)
@@ -1428,18 +1694,23 @@ class OrderProcessingIntegrationTest extends BaseQuest {
     @Test
     @DisplayName("Order creation - persists correctly in database")
     @Journey(Preconditions.Data.USER_LOGGED_IN)
-    @Ripper(DataCleaner.Data.DELETE_TEST_ORDER)
+    @Ripper(targets = {DataCleaner.Data.DELETE_TEST_ORDER})
     void orderCreation_persistsInDatabase(
         Quest quest,
-        @Craft(model = DataCreator.Data.ORDER_DATA) OrderRequest order
+        @Craft(model = DataCreator.Data.ORDER_DATA) CreateOrderDto order
     ) {
         // Create order via API
         quest
             .use(RING_OF_API)
-            .request(OrderEndpoints.CREATE_ORDER, order)
+            .request(AppEndpoints.POST_CREATE_ORDER, order)
             .complete();
 
-        String orderId = quest.storage().retrieve("orderId");
+        String orderId = quest.getStorage()
+            .sub(StorageKeysApi.API)
+            .get(AppEndpoints.POST_CREATE_ORDER, Response.class)
+            .getBody()
+            .jsonPath()
+            .getString("orderId");
 
         // Validate in database
         quest
@@ -1528,20 +1799,34 @@ class OrderProcessingIntegrationTest extends BaseQuest {
 
 ```java
 @API
-@DisplayName("User onboarding flow")
-class UserOnboardingApiTest extends BaseQuest {
+@DisplayName("User management flow")
+class UserManagementApiTest extends BaseQuest {
 
     @Test
-    @Journey(Preconditions.Data.SYSTEM_READY)
-    @Ripper(DataCleaner.Data.DELETE_TEST_USER)
-    void user_onboarding_success(
+    @Journey(Preconditions.Data.CREATE_TEST_USER)
+    @Ripper(targets = {DataCleaner.Data.DELETE_TEST_USER})
+    void createAndValidateUser_success(
         Quest quest,
-        @Craft(model = DataCreator.Data.NEW_USER) NewUserRequest user
+        @Craft(model = DataCreator.Data.NEW_USER) CreateUserDto user
     ) {
         quest
-            .use(RING_OF_ONBOARDING_API)
-            .onboardUser(user)
-            .validateOnboardingSuccess()
+            .use(RING_OF_API)
+            .requestAndValidate(
+                AppEndpoints.POST_CREATE_USER,
+                user,
+                Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
+                Assertion.builder().target(BODY).key("name").type(IS).expected(user.getName()).build()
+            )
+            .complete();
+    }
+
+    @Test
+    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
+    @Journey(Preconditions.Data.SYSTEM_READY)
+    void getAllUsers_authenticated_success(Quest quest) {
+        quest
+            .use(RING_OF_CUSTOM)
+            .requestAndValidateGetAllUsers()
             .complete();
     }
 }
@@ -1554,16 +1839,16 @@ class UserOnboardingApiTest extends BaseQuest {
 **All API endpoints MUST implement the `Endpoint<T>` interface.**
 
 ```java
-public enum UserEndpoints implements Endpoint<UserEndpoints> {
+public enum AppEndpoints implements Endpoint<AppEndpoints> {
     POST_REGISTER(Method.POST, "/api/register"),
     POST_VERIFY_EMAIL(Method.POST, "/api/verify-email"),
     POST_ACTIVATE_ACCOUNT(Method.POST, "/api/activate"),
-    GET_USER(Method.GET, "/api/users/{userId}");
+    GET_USER(Method.GET, "/api/users/{id}");
 
     private final Method method;
     private final String url;
 
-    UserEndpoints(Method method, String url) {
+    AppEndpoints(final Method method, final String url) {
         this.method = method;
         this.url = url;
     }
@@ -1579,25 +1864,16 @@ public enum UserEndpoints implements Endpoint<UserEndpoints> {
     }
 
     @Override
-    public Enum<?> enumImpl() {
-        return this;  // CRITICAL: Must return this
+    public AppEndpoints enumImpl() {
+        return this;  // CRITICAL: Must return this (returns enum type, not Enum<?>)
     }
 
     @Override
-    public RequestSpecification defaultConfiguration(RequestSpecification spec) {
-        return spec
-            .contentType(ContentType.JSON)
-            .baseUri(getApiConfig().baseUrl())
-            .header("Accept", "application/json");
-    }
-
-    // Nested Data class for @Craft/@Journey/@Ripper references
-    public static final class Data {
-        public static final String POST_REGISTER = "POST_REGISTER";
-        public static final String POST_VERIFY_EMAIL = "POST_VERIFY_EMAIL";
-        public static final String POST_ACTIVATE_ACCOUNT = "POST_ACTIVATE_ACCOUNT";
-        public static final String GET_USER = "GET_USER";
-        private Data() {}
+    public RequestSpecification defaultConfiguration() {
+        RequestSpecification spec = Endpoint.super.defaultConfiguration();
+        spec.contentType(ContentType.JSON);
+        spec.header("Accept", "application/json");
+        return spec;
     }
 }
 ```
@@ -1615,39 +1891,36 @@ public enum UserEndpoints implements Endpoint<UserEndpoints> {
 ## 🔁 Custom Business API Service Ring Example
 
 ```java
-@Ring("OnboardingApi")
-public class OnboardingApiService extends ApiServiceFluent {
+@Ring("Custom")
+public class CustomService extends FluentService {
 
-    public OnboardingApiService(Quest quest) {
-        super(quest);
-    }
-
-    public OnboardingApiService onboardUser(NewUserRequest user) {
-        // Multi-step onboarding workflow
-        request(UserEndpoints.POST_REGISTER, user);
-        request(UserEndpoints.POST_VERIFY_EMAIL);
-        request(UserEndpoints.POST_ACTIVATE_ACCOUNT);
+    public CustomService loginUserAndAddHeader(LoginDto loginDto) {
+        quest.use(RING_OF_API)
+            .request(AppEndpoints.POST_LOGIN_USER, loginDto)
+            .requestAndValidate(
+                AppEndpoints.GET_USER
+                    .withPathParam("id", "3")
+                    .withHeader("X-Auth-Token", quest.getStorage()
+                        .sub(StorageKeysApi.API)
+                        .get(AppEndpoints.POST_LOGIN_USER, Response.class)
+                        .getBody()
+                        .jsonPath()
+                        .getString("token")),
+                Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
+            );
         return this;
     }
 
-    public OnboardingApiService validateOnboardingSuccess() {
-        validateResponse(
-            retrieveResponse(UserEndpoints.POST_ACTIVATE_ACCOUNT),
-            Assertion.builder()
-                .target(STATUS)
-                .type(IS)
-                .expected(SC_OK)
-                .build()
-        );
-
-        validateResponse(
-            retrieveResponse(UserEndpoints.POST_ACTIVATE_ACCOUNT),
-            Assertion.builder()
-                .target(BODY)
-                .type(IS)
-                .expected("$.status", "ACTIVE")
-                .build()
-        );
+    public CustomService requestAndValidateGetAllUsers() {
+        quest.use(RING_OF_API)
+            .requestAndValidate(
+                AppEndpoints.GET_ALL_USERS.withQueryParam("page", "2"),
+                Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
+                Assertion.builder().target(HEADER).key(CONTENT_TYPE)
+                    .type(CONTAINS).expected(ContentType.JSON.toString()).build(),
+                Assertion.builder().target(BODY).key("total")
+                    .type(GREATER_THAN).expected(1).build()
+            );
         return this;
     }
 }
@@ -1658,7 +1931,7 @@ public class OnboardingApiService extends ApiServiceFluent {
 @UtilityClass
 public class Rings {
     public static final Class<RestServiceFluent> RING_OF_API = RestServiceFluent.class;
-    public static final Class<OnboardingApiService> RING_OF_ONBOARDING_API = OnboardingApiService.class;
+    public static final Class<CustomService> RING_OF_CUSTOM = CustomService.class;
 }
 ```
 
@@ -1779,7 +2052,7 @@ public class Rings {
 * ✅ `@Journey` applied for all preconditions
 * ✅ `@Craft` applied for all test data
 * ✅ `@Ripper` applied for all cleanup operations
-* ✅ Custom API service rings created (extend `ApiServiceFluent`)
+* ✅ Custom API service rings created (extend `FluentService`)
 * ✅ ZERO code duplication (setup → @Journey, workflows → Custom Rings)
 
 **Code Quality:**
@@ -1798,6 +2071,313 @@ public class Rings {
 ## 🧬 One-Line Definition
 
 **`api-roa-architect` is a business-driven, contract-first, schema-based, AI-native API automation agent that unifies `app-knowledge.yaml` + Swagger/OpenAPI + `target/pandora/pandora.json` + `.claude/pandora/api-usage.json` into deterministic, production-grade Quest-based API automation.**
+
+---
+
+## ⚠️ Common Mistakes and Corrections
+
+This section shows frequent anti-patterns and their correct implementations based on actual api-test-framework code.
+
+### Mistake 1: Hardcoding Request Bodies
+
+❌ **Wrong:**
+```java
+quest.use(RING_OF_API)
+    .request(POST_CREATE_USER, Map.of("name", "John", "job", "Engineer"))
+```
+
+✅ **Correct:**
+```java
+@Test
+void test(Quest quest, @Craft(model = DataCreator.Data.NEW_USER) CreateUserDto user) {
+    quest.use(RING_OF_API)
+        .request(POST_CREATE_USER, user)  // user from @Craft
+}
+```
+
+**Why:** Hardcoded data prevents test reusability and makes data management difficult.
+
+### Mistake 2: Manual Token Management
+
+❌ **Wrong:**
+```java
+String token = "Bearer xyz123";  // Hardcoded or manually extracted
+quest.use(RING_OF_API)
+    .request(GET_USER.withHeader("Authorization", token))
+```
+
+✅ **Correct:**
+```java
+@Test
+@AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
+void test(Quest quest) {
+    // Token automatically added to all requests by framework
+    quest.use(RING_OF_API)
+        .request(GET_USER)
+        .complete();
+}
+```
+
+**Why:** @AuthenticateViaApi handles authentication lifecycle automatically.
+
+### Mistake 3: Missing enumImpl() in Endpoint Enums
+
+❌ **Wrong:**
+```java
+public enum AppEndpoints implements Endpoint<AppEndpoints> {
+    POST_CREATE_USER(Method.POST, "/users");
+
+    // Missing enumImpl() method - COMPILATION ERROR!
+}
+```
+
+✅ **Correct:**
+```java
+public enum AppEndpoints implements Endpoint<AppEndpoints> {
+    POST_CREATE_USER(Method.POST, "/users");
+
+    @Override
+    public AppEndpoints enumImpl() {
+        return this;  // REQUIRED by Endpoint interface
+    }
+}
+```
+
+**Why:** Endpoint<T> interface requires enumImpl() implementation.
+
+### Mistake 4: Wrong Import for Method Class
+
+❌ **Wrong:**
+```java
+import io.cyborgcode.roa.api.core.Method;  // ❌ This class doesn't exist!
+
+public enum AppEndpoints implements Endpoint<AppEndpoints> {
+    POST_CREATE_USER(Method.POST, "/users");
+}
+```
+
+✅ **Correct:**
+```java
+import io.restassured.http.Method;  // ✅ Use RestAssured Method
+
+public enum AppEndpoints implements Endpoint<AppEndpoints> {
+    POST_CREATE_USER(Method.POST, "/users");
+}
+```
+
+**Why:** ROA uses RestAssured's Method enum, not a custom class.
+
+### Mistake 5: Using @Craft with Wrong Attribute
+
+❌ **Wrong:**
+```java
+@Craft(value = DataCreator.Data.USER)  // ❌ Wrong attribute name
+CreateUserDto user
+```
+
+✅ **Correct:**
+```java
+@Craft(model = DataCreator.Data.USER)  // ✅ Correct attribute is "model"
+CreateUserDto user
+```
+
+**Why:** @Craft annotation uses `model` attribute, not `value`.
+
+### Mistake 6: Repeated Setup Logic in Tests
+
+❌ **Wrong:**
+```java
+@Test
+void test1(Quest quest) {
+    // Repeated setup in every test
+    quest.use(RING_OF_API)
+        .request(POST_CREATE_USER, defaultUser())
+        .complete();
+}
+
+@Test
+void test2(Quest quest) {
+    // Same setup repeated again
+    quest.use(RING_OF_API)
+        .request(POST_CREATE_USER, defaultUser())
+        .complete();
+}
+```
+
+✅ **Correct:**
+```java
+@Test
+@Journey(Preconditions.Data.CREATE_DEFAULT_USER)  // Setup extracted to Journey
+void test1(Quest quest) {
+    // User already created by Journey
+}
+
+@Test
+@Journey(Preconditions.Data.CREATE_DEFAULT_USER)
+void test2(Quest quest) {
+    // User already created by Journey
+}
+```
+
+**Why:** @Journey eliminates code duplication for preconditions.
+
+### Mistake 7: Missing Cleanup After Test
+
+❌ **Wrong:**
+```java
+@Test
+void createUser_success(Quest quest, @Craft(model = DataCreator.Data.USER) CreateUserDto user) {
+    quest.use(RING_OF_API)
+        .request(POST_CREATE_USER, user)
+        .complete();
+    // Created user remains in system - test pollution!
+}
+```
+
+✅ **Correct:**
+```java
+@Test
+@Ripper(targets = {DataCleaner.Data.DELETE_TEST_USER})  // Automatic cleanup
+void createUser_success(Quest quest, @Craft(model = DataCreator.Data.USER) CreateUserDto user) {
+    quest.use(RING_OF_API)
+        .request(POST_CREATE_USER, user)
+        .complete();
+    // User automatically deleted after test by @Ripper
+}
+```
+
+**Why:** @Ripper ensures test isolation and prevents data pollution.
+
+### Mistake 8: Forgetting .complete() at End of Quest Chain
+
+❌ **Wrong:**
+```java
+quest.use(RING_OF_API)
+    .request(GET_USER);  // ❌ Missing .complete() - COMPILATION ERROR!
+```
+
+✅ **Correct:**
+```java
+quest.use(RING_OF_API)
+    .request(GET_USER)
+    .complete();  // ✅ MANDATORY - signals end of Quest chain
+```
+
+**Why:** Quest DSL requires .complete() to finalize the chain.
+
+---
+
+## 📖 Quick Reference
+
+### Core Request Patterns
+
+| Pattern | Code Snippet | When to Use |
+|---------|--------------|-------------|
+| **Simple request + validation** | `quest.use(RING_OF_API)`<br>`.requestAndValidate(ENDPOINT, assertions...)`<br>`.complete();` | Single-step requests with inline validations |
+| **Request + extract + validate** | `quest.use(RING_OF_API)`<br>`.request(ENDPOINT)`<br>`.validate(() -> {...})`<br>`.complete();` | Complex validations, data extraction, JUnit assertions |
+| **Chained requests** | `quest.use(RING_OF_API)`<br>`.request(ENDPOINT1, data)`<br>`.request(ENDPOINT2.withPathParam("id", extractedId))`<br>`.complete();` | Multi-step workflows where step 2 needs step 1 data |
+| **Multi-ring workflow** | `quest.use(RING_OF_API)...`<br>`.drop()`<br>`.use(RING_OF_CUSTOM)...`<br>`.complete();` | Cross-module operations (API + DB, API + Custom) |
+
+### Key Annotations
+
+| Annotation | Syntax | Purpose | Example |
+|------------|--------|---------|---------|
+| **@Craft** | `@Craft(model = DataCreator.Data.MODEL)` | Inject test data (eager) | `@Craft(model = DataCreator.Data.USER) CreateUserDto user` |
+| **Late<@Craft>** | `@Craft(model = ...) Late<Dto> model` | Inject test data (lazy - materialized on create()) | `@Craft(model = DataCreator.Data.USER) Late<CreateUserDto> lateUser` |
+| **@Journey** | `@Journey(Preconditions.Data.SETUP)` | Execute precondition before test | `@Journey(Preconditions.Data.CREATE_USER)` |
+| **@JourneyData** | `@Journey(value = ..., journeyData = @JourneyData(...))` | Pass @Craft data to Journey | `@JourneyData(DataCreator.Data.USER)` |
+| **@Ripper** | `@Ripper(targets = {DataCleaner.Data.CLEANUP})` | Automatic cleanup after test | `@Ripper(targets = {DataCleaner.Data.DELETE_USER})` |
+| **@AuthenticateViaApi** | `@AuthenticateViaApi(credentials = X, type = Y)` | Automatic API authentication | `@AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)` |
+| **@API** | `@API` (class level) | Mark class as API test (required for API tests) | `@API class UserApiTest extends BaseQuest {}` |
+
+### Storage Operations
+
+| Operation | Code | Purpose |
+|-----------|------|---------|
+| **Retrieve response** | `quest.getStorage().sub(StorageKeysApi.API)`<br>`.get(ENDPOINT, Response.class)` | Get stored Response object from previous request |
+| **Extract JSON field** | `response.getBody().jsonPath().getString("token")` | Extract field from response body using JsonPath |
+| **Two-step pattern** | `Response r = quest.getStorage()...get(...);`<br>`String value = r.getBody().jsonPath().getString("key");` | Retrieve then extract (recommended pattern) |
+
+### Assertion Targets
+
+| Target | Usage | Example |
+|--------|-------|---------|
+| **STATUS** | HTTP status code | `Assertion.builder().target(STATUS).type(IS).expected(SC_OK)` |
+| **HEADER** | Response headers | `Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON)` |
+| **BODY** | Response body field (JsonPath) | `Assertion.builder().target(BODY).key("user.name").type(IS).expected("John")` |
+
+### Assertion Types
+
+| Type | Meaning | Example |
+|------|---------|---------|
+| **IS** | Exact equality | `.type(IS).expected(SC_OK)` |
+| **CONTAINS** | String contains | `.type(CONTAINS).expected("error")` |
+| **NOT** | Not equal | `.type(NOT).expected(null)` |
+| **GREATER_THAN** | Numeric > | `.type(GREATER_THAN).expected(0)` |
+| **LESS_THAN** | Numeric < | `.type(LESS_THAN).expected(100)` |
+| **NOT_NULL** | Field exists | `.type(NOT_NULL).expected(true)` |
+| **STARTS_WITH** | String prefix | `.type(STARTS_WITH).expected("http")` |
+| **ENDS_WITH** | String suffix | `.type(ENDS_WITH).expected(".com")` |
+| **MATCHES_REGEX** | Regex pattern | `.type(MATCHES_REGEX).expected("\d{3}")` |
+
+### When to Use Eager vs Lazy @Craft
+
+| Scenario | Use | Reason |
+|----------|-----|--------|
+| Simple test with single model | Eager `@Craft` | Model used immediately, no benefit to delay |
+| Model used in multiple requests | Eager `@Craft` | Same instance reused throughout test |
+| Model only used conditionally | Lazy `Late<@Craft>` | Avoid creating if not needed |
+| Performance-sensitive tests | Lazy `Late<@Craft>` | Delay object creation until necessary |
+| Model depends on runtime data | Lazy `Late<@Craft>` | Create after dependencies resolved |
+
+### Full Test Lifecycle Example
+
+```java
+@API
+@DisplayName("User Management API Tests")
+class UserApiTest extends BaseQuest {
+
+    @Test
+    @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)  // 1. Auth
+    @Journey(Preconditions.Data.SETUP_ENVIRONMENT)                             // 2. Precondition
+    @Ripper(targets = {DataCleaner.Data.DELETE_TEST_USER})                     // 3. Cleanup
+    void createUser_withValidData_success(
+        Quest quest,
+        @Craft(model = DataCreator.Data.NEW_USER) CreateUserDto user          // 4. Test data
+    ) {
+        quest
+            .use(RING_OF_API)                                                  // 5. Use service
+            .requestAndValidate(                                               // 6. Execute + validate
+                POST_CREATE_USER,
+                user,
+                Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+            )
+            .complete();                                                       // 7. Complete (required)
+    }
+}
+```
+
+### Mandatory Requirements Checklist
+
+Before generating API test code, verify:
+
+**Step 0.0: Pandora Files**
+- [ ] ✅ Checked if `target/pandora/pandora.json` exists
+- [ ] ✅ Checked if `.claude/pandora/api-usage.json` exists
+- [ ] ✅ If missing, invoked Pandora skill: `Skill(skill="pandora")`
+- [ ] ✅ Verified files generated and are not empty
+- [ ] ✅ Read `target/pandora/pandora.json` (framework contracts)
+- [ ] ✅ Read `.claude/pandora/api-usage.json` (execution patterns)
+
+**Code Generation**
+- [ ] ✅ Using `io.restassured.http.Method` (NOT `io.cyborgcode.roa.api.core.Method`)
+- [ ] ✅ All Endpoint enums implement `enumImpl()` method
+- [ ] ✅ Using `@Craft(model = ...)` (NOT `@Craft(value = ...)`)
+- [ ] ✅ Using `@Ripper(targets = {...})` (NOT `@Ripper(value = ...)`)
+- [ ] ✅ All Quest chains end with `.complete()`
+- [ ] ✅ All tests have `@API` annotation at class level
+- [ ] ✅ All validations use `Assertion.builder()` for API tests
+- [ ] ✅ No hardcoded credentials, URLs, or test data
 
 ---
 
