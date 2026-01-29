@@ -1,0 +1,102 @@
+package io.cyborgcode.ui.complex.test.framework.ui.elements;
+
+import io.cyborgcode.ui.complex.test.framework.ui.functions.ContextConsumer;
+import io.cyborgcode.ui.complex.test.framework.ui.functions.SharedUi;
+import io.cyborgcode.ui.complex.test.framework.ui.types.SelectFieldTypes;
+import io.cyborgcode.roa.ui.components.base.ComponentType;
+import io.cyborgcode.roa.ui.components.select.SelectComponentType;
+import io.cyborgcode.roa.ui.selenium.SelectUiElement;
+import io.cyborgcode.roa.ui.selenium.smart.SmartWebDriver;
+import org.openqa.selenium.By;
+
+import java.util.function.Consumer;
+
+/**
+ * Registry of select/dropdown UI elements for the test application.
+ *
+ * <p>Each enum constant defines a specific dropdown/combo-box with its Selenium locator, component
+ * type (see {@link SelectComponentType}), and optional before/after synchronization hooks.
+ *
+ * <p>Implements {@link SelectUiElement} to integrate with ROA fluent UI testing API for selecting
+ * options and asserting dropdown state.
+ *
+ * <p>Example usage:
+ *
+ * <pre>{@code
+ * quest
+ *     .use(Rings.RING_OF_UI)
+ *     .select().selectOption(SelectFields.LOCATION_DDL, "Store");
+ * }</pre>
+ *
+ * <p>Before/after hooks leverage {@link SharedUi} functions to handle asynchronous page behavior
+ * and to ensure the dropdown is fully rendered before interaction, preventing race conditions in
+ * dynamic UIs.
+ *
+ * <p>The nested {@link Data} class provides string constants for annotation-based references.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
+public enum SelectFields implements SelectUiElement {
+   LOCATION_DDL(By.cssSelector("vaadin-combo-box#pickupLocation"), SelectFieldTypes.VA_SELECT_TYPE,
+         SharedUi.WAIT_FOR_PRESENCE),
+   PRODUCTS_DDL(By.cssSelector("vaadin-combo-box#products"), SelectFieldTypes.VA_SELECT_TYPE,
+         SharedUi.WAIT_FOR_PRESENCE);
+
+   public static final class Data {
+
+      public static final String LOCATION_DDL = "LOCATION_DDL";
+      public static final String PRODUCTS_DDL = "PRODUCTS_DDL";
+
+      private Data() {
+      }
+
+   }
+
+   private final By locator;
+   private final SelectComponentType componentType;
+   private final Consumer<SmartWebDriver> before;
+   private final Consumer<SmartWebDriver> after;
+
+   SelectFields(By locator,
+                SelectComponentType componentType,
+                ContextConsumer before) {
+      this(locator, componentType, before.asConsumer(locator), smartWebDriver -> {
+      });
+   }
+
+   SelectFields(By locator,
+                SelectComponentType componentType,
+                Consumer<SmartWebDriver> before,
+                Consumer<SmartWebDriver> after) {
+      this.locator = locator;
+      this.componentType = componentType;
+      this.before = before;
+      this.after = after;
+   }
+
+   @Override
+   public By locator() {
+      return locator;
+   }
+
+   @Override
+   public <T extends ComponentType> T componentType() {
+      return (T) componentType;
+   }
+
+   @Override
+   public Enum<?> enumImpl() {
+      return this;
+   }
+
+   @Override
+   public Consumer<SmartWebDriver> before() {
+      return before;
+   }
+
+   @Override
+   public Consumer<SmartWebDriver> after() {
+      return after;
+   }
+
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.cyborgcode.roa</groupId>
+        <artifactId>roa-parent</artifactId>
+        <version>1.0.0-rc-1</version>
+    </parent>
+
+    <groupId>io.cyborgcode.roa.usage</groupId>
+    <artifactId>ui-simple-test-framework</artifactId>
+    <version>1.0.0</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.cyborgcode.roa</groupId>
+            <artifactId>ui-interactor-test-framework-adapter</artifactId>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>github-roa-libraries</id>
+            <name>GitHub Packages for Roa Libraries</name>
+            <url>https://maven.pkg.github.com/CyborgCodeSyndicate/roa-libraries</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+</project>

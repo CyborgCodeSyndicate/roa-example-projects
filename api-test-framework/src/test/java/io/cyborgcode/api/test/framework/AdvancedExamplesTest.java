@@ -1,0 +1,390 @@
+package io.cyborgcode.api.test.framework;
+
+import io.cyborgcode.api.test.framework.api.authentication.AdminAuth;
+import io.cyborgcode.api.test.framework.api.authentication.AppAuth;
+import io.cyborgcode.api.test.framework.api.dto.request.CreateUserDto;
+import io.cyborgcode.api.test.framework.api.dto.request.LoginDto;
+import io.cyborgcode.api.test.framework.api.dto.response.CreatedUserDto;
+import io.cyborgcode.api.test.framework.api.dto.response.GetUsersDto;
+import io.cyborgcode.api.test.framework.api.dto.response.UserData;
+import io.cyborgcode.api.test.framework.api.dto.response.UserDto;
+import io.cyborgcode.api.test.framework.data.cleaner.DataCleaner;
+import io.cyborgcode.api.test.framework.data.creator.DataCreator;
+import io.cyborgcode.api.test.framework.preconditions.Preconditions;
+import io.cyborgcode.roa.api.annotations.API;
+import io.cyborgcode.roa.api.annotations.AuthenticateViaApi;
+import io.cyborgcode.roa.api.storage.StorageKeysApi;
+import io.cyborgcode.roa.framework.annotation.Craft;
+import io.cyborgcode.roa.framework.annotation.Journey;
+import io.cyborgcode.roa.framework.annotation.JourneyData;
+import io.cyborgcode.roa.framework.annotation.Regression;
+import io.cyborgcode.roa.framework.annotation.Ripper;
+import io.cyborgcode.roa.framework.annotation.Smoke;
+import io.cyborgcode.roa.framework.base.BaseQuest;
+import io.cyborgcode.roa.framework.parameters.Late;
+import io.cyborgcode.roa.framework.quest.Quest;
+import io.cyborgcode.roa.validator.core.Assertion;
+import io.qameta.allure.Description;
+import io.restassured.response.Response;
+import java.time.Instant;
+import org.junit.jupiter.api.Test;
+
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_ALL_USERS;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.GET_USER;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_CREATE_USER;
+import static io.cyborgcode.api.test.framework.api.AppEndpoints.POST_LOGIN_USER;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_JOB_RESPONSE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.CREATE_USER_NAME_RESPONSE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.DATA;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.PER_PAGE;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_TEXT;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.SUPPORT_URL;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOKEN;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.TOTAL_PAGES;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_AVATAR_BY_INDEX;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_FIRST_NAME;
+import static io.cyborgcode.api.test.framework.api.extractors.ApiResponsesJsonPaths.USER_ID;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_API;
+import static io.cyborgcode.api.test.framework.base.Rings.RING_OF_CUSTOM;
+import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_USER_JOB_INCORRECT;
+import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.CREATED_USER_NAME_INCORRECT;
+import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.FIRST_NAME_LENGTH_INCORRECT;
+import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.USER_DATA_SIZE_INCORRECT;
+import static io.cyborgcode.api.test.framework.data.constants.AssertionMessages.userWithFirstNameNotFound;
+import static io.cyborgcode.api.test.framework.data.constants.Headers.EXAMPLE_HEADER;
+import static io.cyborgcode.api.test.framework.data.constants.PathVariables.ID_PARAM;
+import static io.cyborgcode.api.test.framework.data.constants.QueryParams.PAGE_PARAM;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.FileConstants.AVATAR_FILE_EXTENSION;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.PageTwo.PAGE_TWO_CONTAINS_ANY_USER;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.PageTwo.PAGE_TWO_DATA_SIZE;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.PageTwo.PAGE_TWO_EXPECTED_USERS;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.PAGE_TWO;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Pagination.TOTAL_USERS_IN_PAGE_RANGE;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_INTERMEDIATE_JOB;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_INTERMEDIATE_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_LEADER_JOB;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_LEADER_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_SENIOR_JOB;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Roles.USER_SENIOR_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_TEXT_PREFIX;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_URL_REGEX;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Support.SUPPORT_URL_REQRES_FRAGMENT;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.ID_THREE;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_NINE_EMAIL;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_NINE_FIRST_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_NINE_ID;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_NINE_LAST_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_ONE_FIRST_NAME;
+import static io.cyborgcode.api.test.framework.data.constants.TestConstants.Users.USER_SEVENTH_FIRST_NAME_LENGTH;
+import static io.cyborgcode.roa.api.validator.RestAssertionTarget.BODY;
+import static io.cyborgcode.roa.api.validator.RestAssertionTarget.HEADER;
+import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.ALL_NOT_NULL;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.BETWEEN;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.CONTAINS;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.CONTAINS_ALL;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.CONTAINS_ANY;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.ENDS_WITH;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.EQUALS_IGNORE_CASE;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.GREATER_THAN;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.LENGTH;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.LESS_THAN;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.MATCHES_REGEX;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.NOT;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.NOT_EMPTY;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.NOT_NULL;
+import static io.cyborgcode.roa.validator.core.AssertionTypes.STARTS_WITH;
+import static io.restassured.http.ContentType.JSON;
+import static java.time.ZoneOffset.UTC;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static org.apache.http.HttpHeaders.CONTENT_TYPE;
+import static org.apache.http.HttpStatus.SC_CREATED;
+import static org.apache.http.HttpStatus.SC_OK;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * Comprehensive Reqres API examples using the ROA test framework.
+ * <p>
+ * Demonstrates:
+ * - {@link API} + {@code RING_OF_API} integration
+ * - requestAndValidate with rich assertion types (status, body, headers)
+ * - response storage and {@code retrieve} usage across steps
+ * - {@link Craft} and {@link Late} for request model creation
+ * - dynamic path/header values from previous responses
+ * - {@link AuthenticateViaApi}, {@link Journey}, and {@link Ripper} flows
+ * - usage of a custom ring ({@code RING_OF_CUSTOM}) for reusable services.
+ *
+ * @author Cyborg Code Syndicate 💍👨💻
+ */
+@API
+class AdvancedExamplesTest extends BaseQuest {
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Showcases many assertion types in one GET: status/headers, numeric comparisons, regex, contains(all/any), length, null checks...")
+   void showsComprehensiveAssertionsOnUsersList(Quest quest) {
+      quest
+            .use(RING_OF_API)
+            .requestAndValidate(
+                  GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build(),
+                  Assertion.builder().target(HEADER).key(CONTENT_TYPE).type(CONTAINS).expected(JSON.toString()).build(),
+                  Assertion.builder().target(BODY).key(TOTAL.getJsonPath()).type(NOT).expected(1).build(),
+                  Assertion.builder().target(BODY).key(TOTAL_PAGES.getJsonPath()).type(GREATER_THAN).expected(1).build(),
+                  Assertion.builder().target(BODY).key(PER_PAGE.getJsonPath()).type(LESS_THAN).expected(10).build(),
+                  Assertion.builder().target(BODY).key(SUPPORT_URL.getJsonPath()).type(CONTAINS).expected(SUPPORT_URL_REQRES_FRAGMENT).build(),
+                  Assertion.builder().target(BODY).key(SUPPORT_TEXT.getJsonPath()).type(STARTS_WITH).expected(SUPPORT_TEXT_PREFIX).build(),
+                  Assertion.builder().target(BODY).key(USER_AVATAR_BY_INDEX.getJsonPath(0)).type(ENDS_WITH).expected(AVATAR_FILE_EXTENSION).build(),
+                  Assertion.builder().target(BODY).key(USER_ID.getJsonPath(0)).type(NOT_NULL).expected(true).build(),
+                  Assertion.builder().target(BODY).key(DATA.getJsonPath()).type(ALL_NOT_NULL).expected(true).build(),
+                  Assertion.builder().target(BODY).key(DATA.getJsonPath()).type(NOT_EMPTY).expected(true).build(),
+                  Assertion.builder().target(BODY).key(USER_FIRST_NAME.getJsonPath(0)).type(LENGTH).expected(7).build(),
+                  Assertion.builder().target(BODY).key(DATA.getJsonPath()).type(LENGTH).expected(6).build(),
+                  Assertion.builder().target(BODY).key(SUPPORT_URL.getJsonPath()).type(MATCHES_REGEX).expected(SUPPORT_URL_REGEX).build(),
+                  Assertion.builder().target(BODY).key(USER_FIRST_NAME.getJsonPath(0)).type(EQUALS_IGNORE_CASE).expected(USER_ONE_FIRST_NAME).build(),
+                  Assertion.builder().target(BODY).key(TOTAL.getJsonPath()).type(BETWEEN).expected(TOTAL_USERS_IN_PAGE_RANGE).build(),
+                  Assertion.builder().target(BODY).key(DATA.getJsonPath()).type(CONTAINS_ALL).expected(PAGE_TWO_EXPECTED_USERS).build(),
+                  Assertion.builder().target(BODY).key(DATA.getJsonPath()).type(CONTAINS_ANY).expected(PAGE_TWO_CONTAINS_ANY_USER).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Uses request() + validate(): make a request, retrieve the stored response, and assert with plain JUnit (no DSL).")
+   void showsRequestThenValidateWithPlainJUnitAssertions(Quest quest) {
+      quest
+            .use(RING_OF_API)
+            // Make the request only; response is stored under StorageKeysApi.API
+            .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
+            .validate(() -> {
+               // Retrieve stored response and map to DTO
+               GetUsersDto users =
+                     retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
+                           .getBody().as(GetUsersDto.class);
+
+               // Plain JUnit assertions
+               assertEquals(PAGE_TWO_DATA_SIZE, users.getData().size(), USER_DATA_SIZE_INCORRECT);
+               assertEquals(USER_SEVENTH_FIRST_NAME_LENGTH,
+                     users.getData().get(0).getFirstName().length(), FIRST_NAME_LENGTH_INCORRECT);
+            });
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Chains requests: read an id from the stored list response and reuse it as a path param in the next call.")
+   void showsChainedRequestsAndUsingStorage(Quest quest) {
+      quest
+            .use(RING_OF_API)
+            .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
+            .requestAndValidate(
+                  GET_USER.withPathParam(
+                        ID_PARAM,
+                        retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
+                              .getBody().as(GetUsersDto.class)
+                              .getData().get(0).getId()
+                  ),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Reads the list from storage, finds a user by first name, and validates the full user with soft assertions.")
+   void showsSoftAssertionsAfterFindingUserByFirstNameFromStorage(Quest quest) {
+      quest
+            .use(RING_OF_API)
+            .request(GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO))
+            .request(
+                  GET_USER.withPathParam(
+                        ID_PARAM,
+                        retrieve(StorageKeysApi.API, GET_ALL_USERS, Response.class)
+                              .getBody()
+                              .as(GetUsersDto.class)
+                              .getData()
+                              .stream()
+                              .filter(user -> USER_NINE_FIRST_NAME.equals(user.getFirstName()))
+                              .map(UserData::getId)
+                              .findFirst()
+                              .orElseThrow(() -> new RuntimeException(userWithFirstNameNotFound(USER_NINE_FIRST_NAME))))
+            )
+            .validate(softAssertions -> {
+               UserDto user =
+                     retrieve(StorageKeysApi.API, GET_USER, Response.class)
+                           .getBody().as(UserDto.class);
+               softAssertions.assertThat(user.getData().getId()).isEqualTo(USER_NINE_ID);
+               softAssertions.assertThat(user.getData().getEmail()).isEqualTo(USER_NINE_EMAIL);
+               softAssertions.assertThat(user.getData().getFirstName()).isEqualTo(USER_NINE_FIRST_NAME);
+               softAssertions.assertThat(user.getData().getLastName()).isEqualTo(USER_NINE_LAST_NAME);
+            })
+            .complete();
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Creates a user from an eager @Craft model and validates with a soft assertion.")
+   void showsCraftModelAsRequestWithSoftAssertion(Quest quest,
+                                                  @Craft(model = DataCreator.Data.USER_LEADER) CreateUserDto leaderUser) {
+      quest
+            .use(RING_OF_API)
+            .requestAndValidate(
+                  POST_CREATE_USER,
+                  leaderUser,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
+                  Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath())
+                        .type(IS).expected(USER_LEADER_NAME).soft(true).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Combines a GET and POST where the POST body is built lazily via Late<@Craft> (materialized only when create() is called).")
+   void showsLateCraftModelMaterializedOnDemand(Quest quest,
+                                                @Craft(model = DataCreator.Data.USER_JUNIOR)
+                                                Late<CreateUserDto> juniorUser) {
+      quest
+            .use(RING_OF_API)
+            .requestAndValidate(
+                  GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
+            )
+            .requestAndValidate(
+                  POST_CREATE_USER,
+                  juniorUser.create(), // Late<@Craft> is instantiated here on demand
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Mixes eager @Craft and lazy Late<@Craft>: eager model is ready up-front; the Late model is instantiated via create() at use time.")
+   void showsMixOfCraftAndLateCraftInChainedFlow(Quest quest,
+                                                 @Craft(model = DataCreator.Data.USER_LEADER)
+                                                 CreateUserDto leaderUser,
+                                                 @Craft(model = DataCreator.Data.USER_SENIOR)
+                                                 Late<CreateUserDto> seniorUser) {
+      quest
+            .use(RING_OF_API)
+            // @Craft model (leaderUser) is already materialized
+            .requestAndValidate(
+                  POST_CREATE_USER,
+                  leaderUser,
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
+                  Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath())
+                        .type(IS).expected(USER_LEADER_NAME).soft(true).build(),
+                  Assertion.builder().target(BODY).key(CREATE_USER_JOB_RESPONSE.getJsonPath())
+                        .type(IS).expected(USER_LEADER_JOB).soft(true).build()
+            )
+            // Late<@Craft> is created on-demand at this point
+            .requestAndValidate(
+                  POST_CREATE_USER,
+                  seniorUser.create(),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build(),
+                  Assertion.builder().target(BODY).key(CREATE_USER_NAME_RESPONSE.getJsonPath())
+                        .type(IS).expected(USER_SENIOR_NAME).soft(true).build(),
+                  Assertion.builder().target(BODY).key(CREATE_USER_JOB_RESPONSE.getJsonPath())
+                        .type(IS).expected(USER_SENIOR_JOB).soft(true).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Logs in using @Craft credentials, stores the token, and reuses it as a header in the next GET call.")
+   void showsTokenReuseFromStorageAcrossRequests(Quest quest,
+                                                 @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
+                                                 LoginDto loginAdminUser) {
+      quest
+            .use(RING_OF_API)
+            .request(POST_LOGIN_USER, loginAdminUser)
+            .requestAndValidate(
+                  GET_USER.withPathParam(ID_PARAM, ID_THREE)
+                        .withHeader(
+                              EXAMPLE_HEADER,
+                              retrieve(StorageKeysApi.API, POST_LOGIN_USER, Response.class)
+                                    .getBody().jsonPath().getString(TOKEN.getJsonPath())
+                        ),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @AuthenticateViaApi(credentials = AdminAuth.class, type = AppAuth.class)
+   @Journey(
+         value = Preconditions.Data.CREATE_NEW_USER,
+         journeyData = {@JourneyData(DataCreator.Data.USER_LEADER)},
+         order = 1
+   )
+   @Journey(
+         value = Preconditions.Data.CREATE_NEW_USER,
+         journeyData = {@JourneyData(DataCreator.Data.USER_INTERMEDIATE)},
+         order = 2
+   )
+   @Ripper(targets = {DataCleaner.Data.DELETE_ADMIN_USER})
+   @Description("Executes a full user lifecycle using AuthenticateViaApi for auth, Journey preconditions for setup, and Ripper for cleanup.")
+   void showsAuthenticateViaApiWithJourneySetupAndRipperCleanup(Quest quest) {
+      quest
+            .use(RING_OF_API)
+            .validate(() -> {
+               CreatedUserDto createdUser =
+                     retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
+                           .getBody().as(CreatedUserDto.class);
+               assertEquals(USER_INTERMEDIATE_NAME, createdUser.getName(), CREATED_USER_NAME_INCORRECT);
+               assertEquals(USER_INTERMEDIATE_JOB, createdUser.getJob(), CREATED_USER_JOB_INCORRECT);
+               assertTrue(createdUser.getCreatedAt()
+                     .contains(Instant.now().atZone(UTC).format(ISO_LOCAL_DATE)));
+            })
+            .complete();
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Demonstrates switching rings (services): use a custom ring to log in + header wiring, then return to RING_OF_API for the GET.")
+   void showsSwitchingRingsForLoginThenApiCall(Quest quest,
+                                               @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
+                                               LoginDto loginAdminUser) {
+      quest
+            .use(RING_OF_CUSTOM)
+            .loginUserAndAddSpecificHeader(loginAdminUser)
+            .drop()
+            .use(RING_OF_API)
+            .requestAndValidate(
+                  GET_ALL_USERS.withQueryParam(PAGE_PARAM, PAGE_TWO),
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_OK).build()
+            )
+            .complete();
+   }
+
+   @Test
+   @Smoke
+   @Regression
+   @Description("Shows how a custom service ring can slim down tests by encapsulating the full validation flow.")
+   void showsSlimmerTestsViaCustomServiceRing(Quest quest,
+                                              @Craft(model = DataCreator.Data.LOGIN_ADMIN_USER)
+                                              LoginDto loginAdminUser) {
+      quest
+            .use(RING_OF_CUSTOM)
+            .loginUserAndAddSpecificHeader(loginAdminUser)
+            .requestAndValidateGetAllUsers()
+            .complete();
+   }
+
+}
