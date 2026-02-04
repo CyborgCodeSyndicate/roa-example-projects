@@ -16,7 +16,7 @@ on:
         default: "Flaky"
 jobs:
   run:
-    uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests.yml@v1.0.0-rc-1
+    uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests.yml@v1.0.0-rc-2
     with:
       kind: ui
       project_module: ui-complex-test-framework
