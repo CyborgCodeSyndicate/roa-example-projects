@@ -4,7 +4,7 @@ End-to-end UI + API + DB test automation examples on top of ROA (Ring of Automat
 
 > 🎯 **New to ROA?** Start with the [Getting Started](#7-getting-started) section for a step-by-step guide to create your first project and write your first tests.
 > 
-> 🎬 **Video tutorials coming soon!** Watch our [video series](#) for visual walkthroughs of getting started, writing tests, and exploring all examples in this guide.
+> 🎬 **Video tutorials coming soon!** Watch our [video series](https://vimeo.com/cyborgcodesyndicate) for visual walkthroughs of getting started, writing tests, and exploring all examples in this guide.
 
 ---
 
@@ -479,7 +479,7 @@ Before you begin, ensure you have the following installed and configured:
 | **IDE**                        | IntelliJ IDEA recommended for best experience with Lombok and fluent APIs  |
 | **Allure CLI (Optional)**      | For viewing test reports; Generates interactive HTML reports               |
 
-> **Note:** JUnit 5 and Spring Boot are **included automatically** via the `roa-parent` POM—you don't need to add them separately.
+> **Note:** JUnit 5 and Spring Boot are **included automatically** via the `roa-parent` POM - you don't need to add them separately.
 
 ---
 
@@ -527,6 +527,7 @@ Follow these subsections to build your project:
 - [7.3 Add Dependencies](#73-add-dependencies)
 - [7.4 Configure Environment](#74-configure-environment)  
 - [7.5 Create the Rings Registry](#75-create-the-rings-registry)
+- [7.6 Enable Adapters on Tests](#76-enable-adapters-on-tests)
 - [7.7 Writing Your First UI Test](#77-writing-your-first-ui-test)
 - [7.8 Writing Your First API Test](#78-writing-your-first-api-test)
 
@@ -536,7 +537,7 @@ Follow these subsections to build your project:
 
 **⏱️ Time: ~5 minutes** | **💡 Best for: First-time users and quick prototypes**
 
-> 🎬 Watch video [Setup project with ROA Archetype]() - coming soon!
+> 🎬 Watch video [Setup project with ROA Archetype](https://vimeo.com/1162549144)
 
 The archetype generates everything you need: dependencies, configuration files, base classes, and working example tests.
 
@@ -591,8 +592,8 @@ During generation, select which testing capabilities you need:
 
 > 💡 **Using archetype?** Skip this - dependencies are auto-configured based on your module selection.
 
-> 🎬 Watch video [Getting Started with ROA]() - coming soon!
-> 
+> 🎬 Watch video [Getting Started with ROA](https://vimeo.com/1161116909)
+
 #### Step 1: Add `roa-parent` as your parent POM
 
 ```xml
@@ -663,7 +664,7 @@ Include `properties` to your `pom.xml`
 
 > 💡 **Using archetype?** Skip this - property files are auto-generated. See [Environment Configuration](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#environment-configuration).
 
-> 🎬 Watch video [Handle Configuration]() - coming soon!
+> 🎬 Watch video [Handle Configuration](https://vimeo.com/1161116909)
 
 ROA uses a **layered configuration system** that keeps your test code environment-agnostic. Write once, run anywhere—just switch profiles to target different environments.
 
@@ -700,6 +701,9 @@ extended.logging=false
 
 #### Example Configurations
 
+<details>
+<summary><b>API, UI and DB configurations</b></summary>
+
 **API Configuration** (`config-{env}.properties`)
 ```properties
 api.base.url=https://your-api.example.com
@@ -733,6 +737,8 @@ db.default.password=secret
 ```
 
 📚 Explore more details: [DB Configuration Setup](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/db-interactor/README.md#step-2-database-configuration)
+
+</details>
 
 #### Multi-environment setup (optional)
 
@@ -780,7 +786,8 @@ The `Rings` class is a central registry that maps logical ring identifiers to th
 - Enables `quest.use(Rings.RING_OF_API)` to resolve to your API service implementation
 - Centralizes ring definitions for easy maintenance and discoverability
 
-**Complete example with all typical rings:**
+<details>
+<summary><b>Complete example with all typical rings</b></summary>
 
 ```java
 import lombok.experimental.UtilityClass;
@@ -817,6 +824,8 @@ void exampleUsingRings(Quest quest) {
     .complete();
 }
 ```
+
+</details>
 
 **Key points:**
 - ✅ Include only the rings you actually use (e.g., API-only projects don't need `RING_OF_UI`)
@@ -881,7 +890,7 @@ class SequentialTests extends BaseQuestSequential { }
 
 >💡 **If using archetype (AI style):** No example tests are generated. Use this section as your implementation guide.
 
-> 🎬 Watch video [Create First UI Test]() - coming soon!
+> 🎬 Watch video [Create First UI Test](https://vimeo.com/1161118876)
 >
 This section walks through a complete example that covers the most common UI operations you'll use in your tests.
 Let's write a test that logs into a web app, navigates to a page, and verifies content. This example shows the core UI testing pattern you'll use everywhere.
@@ -905,7 +914,9 @@ Let's write a test that logs into a web app, navigates to a page, and verifies c
 5. **Release Active Ring**: Optionally call `.drop()` to release the current ring/service context
 6. **Complete** with `.complete()` to finalize
 
-**Complete working example:**
+
+<details>
+<summary><b>Complete working example</b></summary>
 
 ```java
 import io.cyborgcode.roa.ui.interactor.test.framework.adapter.annotation.UI;
@@ -937,6 +948,8 @@ class GettingStartedTest extends BaseQuest {
     }
 }
 ```
+
+</details>
 
 #### Each component service provides specialized methods for different UI element types:
 
@@ -996,6 +1009,9 @@ Below are minimal examples to understand the pattern:
 
 **Location:** Create component types in `ui/types`. Example: `src/main/java/.../ui/types/ButtonFieldTypes.java`
 
+<details>
+<summary><b>Component type example</b></summary>
+
 ```java
 import io.cyborgcode.roa.ui.components.button.ButtonComponentType;
 
@@ -1011,9 +1027,14 @@ public enum ButtonFieldTypes implements ButtonComponentType {
 }
 ```
 
+</details>
+
 ##### 2. Component Implementation (key methods only)
 
 **Location:** Create component implementations in `ui/components`. Example: `src/main/java/.../ui/components/button/ButtonBootstrapImpl.java`
+
+<details>
+<summary><b>Component implementation example</b></summary>
 
 ```java
 import io.cyborgcode.roa.ui.annotations.ImplementationOfType;
@@ -1043,9 +1064,15 @@ public class ButtonBootstrapImpl extends BaseComponent implements Button {
 }
 ```
 
+</details>
+
+
 ##### 3. Element Enum (maps names to locators)
 
 **Location:** Create element enums in `ui/elements`. Example: `src/main/java/.../ui/elements/ButtonFields.java`
+
+<details>
+<summary><b>Element enum example</b></summary>
 
 ```java
 import io.cyborgcode.roa.ui.components.base.ComponentType;
@@ -1082,6 +1109,8 @@ public enum ButtonFields implements ButtonUiElement {
   }
 }
 ```
+
+</details>
 
 > 💡 **Using archetype?** Element enums are auto-generated based on `-DuiComponents`. See [Component Generation Matrix](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#component-generation-matrix).
 
@@ -1124,7 +1153,7 @@ driver.findElement(By.cssSelector("#login-btn")).click();
 
 >💡 **If using archetype (AI style):** No example tests are generated. Use this section as your implementation guide.
 
-> 🎬 Watch video [Create First API Test]() - coming soon!
+> 🎬 Watch video [Create First API Test](https://vimeo.com/1161118150)
  
 This section walks through a complete example that covers the most common API operations you'll use in your tests.
 Let's test a REST API by sending a GET request and validating the response. This shows the core API testing pattern.
@@ -1142,7 +1171,8 @@ Let's test a REST API by sending a GET request and validating the response. This
 5. **Release Active Ring**: Optionally call `.drop()` to release the current ring/service context
 6. **Complete** with `.complete()` to finalize
 
-**Complete working example:**
+<details>
+<summary><b>Complete working example</b></summary>
 
 ```java
 import io.cyborgcode.roa.api.interactor.test.framework.adapter.annotation.API;
@@ -1172,6 +1202,8 @@ class GettingStartedTest extends BaseQuest {
 }
 ```
 
+</details>
+
 **What's happening here?**
 - **Endpoints** - Typed endpoint definitions (created once, reused everywhere)
 - **Query parameters** - `.withQueryParam("key", value)`
@@ -1186,6 +1218,9 @@ Endpoints are defined as enums implementing the `Endpoint` interface. This provi
 > **Deep Dive:** For complete endpoint patterns including path parameters, headers, and request bodies, see the API examples in 📖 [Section 8: Writing Tests](#8-writing-tests-feature-by-feature).
 
 **Basic Endpoint Definition:** (`src/main/java/.../api/Endpoints.java`):
+
+<details>
+<summary><b>Endpoint example</b></summary>
 
 ```java
 import io.cyborgcode.roa.api.core.Endpoint;
@@ -1221,6 +1256,8 @@ public enum Endpoints implements Endpoint<Endpoints> {
    }
 }
 ```
+
+</details>
 
 > 💡 **Using archetype?** `ExampleEndpoints.java` and DTOs are auto-generated. See [API Components](https://github.com/CyborgCodeSyndicate/roa-libraries/blob/main/roa-archetype/README.md#api-when-api-module-selected).
 
@@ -1270,7 +1307,7 @@ Validation mechanism for status codes, headers, and response body using JSONPath
 | **▶️ IDE Play Button** | Quick test execution during development | Uses `system.properties` + environment config files (no profile activated) |
 | **Maven Command** | CI/CD pipelines, full test suites, environment switching | Easily activate profiles with `-P` flag (e.g., `-Pstaging`, `-Pprod`) |
 
-> 🎬 Watch video [Run Tests]() - coming soon!
+> 🎬 Watch video [Run Tests](https://vimeo.com/1161159354)
 > 
 ```bash
 # Run all tests
